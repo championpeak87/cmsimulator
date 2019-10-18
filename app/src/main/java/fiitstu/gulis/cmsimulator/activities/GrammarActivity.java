@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -89,6 +92,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
         Log.v(TAG, "onCreate initialization started");
 
+        //menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.grammar_definition);
+
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
         rulesAdapter = new RulesAdapter(rulesTableSize);
@@ -109,66 +117,6 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             grammarExampleToLoad = bundle.getInt(MainActivity.CONFIGURATION_TYPE);
             prepareExmaple(grammarExampleToLoad);
         }
-
-        //back
-        ImageButton backButton = findViewById(R.id.imageButton_grammar_back);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        //menu
-        final ImageButton menuButton = findViewById(R.id.imageButton_grammar_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(GrammarActivity.this, menuButton);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_grammar_help:
-                                FragmentManager fm = getSupportFragmentManager();
-                                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.GRAMMAR);
-                                guideFragment.show(fm, HELP_DIALOG);
-                                return true;
-                            case R.id.menu_save:
-                                if (Build.VERSION.SDK_INT > 15
-                                        && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(GrammarActivity.this,
-                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                            REQUEST_WRITE_STORAGE);
-                                } else {
-                                    if(filename == null)
-                                        filename = GRAMMAR;
-                                    showSaveGrammarDialog(false);
-                                }
-                                break;
-                            case R.id.menu_load:
-                                if (Build.VERSION.SDK_INT > 15
-                                        && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(GrammarActivity.this,
-                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                            REQUEST_READ_STORAGE);
-                                } else {
-                                    loadGrammar();
-                                }
-                                break;
-                            case R.id.menu_new_grammar:
-                                GrammarActivity.this.finish();
-                                Intent nextActivityIntent = new Intent(GrammarActivity.this, GrammarActivity.class);
-                                startActivity(nextActivityIntent);
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popup.inflate(R.menu.menu_grammar);
-                popup.show();
-            }
-        });
 
         //test
         Button grammarTestButton = findViewById(R.id.button_grammar_test);
@@ -247,6 +195,58 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         });
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_grammar, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_grammar_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.GRAMMAR);
+                guideFragment.show(fm, HELP_DIALOG);
+                return true;
+            case R.id.menu_save:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(GrammarActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_WRITE_STORAGE);
+                } else {
+                    if(filename == null)
+                        filename = GRAMMAR;
+                    showSaveGrammarDialog(false);
+                }
+                return true;
+            case R.id.menu_load:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(GrammarActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_READ_STORAGE);
+                } else {
+                    loadGrammar();
+                }
+                return true;
+            case R.id.menu_new_grammar:
+                GrammarActivity.this.finish();
+                Intent nextActivityIntent = new Intent(GrammarActivity.this, GrammarActivity.class);
+                startActivity(nextActivityIntent);
+                return true;
+        }
+
+        return false;
     }
 
     /**

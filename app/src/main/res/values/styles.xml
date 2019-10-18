@@ -6,12 +6,8 @@
         <item name="android:colorPrimary">@color/primary_color</item>
         <item name="android:colorPrimaryDark">@color/primary_color_dark</item>
         <item name="android:colorAccent">@color/primary_color</item>
-        <item name="android:titleTextColor">@color/md_white_1000</item>
         <item name="android:navigationBarColor">@color/primary_color</item>
         <item name="android:colorButtonNormal">@color/primary_color</item>
-        <item name="android:colorBackground">@color/md_white_1000</item>
-        <item name="android:colorControlHighlight">@color/md_white_1000</item>
-
     </style>
     
     <style name="MainMenuTheme" parent="android:style/Theme.Material.Light">
