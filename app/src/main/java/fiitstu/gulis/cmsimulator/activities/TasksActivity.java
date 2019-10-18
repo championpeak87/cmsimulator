@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,6 +12,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +33,7 @@ import java.io.IOException;
 
 /**
  * A main-ish menu for task-related activities.
- *
+ * <p>
  * Created by Jakub Sedlář on 05.01.2018.
  */
 public class TasksActivity extends FragmentActivity implements ExampleTaskDialog.ExampleTaskDialogListener {
@@ -46,38 +49,10 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         setContentView(R.layout.activity_tasks);
         Log.v(TAG, "onCreate initialization started");
 
-        //back
-        ImageButton backButton = findViewById(R.id.imageButton_tasks_back);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
         //menu
-        final ImageButton menuButton = findViewById(R.id.imageButton_tasks_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(TasksActivity.this, menuButton);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_tasks_help:
-                                FragmentManager fm = getSupportFragmentManager();
-                                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.TASKS);
-                                guideFragment.show(fm, "HELP_DIALOG");
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popup.inflate(R.menu.menu_tasks);
-                popup.show();
-            }
-        });
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle(R.string.tasks);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +99,30 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         });
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_tasks, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_tasks_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.TASKS);
+                guideFragment.show(fm, "HELP_DIALOG");
+                return true;
+        }
+
+        return false;
     }
 
     @Override

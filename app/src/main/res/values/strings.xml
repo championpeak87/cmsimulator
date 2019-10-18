@@ -109,6 +109,8 @@
     <string name="example_grammar7">Gcs - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
 
     <!--Options Activity-->
+    <string name="simulation_settings">Simulation settings</string>
+    <string name="simulation_colors">Automatas colors</string>
     <string name="markNondeterminism">Mark nondeterministic transitions</string>
     <string name="colors">Machine colors</string>
     <string name="add_color">Add New Color</string>

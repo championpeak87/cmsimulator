@@ -105,6 +105,8 @@
     <string name="example_grammar7">Gcs - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
 
     <!--Options Activity-->
+    <string name="simulation_settings">Nastavenia simulácie</string>
+    <string name="simulation_colors">Farby automatov</string>
     <string name="markNondeterminism">Označuj nedeterministické prechody</string>
     <string name="colors">Farby automatov</string>
     <string name="add_color">Pridať novú farbu</string>
