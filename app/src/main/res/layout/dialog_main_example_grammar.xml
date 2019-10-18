@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_popup_main_example_grammar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:text="@string/example_grammar"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar1"
+                android:text="@string/example_grammar1"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar2"
+                android:text="@string/example_grammar2"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar3"
+                android:text="@string/example_grammar3"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar4"
+                android:text="@string/example_grammar4"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar5"
+                android:text="@string/example_grammar5"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar6"
+                android:text="@string/example_grammar6"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example_grammar7"
+                android:text="@string/example_grammar7"
+                style="@style/exampleMachineButtonStyle" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

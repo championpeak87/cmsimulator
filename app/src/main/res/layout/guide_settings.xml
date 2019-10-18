@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            style="@style/guide_heading"
+            android:text="@string/guide_title_settings"/>
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_settings_max_steps" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_settings_mark_nondeterminism" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_settings_colors" />
+
+    <TextView
+            style="@style/guide_see_also" />
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_simulation_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_simulation_activity" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_bulk_test_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_bulk_test_activity" />
+    </LinearLayout>
+</LinearLayout>

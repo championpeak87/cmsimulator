@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.0">
+    <automaton type="pda">
+        <input_alphabet>
+            <symbol id="1" name="ε" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="b" properties="0"/>
+        </input_alphabet>
+        <stack_alphabet>
+            <symbol id="1" name="Z" properties="2"/>
+            <symbol id="2" name="A" properties="0"/>
+            <symbol id="3" name="B" properties="0"/>
+        </stack_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>200</x>
+                <y>414</y>
+                <initial/>
+            </state>
+            <state id="2" name="q1">
+                <x>529</x>
+                <y>425</y>
+            </state>
+            <state id="3" name="q2">
+                <x>318</x>
+                <y>618</y>
+                <final/>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>2</read>
+                <pop>2</pop>
+                <push>2</push>
+                <push>2</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>2</read>
+                <pop>3</pop>
+                <push>3</push>
+                <push>2</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>2</read>
+                <pop>1</pop>
+                <push>1</push>
+                <push>2</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>3</read>
+                <pop>2</pop>
+                <push>2</push>
+                <push>3</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>3</read>
+                <pop>3</pop>
+                <push>3</push>
+                <push>3</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>3</read>
+                <pop>1</pop>
+                <push>1</push>
+                <push>3</push>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>2</read>
+                <pop>2</pop>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>3</read>
+                <pop>3</pop>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>2</read>
+                <pop>2</pop>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>3</read>
+                <pop>3</pop>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>1</read>
+                <pop>1</pop>
+                <push>1</push>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>3</symbol>
+            <symbol>3</symbol>
+            <symbol>2</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios/>
+    </automaton>
+</structure>

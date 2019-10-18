@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="fiitstu.gulis.cmsimulator.activities.GrammarActivity">
+
+    <item
+        android:id="@+id/menu_derivation_table"
+        android:title="@string/derivation_table"
+        style="@style/dropDownMenuItemStyle" />
+
+    <item
+        android:id="@+id/menu_derivation_tree"
+        android:title="@string/derivation_tree"
+        style="@style/dropDownMenuItemStyle" />
+
+    <item
+        android:id="@+id/menu_derivation_linear"
+        android:title="@string/derivation_linear"
+        style="@style/dropDownMenuItemStyle" />
+
+    <item
+        android:id="@+id/menu_derivation_fixed"
+        android:title="@string/derivation_fixed"
+        style="@style/dropDownMenuItemStyle" />
+
+    <item
+        android:id="@+id/menu_grammar_simulation_help"
+        android:title="@string/help"
+        style="@style/dropDownMenuItemStyle" />
+
+</menu>

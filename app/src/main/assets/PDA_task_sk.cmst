@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.1">
+    <automaton type="pda">
+        <input_alphabet>
+            <symbol id="1" name="ε" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="b" properties="0"/>
+        </input_alphabet>
+        <stack_alphabet>
+            <symbol id="1" name="Z" properties="2"/>
+        </stack_alphabet>
+        <states/>
+        <transitions/>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+            <symbol>3</symbol>
+            <symbol>3</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+        </negative_scenarios>
+    </automaton>
+    <task title="ZA príklad" text="Zostrojte automat, ktorý akceptuje slová v tvare a^n b^n, kde n &gt; 0." time="0" public_inputs="false" max_steps="100" result_version="1"/>
+</structure>

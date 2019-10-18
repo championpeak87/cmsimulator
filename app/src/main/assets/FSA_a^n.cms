@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.1">
+    <automaton type="fsa">
+        <input_alphabet>
+            <symbol id="1" name="ε" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+        </input_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>400</x>
+                <y>451</y>
+                <initial/>
+                <final/>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>2</read>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+        </tape>
+        <test_scenarios/>
+        <negative_scenarios/>
+    </automaton>
+</structure>

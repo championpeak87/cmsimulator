@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            style="@style/guide_heading"
+            android:text="@string/guide_title_simulation_activity" />
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_simulation_introduction" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_menu_white_with_background_48dp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_menu" />
+    </LinearLayout>
+
+    <TextView
+            style="@style/guide_subheading"
+            android:text="@string/guide_title_tape" />
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_simulation_tape" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/guie_new_tape_element"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_add_tape_element" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/guide_tape_element"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_tape_element" />
+    </LinearLayout>
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_simulation_tape_element_context_menu" />
+
+    <TextView
+            style="@style/guide_subheading"
+            android:text="@string/guide_title_controls" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_sim_step_b"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_step_back" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_sim_step_f"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_step_forward" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_sim_full"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_simulate_fully" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_sim_stop"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_stop" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/ic_sim_remove_brkp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_simulation_remove_breakpoints" />
+    </LinearLayout>
+
+    <TextView
+            style="@style/guide_subheading"
+            android:text="@string/guide_title_breakpoints" />
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_simulation_breakpoints" />
+
+    <TextView
+            style="@style/guide_see_also" />
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_save_load_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_save_load" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_settings_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_settings" />
+    </LinearLayout>
+
+</LinearLayout>

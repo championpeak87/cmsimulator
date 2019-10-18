@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grammar>
+    <rule>
+        <left>S</left>
+        <right>aA</right>
+    </rule>
+    <rule>
+        <left>S</left>
+        <right>bA</right>
+    </rule>
+    <rule>
+        <left>A</left>
+        <right>aB</right>
+    </rule>
+    <rule>
+        <left>A</left>
+        <right>bB</right>
+    </rule>
+    <rule>
+        <left>A</left>
+        <right>ε</right>
+    </rule>
+    <rule>
+        <left>B</left>
+        <right>aS</right>
+    </rule>
+    <rule>
+        <left>B</left>
+        <right>bS</right>
+    </rule>
+</grammar>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.0">
+    <automaton type="fsa">
+        <input_alphabet>
+            <symbol id="1" name="ε" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="b" properties="0"/>
+        </input_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>300</x>
+                <y>275</y>
+                <initial/>
+            </state>
+            <state id="2" name="q1">
+                <x>500</x>
+                <y>275</y>
+                <final/>
+            </state>
+            <state id="3" name="q2">
+                <x>400</x>
+                <y>425</y>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>2</read>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>3</read>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>2</read>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>3</read>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>1</to>
+                <read>2</read>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>1</to>
+                <read>3</read>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+            <symbol>3</symbol>
+            <symbol>2</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios/>
+    </automaton>
+</structure>

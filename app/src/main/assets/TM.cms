@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.0">
+    <automaton type="tm">
+        <input_alphabet>
+            <symbol id="1" name="#" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="b" properties="0"/>
+            <symbol id="4" name="A" properties="0"/>
+            <symbol id="5" name="B" properties="0"/>
+            <symbol id="6" name="1" properties="0"/>
+        </input_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>-46</x>
+                <y>531</y>
+                <initial/>
+                <final/>
+            </state>
+            <state id="2" name="q1">
+                <x>371</x>
+                <y>450</y>
+            </state>
+            <state id="3" name="q2">
+                <x>747</x>
+                <y>402</y>
+            </state>
+            <state id="4" name="q3">
+                <x>652</x>
+                <y>675</y>
+            </state>
+            <state id="5" name="q4">
+                <x>167</x>
+                <y>721</y>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>2</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>3</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>3</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>3</to>
+                <read>6</read>
+                <write>6</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>4</to>
+                <read>1</read>
+                <write>6</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>6</read>
+                <write>6</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>3</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>2</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>5</to>
+                <read>6</read>
+                <write>6</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>5</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>2</read>
+                <write>2</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>1</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+            <symbol>2</symbol>
+            <symbol>3</symbol>
+            <symbol>3</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+                <output_word>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                </output_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+                <output_word>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                </output_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                </input_word>
+                <output_word>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                    <symbol id="6"/>
+                </output_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+                <output_word>
+                    <symbol id="4"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                </output_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios/>
+    </automaton>
+</structure>

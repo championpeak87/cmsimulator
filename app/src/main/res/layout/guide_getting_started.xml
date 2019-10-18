@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            style="@style/guide_heading"
+            android:text="@string/guide_title_getting_started" />
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_new_machine" />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/guide_getting_started_example_machine" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_example_machine_list" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_load_machine" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_tasks" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_grammar" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/guide_getting_started_example_grammar" />
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_getting_started_example_grammar_list" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_getting_started_settings" />
+</LinearLayout>

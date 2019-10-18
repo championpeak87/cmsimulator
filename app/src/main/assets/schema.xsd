@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+           vc:minVersion="1.1">
+
+    <xs:complexType name="state">
+        <xs:sequence>
+            <xs:element name="x" type="xs:int"/>
+            <xs:element name="y" type="xs:int"/>
+            <xs:element name="initial" type="xs:string" fixed="" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="final" type="xs:string" fixed="" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+
+        <xs:attribute name="id" type="xs:long" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="symbolProperties">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="7"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="symbol">
+        <xs:attribute name="id" type="xs:long" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="properties" type="symbolProperties" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="symbolAttrRef">
+        <xs:attribute name="id" type="xs:long" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="word">
+        <xs:sequence>
+            <xs:element name="symbol" type="symbolAttrRef" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="simpleTestScenario">
+        <xs:sequence>
+            <xs:element name="input_word" type="word"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complexTestScenario">
+        <xs:sequence>
+            <xs:element name="input_word" type="word"/>
+            <xs:element name="output_word" type="word" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="states">
+        <xs:sequence>
+            <xs:element name="state" type="state" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="symbols">
+        <xs:sequence>
+            <xs:element name="symbol" type="symbol" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="symbolRefs">
+        <xs:sequence>
+            <xs:element name="symbol" type="xs:long" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="simpleTestScenarios">
+        <xs:sequence>
+            <xs:element name="test_scenario" type="simpleTestScenario" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="complexTestScenarios">
+        <xs:sequence>
+            <xs:element name="test_scenario" type="complexTestScenario" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="fsaTransition">
+        <xs:sequence>
+            <xs:element name="from" type="xs:long"/>
+            <xs:element name="to" type="xs:long"/>
+            <xs:element name="read" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="fsaTransitions">
+        <xs:sequence>
+            <xs:element name="transition" type="fsaTransition" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="finiteStateAutomaton">
+        <xs:sequence>
+            <xs:element name="input_alphabet" type="symbols"/>
+            <xs:element name="states" type="states"/>
+            <xs:element name="transitions" type="fsaTransitions"/>
+            <xs:element name="tape" type="symbolRefs"/>
+            <xs:element name="test_scenarios" type="simpleTestScenarios"/>
+            <xs:element name="negative_scenarios" type="simpleTestScenarios"/>
+        </xs:sequence>
+
+        <xs:attribute name="type" type="xs:string" use="required" fixed="fsa"/>
+    </xs:complexType>
+
+    <xs:complexType name="pdaTransition">
+        <xs:complexContent>
+            <xs:extension base="fsaTransition">
+                <xs:sequence>
+                    <xs:element name="pop" type="xs:long" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="push" type="xs:long" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="pdaTransitions">
+        <xs:sequence>
+            <xs:element name="transition" type="pdaTransition" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="pushDownAutomaton">
+        <xs:sequence>
+            <xs:element name="input_alphabet" type="symbols"/>
+            <xs:element name="stack_alphabet" type="symbols"/>
+            <xs:element name="states" type="states"/>
+            <xs:element name="transitions" type="pdaTransitions"/>
+            <xs:element name="tape" type="symbolRefs"/>
+            <xs:element name="test_scenarios" type="simpleTestScenarios"/>
+            <xs:element name="negative_scenarios" type="simpleTestScenarios"/>
+        </xs:sequence>
+
+        <xs:attribute name="type" type="xs:string" use="required" fixed="pda"/>
+    </xs:complexType>
+
+    <xs:simpleType name="tmMoveDirection">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="L"/>
+            <xs:enumeration value="R"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="tmTransition">
+        <xs:complexContent>
+            <xs:extension base="fsaTransition">
+                <xs:sequence>
+                    <xs:element name="write" type="xs:long"/>
+                    <xs:element name="move" type="tmMoveDirection"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="tmTransitions">
+        <xs:sequence>
+            <xs:element name="transition" type="tmTransition" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="linearBoundedAutomaton">
+        <xs:sequence>
+            <xs:element name="input_alphabet" type="symbols"/>
+            <xs:element name="states" type="states"/>
+            <xs:element name="transitions" type="tmTransitions"/>
+            <xs:element name="tape" type="symbolRefs"/>
+            <xs:element name="test_scenarios" type="complexTestScenarios"/>
+            <xs:element name="negative_scenarios" type="complexTestScenarios"/>
+        </xs:sequence>
+
+        <xs:attribute name="type" type="xs:string" use="required" fixed="lba"/>
+    </xs:complexType>
+
+    <xs:complexType name="turingMachine">
+        <xs:sequence>
+            <xs:element name="input_alphabet" type="symbols"/>
+            <xs:element name="states" type="states"/>
+            <xs:element name="transitions" type="tmTransitions"/>
+            <xs:element name="tape" type="symbolRefs"/>
+            <xs:element name="test_scenarios" type="complexTestScenarios"/>
+            <xs:element name="negative_scenarios" type="complexTestScenarios"/>
+        </xs:sequence>
+
+        <xs:attribute name="type" type="xs:string" use="required" fixed="tm"/>
+    </xs:complexType>
+
+    <xs:complexType name="task">
+        <xs:attribute name="title" type="xs:string" use="required"/>
+        <xs:attribute name="text" type="xs:string" use="required"/>
+        <xs:attribute name="time" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="public_inputs" type="xs:boolean" use="required"/>
+        <xs:attribute name="max_steps" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="result_version" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="structure">
+        <xs:sequence>
+            <xs:element name="automaton" minOccurs="0">
+                <xs:alternative test="@type='fsa'" type="finiteStateAutomaton"/>
+                <xs:alternative test="@type='pda'" type="pushDownAutomaton"/>
+                <xs:alternative test="@type='lba'" type="linearBoundedAutomaton"/>
+                <xs:alternative test="@type='tm'" type="turingMachine"/>
+                <xs:alternative type="xs:error"/>
+            </xs:element>
+            <xs:element name="task" type="task" minOccurs="0"/>
+        </xs:sequence>
+
+        <!--NOTE: due to minor bugs during file generation, files generated by application versions < 3.4
+        are not valid according to this schema, even though they are v2.1 (the app itself parses them just fine)-->
+        <xs:attribute name="version" type="xs:decimal" use="required" fixed="2.1"/>
+    </xs:complexType>
+
+
+    <xs:element name="structure" type="structure">
+        <xs:unique name="stateName">
+            <xs:selector xpath="./automaton/states/state"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:unique name="inputSymbolName">
+            <xs:selector xpath="./automaton/input_alphabet/symbol"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+        <xs:unique name="stackSymbolName">
+            <xs:selector xpath="./automaton/stack_alphabet/symbol"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+
+        <xs:key name="stateId">
+            <xs:selector xpath="./automaton/states/state"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="fromStateIdRef" refer="stateId">
+            <xs:selector xpath="./automaton/transitions/transition/from"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="toStateIdRef" refer="stateId">
+            <xs:selector xpath="./automaton/transitions/transition/to"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+
+        <xs:key name="inputSymbolId">
+            <xs:selector xpath="./automaton/input_alphabet/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="readSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/transitions/transition/read"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="writeSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/transitions/transition/write"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="inputWordSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/test_scenarios/test_scenario/input_word/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:keyref>
+        <xs:keyref name="outputWordSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/test_scenarios/test_scenario/output_word/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:keyref>
+        <xs:keyref name="negativeInputWordSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/negative_scenarios/test_scenario/input_word/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:keyref>
+        <xs:keyref name="negativeOutputWordSymbolIdRef" refer="inputSymbolId">
+            <xs:selector xpath="./automaton/negative_scenarios/test_scenario/output_word/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:keyref>
+
+        <xs:key name="stackSymbolId">
+            <xs:selector xpath="./automaton/stack_alphabet/symbol"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="pushSymbolIdRef" refer="stackSymbolId">
+            <xs:selector xpath="./automaton/transitions/transition/push"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="popSymbolIdRef" refer="stackSymbolId">
+            <xs:selector xpath="./automaton/transitions/transition/pop"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+    </xs:element>
+
+</xs:schema>

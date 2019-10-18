@@ -1,0 +1,317 @@
+package fiitstu.gulis.cmsimulator.activities;
+
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.*;
+
+import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
+import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
+import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
+import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
+import fiitstu.gulis.cmsimulator.elements.TaskResult;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+/**
+ * Activity for editing tasks.
+ *
+ * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
+ * TASK (Serializable - Task) - the task being edited
+ *
+ * Created by Jakub Sedlář on 12.01.2018.
+ */
+public class EditTaskActivity extends FragmentActivity implements SaveMachineDialog.SaveDialogListener,
+        NewMachineDialog.NewMachineDialogListener {
+    //log tag
+    private static final String TAG = EditTaskActivity.class.getName();
+
+    //bundle arguments
+    public static final String TASK = "TASK";
+
+    private EditText titleEditText;
+    private EditText textEditText;
+    private EditText minutesEditText;
+    private CheckBox timeLimitCheckbox;
+    private CheckBox publishInputsCheckbox;
+
+    private Task task;
+    private int machineType;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_task);
+        Log.v(TAG, "onCreate initialization started");
+
+        final Bundle inputBundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
+
+        machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE, MainActivity.UNDEFINED);
+        task = (Task) inputBundle.getSerializable(TASK);
+        if (task == null) {
+            task = new Task();
+        }
+
+        titleEditText = findViewById(R.id.editText_task_title);
+        textEditText = findViewById(R.id.editText_task_text);
+        timeLimitCheckbox = findViewById(R.id.checkBox_edit_task_time_limit);
+        minutesEditText = findViewById(R.id.editText_edit_task_minutes);
+        publishInputsCheckbox = findViewById(R.id.checkBox_edit_task_show_tests);
+
+        publishInputsCheckbox.setChecked(task.getPublicInputs());
+
+        if (task.getTitle() != null) {
+            titleEditText.setText(task.getTitle());
+        }
+
+        if (task.getText() != null) {
+            textEditText.setText(task.getText());
+        }
+
+        if (task.getMinutes() != 0) {
+            timeLimitCheckbox.setChecked(true);
+            minutesEditText.setText(String.valueOf(task.getMinutes()));
+        }
+
+
+        Button setAutomatonButton = findViewById(R.id.button_edit_task_set_automaton);
+        setAutomatonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (machineType == MainActivity.UNDEFINED) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    NewMachineDialog newMachineDialog = NewMachineDialog.newInstance();
+                    newMachineDialog.show(fm, "MACHINE_CHOICE_DIALOG");
+                }
+                else {
+                    editAutomaton(false);
+                }
+            }
+        });
+
+        //back
+        ImageButton backButton = findViewById(R.id.imageButton_edit_tasks_back);
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        final ImageButton menuButton = findViewById(R.id.imageButton_edit_tasks_menu);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(EditTaskActivity.this, menuButton);
+                popup.setOnMenuItemClickListener(new MenuItemClickListener());
+                popup.inflate(R.menu.menu_edit_task);
+                popup.show();
+            }
+        });
+
+        Button launchButton = findViewById(R.id.button_edit_task_launch);
+        launchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (machineType == MainActivity.UNDEFINED) {
+                    Toast.makeText(EditTaskActivity.this, R.string.automaton_not_created, Toast.LENGTH_SHORT).show();
+                }
+                else if (titleEditText.getText().toString().isEmpty()) {
+                    Toast.makeText(EditTaskActivity.this, R.string.no_task_title, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Bundle outputBundle = new Bundle();
+                    FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+                    DataSource dataSource = DataSource.getInstance();
+                    dataSource.open();
+                    try {
+                        fileHandler.setData(dataSource, machineType);
+                        updateTask();
+                        task.setResultVersion(TaskResult.CURRENT_VERSION);
+                        fileHandler.writeTask(task);
+
+                        String taskDoc = fileHandler.writeToString();
+                        outputBundle.putString(LaunchedTaskActivity.TASK_DOCUMENT, taskDoc);
+                        outputBundle.putInt(LaunchedTaskActivity.TIME, task.getMinutes());
+                        outputBundle.putString(LaunchedTaskActivity.TITLE, task.getTitle());
+                    } catch (ParserConfigurationException | TransformerException e) {
+                        Log.e(TAG, "Error happened when serializing task", e);
+                    } finally {
+                        dataSource.close();
+                    }
+                    Intent nextActivityIntent = new Intent(EditTaskActivity.this, LaunchedTaskActivity.class);
+                    nextActivityIntent.putExtras(outputBundle);
+                    startActivity(nextActivityIntent);
+                }
+            }
+        });
+
+        Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(MainActivity.MACHINE_TYPE, machineType);
+        outState.putSerializable("TASK", task);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG, "onBackPressed method started");
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.exit_confirmation)
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        DataSource.getInstance().open();;
+                        DataSource.getInstance().globalDrop();
+                        DataSource.getInstance().close();
+                        finish();
+                        EditTaskActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    @Override
+    public void saveDialogClick(String filename, FileHandler.Format format, boolean exit) {
+        try {
+            FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+            if (machineType != MainActivity.UNDEFINED) {
+                DataSource dataSource = DataSource.getInstance();
+                dataSource.open();
+                fileHandler.setData(dataSource, machineType);
+                dataSource.close();
+            }
+            updateTask();
+            fileHandler.writeTask(task);
+            fileHandler.writeFile(filename);
+
+            Toast.makeText(this, FileHandler.PATH + "/" + filename + ".cmst " + getResources().getString(R.string.save_succ), Toast.LENGTH_SHORT).show();
+            SaveMachineDialog saveMachineDialog = (SaveMachineDialog) getSupportFragmentManager()
+                    .findFragmentByTag("SAVE_DIALOG");
+            if (saveMachineDialog != null) {
+                saveMachineDialog.dismiss();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "File was not saved", e);
+            Toast.makeText(this, getResources().getString(R.string.file_not_saved), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void newMachineDialogClick(Bundle outputBundle) {
+        machineType = outputBundle.getInt(MainActivity.MACHINE_TYPE);
+        editAutomaton(true);
+        NewMachineDialog newMachineDialog = (NewMachineDialog) getSupportFragmentManager()
+                .findFragmentByTag("MACHINE_CHOICE_DIALOG");
+        if (newMachineDialog != null) {
+            newMachineDialog.dismiss();
+        }
+    }
+
+    /**
+     * Updates  edited Task object to reflect the changes made by the user via the GUI
+     */
+    private void updateTask() {
+        task.setTitle(titleEditText.getText().toString());
+        task.setText(textEditText.getText().toString());
+        task.setPublicInputs(publishInputsCheckbox.isChecked());
+        if (timeLimitCheckbox.isChecked()) {
+            task.setMinutes(Integer.parseInt(minutesEditText.getText().toString()));
+        }
+        else {
+            task.setMinutes(0);
+        }
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        task.setMaxSteps(dataSource.getMaxSteps());
+        dataSource.close();
+    }
+
+    private void editAutomaton(boolean isNew) {
+        updateTask();
+        Bundle outputBundle = new Bundle();
+        outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
+        if (isNew) {
+            outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_TASK);
+        }
+        else {
+            outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EDIT_TASK);
+        }
+        outputBundle.putSerializable("TASK", task);
+        Intent nextActivityIntent = new Intent(EditTaskActivity.this, SimulationActivity.class);
+        nextActivityIntent.putExtras(outputBundle);
+        startActivity(nextActivityIntent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MainActivity.REQUEST_WRITE_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    SaveMachineDialog saveMachineDialog = SaveMachineDialog.newInstance(task.getTitle(), FileHandler.Format.CMST, false);
+                    saveMachineDialog.show(fm, "SAVE_DIALOG");
+                }
+            }
+        }
+    }
+
+    private class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_edit_task_save_task:
+                    if (Build.VERSION.SDK_INT > 15
+                            && ContextCompat.checkSelfPermission(EditTaskActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(EditTaskActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MainActivity.REQUEST_WRITE_STORAGE);
+                    } else {
+                        FragmentManager fm = getSupportFragmentManager();
+                        SaveMachineDialog saveMachineDialog = SaveMachineDialog.newInstance(task.getTitle(), FileHandler.Format.CMST, false);
+                        saveMachineDialog.show(fm, "SAVE_DIALOG");
+                    }
+                    return true;
+                case R.id.menu_edit_task_settings:
+                    Intent nextActivityIntent = new Intent(EditTaskActivity.this, OptionsActivity.class);
+                    startActivity(nextActivityIntent);
+                    Log.i(TAG, "options activity intent executed");
+                    return true;
+                case R.id.menu_edit_task_help:
+                    FragmentManager fm = getSupportFragmentManager();
+                    GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
+                    guideFragment.show(fm, "HELP_DIALOG");
+                    return true;
+            }
+            return false;
+        }
+    }
+}

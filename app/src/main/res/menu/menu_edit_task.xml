@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="fiitstu.gulis.cmsimulator.activities.EditTaskActivity">
+    <item
+            android:id="@+id/menu_edit_task_save_task"
+            android:title="@string/save_task"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_edit_task_settings"
+            android:title="@string/settings"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_edit_task_help"
+            android:title="@string/help"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+</menu>

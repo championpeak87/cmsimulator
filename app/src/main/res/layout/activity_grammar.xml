@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout_grammar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_black_1000"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/imageButton_grammar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@color/md_black_1000"
+            android:contentDescription="@string/back"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_arrow_back_white_48dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/imageButton_grammar_back"
+            android:layout_toRightOf="@id/imageButton_grammar_back"
+            android:layout_toStartOf="@+id/imageButton_grammar_menu"
+            android:layout_toLeftOf="@+id/imageButton_grammar_menu"
+            android:background="@color/md_black_1000"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/grammar_definition"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/md_white_1000" />
+
+        <ImageButton
+            android:id="@+id/imageButton_grammar_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/md_black_1000"
+            android:contentDescription="@string/menu"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_menu_white_48dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_white_1000"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
+
+        <Button
+            android:id="@+id/button_grammar_grammarType"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/grammar_grammarType"
+            style="@style/GrammarButtonStyle"/>
+
+        <Button
+            android:id="@+id/button_grammar_test"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/grammar_test"
+            style="@style/GrammarButtonStyle"/>
+
+        <Button
+            android:id="@+id/button_grammar_pipe"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/pipe"
+            style="@style/GrammarButtonStyle"/>
+
+        <Button
+            android:id="@+id/button_grammar_epsilon"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/epsilon"
+            style="@style/GrammarButtonStyle"/>
+
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="285dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewRules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/button_grammar_add_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/grammar_add_row"
+                style="@style/GrammarButtonStyle"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_black_1000"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="@string/grammar_definition"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/md_white_1000" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height= "1dp"
+        android:background="@color/md_white_1000" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:background="@color/md_black_1000"
+                    android:textColor="@color/md_white_1000"
+                    android:text="@string/grammar_grammarType"/>
+
+                <TextView
+                    android:id="@+id/textView_grammar_type_grammar_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/grammar_text_size"
+                    android:background="@drawable/boarder"/>
+            </LinearLayout>
+            <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@color/md_black_1000"
+                android:textColor="@color/md_white_1000"
+                android:text="@string/definition"/>
+
+            <TextView
+                android:id="@+id/textView_grammar_type_definition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/grammar_text_size"
+                android:background="@drawable/boarder"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:background="@color/md_black_1000"
+                    android:textColor="@color/md_white_1000"
+                    android:text="@string/non_terminals"/>
+
+                <TextView
+                    android:id="@+id/textView_grammar_type_non_terminals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/grammar_text_size"
+                    android:background="@drawable/boarder"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:background="@color/md_black_1000"
+                    android:textColor="@color/md_white_1000"
+                    android:text="@string/terminals"/>
+
+                <TextView
+                    android:id="@+id/textView_grammar_type_terminals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:gravity="center_horizontal"
+                    android:textSize="@dimen/grammar_text_size"
+                    android:background="@drawable/boarder"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

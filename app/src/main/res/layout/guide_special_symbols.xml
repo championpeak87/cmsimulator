@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        style="@style/guide_heading"
+        android:text="@string/guide_title_special_symbols" />
+
+    <TextView style="@style/guide_paragraph"
+        android:text="@string/guide_special_symbols_introduction" />
+
+    <TextView style="@style/guide_paragraph"
+              android:text="@string/guide_special_symbols_epsilon" />
+
+    <TextView style="@style/guide_paragraph"
+              android:text="@string/guide_special_symbols_blank" />
+
+    <TextView style="@style/guide_paragraph"
+              android:text="@string/guide_special_symbols_stack_start" />
+
+    <TextView style="@style/guide_paragraph"
+              android:text="@string/guide_special_symbols_left_end" />
+
+    <TextView style="@style/guide_paragraph"
+              android:text="@string/guide_special_symbols_right_end" />
+
+    <TextView style="@style/guide_see_also"
+              android:text="@string/guide_see_also" />
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_configuration_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_configuration_activity" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_bulk_test_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_bulk_test_activity" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grammar>
+    <rule>
+        <left>S</left>
+        <right>aSBC</right>
+    </rule>
+    <rule>
+        <left>S</left>
+        <right>abC</right>
+    </rule>
+    <rule>
+        <left>CB</left>
+        <right>BC</right>
+    </rule>
+    <rule>
+        <left>bC</left>
+        <right>bc</right>
+    </rule>
+    <rule>
+        <left>bB</left>
+        <right>bb</right>
+    </rule>
+    <rule>
+        <left>cC</left>
+        <right>cc</right>
+    </rule>
+</grammar>

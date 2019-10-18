@@ -1,0 +1,223 @@
+package fiitstu.gulis.cmsimulator.adapters.bulktest;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.StringRes;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.app.CMSimulator;
+import fiitstu.gulis.cmsimulator.elements.Symbol;
+import fiitstu.gulis.cmsimulator.elements.TestScenario;
+import junit.framework.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * An adapter for listing test scenarios, showing their index, input word, and optionally
+ * also the result of their running. Also supports customizable background color for each entry.
+ *
+ * Created by Jakub Sedlář on 21.01.2018.
+ */
+public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioListAdapter.ViewHolder> {
+
+    public enum Status {
+        ACCEPT(R.string.accept, Color.GREEN),
+        REJECT(R.string.reject, 0xFFFF3333), //light red
+        INCORRECT_OUTPUT(R.string.incorrect_output, 0xFFFF3333), //light red
+        CORRECT_OUTPUT_REJECTED(R.string.correct_output_but_reject, Color.YELLOW),
+        TOOK_TOO_LONG(R.string.not_halt, 0xFFFF8000); //orange
+
+        /**
+         * The displayed status text
+         */
+        public final String text;
+
+        /**
+         * The highlight color of the row
+         */
+        @ColorInt
+        public final int color;
+
+        Status(@StringRes int text, int color) {
+            this.text = CMSimulator.getContext().getResources().getString(text);
+            this.color = color;
+        }
+    }
+
+    //log tag
+    private static final String TAG = TestScenarioListAdapter.class.getName();
+
+    private List<TestScenario> items;
+    private boolean editable;
+    private LayoutInflater inflater;
+    private ItemClickCallback itemClickCallback;
+
+    private SparseIntArray rowColors = new SparseIntArray();
+    private SparseArray<String> statuses = new SparseArray<>();
+
+    public interface ItemClickCallback {
+        void onLongClick(TestScenario test);
+        void onEditItemClick(TestScenario test);
+        void onRemoveItemClick(TestScenario test);
+    }
+
+    public void setItemClickCallback(final ItemClickCallback itemClickCallback) {
+        this.itemClickCallback = itemClickCallback;
+    }
+
+    public TestScenarioListAdapter(Context context, boolean editable) {
+        this.items = new ArrayList<>();
+        this.editable = editable;
+        this.inflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.list_element_test, parent, false);
+        return new ViewHolder(view, editable);
+    }
+
+    /**
+     * Sets the background color of all rows to transparent
+     */
+    public void clearRowColors() {
+        rowColors.clear();
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Sets the row's status/result message
+     * @param row the row index
+     * @param status the status of the test
+     */
+    public void setRowStatus(int row, Status status) {
+        statuses.put(row, status.text);
+        rowColors.put(row, status.color);
+        notifyItemChanged(row);
+    }
+
+    public void notifyItemChanged(TestScenario testScenario) {
+        notifyItemChanged(items.indexOf(testScenario));
+    }
+
+    /**
+     * Deletes all status messages previously set by {@link #setRowStatus(int, String)}
+     */
+    public void clearStatuses() {
+        statuses.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        TestScenario test = items.get(position);
+        holder.valueTextView.setText(Symbol.listToWord(test.getInputWord()));
+
+        holder.positionTextView.setText(String.valueOf(position + 1) + ".");
+
+        holder.background.setBackgroundColor(rowColors.get(position));
+
+        if (statuses.get(position) != null) {
+            holder.setStatus(statuses.get(position));
+        }
+        else {
+            holder.setStatus("");
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public TestScenario getItem(int index) {
+        return items.get(index);
+    }
+
+    public void setItems(List items) {
+        //cannot set, because the same list is used in spinners
+        this.items.clear();
+        this.items.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(TestScenario item) {
+        Log.v(TAG, "addItem item added");
+        items.add(item);
+        notifyItemInserted(items.size() - 1);
+    }
+
+    public void removeItem(TestScenario item) {
+        Log.v(TAG, "removeItem item removed");
+        int position = items.indexOf(item);
+        items.remove(position);
+        statuses.delete(position);
+        rowColors.delete(position);
+        notifyItemRemoved(position);
+        //also change numbers of next elements
+        notifyItemRangeChanged(position, items.size() - position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        //listItem content
+        private TextView positionTextView;
+        private TextView valueTextView;
+        private TextView statusTextView;
+        private ImageButton editImageButton;
+        private ImageButton removeImageButton;
+        private LinearLayout background;
+
+        ViewHolder(View itemView, boolean editable) {
+            super(itemView);
+            positionTextView = itemView.findViewById(R.id.textView_list_test_position);
+            valueTextView = itemView.findViewById(R.id.textView_list_test_word);
+            statusTextView = itemView.findViewById(R.id.textView_list_test_status);
+            editImageButton = itemView.findViewById(R.id.imageButton_list_test_edit);
+            removeImageButton = itemView.findViewById(R.id.imageButton_list_test_remove);
+            if (editable) {
+                editImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v(TAG, "editElement button click noted");
+                        itemClickCallback.onEditItemClick(items.get(getAdapterPosition()));
+                    }
+                });
+                removeImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v(TAG, "removeElement button click noted");
+                        itemClickCallback.onRemoveItemClick(items.get(getAdapterPosition()));
+                    }
+                });
+            }
+            else {
+                editImageButton.setVisibility(View.GONE);
+                removeImageButton.setVisibility(View.GONE);
+            }
+            background = itemView.findViewById(R.id.linearLayout_list_test_background);
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    itemClickCallback.onLongClick(items.get(getAdapterPosition()));
+                    return true;
+                }
+            });
+        }
+
+        public void setStatus(String status) {
+            statusTextView.setText(status);
+        }
+    }
+}

@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.0">
+    <automaton type="tm">
+        <input_alphabet>
+            <symbol id="1" name="#" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="b" properties="0"/>
+            <symbol id="4" name="A" properties="0"/>
+            <symbol id="5" name="B" properties="0"/>
+            <symbol id="6" name="$" properties="0"/>
+        </input_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>-543</x>
+                <y>499</y>
+                <initial/>
+            </state>
+            <state id="2" name="q1a">
+                <x>-342</x>
+                <y>153</y>
+            </state>
+            <state id="3" name="q1b">
+                <x>-235</x>
+                <y>689</y>
+            </state>
+            <state id="4" name="q2a">
+                <x>-72</x>
+                <y>142</y>
+            </state>
+            <state id="5" name="q2b">
+                <x>355</x>
+                <y>750</y>
+            </state>
+            <state id="6" name="qf">
+                <x>-349</x>
+                <y>394</y>
+                <final/>
+            </state>
+            <state id="7" name="q3">
+                <x>207</x>
+                <y>313</y>
+            </state>
+            <state id="8" name="q4">
+                <x>424</x>
+                <y>306</y>
+            </state>
+            <state id="9" name="q5">
+                <x>624</x>
+                <y>429</y>
+            </state>
+            <state id="10" name="q6">
+                <x>-16</x>
+                <y>427</y>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>1</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>2</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>3</to>
+                <read>3</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>3</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>3</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>4</to>
+                <read>6</read>
+                <write>6</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>5</to>
+                <read>6</read>
+                <write>6</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>6</to>
+                <read>1</read>
+                <write>1</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>6</to>
+                <read>1</read>
+                <write>1</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>7</to>
+                <read>2</read>
+                <write>4</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>7</to>
+                <read>3</read>
+                <write>5</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>7</from>
+                <to>8</to>
+                <read>6</read>
+                <write>6</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>8</from>
+                <to>8</to>
+                <read>2</read>
+                <write>2</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>8</from>
+                <to>8</to>
+                <read>3</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>8</from>
+                <to>9</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>8</from>
+                <to>9</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>8</from>
+                <to>9</to>
+                <read>1</read>
+                <write>1</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>9</from>
+                <to>2</to>
+                <read>2</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>9</from>
+                <to>3</to>
+                <read>3</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>7</from>
+                <to>7</to>
+                <read>4</read>
+                <write>4</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>7</from>
+                <to>7</to>
+                <read>5</read>
+                <write>5</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>9</from>
+                <to>10</to>
+                <read>6</read>
+                <write>6</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>10</from>
+                <to>10</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>10</from>
+                <to>10</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>10</from>
+                <to>6</to>
+                <read>1</read>
+                <write>1</write>
+                <move>R</move>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>2</symbol>
+            <symbol>3</symbol>
+            <symbol>3</symbol>
+            <symbol>2</symbol>
+            <symbol>6</symbol>
+            <symbol>3</symbol>
+            <symbol>3</symbol>
+            <symbol>2</symbol>
+            <symbol>1</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="6"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="3"/>
+                    <symbol id="6"/>
+                    <symbol id="2"/>
+                    <symbol id="3"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios/>
+    </automaton>
+</structure>

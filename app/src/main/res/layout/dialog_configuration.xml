@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_white_1000" >
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <!--used for alphabets and state value-->
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <!--text will be set programmatically-->
+            <TextView
+                    android:id="@+id/textView_popup_configuration_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                    android:id="@+id/editText_popup_configuration_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:inputType="text"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_state_initial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:id="@+id/textView_popup_configuration_state_initial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.69"
+                    android:text="@string/initial_state"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                    android:id="@+id/checkBox_popup_configuration_state_initial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.31"
+                    android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_state_final"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:id="@+id/textView_popup_configuration_state_final"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.69"
+                    android:text="@string/final_state"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                    android:id="@+id/checkBox_popup_configuration_state_final"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.31" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_from_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/from_state"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                    android:id="@+id/spinner_popup_configuration_transition_from_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_read_symbol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/read_symbol"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                    android:id="@+id/spinner_popup_configuration_transition_read_symbol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_pop_symbol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/POP_symbol"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView_popup_configuration_transition_pop_symbol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_to_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/to_state"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                    android:id="@+id/spinner_popup_configuration_transition_to_state"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_push_symbol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/PUSH_symbol"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView_popup_configuration_transition_push_symbol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_popup_configuration_transition_write_symbol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/write_symbol"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                    android:id="@+id/spinner_popup_configuration_transition_write_symbol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+        </LinearLayout>
+
+        <RadioGroup
+                android:id="@+id/linearLayout_popup_configuration_transition_direction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.40"
+                    android:text="@string/direction"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioButton
+                    android:id="@+id/radioButton_popup_configuration_transition_direction_left"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.30"
+                    android:checked="false"
+                    android:layout_gravity="right"
+                    android:text="@string/left"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <RadioButton
+                    android:id="@+id/radioButton_popup_configuration_transition_direction_right"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.30"
+                    android:checked="true"
+                    android:layout_gravity="right"
+                    android:text="@string/right"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RadioGroup>
+    </LinearLayout>
+</ScrollView>

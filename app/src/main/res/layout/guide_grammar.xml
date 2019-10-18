@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        style="@style/guide_heading"
+        android:text="@string/guide_title_grammar_definition" />
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_grammar_definition_instruction" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical">
+        <ImageView
+            style="@style/guide_image"
+            android:src="@drawable/ic_menu_white_with_background_48dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/guide_grammar_definition_menu" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/guide_subheading"
+        android:text="@string/guide_title_grammar_input_table"/>
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_grammar_input_table_instruction" />
+
+    <TextView
+        style="@style/guide_subheading"
+        android:text="@string/guide_title_grammar_definition_table"/>
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_grammar_definition_table_instructions"/>
+
+    <TextView
+        style="@style/guide_see_also" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_guide_grammar_simulation_link"
+        style="@style/guide_content_container">
+        <ImageView
+            style="@style/guide_content_bullet" />
+
+        <TextView
+            style="@style/guide_content_text"
+            android:text="@string/guide_title_grammar_simulation" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_guide_grammar_special_symbols_link"
+        style="@style/guide_content_container">
+        <ImageView
+            style="@style/guide_content_bullet" />
+
+        <TextView
+            style="@style/guide_content_text"
+            android:text="@string/guide_title_grammar_special_symbols" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_guide_grammar_load_save_link"
+        style="@style/guide_content_container">
+        <ImageView
+            style="@style/guide_content_bullet" />
+
+        <TextView
+            style="@style/guide_content_text"
+            android:text="@string/guide_title_grammar_load_save" />
+    </LinearLayout>
+
+</LinearLayout>

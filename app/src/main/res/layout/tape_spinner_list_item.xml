@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@android:id/text1"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:textAppearance="?android:attr/textAppearanceListItemSmall"
+          android:maxLines="1"
+          android:gravity="center_vertical"
+          android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+          android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+          android:minHeight="?android:attr/listPreferredItemHeightSmall" />

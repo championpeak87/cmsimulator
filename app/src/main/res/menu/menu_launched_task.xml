@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="fiitstu.gulis.cmsimulator.activities.LaunchedTaskActivity">
+    <item
+            android:id="@+id/menu_launched_task_save"
+            android:title="@string/save"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_launched_task_help"
+            android:title="@string/help"
+            style="@style/dropDownMenuItemStyle" />
+</menu>

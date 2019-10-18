@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="fiitstu.gulis.cmsimulator.activities.OptionsActivity">
+    <item
+        android:id="@+id/menu_options_reset_settings"
+        android:title="@string/reset_settings"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+
+    <item
+            android:id="@+id/menu_options_help"
+            android:title="@string/help"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+</menu>

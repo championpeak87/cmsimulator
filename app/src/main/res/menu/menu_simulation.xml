@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="fiitstu.gulis.cmsimulator.activities.SimulationActivity">
+    <item
+        android:id="@+id/menu_simulation_configure"
+        android:title="@string/configure"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+        android:id="@+id/menu_simulation_save_machine"
+        android:title="@string/save_machine"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+        android:id="@+id/menu_simulation_specification"
+        android:title="@string/specification"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+        android:id="@+id/menu_simulation_settings"
+        android:title="@string/settings"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+        android:id="@+id/menu_simulation_reset_tape"
+        android:title="@string/tape_reset"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+        android:id="@+id/menu_simulation_help"
+        android:title="@string/help"
+        app:showAsAction="never"
+        style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_simulation_bulk_test"
+            android:title="@string/bulk_test"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_simulation_negative_test"
+            android:title="@string/incorrect_inputs"
+            style="@style/dropDownMenuItemStyle"
+            android:visible="false" />
+</menu>

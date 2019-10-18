@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<structure version="2.1">
+    <automaton type="tm">
+        <input_alphabet>
+            <symbol id="1" name="#" properties="1"/>
+            <symbol id="2" name="a" properties="0"/>
+            <symbol id="3" name="A" properties="0"/>
+            <symbol id="4" name="b" properties="0"/>
+            <symbol id="5" name="B" properties="0"/>
+        </input_alphabet>
+        <states>
+            <state id="1" name="q0">
+                <x>36</x>
+                <y>315</y>
+                <initial/>
+            </state>
+            <state id="2" name="q1a">
+                <x>202</x>
+                <y>195</y>
+            </state>
+            <state id="3" name="q2a">
+                <x>558</x>
+                <y>242</y>
+            </state>
+            <state id="4" name="q1b">
+                <x>-252</x>
+                <y>657</y>
+            </state>
+            <state id="5" name="q3">
+                <x>360</x>
+                <y>389</y>
+            </state>
+            <state id="6" name="q2b">
+                <x>351</x>
+                <y>884</y>
+            </state>
+            <state id="7" name="qf">
+                <x>-46</x>
+                <y>69</y>
+                <final/>
+            </state>
+        </states>
+        <transitions>
+            <transition>
+                <from>1</from>
+                <to>2</to>
+                <read>2</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>2</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>4</to>
+                <read>4</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>2</read>
+                <write>2</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>4</to>
+                <read>4</read>
+                <write>4</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>3</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>5</read>
+                <write>5</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>2</from>
+                <to>3</to>
+                <read>1</read>
+                <write>1</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>3</from>
+                <to>5</to>
+                <read>2</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>2</read>
+                <write>2</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>5</to>
+                <read>4</read>
+                <write>4</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>1</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>1</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>5</from>
+                <to>1</to>
+                <read>1</read>
+                <write>1</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>6</to>
+                <read>3</read>
+                <write>3</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>6</to>
+                <read>5</read>
+                <write>5</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>4</from>
+                <to>6</to>
+                <read>1</read>
+                <write>1</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>6</from>
+                <to>5</to>
+                <read>4</read>
+                <write>5</write>
+                <move>L</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>7</to>
+                <read>3</read>
+                <write>3</write>
+                <move>R</move>
+            </transition>
+            <transition>
+                <from>1</from>
+                <to>7</to>
+                <read>5</read>
+                <write>5</write>
+                <move>R</move>
+            </transition>
+        </transitions>
+        <tape>
+            <symbol>4</symbol>
+            <symbol>2</symbol>
+            <symbol>4</symbol>
+            <symbol>1</symbol>
+            <symbol>1</symbol>
+            <symbol>1</symbol>
+        </tape>
+        <test_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="4"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+        </test_scenarios>
+        <negative_scenarios>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="2"/>
+                    <symbol id="2"/>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+            <test_scenario>
+                <input_word>
+                    <symbol id="4"/>
+                    <symbol id="4"/>
+                    <symbol id="2"/>
+                </input_word>
+            </test_scenario>
+        </negative_scenarios>
+    </automaton>
+    <task title="TM example" text="Fix the error in the Turing machine that should accept all palindromes consisting of 'a' and 'b'." time="0" public_inputs="true" max_steps="100" result_version="1"/>
+</structure>

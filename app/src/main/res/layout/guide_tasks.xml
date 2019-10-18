@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            style="@style/guide_heading"
+            android:text="@string/guide_title_tasks" />
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_tasks_introduction1" />
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_tasks_introduction2" />
+
+    <TextView
+            style="@style/guide_see_also" />
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_solving_tasks_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_solving_tasks" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_creating_tasks_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_creating_tasks" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_settings_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet" />
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_settings" />
+    </LinearLayout>
+</LinearLayout>

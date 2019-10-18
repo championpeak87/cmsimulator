@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView_popup_main_example_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:text="@string/example_machine"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_popup_main_example1_finite_state_automatom"
+                android:text="@string/finite_state_automaton_example1"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example3_finite_state_automatom"
+                android:text="@string/finite_state_automaton_example3"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example2_finite_state_automatom"
+                android:text="@string/finite_state_automaton_example2"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example1_pushdown_automaton"
+                android:text="@string/pushdown_automaton_example1"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example3_pushdown_automaton"
+                android:text="@string/pushdown_automaton_example3"
+                style="@style/exampleMachineButtonStyle" />
+            <Button
+                android:id="@+id/button_popup_main_example2_pushdown_automaton"
+                android:text="@string/pushdown_automaton_example2"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example1_linear_bounded_automaton"
+                android:text="@string/linear_bounded_automaton_example1"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example2_linear_bounded_automaton"
+                android:text="@string/linear_bounded_automaton_example2"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example1_turing_machine"
+                android:text="@string/turing_machine_example1"
+                style="@style/exampleMachineButtonStyle" />
+
+            <Button
+                android:id="@+id/button_popup_main_example2_turing_machine"
+                android:text="@string/turing_machine_example2"
+                style="@style/exampleMachineButtonStyle" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

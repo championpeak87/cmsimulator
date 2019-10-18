@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/guide_heading"
+        android:text="@string/guide_title_grammar_special_symbols" />
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_grammar_special_symbols_instruction"/>
+
+    <TextView
+        style="@style/guide_subheading"
+        android:text="@string/guide_title_grammar_special_symbols_pipe"/>
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_pipe_instruction"/>
+
+    <TextView
+        style="@style/guide_subheading"
+        android:text="@string/guide_title_grammar_special_symbols_epsilon"/>
+
+    <TextView
+        style="@style/guide_paragraph"
+        android:text="@string/guide_epsilon_instruction"/>
+
+    <TextView
+        style="@style/guide_see_also" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_guide_grammar_link"
+        style="@style/guide_content_container">
+        <ImageView
+            style="@style/guide_content_bullet" />
+
+        <TextView
+            style="@style/guide_content_text"
+            android:text="@string/guide_title_grammar_definition" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_guide_grammar_simulation_link"
+        style="@style/guide_content_container">
+        <ImageView
+            style="@style/guide_content_bullet" />
+
+        <TextView
+            style="@style/guide_content_text"
+            android:text="@string/guide_title_grammar_simulation" />
+    </LinearLayout>
+
+</LinearLayout>

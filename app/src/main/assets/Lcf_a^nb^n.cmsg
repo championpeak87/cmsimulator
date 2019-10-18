@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grammar>
+    <rule>
+        <left>S</left>
+        <right>aSb</right>
+    </rule>
+    <rule>
+        <left>S</left>
+        <right>ε</right>
+    </rule>
+</grammar>
