@@ -34,70 +34,78 @@
                       android:layout_marginBottom="10dp">
             <Button
                     android:id="@+id/button_main_new"
-        android:text="@string/new_machine"
-        style="@style/mainMenuButtonStyle"/>
+                    android:text="@string/new_machine"
+                    android:drawableTop="@drawable/baseline_add_box_24"
+                    style="@style/mainMenuButtonStyle"/>
 
-        <Button
-                android:id="@+id/button_main_example"
-                android:text="@string/example_machine"
-                style="@style/mainMenuButtonStyle"/>
+            <Button
+                    android:id="@+id/button_main_example"
+                    android:text="@string/example_machine"
+                    android:drawableTop="@drawable/baseline_slideshow_24"
+                    style="@style/mainMenuButtonStyle"/>
 
-        <Button
-                android:id="@+id/button_main_load"
-                android:text="@string/load_machine"
-                style="@style/mainMenuButtonStyle"/>
-    </LinearLayout>
+            <Button
+                    android:id="@+id/button_main_load"
+                    android:text="@string/load_machine"
+                    android:drawableTop="@drawable/baseline_folder_open_24"
+                    style="@style/mainMenuButtonStyle"/>
+        </LinearLayout>
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/grammars"
-              android:theme="@style/text_subheader"/>
-
-    <LinearLayout android:layout_width="match_parent"
+        <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_marginLeft="10dp"
-                  android:layout_marginTop="10dp"
-                  android:layout_marginBottom="10dp">
-        <Button
-                android:id="@+id/button_main_grammar"
-                android:text="@string/new_grammar"
-                style="@style/mainMenuButtonStyle"/>
-        <Button
-                android:id="@+id/button_main_example_grammar"
-                android:text="@string/example_grammar"
-                style="@style/mainMenuButtonStyle"/>
-    </LinearLayout>
+                  android:text="@string/grammars"
+                  android:theme="@style/text_subheader"/>
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/extras"
-              android:theme="@style/text_subheader"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginBottom="10dp">
+            <Button
+                    android:id="@+id/button_main_grammar"
+                    android:text="@string/new_grammar"
+                    android:drawableTop="@drawable/baseline_add_box_24"
+                    style="@style/mainMenuButtonStyle"/>
+            <Button
+                    android:id="@+id/button_main_example_grammar"
+                    android:text="@string/example_grammar"
+                    android:drawableTop="@drawable/baseline_slideshow_24"
+                    style="@style/mainMenuButtonStyle"/>
+        </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent"
+        <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_marginLeft="10dp"
-                  android:layout_marginTop="10dp"
-                  android:layout_marginBottom="10dp">
+                  android:text="@string/extras"
+                  android:theme="@style/text_subheader"/>
 
-        <Button
-                android:id="@+id/button_main_tasks"
-                android:text="@string/tasks"
-                style="@style/mainMenuButtonStyle"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginBottom="10dp">
 
-        <Button
-                android:id="@+id/button_main_options"
-                android:text="@string/settings"
-                style="@style/mainMenuButtonStyle"/>
+            <Button
+                    android:id="@+id/button_main_tasks"
+                    android:text="@string/tasks"
+                    android:drawableTop="@drawable/baseline_format_list_numbered_24"
+                    style="@style/mainMenuButtonStyle"/>
 
-        <Button
-                android:id="@+id/button_main_help"
-                android:text="@string/help_about"
-                style="@style/mainMenuButtonStyle"/>
+            <Button
+                    android:id="@+id/button_main_options"
+                    android:text="@string/settings"
+                    android:drawableTop="@drawable/baseline_settings_applications_24"
+                    style="@style/mainMenuButtonStyle"/>
+
+            <Button
+                    android:id="@+id/button_main_help"
+                    android:text="@string/help_about"
+                    android:drawableTop="@drawable/baseline_help_24"
+                    style="@style/mainMenuButtonStyle"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
 </LinearLayout>
-
-        </LinearLayout>
