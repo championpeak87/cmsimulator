@@ -386,12 +386,13 @@
 
     <!--Credits-->
     <string name="guide_title_credits">Credits</string>
-    <string name="application_version" translatable="false">CMSimulator v4.2.2 2019</string>
+    <string name="application_version" translatable="false">CMSimulator v5.0.0 ©2019</string>
     <string name="authors">written by:</string>
     <string name="author2015" translatable="false">Jakub Trizna (2015)</string>
     <string name="author2017" translatable="false">Martin Gulis (2017)</string>
     <string name="author2018" translatable="false">Jakub Sedlář (2018)</string>
     <string name="author2019" translatable="false">Krisztian Tóth (2019)</string>
+    <string name="author2020" translatable="false">Kamil Lihan (2020)</string>
     <string name="supervisor">supervised by doc. Mgr. Daniela Chudá, PhD.</string>
     <string name="faculty">FIIT STU Bratislava</string>
     <string name="logo">Logo designed by Adam Trizna</string>

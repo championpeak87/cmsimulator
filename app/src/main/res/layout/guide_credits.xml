@@ -46,6 +46,9 @@
         <TextView
             android:text="@string/author2019"
             style="@style/aboutTextStyle" />
+        <TextView
+                android:text="@string/author2020"
+                style="@style/aboutTextStyle" />
 
         <TextView
                 android:text="@string/supervisor"

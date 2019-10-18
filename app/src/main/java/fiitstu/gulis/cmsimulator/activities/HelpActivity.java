@@ -1,8 +1,12 @@
 package fiitstu.gulis.cmsimulator.activities;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -24,12 +28,24 @@ public class HelpActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_help);
         Log.v(TAG, "onCreate initialization started");
 
-        ////buttons initialization
-        //back
-        ImageButton backB = findViewById(R.id.imageButton_help_back);
-        backB.setOnClickListener(this);
+        //menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle(R.string.help);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -41,8 +57,6 @@ public class HelpActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.imageButton_help_back) {
-            onBackPressed();
-        }
+
     }
 }
