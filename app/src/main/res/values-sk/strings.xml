@@ -3,6 +3,9 @@
     <string name="app_name">CMSimulator</string>
 
     <!--menu items-->
+    <string name="automatas">Automaty</string>
+    <string name="grammars">Gramatiky</string>
+    <string name="extras">Extra</string>
     <string name="settings">Nastavenia</string>
     <string name="help">Pomoc</string>
     <string name="reset_settings">Reset na pôvodné nastavenia</string>
@@ -71,7 +74,7 @@
     <string name="example_grammar">Vzorové gramatiky</string>
     <string name="load_machine">Načítať automat</string>
     <string name="tasks">Úlohy</string>
-    <string name="help_about">Pomoc/O aplikácii</string>
+    <string name="help_about">Pomoc</string>
     <string name="grammar">Gramatika</string>
 
     <!--Popup Main Activity new-->
