@@ -325,7 +325,7 @@
     <string name="refresh">Obnoviť</string>
 
     <!--Edit Tasks Activity-->
-    <string name="edit_task">Upráva úlohy</string>
+    <string name="edit_task">Úprava úlohy</string>
     <string name="title">Názov</string>
     <string name="task_text">Zadanie</string>
     <string name="set_test_inputs_and_automaton">Nastaviť testovacie vstupy a automat</string>

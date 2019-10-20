@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fiitstu.gulis.cmsimulator.activities.ConfigurationActivity">
     <item
+            android:id="@+id/menu_configuration_task_info"
+            android:title="Task info"
+            android:showAsAction="always"
+            android:visible="false"
+            style="@style/dropDownMenuItemStyle" />
+    <item
         android:id="@+id/menu_configuration_simulate"
         android:title="@string/simulate"
         app:showAsAction="never"

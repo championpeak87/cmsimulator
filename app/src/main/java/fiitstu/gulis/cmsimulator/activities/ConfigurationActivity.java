@@ -40,7 +40,7 @@ import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * MACHINE_TYPE (int) - type of the machine (one of MainActivity's static fields)
  * TASK_CONFIGURATION (int) - 0 (not a task), MainActivity.EditTask, or MainActivity.SolveTask
@@ -48,7 +48,7 @@ import fiitstu.gulis.cmsimulator.util.ProgressWorker;
  * TASK (Serializable - Task) - the task being solved (or null); TASK = null <=> TASK_CONFIGURATION = 0
  * EMPTY_INPUT_SYMBOL (long) - the ID of the empty symbol
  * START_STACK_SYMBOL (long) - the ID of the stack start symbol (only needed for push-down automaton)
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class ConfigurationActivity extends FragmentActivity
@@ -165,33 +165,6 @@ public class ConfigurationActivity extends FragmentActivity
         startStackSymbolId = inputBundle.getLong(SimulationActivity.START_STACK_SYMBOL);
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
-        /*if (taskConfiguration != 0) {
-            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-            /ImageButton taskInfoButton = findViewById(R.id.imageButton_configuration_task_info);
-            taskInfoButton.setVisibility(View.VISIBLE);
-            if (taskConfiguration == MainActivity.SOLVE_TASK) {
-                taskInfoButton.setImageResource(R.drawable.excl_red);
-                taskInfoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                        taskDialog.show(fm, TASK_DIALOG);
-                    }
-                });
-            }
-            else {
-                taskInfoButton.setImageResource(R.drawable.excl_green);
-                taskInfoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
-                        taskDialog.show(fm, TASK_DIALOG);
-                    }
-                });
-            }
-        }*/
 
         ////tabHost initialization
         tabHost = findViewById(R.id.tabHost_configuration);
@@ -341,12 +314,26 @@ public class ConfigurationActivity extends FragmentActivity
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.menu_configuration, menu);
 
+        return true;
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (taskConfiguration != 0) {
-            if (task.getPublicInputs() || taskConfiguration != MainActivity.SOLVE_TASK) {
+            MenuItem taskInfoButton = menu.getItem(0);
+            //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
+
+            if (taskConfiguration == MainActivity.SOLVE_TASK) {
+                taskInfoButton.setIcon(R.drawable.excl_red);
+                taskInfoButton.setVisible(true);
+            } else if (taskConfiguration == MainActivity.EDIT_TASK) {
+                taskInfoButton.setIcon(R.drawable.excl_green);
+                taskInfoButton.setVisible(true);
+            }
+            if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
                 menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
                 menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
-            }
-            else {
+            } else {
                 menu.findItem(R.id.menu_configuration_bulk_test).setVisible(false);
             }
         }
@@ -357,10 +344,11 @@ public class ConfigurationActivity extends FragmentActivity
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -380,11 +368,21 @@ public class ConfigurationActivity extends FragmentActivity
                     showSaveMachineDialog();
                 }
                 return true;
+            case R.id.menu_configuration_task_info:
+                if (taskConfiguration == MainActivity.SOLVE_TASK) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+                    taskDialog.show(fm, TASK_DIALOG);
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+                    taskDialog.show(fm, TASK_DIALOG);
+                }
+                return true;
             case R.id.menu_configuration_convert:
                 if (initialState == null) {
                     Toast.makeText(this, R.string.convert_error_no_initial_state, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
                     dialogBuilder.setTitle(R.string.convert_to_deterministic);
                     dialogBuilder.setMessage(R.string.convert_to_deterministic_dialog_text);
@@ -697,12 +695,10 @@ public class ConfigurationActivity extends FragmentActivity
                         deterministicMachine.second, tapeElementList, dataSource.getTestFullExtract(false, getInputAlphabetList()),
                         dataSource.getTestFullExtract(true, getInputAlphabetList()), machineType);
                 saveAsDeterministic = false;
-            }
-            else {
+            } else {
                 if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
                     fileHandler.setData(dataSource, machineType);
-                }
-                else {
+                } else {
                     List<Transition> transitions;
                     switch (machineType) {
                         case MainActivity.FINITE_STATE_AUTOMATON:
@@ -803,8 +799,7 @@ public class ConfigurationActivity extends FragmentActivity
                     Log.i(TAG, "newInputSymbol '" + newSymbol.getValue() + "' created");
                     configurationDialog.addAndSelectInputSymbol(newSymbol);
                     supportDialog.dismiss();
-                }
-                else {
+                } else {
                     switch (elementAction) {
                         case NEW:
                             Symbol newSymbol = dataSource.addInputSymbol(value, 0);
@@ -857,8 +852,7 @@ public class ConfigurationActivity extends FragmentActivity
                     Log.i(TAG, "newStackSymbol '" + newSymbol.getValue() + "' created");
                     configurationDialog.addAndSelectStackSymbol(newSymbol);
                     supportDialog.dismiss();
-                }
-                else {
+                } else {
                     switch (elementAction) {
                         case NEW:
                             Symbol newSymbol = dataSource.addStackSymbol(value, 0);
@@ -924,8 +918,7 @@ public class ConfigurationActivity extends FragmentActivity
                         Log.i(TAG, "newState '" + newState.getValue() + "' created");
                         configurationDialog.addAndSelectState(newState);
                         supportDialog.dismiss();
-                    }
-                    else {
+                    } else {
                         switch (elementAction) {
                             case NEW:
                                 State newState = dataSource.addState(value,
@@ -1297,7 +1290,7 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onRemoveState(final State stateRemove) {
         Log.v(TAG, "onRemoveState from diagram noted");
-       try {
+        try {
             dataSource.deleteState(stateRemove);
             stateAdapter.removeItem(stateRemove);
             diagramView.removeState(stateRemove);
@@ -1425,7 +1418,7 @@ public class ConfigurationActivity extends FragmentActivity
         dataSource.dropStates();
         Pair<List<State>, List<Transition>> deterministicMachine =
                 FiniteStateAutomatonStep.createDeterministic(getStateList(), transitionAdapter.getItems(),
-                diagramView.getDimensionY(), diagramView.getDimensionX(), diagramView.getNodeRadius());
+                        diagramView.getDimensionY(), diagramView.getDimensionX(), diagramView.getNodeRadius());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1435,13 +1428,13 @@ public class ConfigurationActivity extends FragmentActivity
             }
         });
 
-        for (State state: deterministicMachine.first) {
+        for (State state : deterministicMachine.first) {
             final State s = dataSource.addState(state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
             if (s.isInitialState()) {
                 ConfigurationActivity.this.initialState = s;
             }
 
-            for (Transition transition: deterministicMachine.second) {
+            for (Transition transition : deterministicMachine.second) {
                 if (transition.getFromState().equals(state)) {
                     transition.setFromState(s);
                 }
@@ -1457,7 +1450,7 @@ public class ConfigurationActivity extends FragmentActivity
                 }
             });
         }
-        for (Transition transition: deterministicMachine.second) {
+        for (Transition transition : deterministicMachine.second) {
             final Transition t = dataSource.addFsaTransition(transition.getFromState(), transition.getReadSymbol(), transition.getToState(), emptyInputSymbolId);
             runOnUiThread(new Runnable() {
                 @Override
@@ -1483,8 +1476,7 @@ public class ConfigurationActivity extends FragmentActivity
             nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(nextActivityIntent);
             taskDialog.dismiss();
-        }
-        else if (dialogMode == TaskDialog.SOLVING) {
+        } else if (dialogMode == TaskDialog.SOLVING) {
             TaskResultSender resultSender = new TaskResultSender(task, machineType);
 
             resultSender.setOnFinish(new Runnable() {
@@ -1530,8 +1522,7 @@ public class ConfigurationActivity extends FragmentActivity
 
             taskDialog.freeze();
             resultSender.execute();
-        }
-        else if (dialogMode == TaskDialog.SOLVED) {
+        } else if (dialogMode == TaskDialog.SOLVED) {
             dataSource.globalDrop();
             dataSource.close();
             TaskDialog.setStatusText(null);

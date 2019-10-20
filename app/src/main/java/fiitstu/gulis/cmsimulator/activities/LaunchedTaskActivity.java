@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -15,6 +16,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -39,12 +42,12 @@ import java.util.*;
 /**
  * An activity for controlling a task that is currently being assigned to others and
  * for viewing submitted results.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * TASK_DOCUMENT (String) - an XML document containing the task, the test inputs and the automaton
  * TIME (int) - the time, in minutes, reserved to solving the task, 0 if unlimited
  * TITLE (String) - the displayed title of the activity, typically the title of the task
- *
+ * <p>
  * Created by Jakub Sedlář on 15.01.2018.
  */
 public class LaunchedTaskActivity extends FragmentActivity {
@@ -72,62 +75,22 @@ public class LaunchedTaskActivity extends FragmentActivity {
         setContentView(R.layout.activity_launched_task);
         Log.v(TAG, "onCreate initialization started");
 
+
         Bundle inputBundle = getIntent().getExtras();
         String taskDoc = inputBundle.getString(TASK_DOCUMENT);
         final int time = inputBundle.getInt(TIME);
 
+        //menu
         title = inputBundle.getString(TITLE);
-        TextView titleTextView = findViewById(R.id.textView_launched_task_title);
-        titleTextView.setText(title);
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(title);
 
         resultListAdapter = new TaskResultListAdapter();
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView_launched_task_results);
         recyclerView.setAdapter(resultListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //back
-        ImageButton backButton = findViewById(R.id.imageButton_launched_task_back);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        //menu
-        final ImageButton menuButton = findViewById(R.id.imageButton_launched_task_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(LaunchedTaskActivity.this, menuButton);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.menu_launched_task_save:
-                                if (Build.VERSION.SDK_INT > 15
-                                        && ContextCompat.checkSelfPermission(LaunchedTaskActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(LaunchedTaskActivity.this,
-                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                            MainActivity.REQUEST_WRITE_STORAGE);
-                                } else {
-                                    saveResults();
-                                }
-                                return true;
-                            case R.id.menu_launched_task_help:
-                                FragmentManager fm = getSupportFragmentManager();
-                                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
-                                guideFragment.show(fm, "HELP_DIALOG");
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popup.inflate(R.menu.menu_launched_task);
-                popup.show();
-            }
-        });
 
         try {
             taskServer = new TaskServer(taskDoc, new TaskServer.ResultConsumer() {
@@ -213,6 +176,40 @@ public class LaunchedTaskActivity extends FragmentActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_launched_task_save:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(LaunchedTaskActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(LaunchedTaskActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MainActivity.REQUEST_WRITE_STORAGE);
+                } else {
+                    saveResults();
+                }
+                return true;
+            case R.id.menu_launched_task_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
+                guideFragment.show(fm, "HELP_DIALOG");
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_launched_task, menu);
+
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
         finish();
@@ -256,8 +253,7 @@ public class LaunchedTaskActivity extends FragmentActivity {
             Toast.makeText(LaunchedTaskActivity.this, FileHandler.PATH + "/" + fileName +
                     " " + getResources().getString(R.string.save_succ), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "file " + fileName + " saved");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "File was not saved", e);
             Toast.makeText(LaunchedTaskActivity.this,
                     getResources().getString(R.string.file_not_saved), Toast.LENGTH_SHORT).show();

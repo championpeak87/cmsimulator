@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -60,6 +63,11 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         setContentView(R.layout.activity_edit_task);
         Log.v(TAG, "onCreate initialization started");
 
+        // menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.edit_task);
+
         final Bundle inputBundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
 
         machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE, MainActivity.UNDEFINED);
@@ -105,26 +113,6 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             }
         });
 
-        //back
-        ImageButton backButton = findViewById(R.id.imageButton_edit_tasks_back);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        final ImageButton menuButton = findViewById(R.id.imageButton_edit_tasks_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(EditTaskActivity.this, menuButton);
-                popup.setOnMenuItemClickListener(new MenuItemClickListener());
-                popup.inflate(R.menu.menu_edit_task);
-                popup.show();
-            }
-        });
-
         Button launchButton = findViewById(R.id.button_edit_task_launch);
         launchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +151,48 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         });
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_edit_task, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_edit_task_save_task:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(EditTaskActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(EditTaskActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MainActivity.REQUEST_WRITE_STORAGE);
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    SaveMachineDialog saveMachineDialog = SaveMachineDialog.newInstance(task.getTitle(), FileHandler.Format.CMST, false);
+                    saveMachineDialog.show(fm, "SAVE_DIALOG");
+                }
+                return true;
+            case R.id.menu_edit_task_settings:
+                Intent nextActivityIntent = new Intent(EditTaskActivity.this, OptionsActivity.class);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "options activity intent executed");
+                return true;
+            case R.id.menu_edit_task_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
+                guideFragment.show(fm, "HELP_DIALOG");
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -288,28 +318,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.menu_edit_task_save_task:
-                    if (Build.VERSION.SDK_INT > 15
-                            && ContextCompat.checkSelfPermission(EditTaskActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(EditTaskActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                MainActivity.REQUEST_WRITE_STORAGE);
-                    } else {
-                        FragmentManager fm = getSupportFragmentManager();
-                        SaveMachineDialog saveMachineDialog = SaveMachineDialog.newInstance(task.getTitle(), FileHandler.Format.CMST, false);
-                        saveMachineDialog.show(fm, "SAVE_DIALOG");
-                    }
-                    return true;
-                case R.id.menu_edit_task_settings:
-                    Intent nextActivityIntent = new Intent(EditTaskActivity.this, OptionsActivity.class);
-                    startActivity(nextActivityIntent);
-                    Log.i(TAG, "options activity intent executed");
-                    return true;
-                case R.id.menu_edit_task_help:
-                    FragmentManager fm = getSupportFragmentManager();
-                    GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
-                    guideFragment.show(fm, "HELP_DIALOG");
-                    return true;
+
             }
             return false;
         }

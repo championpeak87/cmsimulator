@@ -339,8 +339,9 @@ public class SimulationActivity extends FragmentActivity
                 //intentional fall-through
             case MainActivity.EDIT_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-                taskButton.setIcon(R.drawable.excl_green);
-                taskButton.setVisible(true);
+
+                //taskButton.setIcon(getDrawable(R.drawable.excl_green));
+                //taskButton.setVisible(true);
                 filename = task.getTitle();
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
@@ -350,8 +351,8 @@ public class SimulationActivity extends FragmentActivity
                 break;
             case MainActivity.SOLVE_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-                taskButton.setIcon(R.drawable.excl_red);
-                taskButton.setVisible(true);
+                //taskButton.setIcon(getDrawable(R.drawable.excl_red));
+                //taskButton.setVisible(true);
                 filename = task.getTitle();
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
