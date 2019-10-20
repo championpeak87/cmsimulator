@@ -1003,11 +1003,13 @@
 	<string name="guide_title_grammar_input_table">The input table</string>
 	<string name="guide_grammar_input_table_instruction">You can define the rules of your grammar in this table by
 		entering the rules to the left columns
-		and derivations to the right column. If there are several derivations from the same rule, you can divide them by <b>
+		and derivations to the right column. If there are several derivations from the same rule, you can divide them by
+		<b>
 			pipe
 		</b>
 		<i>(See Grammar special symbols)</i>.
-		If you wish to enter an empty word, please use <b>epsilon</b>
+		If you wish to enter an empty word, please use
+		<b>epsilon</b>
 		<i>(See Grammar special symbols)</i>. Since these characters are uncommon on Android keyboards you can
 		enter them by pressing the shortcut buttons. If you run out of rows in the table, you can add more by pressing
 		the <b>Add row</b> button.
