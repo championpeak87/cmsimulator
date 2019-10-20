@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,13 +51,13 @@ import fiitstu.gulis.cmsimulator.views.AdaptiveRecyclerView;
 
 /**
  * The activity for simulating machines.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * MACHINE_TYPE (int) - type of the machine (one of MainActivity's static fields)
  * CONFIGURATION_TYPE (int) - what kind of machine is being started (one of MainActivity's static fields, e.g. NEW_MACHINE)
  * FILE_NAME (String) - the name of the currently open file (or the default filename)
  * TASK (Serializable - Task) - the task being solved (or null)
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class SimulationActivity extends FragmentActivity
@@ -124,6 +125,7 @@ public class SimulationActivity extends FragmentActivity
     /**
      * Initializes the machine, adding special symbols to its alphabet and creates the tape.
      * called when new machine is to be created (rather than loading an existing one).
+     *
      * @param machineType the type of the machine
      */
     private void initMachine(int machineType) {
@@ -161,28 +163,30 @@ public class SimulationActivity extends FragmentActivity
 
     /**
      * Sets the activity's title
+     *
      * @param machineType the type of the machine
      */
     private void setActivityTitle(int machineType) {
-        TextView title = findViewById(R.id.textView_simulation_title);
+        ActionBar actionBar = this.getActionBar();
         switch (machineType) {
             case MainActivity.FINITE_STATE_AUTOMATON:
-                title.setText(R.string.simulation_FSA);
+                actionBar.setTitle(R.string.simulation_FSA);
                 break;
             case MainActivity.PUSHDOWN_AUTOMATON:
-                title.setText(R.string.simulation_PDA);
+                actionBar.setTitle(R.string.simulation_PDA);
                 break;
             case MainActivity.LINEAR_BOUNDED_AUTOMATON:
-                title.setText(R.string.simulation_LBA);
+                actionBar.setTitle(R.string.simulation_LBA);
                 break;
             case MainActivity.TURING_MACHINE:
-                title.setText(R.string.simulation_TM);
+                actionBar.setTitle(R.string.simulation_TM);
                 break;
         }
     }
 
     /**
      * Sets the filename based on the type of the machine or Intent paramaters
+     *
      * @param machineType the type of the machine
      */
     private void setFilename(int machineType) {
@@ -202,10 +206,41 @@ public class SimulationActivity extends FragmentActivity
                     this.filename = "TM";
                     break;
             }
-        }
-        else {
+        } else {
             this.filename = filename;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_simulation, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_simulation_task_info:
+                if (configurationType == MainActivity.EDIT_TASK) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
+                    taskDialog.show(fm, "TASK_DIALOG");
+                } else if (configurationType == MainActivity.SOLVE_TASK) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+                    taskDialog.show(fm, "TASK_DIALOG");
+                }
+                return true;
+
+
+        }
+
+        return false;
     }
 
     @Override
@@ -213,6 +248,10 @@ public class SimulationActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation);
         Log.v(TAG, "onCreate initialization started");
+
+        //menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //dataSource initialization
         dataSource = DataSource.getInstance();
@@ -261,7 +300,7 @@ public class SimulationActivity extends FragmentActivity
         machineTapeRecyclerView.setMaxCount(3.4f);
         machineTapeRecyclerView.setVisibility(View.GONE);
 
-        ImageButton taskButton = findViewById(R.id.imageButton_simulation_task_info);
+        MenuItem taskButton = findViewById(R.id.menu_simulation_task_info);
 
         //get configuration type (defines if we work with empty activity or fields will be filled already
         configurationType = savedInstanceState == null
@@ -300,16 +339,8 @@ public class SimulationActivity extends FragmentActivity
                 //intentional fall-through
             case MainActivity.EDIT_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-                taskButton.setImageResource(R.drawable.excl_green);
-                taskButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
-                        taskDialog.show(fm, "TASK_DIALOG");
-                    }
-                });
-                taskButton.setVisibility(View.VISIBLE);
+                taskButton.setIcon(R.drawable.excl_green);
+                taskButton.setVisible(true);
                 filename = task.getTitle();
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
@@ -319,16 +350,8 @@ public class SimulationActivity extends FragmentActivity
                 break;
             case MainActivity.SOLVE_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-                taskButton.setImageResource(R.drawable.excl_red);
-                taskButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                        taskDialog.show(fm, "TASK_DIALOG");
-                    }
-                });
-                taskButton.setVisibility(View.VISIBLE);
+                taskButton.setIcon(R.drawable.excl_red);
+                taskButton.setVisible(true);
                 filename = task.getTitle();
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
@@ -370,22 +393,12 @@ public class SimulationActivity extends FragmentActivity
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 stackRecyclerView.setMaxCount(4.4f);
-            }
-            else {
+            } else {
                 stackRecyclerView.setMaxCount(2.4f);
             }
         } else {
             stackRecyclerView.setVisibility(View.GONE);
         }
-
-        ////buttons initialization
-        //back
-        ImageButton backB = findViewById(R.id.imageButton_simulation_back);
-        backB.setOnClickListener(this);
-
-        //menu
-        menuB = findViewById(R.id.imageButton_simulation_menu);
-        menuB.setOnClickListener(this);
 
         //full simulation
         ImageButton simulateFullB = findViewById(R.id.imageButton_simulation_full);
@@ -455,8 +468,7 @@ public class SimulationActivity extends FragmentActivity
             if (configurationType == MainActivity.NEW_TASK || configurationType == MainActivity.EDIT_TASK) {
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.EDIT_TASK);
                 outputBundle.putSerializable(MainActivity.TASK, task);
-            }
-            else if (configurationType == MainActivity.SOLVE_TASK) {
+            } else if (configurationType == MainActivity.SOLVE_TASK) {
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                 outputBundle.putSerializable(MainActivity.TASK, task);
             }
@@ -559,8 +571,7 @@ public class SimulationActivity extends FragmentActivity
         super.onSaveInstanceState(outState);
         if (task == null) {
             outState.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.RESUME_MACHINE);
-        }
-        else if (configurationType == MainActivity.NEW_TASK) {
+        } else if (configurationType == MainActivity.NEW_TASK) {
             outState.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EDIT_TASK);
         }
     }
@@ -580,8 +591,7 @@ public class SimulationActivity extends FragmentActivity
             stackRecyclerView.setAdapter(stackAdapter);
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 stackRecyclerView.setMaxCount(4.4f);
-            }
-            else {
+            } else {
                 stackRecyclerView.setMaxCount(2.4f);
             }
         }
@@ -592,30 +602,6 @@ public class SimulationActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            //back
-            case R.id.imageButton_simulation_back:
-                onBackPressed();
-                break;
-            //menu
-            case R.id.imageButton_simulation_menu:
-                PopupMenu popup = new PopupMenu(this, menuB);
-                popup.setOnMenuItemClickListener(this);
-                popup.inflate(R.menu.menu_simulation);
-                if (configurationType == MainActivity.SOLVE_TASK
-                        || configurationType == MainActivity.EDIT_TASK
-                        || configurationType == MainActivity.NEW_TASK) {
-                    Menu menu = popup.getMenu();
-
-                    if (task.getPublicInputs() || configurationType != MainActivity.SOLVE_TASK) {
-                        menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
-                        menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
-                    }
-                    else {
-                        menu.findItem(R.id.menu_simulation_bulk_test).setVisible(false);
-                    }
-                }
-                popup.show();
-                break;
             //full simulation
             case R.id.imageButton_simulation_full:
                 //check if initial and final states exist
@@ -818,7 +804,7 @@ public class SimulationActivity extends FragmentActivity
                         defaultTapeAdapter.notifyItemChanged(defaultTapeAdapter.getItems().indexOf(tapeElement) + 1);
                     }
                 }
-                for (MachineStep machineStep: machineAdapter.getItems()) {
+                for (MachineStep machineStep : machineAdapter.getItems()) {
                     machineStep.getTape().clearBreakpoints();
                 }
                 machineAdapter.notifyDataSetChanged();
@@ -835,8 +821,7 @@ public class SimulationActivity extends FragmentActivity
                 || configurationType == MainActivity.EDIT_TASK) {
             SimulationActivity.this.finish();
             SimulationActivity.super.onBackPressed();
-        }
-        else if (configurationType == MainActivity.SOLVE_TASK) {
+        } else if (configurationType == MainActivity.SOLVE_TASK) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
                     .setMessage(R.string.task_leave_warning)
@@ -850,8 +835,7 @@ public class SimulationActivity extends FragmentActivity
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
-        }
-        else {
+        } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
                     .setMessage(R.string.machine_confirmation)
@@ -863,7 +847,7 @@ public class SimulationActivity extends FragmentActivity
                                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                         MainActivity.REQUEST_WRITE_STORAGE);
                             } else {
-                                if(filename == null)
+                                if (filename == null)
                                     setFilename(machineType);
                                 showSaveMachineDialog(true);
                             }
@@ -912,8 +896,7 @@ public class SimulationActivity extends FragmentActivity
                 if (configurationType == MainActivity.NEW_TASK || configurationType == MainActivity.EDIT_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.EDIT_TASK);
                     outputBundle.putSerializable(MainActivity.TASK, task);
-                }
-                else if (configurationType == MainActivity.SOLVE_TASK) {
+                } else if (configurationType == MainActivity.SOLVE_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 }
@@ -1092,8 +1075,7 @@ public class SimulationActivity extends FragmentActivity
     public void onSpinnerLongClick(int position) {
         if (simulating) {
             Toast.makeText(this, R.string.unable_simulation, Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             final int finalPosition = position;
             final TapeElement defaultTapeElement = defaultTapeAdapter.getItems().get(position);
 
@@ -1109,8 +1091,7 @@ public class SimulationActivity extends FragmentActivity
                 contextSource = new CharSequence[]{getResources().getString(R.string.set_initial),
                         getResources().getString(R.string.remove_breakpoint),
                         getResources().getString(R.string.remove)};
-            }
-            else {
+            } else {
                 contextSource = new CharSequence[]{getResources().getString(R.string.set_initial),
                         getResources().getString(R.string.place_breakpoint),
                         getResources().getString(R.string.remove)};
@@ -1140,8 +1121,7 @@ public class SimulationActivity extends FragmentActivity
 
                                         diagramView.invalidate();
                                         simulationFlowView.invalidate();
-                                    }
-                                    else {
+                                    } else {
                                         TapeElement oldInitialElement = defaultTapeAdapter.getInitialTapeElement();
                                         defaultTapeAdapter.changeInitialTapeElement(defaultTapeElement);
                                         //position+1 because 0 is left button
@@ -1166,13 +1146,13 @@ public class SimulationActivity extends FragmentActivity
                                 case PLACE_BREAKPOINT:
                                     /*if (defaultTapeAdapter.getInitialTapeElement() == defaultTapeElement) {
                                         Toast.makeText(SimulationActivity.this, R.string.initial_tape_element_breakpoint_error, Toast.LENGTH_SHORT).show();
-                                    } else*/ if (defaultTapeElement.isBreakpoint()) {
+                                    } else*/
+                                    if (defaultTapeElement.isBreakpoint()) {
                                         defaultTapeElement.setBreakpoint(false);
                                         //position+1 because 0 is left button
                                         defaultTapeAdapter.notifyItemChanged(finalPosition + 1);
                                         machineAdapter.getItems().get(0).getTape().setBreakpoint(finalPosition, false);
-                                    }
-                                    else {
+                                    } else {
                                         defaultTapeElement.setBreakpoint(true);
                                         //position+1 because 0 is left button
                                         defaultTapeAdapter.notifyItemChanged(finalPosition + 1);
@@ -1208,8 +1188,7 @@ public class SimulationActivity extends FragmentActivity
                                                 })
                                                 .setNegativeButton(R.string.no, null)
                                                 .show();
-                                    }
-                                    else {
+                                    } else {
                                         new AlertDialog.Builder(SimulationActivity.this)
                                                 .setTitle(R.string.warning)
                                                 .setMessage(R.string.remove_tape_element)
@@ -1244,8 +1223,7 @@ public class SimulationActivity extends FragmentActivity
             FileHandler fileHandler = new FileHandler(format);
             if (configurationType != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
                 fileHandler.setData(dataSource, machineType);
-            }
-            else { //test inputs are supposed to be hidden, do not save them
+            } else { //test inputs are supposed to be hidden, do not save them
                 List<Transition> transitions;
                 List<Symbol> inputAlphabet = dataSource.getInputAlphabetFullExtract();
                 List<State> states = dataSource.getStateFullExtract();
@@ -1276,7 +1254,7 @@ public class SimulationActivity extends FragmentActivity
                 saveMachineDialog.dismiss();
             }
 
-            if(exit){
+            if (exit) {
                 dataSource.globalDrop();
                 SimulationActivity.this.finish();
                 SimulationActivity.super.onBackPressed();
@@ -1313,8 +1291,9 @@ public class SimulationActivity extends FragmentActivity
 
     /**
      * Loads machine from a file
+     *
      * @param filename the name of the file
-     * @param format the file format
+     * @param format   the file format
      */
     private void loadMachine(String filename, FileHandler.Format format) {
         try {
@@ -1337,6 +1316,7 @@ public class SimulationActivity extends FragmentActivity
 
     /**
      * Loads an example machine
+     *
      * @param machineType the type of the machine
      */
     private void prepareExample(int machineType) {
@@ -1477,7 +1457,7 @@ public class SimulationActivity extends FragmentActivity
         }
 
         if (machineStep != null) {
-            ((MachineTapeListAdapter)machineStep.getTape()).setTapeDimension(tapeDimension);
+            ((MachineTapeListAdapter) machineStep.getTape()).setTapeDimension(tapeDimension);
 
             machineStep.findUsableTransitions();
             machineAdapter.addItem(machineStep);
@@ -1509,15 +1489,12 @@ public class SimulationActivity extends FragmentActivity
 
         if (status == MachineStep.DONE) {
             Toast.makeText(this, getResources().getString(R.string.solution_found), Toast.LENGTH_SHORT).show();
-        }
-        else if (status == MachineStep.STUCK) {
+        } else if (status == MachineStep.STUCK) {
             Toast.makeText(this, R.string.all_stuck, Toast.LENGTH_SHORT).show();
-        }
-        else if (fullSimulation) {
+        } else if (fullSimulation) {
             if (machine.isNondeterministicBreakpoint()) {
                 Toast.makeText(this, R.string.breakpoint_hit, Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 Toast.makeText(this, getString(R.string.simulated_max_steps, dataSource.getMaxSteps()),
                         Toast.LENGTH_SHORT).show();
             }
@@ -1541,21 +1518,19 @@ public class SimulationActivity extends FragmentActivity
         for (int i = machineAdapter.getItems().size() - 1; i >= 0; i--) {
             MachineStep machineStep = machineAdapter.getItems().get(i);
 
-            ((MachineTapeListAdapter)machineStep.getTape()).setTapeDimension(tapeDimension);
+            ((MachineTapeListAdapter) machineStep.getTape()).setTapeDimension(tapeDimension);
             //when simulation is over, need to change tapeDimensions
             //machineAdapter.notifyItemChanged(machineAdapter.getItems().indexOf(machineStep));
             if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
-                ((StackTapeListAdapter)((PushdownAutomatonStep) machineStep).getStack()).setTapeDimension(tapeDimension);
+                ((StackTapeListAdapter) ((PushdownAutomatonStep) machineStep).getStack()).setTapeDimension(tapeDimension);
                 //stackAdapter.notifyItemChanged(machineAdapter.getItems().indexOf(machineStep));
             }
             //add to specific list according to status
             if (machineStep.getMachineStatus() == MachineStep.DONE) {
                 doneMachineStepList.add(machineStep);
-            }
-            else if (machineStep.getMachineStatus() == MachineStep.PROGRESS) {
+            } else if (machineStep.getMachineStatus() == MachineStep.PROGRESS) {
                 progressMachineStepList.add(machineStep);
-            }
-            else {
+            } else {
                 stuckMachineStepList.add(machineStep);
             }
         }
@@ -1576,8 +1551,7 @@ public class SimulationActivity extends FragmentActivity
         if (dialogMode == TaskDialog.EDITING) {
             onBackPressed();
             taskDialog.dismiss();
-        }
-        else if (dialogMode == TaskDialog.SOLVING) {
+        } else if (dialogMode == TaskDialog.SOLVING) {
             TaskResultSender resultSender = new TaskResultSender(task, machineType);
 
             resultSender.setOnFinish(new Runnable() {
@@ -1623,8 +1597,7 @@ public class SimulationActivity extends FragmentActivity
 
             taskDialog.freeze();
             resultSender.execute();
-        }
-        else if (dialogMode == TaskDialog.SOLVED) {
+        } else if (dialogMode == TaskDialog.SOLVED) {
             dataSource.globalDrop();
             TaskDialog.setStatusText(null);
             Intent nextActivityIntent = new Intent(SimulationActivity.this, MainActivity.class);
