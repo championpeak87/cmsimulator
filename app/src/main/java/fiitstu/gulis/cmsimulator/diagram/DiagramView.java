@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.diagram;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -139,7 +140,19 @@ public class DiagramView extends View {
         newStatePositionY = metrics.heightPixels / 3;
 
         textPaint = new Paint();
-        textPaint.setColor(ContextCompat.getColor(context, R.color.md_black_1000));
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                textPaint.setColor(ContextCompat.getColor(context, R.color.md_white_1000));
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                textPaint.setColor(ContextCompat.getColor(context, R.color.md_black_1000));
+                break;
+        }
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.diagram_text_size));
 

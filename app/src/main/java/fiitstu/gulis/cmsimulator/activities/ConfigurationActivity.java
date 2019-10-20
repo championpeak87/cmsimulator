@@ -320,6 +320,8 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (taskConfiguration != 0) {
+            Bundle inputBundle = getIntent().getExtras();
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             MenuItem taskInfoButton = menu.getItem(0);
             //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
 

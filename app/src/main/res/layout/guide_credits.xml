@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:contentDescription="@string/logo"
-            android:src="@drawable/logo_v1" />
+            android:src="@drawable/logo_v1_light" />
 
     <TextView
             android:text="@string/logo"

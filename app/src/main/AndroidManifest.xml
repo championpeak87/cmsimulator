@@ -1,69 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fiitstu.gulis.cmsimulator">
+          package="fiitstu.gulis.cmsimulator">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
 
-    <application
-        android:name="fiitstu.gulis.cmsimulator.app.CMSimulator"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+	<application
+			android:name=".app.CMSimulator"
+			android:allowBackup="true"
+			android:icon="@mipmap/ic_launcher"
+			android:label="@string/app_name"
+			android:supportsRtl="true"
+			android:theme="@style/AppTheme">
+<!--		<activity android:name=".activities.SplashActivity">-->
+<!--		</activity>-->
 		<activity
-            android:name="fiitstu.gulis.cmsimulator.activities.MainActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/MainMenuTheme">
+				android:name=".activities.MainActivity"
+				android:configChanges="orientation|screenSize"
+				android:label="@string/app_name"
+				android:theme="@style/MainMenuTheme">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.OptionsActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.HelpActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.ConfigurationActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.SimulationActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.BulkTestActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.TasksActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.FindTasksActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.EditTaskActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.GrammarActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:screenOrientation="portrait"/>
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.SimulationGrammarActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:screenOrientation="portrait"/>
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.LaunchedTaskActivity"
-                  android:configChanges="orientation|screenSize" />
-
-        <activity android:name="fiitstu.gulis.cmsimulator.activities.MultipleTestsActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:screenOrientation="portrait"/>
-    </application>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity
+				android:name=".activities.OptionsActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.HelpActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.ConfigurationActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.SimulationActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.BulkTestActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.TasksActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.FindTasksActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.EditTaskActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.GrammarActivity"
+				android:configChanges="orientation|screenSize"
+				android:screenOrientation="portrait"/>
+		<activity
+				android:name=".activities.SimulationGrammarActivity"
+				android:configChanges="orientation|screenSize"
+				android:screenOrientation="portrait"/>
+		<activity
+				android:name=".activities.LaunchedTaskActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.MultipleTestsActivity"
+				android:configChanges="orientation|screenSize"
+				android:screenOrientation="portrait"/>
+	</application>
 
 </manifest>

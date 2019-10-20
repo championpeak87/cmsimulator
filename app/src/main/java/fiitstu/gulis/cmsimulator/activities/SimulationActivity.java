@@ -236,8 +236,100 @@ public class SimulationActivity extends FragmentActivity
                     taskDialog.show(fm, "TASK_DIALOG");
                 }
                 return true;
+            case R.id.menu_simulation_configure:
+                if (simulating) {
+                    stopSimulation();
+                }
 
+                Bundle outputBundle = new Bundle();
+                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
+                outputBundle.putString(MainActivity.FILE_NAME, filename);
+                outputBundle.putLong(SimulationActivity.EMPTY_INPUT_SYMBOL, emptyInputSymbolId);
+                if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
+                    outputBundle.putLong(SimulationActivity.START_STACK_SYMBOL, startStackSymbolId);
+                }
+                if (configurationType == MainActivity.NEW_TASK || configurationType == MainActivity.EDIT_TASK) {
+                    outputBundle.putInt(TASK_CONFIGURATION, MainActivity.EDIT_TASK);
+                    outputBundle.putSerializable(MainActivity.TASK, task);
+                } else if (configurationType == MainActivity.SOLVE_TASK) {
+                    outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putSerializable(MainActivity.TASK, task);
+                }
+                Log.v(TAG, "outputBundle initialized");
 
+                Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
+                nextActivityIntent.putExtras(outputBundle);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "configuration activity intent executed");
+                return true;
+            case R.id.menu_simulation_save_machine:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MainActivity.REQUEST_WRITE_STORAGE);
+                } else {
+                    showSaveMachineDialog(false);
+                }
+                return true;
+            case R.id.menu_simulation_specification:
+                FragmentManager fm = getSupportFragmentManager();
+                FormalSpecDialog formalSpecDialog = FormalSpecDialog.newInstance(machineType,
+                        inputAlphabetList, stackAlphabetList,
+                        stateList, transitionList);
+                formalSpecDialog.show(fm, FORMAL_SPEC_DIALOG);
+                return true;
+            case R.id.menu_simulation_settings:
+                if (simulating) {
+                    stopSimulation();
+                }
+
+                outputBundle = new Bundle();
+                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
+                Log.v(TAG, "outputBundle initialized");
+
+                nextActivityIntent = new Intent(this, OptionsActivity.class);
+                nextActivityIntent.putExtras(outputBundle);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "configuration activity intent executed");
+                return true;
+            case R.id.menu_simulation_reset_tape:
+                if (!simulating) {
+                    resetTape();
+                } else {
+                    Toast.makeText(SimulationActivity.this, R.string.unable_simulation, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.menu_simulation_help:
+                fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SIMULATION);
+                guideFragment.show(fm, HELP_DIALOG);
+                return true;
+            case R.id.menu_simulation_negative_test:
+            case R.id.menu_simulation_bulk_test:
+                if (simulating) {
+                    stopSimulation();
+                }
+                outputBundle = new Bundle();
+                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
+                outputBundle.putString(MainActivity.FILE_NAME, filename);
+                if (configurationType == MainActivity.SOLVE_TASK
+                        || configurationType == MainActivity.NEW_TASK
+                        || configurationType == MainActivity.EDIT_TASK) {
+                    outputBundle.putInt(BulkTestActivity.TASK_CONFIGURATION, configurationType);
+                }
+                outputBundle.putSerializable(MainActivity.TASK, task);
+                if (item.getItemId() == R.id.menu_simulation_negative_test) {
+                    outputBundle.putBoolean(BulkTestActivity.NEGATIVE, true);
+                }
+                outputBundle.putString(MainActivity.FILE_NAME, filename);
+                Log.v(TAG, "outputBundle initialized");
+
+                nextActivityIntent = new Intent(this, BulkTestActivity.class);
+                nextActivityIntent.putExtras(outputBundle);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "bulk test activity intent executed");
+                return true;
         }
 
         return false;
@@ -882,100 +974,7 @@ public class SimulationActivity extends FragmentActivity
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_simulation_configure:
-                if (simulating) {
-                    stopSimulation();
-                }
 
-                Bundle outputBundle = new Bundle();
-                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
-                outputBundle.putString(MainActivity.FILE_NAME, filename);
-                outputBundle.putLong(SimulationActivity.EMPTY_INPUT_SYMBOL, emptyInputSymbolId);
-                if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
-                    outputBundle.putLong(SimulationActivity.START_STACK_SYMBOL, startStackSymbolId);
-                }
-                if (configurationType == MainActivity.NEW_TASK || configurationType == MainActivity.EDIT_TASK) {
-                    outputBundle.putInt(TASK_CONFIGURATION, MainActivity.EDIT_TASK);
-                    outputBundle.putSerializable(MainActivity.TASK, task);
-                } else if (configurationType == MainActivity.SOLVE_TASK) {
-                    outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
-                    outputBundle.putSerializable(MainActivity.TASK, task);
-                }
-                Log.v(TAG, "outputBundle initialized");
-
-                Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
-                nextActivityIntent.putExtras(outputBundle);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "configuration activity intent executed");
-                return true;
-            case R.id.menu_simulation_save_machine:
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MainActivity.REQUEST_WRITE_STORAGE);
-                } else {
-                    showSaveMachineDialog(false);
-                }
-                return true;
-            case R.id.menu_simulation_specification:
-                FragmentManager fm = getSupportFragmentManager();
-                FormalSpecDialog formalSpecDialog = FormalSpecDialog.newInstance(machineType,
-                        inputAlphabetList, stackAlphabetList,
-                        stateList, transitionList);
-                formalSpecDialog.show(fm, FORMAL_SPEC_DIALOG);
-                return true;
-            case R.id.menu_simulation_settings:
-                if (simulating) {
-                    stopSimulation();
-                }
-
-                outputBundle = new Bundle();
-                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
-                Log.v(TAG, "outputBundle initialized");
-
-                nextActivityIntent = new Intent(this, OptionsActivity.class);
-                nextActivityIntent.putExtras(outputBundle);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "configuration activity intent executed");
-                return true;
-            case R.id.menu_simulation_reset_tape:
-                if (!simulating) {
-                    resetTape();
-                } else {
-                    Toast.makeText(SimulationActivity.this, R.string.unable_simulation, Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            case R.id.menu_simulation_help:
-                fm = getSupportFragmentManager();
-                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SIMULATION);
-                guideFragment.show(fm, HELP_DIALOG);
-                return true;
-            case R.id.menu_simulation_negative_test:
-            case R.id.menu_simulation_bulk_test:
-                if (simulating) {
-                    stopSimulation();
-                }
-                outputBundle = new Bundle();
-                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
-                outputBundle.putString(MainActivity.FILE_NAME, filename);
-                if (configurationType == MainActivity.SOLVE_TASK
-                        || configurationType == MainActivity.NEW_TASK
-                        || configurationType == MainActivity.EDIT_TASK) {
-                    outputBundle.putInt(BulkTestActivity.TASK_CONFIGURATION, configurationType);
-                }
-                outputBundle.putSerializable(MainActivity.TASK, task);
-                if (menuItem.getItemId() == R.id.menu_simulation_negative_test) {
-                    outputBundle.putBoolean(BulkTestActivity.NEGATIVE, true);
-                }
-                outputBundle.putString(MainActivity.FILE_NAME, filename);
-                Log.v(TAG, "outputBundle initialized");
-
-                nextActivityIntent = new Intent(this, BulkTestActivity.class);
-                nextActivityIntent.putExtras(outputBundle);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "bulk test activity intent executed");
-                return true;
         }
         return false;
     }

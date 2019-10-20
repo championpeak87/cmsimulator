@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.activities;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -80,75 +83,10 @@ public class SimulationGrammarActivity extends FragmentActivity {
         super.onCreate(savedInstaceState);
         setContentView(R.layout.activity_simulation_grammar);
 
-        //back
-        ImageButton backButton = findViewById(R.id.imageButton_grammar_simulation_back);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        //menu
-        final ImageButton menuButton = findViewById(R.id.imageButton_grammar_simulation_menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(SimulationGrammarActivity.this, menuButton);
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        List<GeneratedWord> stepList = new ArrayList<>();
-                        if(backTrackList.size() > 0) {
-                            stepList = stepSimulation();
-                        }
-                        switch (item.getItemId()) {
-                            case R.id.menu_grammar_simulation_help:
-                                FragmentManager fm = getSupportFragmentManager();
-                                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SIMULATION_GRAMMAR);
-                                guideFragment.show(fm, HELP_DIALOG);
-                                return true;
-                            case R.id.menu_derivation_table:
-                                Fragment derivationTableFragment = DerivationTableFragment.newInstance(stepList);
-                                replaceFragment(derivationTableFragment);
-                                selectedVisualization = DERIVATION_TABLE;
-                                break;
-                            case R.id.menu_derivation_linear:
-                                Fragment derivationLinearFragment;
-                                if(StepCount == backTrackList.size()-1){
-                                    derivationLinearFragment = LinearDerivationFragment.newInstance(stepList, true);
-                                }else{
-                                    derivationLinearFragment = LinearDerivationFragment.newInstance(stepList, false);
-                                }
-                                replaceFragment(derivationLinearFragment);
-                                selectedVisualization = LINEAR_DERIVATION;
-                                break;
-                            case R.id.menu_derivation_fixed:
-                                Fragment derivationFixedFragment;
-                                if(StepCount == backTrackList.size()-1) {
-                                    derivationFixedFragment = FixedDerivationFragment.newInstance(stepList, true);
-                                }else{
-                                    derivationFixedFragment = FixedDerivationFragment.newInstance(stepList, false);
-                                }
-                                replaceFragment(derivationFixedFragment);
-                                selectedVisualization = FIXED_DERIVATION;
-                                break;
-                            case R.id.menu_derivation_tree:
-                                if(grammarType.equals(REGULAR) || grammarType.equals(CONTEXT_FREE)) {
-                                    Fragment derivationTreeFragment = DerivationTreeFragment.newInstance(stepList);
-                                    replaceFragment(derivationTreeFragment);
-                                    selectedVisualization = DERIVATION_TREE;
-                                }else{
-                                    Toast.makeText(SimulationGrammarActivity.this, R.string.grammar_simulation_tree_constraint, Toast.LENGTH_SHORT).show();
-                                }
-                        }
-                        return false;
-                    }
-                });
-                popup.inflate(R.menu.menu_grammar_simulation);
-                popup.show();
-            }
-        });
+        // menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.grammar_simulation);
 
         //test input
         Button testInputButton = findViewById(R.id.button_grammar_simulation_test);
@@ -349,6 +287,66 @@ public class SimulationGrammarActivity extends FragmentActivity {
         Fragment derivationTableFragment = DerivationTableFragment.newInstance(backTrackList);
         replaceFragment(derivationTableFragment);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_grammar_simulation, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        List<GeneratedWord> stepList = new ArrayList<>();
+        if(backTrackList.size() > 0) {
+            stepList = stepSimulation();
+        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_grammar_simulation_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SIMULATION_GRAMMAR);
+                guideFragment.show(fm, HELP_DIALOG);
+                return true;
+            case R.id.menu_derivation_table:
+                Fragment derivationTableFragment = DerivationTableFragment.newInstance(stepList);
+                replaceFragment(derivationTableFragment);
+                selectedVisualization = DERIVATION_TABLE;
+                break;
+            case R.id.menu_derivation_linear:
+                Fragment derivationLinearFragment;
+                if(StepCount == backTrackList.size()-1){
+                    derivationLinearFragment = LinearDerivationFragment.newInstance(stepList, true);
+                }else{
+                    derivationLinearFragment = LinearDerivationFragment.newInstance(stepList, false);
+                }
+                replaceFragment(derivationLinearFragment);
+                selectedVisualization = LINEAR_DERIVATION;
+                break;
+            case R.id.menu_derivation_fixed:
+                Fragment derivationFixedFragment;
+                if(StepCount == backTrackList.size()-1) {
+                    derivationFixedFragment = FixedDerivationFragment.newInstance(stepList, true);
+                }else{
+                    derivationFixedFragment = FixedDerivationFragment.newInstance(stepList, false);
+                }
+                replaceFragment(derivationFixedFragment);
+                selectedVisualization = FIXED_DERIVATION;
+                break;
+            case R.id.menu_derivation_tree:
+                if(grammarType.equals(REGULAR) || grammarType.equals(CONTEXT_FREE)) {
+                    Fragment derivationTreeFragment = DerivationTreeFragment.newInstance(stepList);
+                    replaceFragment(derivationTreeFragment);
+                    selectedVisualization = DERIVATION_TREE;
+                }else{
+                    Toast.makeText(SimulationGrammarActivity.this, R.string.grammar_simulation_tree_constraint, Toast.LENGTH_SHORT).show();
+                }
+        }
+        return false;
     }
 
     /**

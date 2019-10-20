@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import fiitstu.gulis.cmsimulator.database.DataSource;
@@ -23,6 +24,8 @@ import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+
+import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 
 /**
@@ -94,6 +97,24 @@ public class MainActivity extends FragmentActivity
         }
         else {
             setContentView(R.layout.activity_main_portrait);
+        }
+
+
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        ImageView logo = findViewById(R.id.imageView_main_logo);
+        switch (nightModeFlags) {
+
+            case Configuration.UI_MODE_NIGHT_YES:
+
+                logo.setImageResource(R.drawable.logo_v1_dark);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                logo.setImageResource(R.drawable.logo_v1_light);
+                break;
         }
 
         Log.v(TAG, "onCreate initialization started");

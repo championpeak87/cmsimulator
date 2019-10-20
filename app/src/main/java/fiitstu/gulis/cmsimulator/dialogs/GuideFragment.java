@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.dialogs;
 
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import fiitstu.gulis.cmsimulator.R;
 
@@ -374,6 +376,24 @@ public class GuideFragment extends DialogFragment {
         });
         resetScrollView();
         ScrollView.inflate(contentScrollView.getContext(), R.layout.guide_credits, contentScrollView);
+
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+
+        ImageView logo = view.findViewById(R.id.imageView_about_logo);
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                logo.setImageResource(R.drawable.logo_v1_dark);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                logo.setImageResource(R.drawable.logo_v1_light);
+                break;
+        }
+
+        logo.setImageTintMode(null);
         activateLinks(view);
     }
 
