@@ -67,7 +67,7 @@
 
     <!--app theme colors-->
     <color name="primary_color_dark">#00688a</color>
-    <color name="primary_color">#0092c2</color>
+    <color name="primary_color">#00a9e0</color>
     <color name="primary_color_light">#50bbde</color>
 
     <!--simulation colors-->
