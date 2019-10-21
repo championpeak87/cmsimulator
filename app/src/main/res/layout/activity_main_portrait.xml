@@ -25,7 +25,8 @@
                   android:text="@string/automatas"
                   android:theme="@style/text_subheader"/>
 
-        <LinearLayout android:layout_width="match_parent"
+        <LinearLayout android:id="@+id/automatas_linear_layout"
+                android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
                       android:layout_marginLeft="10dp"

@@ -1164,5 +1164,11 @@
 	</string>
 	<string name="task_description">Task description</string>
 	<string name="task_config">Task configuration</string>
+	<string name="welcome">Welcome</string>
+	<string name="welcome_message">This app will help you with formal grammars and languages</string>
+	<string name="understood">Got it</string>
+	<string name="automata_message">When you click this button you can create new automata</string>
+	<string name="grammar_message">This button allows you to create new grammar</string>
+	<string name="tasks_message">Over here you can find tasks you have been assigned</string>
 
 </resources>
