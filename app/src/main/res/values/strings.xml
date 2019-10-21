@@ -1162,5 +1162,7 @@
 		.cmsg and .jff. If you chose
 		.jff you can open the file in JFLAP. The file is saved to the CMSolutions folder in your device.
 	</string>
+	<string name="task_description">Task description</string>
+	<string name="task_config">Task configuration</string>
 
 </resources>

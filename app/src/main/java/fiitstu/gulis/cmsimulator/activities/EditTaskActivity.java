@@ -94,8 +94,24 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
         if (task.getMinutes() != 0) {
             timeLimitCheckbox.setChecked(true);
+            minutesEditText.setEnabled(true);
             minutesEditText.setText(String.valueOf(task.getMinutes()));
         }
+
+        if (timeLimitCheckbox.isChecked())
+        {
+            minutesEditText.setEnabled(true);
+        }
+
+        timeLimitCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (timeLimitCheckbox.isChecked())
+                    minutesEditText.setEnabled(true);
+                else
+                    minutesEditText.setEnabled(false);
+            }
+        });
 
 
         Button setAutomatonButton = findViewById(R.id.button_edit_task_set_automaton);

@@ -24,6 +24,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/finite_state_automaton"
+                      android:theme="@style/text_subheader"
+                      android:layout_marginTop="20dp"
+                      android:layout_marginLeft="20dp"
+                      android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"/>
+
             <Button
                 android:id="@+id/button_popup_main_example1_finite_state_automatom"
                 android:text="@string/finite_state_automaton_example1"
@@ -39,6 +48,15 @@
                 android:text="@string/finite_state_automaton_example2"
                 style="@style/exampleMachineButtonStyle" />
 
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/pushdown_automaton"
+                      android:theme="@style/text_subheader"
+                      android:layout_marginTop="20dp"
+                      android:layout_marginLeft="20dp"
+                      android:layout_marginRight="10dp"
+                      android:layout_marginBottom="10dp"/>
+
             <Button
                 android:id="@+id/button_popup_main_example1_pushdown_automaton"
                 android:text="@string/pushdown_automaton_example1"
@@ -53,6 +71,15 @@
                 android:text="@string/pushdown_automaton_example2"
                 style="@style/exampleMachineButtonStyle" />
 
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/linear_bounded_automaton"
+                      android:theme="@style/text_subheader"
+                      android:layout_marginTop="20dp"
+                      android:layout_marginLeft="20dp"
+                      android:layout_marginRight="10dp"
+                      android:layout_marginBottom="10dp"/>
+
             <Button
                 android:id="@+id/button_popup_main_example1_linear_bounded_automaton"
                 android:text="@string/linear_bounded_automaton_example1"
@@ -62,6 +89,15 @@
                 android:id="@+id/button_popup_main_example2_linear_bounded_automaton"
                 android:text="@string/linear_bounded_automaton_example2"
                 style="@style/exampleMachineButtonStyle" />
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/turing_machine"
+                      android:theme="@style/text_subheader"
+                      android:layout_marginTop="20dp"
+                      android:layout_marginLeft="20dp"
+                      android:layout_marginRight="10dp"
+                      android:layout_marginBottom="10dp"/>
 
             <Button
                 android:id="@+id/button_popup_main_example1_turing_machine"

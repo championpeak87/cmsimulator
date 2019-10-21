@@ -28,12 +28,13 @@
 						android:orientation="vertical">
 
 					<!--clickable tab widget-->
-					<HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+					<HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
+					                      android:background="@color/primary_color_light">
 						<TabWidget
 								android:id="@android:id/tabs"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
-								android:background="@color/primary_color_light"/>
+						/>
 					</HorizontalScrollView>
 
 
@@ -63,7 +64,7 @@
 
 							<LinearLayout
 									android:layout_width="match_parent"
-									android:layout_height="wrap_content"
+									android:layout_height="50dp"
 									android:background="@color/md_black_1000"
 									android:orientation="horizontal"
 									android:padding="0dp">
@@ -92,7 +93,10 @@
 										android:contentDescription="@string/move"
 										android:paddingBottom="7dp"
 										android:paddingTop="2dp"
-										android:src="@drawable/ic_open_with_black_48dp"/>
+										android:src="@drawable/ic_open_with_black_48dp"
+										android:padding="10dp"
+										android:scaleType="centerInside"
+										android:adjustViewBounds="true"/>
 
 								<ImageButton
 										android:id="@+id/imageButton_configuration_diagram_state"
@@ -105,7 +109,10 @@
 										android:contentDescription="@string/add_state"
 										android:paddingBottom="7dp"
 										android:paddingTop="2dp"
-										android:src="@drawable/ic_add_circle_outline_black_48dp"/>
+										android:src="@drawable/ic_add_circle_outline_black_48dp"
+										android:padding="10dp"
+										android:scaleType="centerInside"
+										android:adjustViewBounds="true"/>
 
 								<ImageButton
 										android:id="@+id/imageButton_configuration_diagram_transition"
@@ -116,9 +123,10 @@
 										android:layout_marginRight="-3dp"
 										android:layout_weight="1"
 										android:contentDescription="@string/add_transition"
-										android:paddingBottom="7dp"
-										android:paddingTop="2dp"
-										android:src="@drawable/ic_redo_black_48dp"/>
+										android:src="@drawable/ic_redo_black_48dp"
+										android:padding="10dp"
+										android:scaleType="centerInside"
+										android:adjustViewBounds="true"/>
 
 								<ImageButton
 										android:id="@+id/imageButton_configuration_diagram_edit"
@@ -131,7 +139,10 @@
 										android:contentDescription="@string/edit"
 										android:paddingBottom="7dp"
 										android:paddingTop="2dp"
-										android:src="@drawable/ic_edit_black_48dp"/>
+										android:src="@drawable/ic_edit_black_48dp"
+										android:padding="10dp"
+										android:scaleType="centerInside"
+										android:adjustViewBounds="true"/>
 
 								<ImageButton
 										android:id="@+id/imageButton_configuration_diagram_remove"
@@ -144,7 +155,10 @@
 										android:contentDescription="@string/remove"
 										android:paddingBottom="7dp"
 										android:paddingTop="2dp"
-										android:src="@drawable/ic_delete_black_48dp"/>
+										android:src="@drawable/ic_delete_black_48dp"
+										android:padding="10dp"
+										android:scaleType="centerInside"
+										android:adjustViewBounds="true"/>
 
 								<!--only to make parent the same height-->
 								<ImageButton

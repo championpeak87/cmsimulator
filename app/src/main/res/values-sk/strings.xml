@@ -807,4 +807,6 @@
     <string name="guide_grammar_save_instruction">Uložiť gramatiku môžete v rámci menu na obrazovke pre definíciu gramatiky vybraním tlačidla
     <b>Uložiť gramatiku</b>. Následne zadajte meno súboru a vyberte jeden z dvoch dostupných formátov .cmsg a .jff. Ak si zvolíte .jff môžete
     otvoriť vytvorený súbor v simulátore JFLAP. Vytvorený súbor bude uložený do priečinku CMSolutions vo vašom zariadení.</string>
+	<string name="task_description">Popis úlohy</string>
+    <string name="task_config">Konfigurácia úlohy</string>
 </resources>
