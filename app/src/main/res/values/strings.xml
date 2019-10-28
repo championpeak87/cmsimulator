@@ -1172,5 +1172,6 @@
 	<string name="tasks_message">Over here you can find tasks you have been assigned</string>
 	<string name="tasks_game">Game (EXPERIMENTAL)</string>
 	<string name="select_task">Select task</string>
+	<string name="generic_error">Something went wrong</string>
 
 </resources>

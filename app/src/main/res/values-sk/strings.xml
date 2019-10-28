@@ -819,4 +819,5 @@
     <string name="tasks_message">Tu môžeš nájsť úlohy, ktoré môžeš vyriešiť</string>
 	<string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
 	<string name="select_task">Vyber úlohu</string>
+	<string name="generic_error">Niečo sa pokazilo</string>
 </resources>

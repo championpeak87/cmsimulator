@@ -37,6 +37,8 @@ import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.FiniteStateAutomatonStep;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.util.ProgressWorker;
+import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
+import io.blushine.android.ui.showcase.MaterialShowcaseView;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
@@ -165,6 +167,43 @@ public class ConfigurationActivity extends FragmentActivity
         startStackSymbolId = inputBundle.getLong(SimulationActivity.START_STACK_SYMBOL);
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
+
+        if (taskConfiguration == MainActivity.GAME_MACHINE)
+        {
+            final int selectedGame = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
+            switch (selectedGame)
+            {
+                case TasksActivity.GAME_EXAMPLE_PREVIEW:
+                    ImageButton addState = findViewById(R.id.imageButton_configuration_diagram_state);
+                    MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
+                    MaterialShowcaseView firstLaunchMessage = new MaterialShowcaseView.Builder(this)
+                            .renderOverNavigationBar()
+                            .setTitleText(getString(R.string.welcome))
+                            .setContentText("V tejto hre si ukážeme ako vytvoriť jednoduchý automat")
+                            .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                            .setDismissText(R.string.understood)
+                            .setDelay(500)
+                            .build();
+
+                    MaterialShowcaseView addStateView = new MaterialShowcaseView.Builder(this)
+                            .renderOverNavigationBar()
+                            .setTarget(addState)
+                            .setTitleText(getString(R.string.welcome))
+                            .setContentText("Začneme vytvorením stavu")
+                            .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                            .setDelay(500)
+                            .build();
+
+                    showcaseSequence.addSequenceItem(firstLaunchMessage);
+                    showcaseSequence.addSequenceItem(addStateView);
+                    showcaseSequence.show();
+                    break;
+
+                default:
+                    Toast.makeText(getApplicationContext(), R.string.generic_error, Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
 
         ////tabHost initialization
         tabHost = findViewById(R.id.tabHost_configuration);
