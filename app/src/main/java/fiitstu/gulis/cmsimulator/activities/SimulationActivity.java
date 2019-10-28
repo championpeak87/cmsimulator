@@ -566,7 +566,20 @@ public class SimulationActivity extends FragmentActivity
             Log.v(TAG, "outputBundle initialized");
 
             Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
-            nextActivityIntent.putExtras(outputBundle);
+            Bundle gameBundle = new Bundle();
+            if (inputBundle.containsKey(TasksActivity.TASK_CONFIGURATION)) {
+                int temp = inputBundle.getInt(TasksActivity.TASK_CONFIGURATION);
+                gameBundle.putInt(TasksActivity.TASK_CONFIGURATION, temp);
+
+                temp = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
+                gameBundle.putInt(TasksActivity.GAME_EXAMPLE_NUMBER, temp);
+
+                gameBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+
+                nextActivityIntent.putExtras(gameBundle);
+            } else {
+                nextActivityIntent.putExtras(outputBundle);
+            }
             startActivity(nextActivityIntent);
             Log.i(TAG, "configuration activity intent executed");
         }

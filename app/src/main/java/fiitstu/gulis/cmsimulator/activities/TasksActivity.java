@@ -44,7 +44,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
     private static final String EXAMPLE_DIALOG = "EXAMPLE_DIALOG";
     private static final String GAME_DIALOG = "GAME_DIALOG";
-    private static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
+    public static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
     public static final String GAME_EXAMPLE_NUMBER = "GAME_EXAMPLE_NUMBER";
 
     public static final int GAME_EXAMPLE_PREVIEW = 0;
@@ -207,10 +207,11 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
         Bundle bundle = new Bundle();
         bundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+        bundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_MACHINE);
         bundle.putInt(TASK_CONFIGURATION, MainActivity.GAME_MACHINE);
         bundle.putInt(GAME_EXAMPLE_NUMBER, GAME_EXAMPLE_PREVIEW);
 
-        Intent automata = new Intent(TasksActivity.this, ConfigurationActivity.class);
+        Intent automata = new Intent(TasksActivity.this, SimulationActivity.class);
         automata.putExtras(bundle);
         startActivity(automata);
         Log.i(TAG, "game started");
