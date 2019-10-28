@@ -1173,5 +1173,9 @@
 	<string name="tasks_game">Game (EXPERIMENTAL)</string>
 	<string name="select_task">Select task</string>
 	<string name="generic_error">Something went wrong</string>
+	<string name="game_create_state">Now we will create a new state</string>
+	<string name="gotit">Got it</string>
+	<string name="game_new_state_title">Create new state</string>
+	<string name="game_welcome1">This will help you learn basic finite automata construction</string>
 
 </resources>

@@ -820,4 +820,8 @@
 	<string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
 	<string name="select_task">Vyber úlohu</string>
 	<string name="generic_error">Niečo sa pokazilo</string>
+	<string name="game_create_state">Teraz si vytvoríme nový stav</string>
+    <string name="gotit">Rozumiem</string>
+    <string name="game_new_state_title">Vytvor nový stav</string>
+    <string name="game_welcome1">Táto hra ti pomôže sa naučiť základy tvorby konečných automatov</string>
 </resources>

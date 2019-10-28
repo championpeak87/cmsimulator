@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
 import io.blushine.android.ui.showcase.MaterialShowcaseView;
+import io.blushine.android.ui.showcase.ShowcaseListener;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
@@ -62,12 +64,15 @@ public class ConfigurationActivity extends FragmentActivity
     //log tag
     private static final String TAG = ConfigurationActivity.class.getName();
 
+    public static Activity activity;
+    public static Bundle inputBundle;
+
     //dialog value
     private static final String CONFIGURATION_DIALOG = "CONFIGURATION_DIALOG";
     private static final String SUPPORT_CONFIGURATION_DIALOG = "SUPPORT_CONFIGURATION_DIALOG";
     private static final String TASK_DIALOG = "TASK_DIALOG";
     private static final String HELP_DIALOG = "HELP_DIALOG";
-    private static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
+    public static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
 
     //element actions
     public static final int NEW = 0;
@@ -100,6 +105,7 @@ public class ConfigurationActivity extends FragmentActivity
     private Long emptyInputSymbolId;
     private Long startStackSymbolId;
     private boolean markNondeterminism;
+    public static int gameNumber;
 
     private boolean saveAsDeterministic;
 
@@ -138,6 +144,7 @@ public class ConfigurationActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         Log.v(TAG, "onCreate initialization started");
+        activity = this;
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -152,7 +159,7 @@ public class ConfigurationActivity extends FragmentActivity
         diagramView.setItemClickCallback(this);
 
         //get data from bundle
-        Bundle inputBundle = getIntent().getExtras();
+        inputBundle = getIntent().getExtras();
 
         //set machineType
         machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
@@ -170,39 +177,9 @@ public class ConfigurationActivity extends FragmentActivity
 
         if (taskConfiguration == MainActivity.GAME_MACHINE)
         {
-            final int selectedGame = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
-            switch (selectedGame)
-            {
-                case TasksActivity.GAME_EXAMPLE_PREVIEW:
-                    ImageButton addState = findViewById(R.id.imageButton_configuration_diagram_state);
-                    MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
-                    MaterialShowcaseView firstLaunchMessage = new MaterialShowcaseView.Builder(this)
-                            .renderOverNavigationBar()
-                            .setTitleText(getString(R.string.welcome))
-                            .setContentText("V tejto hre si ukážeme ako vytvoriť jednoduchý automat")
-                            .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                            .setDismissText(R.string.understood)
-                            .setDelay(500)
-                            .build();
-
-                    MaterialShowcaseView addStateView = new MaterialShowcaseView.Builder(this)
-                            .renderOverNavigationBar()
-                            .setTarget(addState)
-                            .setTitleText(getString(R.string.welcome))
-                            .setContentText("Začneme vytvorením stavu")
-                            .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                            .setDelay(500)
-                            .build();
-
-                    showcaseSequence.addSequenceItem(firstLaunchMessage);
-                    showcaseSequence.addSequenceItem(addStateView);
-                    showcaseSequence.show();
-                    break;
-
-                default:
-                    Toast.makeText(getApplicationContext(), R.string.generic_error, Toast.LENGTH_LONG).show();
-                    break;
-            }
+            gameNumber = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
+            GameShowcase gameShowcase = new GameShowcase();
+            gameShowcase.showTutorial(gameNumber, this);
         }
 
         ////tabHost initialization
@@ -359,7 +336,6 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (taskConfiguration != 0) {
-            Bundle inputBundle = getIntent().getExtras();
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             MenuItem taskInfoButton = menu.getItem(0);
             //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
@@ -384,8 +360,6 @@ public class ConfigurationActivity extends FragmentActivity
 
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -585,6 +585,8 @@ public class SimulationActivity extends FragmentActivity
         }
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();

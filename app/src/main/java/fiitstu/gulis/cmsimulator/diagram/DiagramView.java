@@ -17,12 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.elements.FsaTransition;
-import fiitstu.gulis.cmsimulator.elements.MachineColor;
-import fiitstu.gulis.cmsimulator.elements.PdaTransition;
-import fiitstu.gulis.cmsimulator.elements.State;
-import fiitstu.gulis.cmsimulator.elements.Symbol;
-import fiitstu.gulis.cmsimulator.elements.Transition;
+import fiitstu.gulis.cmsimulator.activities.ConfigurationActivity;
+import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.MachineStep;
 
 import static java.lang.Math.PI;
@@ -582,6 +578,9 @@ public class DiagramView extends View {
         diagramStateNode.setPosition(state.getPositionX(), state.getPositionY(), cameraX, cameraY);
         findBounds();
         invalidate();
+
+        GameShowcase gs = new GameShowcase();
+        gs.showTutorial(ConfigurationActivity.gameNumber, ConfigurationActivity.activity);
     }
 
     public void removeState(State state) {
@@ -653,6 +652,9 @@ public class DiagramView extends View {
         diagramTransitionCurveList.add(diagramTransitionCurve);
         findNonDeterminism();
         invalidate();
+
+        GameShowcase gs = new GameShowcase();
+        gs.showTutorial(0, ConfigurationActivity.activity);
     }
 
     public void changeTransition(Transition transition, long oldFromStateId, long oldToStateId) {
