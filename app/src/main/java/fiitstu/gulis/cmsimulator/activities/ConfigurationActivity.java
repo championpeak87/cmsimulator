@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +40,7 @@ import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * MACHINE_TYPE (int) - type of the machine (one of MainActivity's static fields)
  * TASK_CONFIGURATION (int) - 0 (not a task), MainActivity.EditTask, or MainActivity.SolveTask
@@ -47,12 +48,12 @@ import fiitstu.gulis.cmsimulator.util.ProgressWorker;
  * TASK (Serializable - Task) - the task being solved (or null); TASK = null <=> TASK_CONFIGURATION = 0
  * EMPTY_INPUT_SYMBOL (long) - the ID of the empty symbol
  * START_STACK_SYMBOL (long) - the ID of the stack start symbol (only needed for push-down automaton)
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class ConfigurationActivity extends FragmentActivity
         implements View.OnClickListener, ConfigurationListAdapter.ItemClickCallback,
-        DiagramView.ItemClickCallback, PopupMenu.OnMenuItemClickListener,
+        DiagramView.ItemClickCallback,
         ConfigurationDialog.ConfigurationDialogListener, SaveMachineDialog.SaveDialogListener,
         TaskDialog.TaskDialogListener {
 
@@ -136,6 +137,10 @@ public class ConfigurationActivity extends FragmentActivity
         setContentView(R.layout.activity_configuration);
         Log.v(TAG, "onCreate initialization started");
 
+        //menu
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         //DataSource initialization
         dataSource = DataSource.getInstance();
         dataSource.open();
@@ -160,33 +165,6 @@ public class ConfigurationActivity extends FragmentActivity
         startStackSymbolId = inputBundle.getLong(SimulationActivity.START_STACK_SYMBOL);
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
-        if (taskConfiguration != 0) {
-            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-            ImageButton taskInfoButton = findViewById(R.id.imageButton_configuration_task_info);
-            taskInfoButton.setVisibility(View.VISIBLE);
-            if (taskConfiguration == MainActivity.SOLVE_TASK) {
-                taskInfoButton.setImageResource(R.drawable.excl_red);
-                taskInfoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                        taskDialog.show(fm, TASK_DIALOG);
-                    }
-                });
-            }
-            else {
-                taskInfoButton.setImageResource(R.drawable.excl_green);
-                taskInfoButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
-                        taskDialog.show(fm, TASK_DIALOG);
-                    }
-                });
-            }
-        }
 
         ////tabHost initialization
         tabHost = findViewById(R.id.tabHost_configuration);
@@ -235,9 +213,6 @@ public class ConfigurationActivity extends FragmentActivity
         tabSpec.setIndicator(getString(R.string.transitions));
         tabHost.addTab(tabSpec);
 
-        //title
-        TextView title = findViewById(R.id.textView_configuration_title);
-
         //build adapters
         //input alphabet
         RecyclerView recyclerView = findViewById(R.id.recyclerView_configuration_form_input_alphabet);
@@ -268,39 +243,34 @@ public class ConfigurationActivity extends FragmentActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         switch (machineType) {
             case MainActivity.FINITE_STATE_AUTOMATON:
-                title.setText(getString(R.string.configure_FSA));
+                actionBar.setTitle(R.string.configure_FSA);
+                //title.setText(getString(R.string.configure_FSA));
                 transitionAdapter = new ConfigurationListAdapter(this, FSA_TRANSITION, false);
                 recyclerView.setAdapter(transitionAdapter);
                 transitionAdapter.setItemClickCallback(this);
                 break;
             case MainActivity.PUSHDOWN_AUTOMATON:
-                title.setText(getString(R.string.configure_PDA));
+                actionBar.setTitle(R.string.configure_PDA);
+                //title.setText(getString(R.string.configure_PDA));
                 transitionAdapter = new ConfigurationListAdapter(this, PDA_TRANSITION, false);
                 recyclerView.setAdapter(transitionAdapter);
                 transitionAdapter.setItemClickCallback(this);
                 break;
             case MainActivity.LINEAR_BOUNDED_AUTOMATON:
-                title.setText(getString(R.string.configure_LBA));
+                actionBar.setTitle(R.string.configure_LBA);
+                //title.setText(getString(R.string.configure_LBA));
                 transitionAdapter = new ConfigurationListAdapter(this, TM_TRANSITION, false);
                 recyclerView.setAdapter(transitionAdapter);
                 transitionAdapter.setItemClickCallback(this);
                 break;
             case MainActivity.TURING_MACHINE:
-                title.setText(getString(R.string.configure_TM));
+                actionBar.setTitle(R.string.configure_TM);
+                //title.setText(getString(R.string.configure_TM));
                 transitionAdapter = new ConfigurationListAdapter(this, TM_TRANSITION, false);
                 recyclerView.setAdapter(transitionAdapter);
                 transitionAdapter.setItemClickCallback(this);
                 break;
         }
-
-        ////buttons initialization
-        //back
-        ImageButton backB = findViewById(R.id.imageButton_configuration_back);
-        backB.setOnClickListener(this);
-
-        //menu
-        menuB = findViewById(R.id.imageButton_configuration_menu);
-        menuB.setOnClickListener(this);
 
         //add input alphabet symbol
         Button addInputSymbolButton = findViewById(R.id.button_configuration_form_input_symbol);
@@ -337,6 +307,184 @@ public class ConfigurationActivity extends FragmentActivity
 
         dataSource.close();
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_configuration, menu);
+
+        return true;
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (taskConfiguration != 0) {
+            Bundle inputBundle = getIntent().getExtras();
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
+            MenuItem taskInfoButton = menu.getItem(0);
+            //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
+
+            if (taskConfiguration == MainActivity.SOLVE_TASK) {
+                taskInfoButton.setIcon(R.drawable.excl_red);
+                taskInfoButton.setVisible(true);
+            } else if (taskConfiguration == MainActivity.EDIT_TASK) {
+                taskInfoButton.setIcon(R.drawable.excl_green);
+                taskInfoButton.setVisible(true);
+            }
+            if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
+                menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
+                menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
+            } else {
+                menu.findItem(R.id.menu_configuration_bulk_test).setVisible(false);
+            }
+        }
+        if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {
+            menu.findItem(R.id.menu_configuration_convert).setVisible(false);
+        }
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_configuration_simulate:
+                Intent nextActivityIntent = new Intent(this, SimulationActivity.class);
+                nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "simulation activity intent executed");
+                return true;
+            case R.id.menu_configuration_save_machine:
+                if (Build.VERSION.SDK_INT > 15
+                        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MainActivity.REQUEST_WRITE_STORAGE);
+                } else {
+                    showSaveMachineDialog();
+                }
+                return true;
+            case R.id.menu_configuration_task_info:
+                if (taskConfiguration == MainActivity.SOLVE_TASK) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+                    taskDialog.show(fm, TASK_DIALOG);
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+                    taskDialog.show(fm, TASK_DIALOG);
+                }
+                return true;
+            case R.id.menu_configuration_convert:
+                if (initialState == null) {
+                    Toast.makeText(this, R.string.convert_error_no_initial_state, Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                    dialogBuilder.setTitle(R.string.convert_to_deterministic);
+                    dialogBuilder.setMessage(R.string.convert_to_deterministic_dialog_text);
+                    dialogBuilder.setInverseBackgroundForced(true);
+                    dialogBuilder.setPositiveButton(R.string.convert_to_deterministic_dialog_convert,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_configuration_working),
+                                            new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    makeDeterministicMachine();
+                                                }
+                                            });
+                                    worker.setPostAction(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                }
+                                            });
+                                        }
+                                    });
+                                    worker.execute();
+                                }
+                            });
+                    dialogBuilder.setNeutralButton(R.string.convert_to_deterministic_dialog_create_file,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    saveAsDeterministic = true;
+                                    showSaveMachineDialog();
+                                }
+                            });
+                    dialogBuilder.setNegativeButton(R.string.cancel, null);
+                    dialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            saveAsDeterministic = false;
+                        }
+                    });
+
+                    dialogBuilder.create().show();
+                }
+                return true;
+            case R.id.menu_configuration_specification:
+                FragmentManager fm = getSupportFragmentManager();
+                FormalSpecDialog formalSpecDialog = FormalSpecDialog.newInstance(machineType,
+                        inputAlphabetAdapter == null ? null : inputAlphabetAdapter.getItems(),
+                        stackAlphabetAdapter == null ? null : stackAlphabetAdapter.getItems(),
+                        stateAdapter == null ? null : stateAdapter.getItems(),
+                        transitionAdapter == null ? null : transitionAdapter.getItems());
+                formalSpecDialog.show(fm, SimulationActivity.FORMAL_SPEC_DIALOG);
+                return true;
+            case R.id.menu_configuration_settings:
+                for (Object object : stateAdapter.getItems()) {
+                    State state = (State) object;
+                    dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
+                }
+                dataSource.close();
+                nextActivityIntent = new Intent(this, OptionsActivity.class);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "options activity intent executed");
+                return true;
+            case R.id.menu_configuration_bulk_test:
+            case R.id.menu_configuration_negative_test:
+                for (Object object : stateAdapter.getItems()) {
+                    State state = (State) object;
+                    dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
+                }
+                dataSource.close();
+
+                Bundle outputBundle = new Bundle();
+                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
+                outputBundle.putString(MainActivity.FILE_NAME, filename);
+                outputBundle.putInt(BulkTestActivity.TASK_CONFIGURATION, taskConfiguration);
+                outputBundle.putSerializable(MainActivity.TASK, task);
+                if (item.getItemId() == R.id.menu_configuration_negative_test) {
+                    outputBundle.putBoolean(BulkTestActivity.NEGATIVE, true);
+                }
+                Log.v(TAG, "outputBundle initialized");
+
+                nextActivityIntent = new Intent(this, BulkTestActivity.class);
+                nextActivityIntent.putExtras(outputBundle);
+                startActivity(nextActivityIntent);
+                Log.i(TAG, "bulk test activity intent executed");
+                return true;
+            case R.id.menu_configuration_help:
+                fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CONFIGURATION);
+                guideFragment.show(fm, HELP_DIALOG);
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -411,30 +559,6 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            //back
-            case R.id.imageButton_configuration_back:
-                onBackPressed();
-                break;
-            //menu
-            case R.id.imageButton_configuration_menu:
-                PopupMenu popup = new PopupMenu(this, menuB);
-                popup.setOnMenuItemClickListener(this);
-                popup.inflate(R.menu.menu_configuration);
-                Menu menu = popup.getMenu();
-                if (taskConfiguration != 0) {
-                    if (task.getPublicInputs() || taskConfiguration != MainActivity.SOLVE_TASK) {
-                        menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
-                        menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
-                    }
-                    else {
-                        menu.findItem(R.id.menu_configuration_bulk_test).setVisible(false);
-                    }
-                }
-                if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {
-                    menu.findItem(R.id.menu_configuration_convert).setVisible(false);
-                }
-                popup.show();
-                break;
             //add input alphabet symbol
             case R.id.button_configuration_form_input_symbol:
                 Log.v(TAG, "addInputSymbolButton click noted");
@@ -544,131 +668,6 @@ public class ConfigurationActivity extends FragmentActivity
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.menu_configuration_simulate:
-                Intent nextActivityIntent = new Intent(this, SimulationActivity.class);
-                nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "simulation activity intent executed");
-                return true;
-            case R.id.menu_configuration_save_machine:
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MainActivity.REQUEST_WRITE_STORAGE);
-                } else {
-                    showSaveMachineDialog();
-                }
-                return true;
-            case R.id.menu_configuration_convert:
-                if (initialState == null) {
-                    Toast.makeText(this, R.string.convert_error_no_initial_state, Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-                    dialogBuilder.setTitle(R.string.convert_to_deterministic);
-                    dialogBuilder.setMessage(R.string.convert_to_deterministic_dialog_text);
-                    dialogBuilder.setInverseBackgroundForced(true);
-                    dialogBuilder.setPositiveButton(R.string.convert_to_deterministic_dialog_convert,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_configuration_working),
-                                            new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    makeDeterministicMachine();
-                                                }
-                                            });
-                                    worker.setPostAction(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                }
-                                            });
-                                        }
-                                    });
-                                    worker.execute();
-                                }
-                            });
-                    dialogBuilder.setNeutralButton(R.string.convert_to_deterministic_dialog_create_file,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    saveAsDeterministic = true;
-                                    showSaveMachineDialog();
-                                }
-                            });
-                    dialogBuilder.setNegativeButton(R.string.cancel, null);
-                    dialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            saveAsDeterministic = false;
-                        }
-                    });
-
-                    dialogBuilder.create().show();
-                }
-                return true;
-            case R.id.menu_configuration_specification:
-                FragmentManager fm = getSupportFragmentManager();
-                FormalSpecDialog formalSpecDialog = FormalSpecDialog.newInstance(machineType,
-                        inputAlphabetAdapter == null ? null : inputAlphabetAdapter.getItems(),
-                        stackAlphabetAdapter == null ? null : stackAlphabetAdapter.getItems(),
-                        stateAdapter == null ? null : stateAdapter.getItems(),
-                        transitionAdapter == null ? null : transitionAdapter.getItems());
-                formalSpecDialog.show(fm, SimulationActivity.FORMAL_SPEC_DIALOG);
-                return true;
-            case R.id.menu_configuration_settings:
-                for (Object object : stateAdapter.getItems()) {
-                    State state = (State) object;
-                    dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
-                }
-                dataSource.close();
-                nextActivityIntent = new Intent(this, OptionsActivity.class);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "options activity intent executed");
-                return true;
-            case R.id.menu_configuration_bulk_test:
-            case R.id.menu_configuration_negative_test:
-                for (Object object : stateAdapter.getItems()) {
-                    State state = (State) object;
-                    dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
-                }
-                dataSource.close();
-
-                Bundle outputBundle = new Bundle();
-                outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
-                outputBundle.putString(MainActivity.FILE_NAME, filename);
-                outputBundle.putInt(BulkTestActivity.TASK_CONFIGURATION, taskConfiguration);
-                outputBundle.putSerializable(MainActivity.TASK, task);
-                if (menuItem.getItemId() == R.id.menu_configuration_negative_test) {
-                    outputBundle.putBoolean(BulkTestActivity.NEGATIVE, true);
-                }
-                Log.v(TAG, "outputBundle initialized");
-
-                nextActivityIntent = new Intent(this, BulkTestActivity.class);
-                nextActivityIntent.putExtras(outputBundle);
-                startActivity(nextActivityIntent);
-                Log.i(TAG, "bulk test activity intent executed");
-                return true;
-            case R.id.menu_configuration_help:
-                fm = getSupportFragmentManager();
-                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CONFIGURATION);
-                guideFragment.show(fm, HELP_DIALOG);
-                return true;
-        }
-        return false;
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MainActivity.REQUEST_WRITE_STORAGE: {
@@ -698,12 +697,10 @@ public class ConfigurationActivity extends FragmentActivity
                         deterministicMachine.second, tapeElementList, dataSource.getTestFullExtract(false, getInputAlphabetList()),
                         dataSource.getTestFullExtract(true, getInputAlphabetList()), machineType);
                 saveAsDeterministic = false;
-            }
-            else {
+            } else {
                 if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
                     fileHandler.setData(dataSource, machineType);
-                }
-                else {
+                } else {
                     List<Transition> transitions;
                     switch (machineType) {
                         case MainActivity.FINITE_STATE_AUTOMATON:
@@ -804,8 +801,7 @@ public class ConfigurationActivity extends FragmentActivity
                     Log.i(TAG, "newInputSymbol '" + newSymbol.getValue() + "' created");
                     configurationDialog.addAndSelectInputSymbol(newSymbol);
                     supportDialog.dismiss();
-                }
-                else {
+                } else {
                     switch (elementAction) {
                         case NEW:
                             Symbol newSymbol = dataSource.addInputSymbol(value, 0);
@@ -858,8 +854,7 @@ public class ConfigurationActivity extends FragmentActivity
                     Log.i(TAG, "newStackSymbol '" + newSymbol.getValue() + "' created");
                     configurationDialog.addAndSelectStackSymbol(newSymbol);
                     supportDialog.dismiss();
-                }
-                else {
+                } else {
                     switch (elementAction) {
                         case NEW:
                             Symbol newSymbol = dataSource.addStackSymbol(value, 0);
@@ -925,8 +920,7 @@ public class ConfigurationActivity extends FragmentActivity
                         Log.i(TAG, "newState '" + newState.getValue() + "' created");
                         configurationDialog.addAndSelectState(newState);
                         supportDialog.dismiss();
-                    }
-                    else {
+                    } else {
                         switch (elementAction) {
                             case NEW:
                                 State newState = dataSource.addState(value,
@@ -1298,7 +1292,7 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onRemoveState(final State stateRemove) {
         Log.v(TAG, "onRemoveState from diagram noted");
-       try {
+        try {
             dataSource.deleteState(stateRemove);
             stateAdapter.removeItem(stateRemove);
             diagramView.removeState(stateRemove);
@@ -1426,7 +1420,7 @@ public class ConfigurationActivity extends FragmentActivity
         dataSource.dropStates();
         Pair<List<State>, List<Transition>> deterministicMachine =
                 FiniteStateAutomatonStep.createDeterministic(getStateList(), transitionAdapter.getItems(),
-                diagramView.getDimensionY(), diagramView.getDimensionX(), diagramView.getNodeRadius());
+                        diagramView.getDimensionY(), diagramView.getDimensionX(), diagramView.getNodeRadius());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1436,13 +1430,13 @@ public class ConfigurationActivity extends FragmentActivity
             }
         });
 
-        for (State state: deterministicMachine.first) {
+        for (State state : deterministicMachine.first) {
             final State s = dataSource.addState(state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
             if (s.isInitialState()) {
                 ConfigurationActivity.this.initialState = s;
             }
 
-            for (Transition transition: deterministicMachine.second) {
+            for (Transition transition : deterministicMachine.second) {
                 if (transition.getFromState().equals(state)) {
                     transition.setFromState(s);
                 }
@@ -1458,7 +1452,7 @@ public class ConfigurationActivity extends FragmentActivity
                 }
             });
         }
-        for (Transition transition: deterministicMachine.second) {
+        for (Transition transition : deterministicMachine.second) {
             final Transition t = dataSource.addFsaTransition(transition.getFromState(), transition.getReadSymbol(), transition.getToState(), emptyInputSymbolId);
             runOnUiThread(new Runnable() {
                 @Override
@@ -1484,8 +1478,7 @@ public class ConfigurationActivity extends FragmentActivity
             nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(nextActivityIntent);
             taskDialog.dismiss();
-        }
-        else if (dialogMode == TaskDialog.SOLVING) {
+        } else if (dialogMode == TaskDialog.SOLVING) {
             TaskResultSender resultSender = new TaskResultSender(task, machineType);
 
             resultSender.setOnFinish(new Runnable() {
@@ -1531,8 +1524,7 @@ public class ConfigurationActivity extends FragmentActivity
 
             taskDialog.freeze();
             resultSender.execute();
-        }
-        else if (dialogMode == TaskDialog.SOLVED) {
+        } else if (dialogMode == TaskDialog.SOLVED) {
             dataSource.globalDrop();
             dataSource.close();
             TaskDialog.setStatusText(null);

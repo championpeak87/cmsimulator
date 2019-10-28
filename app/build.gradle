@@ -5,9 +5,9 @@ android {
     buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "fiitstu.gulis.cmsimulator"
-        minSdkVersion 14
+        minSdkVersion 23
         targetSdkVersion 27
-        versionName '4.2.2'
+        versionName '5.0.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 22
     }
@@ -42,4 +42,5 @@ dependencies {
 
 dependencies {
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
+    implementation 'com.github.BlushineIO:MaterialShowcaseView:2.1.0'
 }

@@ -2,6 +2,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="fiitstu.gulis.cmsimulator.activities.BulkTestActivity">
+    <item android:id="@+id/menu_bulk_test_info"
+        android:title="Test info"
+        android:showAsAction="always"
+          android:visible="false"
+        android:icon="@drawable/excl_red"/>
     <item
             android:id="@+id/menu_bulk_test_configure"
             android:title="@string/configure"

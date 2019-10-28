@@ -6,59 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/md_black_1000"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/imageButton_grammar_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:background="@color/md_black_1000"
-            android:contentDescription="@string/back"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_arrow_back_white_48dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/imageButton_grammar_back"
-            android:layout_toRightOf="@id/imageButton_grammar_back"
-            android:layout_toStartOf="@+id/imageButton_grammar_menu"
-            android:layout_toLeftOf="@+id/imageButton_grammar_menu"
-            android:background="@color/md_black_1000"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="@string/grammar_definition"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/md_white_1000" />
-
-        <ImageButton
-            android:id="@+id/imageButton_grammar_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:background="@color/md_black_1000"
-            android:contentDescription="@string/menu"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_menu_white_48dp" />
-    </RelativeLayout>
-
-    <LinearLayout
+       <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_white_1000"
         android:orientation="horizontal"
         android:paddingTop="8dp">
 
@@ -82,7 +32,7 @@
             android:id="@+id/button_grammar_pipe"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:text="@string/pipe"
             style="@style/GrammarButtonStyle"/>
 
@@ -90,7 +40,7 @@
             android:id="@+id/button_grammar_epsilon"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:text="@string/epsilon"
             style="@style/GrammarButtonStyle"/>
 
@@ -134,8 +84,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height= "1dp"
-        android:background="@color/md_white_1000" />
+        android:layout_height= "1dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -167,7 +116,7 @@
                     android:layout_weight="0.6"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/grammar_text_size"
-                    android:background="@drawable/boarder"/>
+                    />
             </LinearLayout>
             <LinearLayout
             android:orientation="horizontal"
@@ -191,7 +140,7 @@
                 android:layout_weight="0.6"
                 android:gravity="center_horizontal"
                 android:textSize="@dimen/grammar_text_size"
-                android:background="@drawable/boarder"/>
+                />
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -215,7 +164,7 @@
                     android:layout_weight="0.6"
                     android:gravity="center_horizontal"
                     android:textSize="@dimen/grammar_text_size"
-                    android:background="@drawable/boarder"/>
+                    />
             </LinearLayout>
             <LinearLayout
                 android:orientation="horizontal"
@@ -238,8 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:gravity="center_horizontal"
-                    android:textSize="@dimen/grammar_text_size"
-                    android:background="@drawable/boarder"/>
+                    android:textSize="@dimen/grammar_text_size"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

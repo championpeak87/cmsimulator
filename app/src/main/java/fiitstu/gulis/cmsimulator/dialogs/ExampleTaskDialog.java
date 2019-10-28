@@ -75,4 +75,6 @@ public class ExampleTaskDialog extends DialogFragment {
                     (int) (getResources().getDisplayMetrics().heightPixels * 0.8));
         }
     }
+
+
 }

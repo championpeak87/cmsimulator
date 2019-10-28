@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.activities;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -10,6 +11,8 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
@@ -64,14 +67,10 @@ public class    OptionsActivity extends FragmentActivity
         optionsColorsRecyclerView.setAdapter(optionsColorsListAdapter);
         optionsColorsListAdapter.setItemClickCallback(this);
 
-        ////buttons initialization
-        //back
-        backB = findViewById(R.id.imageButton_options_back);
-        backB.setOnClickListener(this);
-
         //menu
-        menuB = findViewById(R.id.imageButton_options_menu);
-        menuB.setOnClickListener(this);
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.settings);
 
         //add color
         Button addColorB = findViewById(R.id.button_options_add_color);
@@ -94,6 +93,40 @@ public class    OptionsActivity extends FragmentActivity
         onConfigurationChanged(getResources().getConfiguration());
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_options, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.menu_options_reset_settings:
+                optionsColorsListAdapter.getMachineColorsGenerator().loadFromXML(this, dataSource);
+                optionsColorsListAdapter.notifyDataSetChanged();
+                markNondeterminism = Options.MARK_NONDETERMINISM_DEFAULT;
+                yesNondeterminism.setChecked(markNondeterminism);
+                noNondeterminism.setChecked(!markNondeterminism);
+                dataSource.updateMarkNondeterminism(markNondeterminism);
+                maxStepsEditText.setText(String.valueOf(Options.MAX_STEPS_DEFAULT));
+                dataSource.updateMaxSteps(Options.MAX_STEPS_DEFAULT);
+                return true;
+            case R.id.menu_options_help:
+                FragmentManager fm = getSupportFragmentManager();
+                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SETTINGS);
+                guideFragment.show(fm, "HELP_DIALOG");
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -144,44 +177,11 @@ public class    OptionsActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            //back
-            case R.id.imageButton_options_back:
-                onBackPressed();
-                break;
-            //menu
-            case R.id.imageButton_options_menu:
-                PopupMenu popup = new PopupMenu(this, menuB);
-                popup.setOnMenuItemClickListener(this);
-                popup.inflate(R.menu.menu_options);
-                popup.show();
-                break;
             //add color
             case R.id.button_options_add_color:
                 optionsColorsListAdapter.addItem();
                 break;
         }
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.menu_options_reset_settings:
-                optionsColorsListAdapter.getMachineColorsGenerator().loadFromXML(this, dataSource);
-                optionsColorsListAdapter.notifyDataSetChanged();
-                markNondeterminism = Options.MARK_NONDETERMINISM_DEFAULT;
-                yesNondeterminism.setChecked(markNondeterminism);
-                noNondeterminism.setChecked(!markNondeterminism);
-                dataSource.updateMarkNondeterminism(markNondeterminism);
-                maxStepsEditText.setText(String.valueOf(Options.MAX_STEPS_DEFAULT));
-                dataSource.updateMaxSteps(Options.MAX_STEPS_DEFAULT);
-                return true;
-            case R.id.menu_options_help:
-                FragmentManager fm = getSupportFragmentManager();
-                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.SETTINGS);
-                guideFragment.show(fm, "HELP_DIALOG");
-                return true;
-        }
-        return false;
     }
 
     @Override
@@ -244,5 +244,10 @@ public class    OptionsActivity extends FragmentActivity
                 })
                 .setNegativeButton(R.string.no, null)
                 .show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 }

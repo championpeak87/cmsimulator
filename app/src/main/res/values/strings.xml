@@ -1,820 +1,1176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CMSimulator</string>
-
-    <!--internal constants-->
-    <string name="network_encoding" translatable="false">UTF-8</string>
-
-    <!--menu items-->
-    <string name="settings">Settings</string>
-    <string name="help">Help</string>
-    <string name="reset_settings">Reset to default</string>
-    <string name="tape_reset">Tape reset</string>
-    <string name="specification">Formal Specification</string>
-    <string name="save_machine">Save Machine</string>
-    <string name="bulk_test">Bulk Testing</string>
-    <string name="save_task">Save Task</string>
-    <string name="correct_inputs">Correct Inputs</string>
-    <string name="incorrect_inputs">Incorrect Inputs</string>
-    <string name="convert_to_deterministic">Convert to Deterministic</string>
-    <string name="pipe">|</string>
-    <string name="epsilon">ε</string>
-    <string name="load">Load</string>
-    <string name="save">Save</string>
-    <string name="derivation_table">Derivation table</string>
-    <string name="derivation_linear">Linear derivation</string>
-    <string name="derivation_fixed">Fixed derivation</string>
-    <string name="derivation_tree">Derivation tree</string>
-    <string name="load_grammar">Load grammar</string>
-    <string name="save_grammar">Save grammar</string>
-    <string name="new_grammar">New grammar</string>
-
-    <!--image descriptions-->
-    <string name="back">Back</string>
-    <string name="menu">Menu</string>
-    <string name="move">Move</string>
-    <string name="remove">Remove</string>
-    <string name="sim_step_b">Step back</string>
-    <string name="sim_step_f">Step forward</string>
-    <string name="sim_full">Full simulation</string>
-    <string name="sim_stop">Stop simulation</string>
-    <string name="sim_remove_brk">Remove breakpoints</string>
-    <string name="task_details">Task details</string>
-    <string name="previous_page">Previous page</string>
-    <string name="next_page">Next page</string>
-
-
-    <string name="edit">Edit</string>
-    <string name="discard">Discard</string>
-    <string name="cancel">Cancel</string>
-
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-
-    <!--files-->
-    <string name="file_name">File Name</string>
-    <string name="save_file">Save File</string>
-    <string name="choose_file">Choose File</string>
-    <string name="CMS">CMS</string>
-    <string name="CMSG">CMSG</string>
-    <string name="JFF">JFF</string>
-    <string name="save_succ">was successfully saved!</string>
-    <string name="file_not_loaded">File could not be loaded.</string>
-    <string name="file_not_saved">File could not be saved.</string>
-    <string name="default_folder">CMSolutions</string>
-
-    <!--Basic Elements-->
-    <string name="symbol">Symbol</string>
-    <string name="state">State</string>
-    <string name="transition">Transition</string>
-
-    <!--Main Activity-->
-    <string name="new_machine">New Machine</string>
-    <string name="example_machine">Example Machines</string>
-    <string name="example_grammar">Example Grammars</string>
-    <string name="load_machine">Load Machine</string>
-    <string name="tasks">Tasks</string>
-    <string name="help_about">Help/About</string>
-    <string name="grammar">Grammar</string>
-
-    <!--Popup Main Activity new-->
-    <string name="finite_state_automaton">Finite State Automaton</string>
-    <string name="pushdown_automaton">Pushdown Automaton</string>
-    <string name="linear_bounded_automaton">Linear Bounded Automaton</string>
-    <string name="turing_machine">Turing Machine</string>
-
-    <!--Popup Main Activity examples-->
-    <string name="finite_state_automaton_example1">DFSA - 3k+1</string>
-    <string name="finite_state_automaton_example2">NFSA - ends with 01 or 10</string>
-    <string name="finite_state_automaton_example3">DFSA - a<sup><small>N</small></sup></string>
-    <string name="pushdown_automaton_example1">DPDA - wcw<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example2">NPDA - ww<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example3">DPDA - a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example1">DLBA - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example2">NLBA - 1<sup><small>N</small></sup>, where N is not a prime</string>
-    <string name="turing_machine_example1">DTM - multiply two unary numbers</string>
-    <string name="turing_machine_example2">NTM - w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, where w<sub><small>2</small></sub> is a substring of w<sub><small>1</small></sub></string>
-
-    <!--Popup Main Activity grammar examples-->
-    <string name="example_grammar1">Greg - a<sup><small>N</small></sup></string>
-    <string name="example_grammar2">Greg - 3k+1</string>
-    <string name="example_grammar3">Greg - ends with 01 or 10</string>
-    <string name="example_grammar4">Gcf - a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="example_grammar5">Gcf - a<sup><small>N</small></sup>b<sup><small>N</small></sup> in Chomsky normal form</string>
-    <string name="example_grammar6">Gcf - ww<sup><small>R</small></sup></string>
-    <string name="example_grammar7">Gcs - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
-
-    <!--Options Activity-->
-    <string name="markNondeterminism">Mark nondeterministic transitions</string>
-    <string name="colors">Machine colors</string>
-    <string name="add_color">Add New Color</string>
-    <string name="remove_color">Do you really want to remove this color?</string>
-    <string name="color_save_error">Unknown error occurred while saving new color!</string>
-    <string name="color_remove10_error">At least 10 color must exist!</string>
-    <string name="color_remove_error">Unknown error occurred while removing color!</string>
-    <string name="maximum_steps">Maximum number of automatically simulated steps</string>
-
-    <!--Simulation Activity-->
-    <string name="simulate">Simulate</string>
-    <string name="simulation_FSA">FSA</string>
-    <string name="simulation_PDA">PDA</string>
-    <string name="simulation_LBA">LBA</string>
-    <string name="simulation_TM">TM</string>
-    <string name="add_tape">+</string>
-    <string name="machine_tape">Machine tape</string>
-    <string name="stack_tape">Stack</string>
-    <string name="tape_element_save_error">Unknown error occurred while saving new tape element!</string>
-    <string name="exit_confirmation">Do you really wish to exit? All unsaved work will be lost!</string>
-    <string name="choose_action">Choose action</string>
-    <string name="set_initial">Set as initial tape element</string>
-    <string name="set_ordinary">Set as ordinary tape element</string>
-    <string name="place_breakpoint">Place breakpoint</string>
-    <string name="remove_breakpoint">Remove breakpoint</string>
-    <string name="remove_tape_element">Do you really want to remove this tape element?</string>
-    <string name="initial_tape_element_exists_error">Unable to set as initial tape element. Initial tape element already exists.</string>
-    <string name="initial_state_error">Unable to start simulation, because initial state does not exist. Please create initial state in configuration and try again.</string>
-    <string name="final_state_error">Unable to start simulation, because final state does not exist. Please create final state in configuration and try again.</string>
-    <string name="both_states_error">Unable to start simulation, because initial and final states do not exist. Please create initial and final state in configuration and try again.</string>
-    <string name="initial_tape_element_error">Unable to start simulation. Initial tape position needs to be set.</string>
-    <string name="initial_tape_symbol_error">Unable to start simulation. Initial tape position cannot be blank symbol.</string>
-    <string name="simulation_incomplete_tape_error">Unable to start simulation. Initial tape needs to be a continuous sequence of nonblank symbols.</string>
-    <string name="unable_simulation">Unable to perform selected action. You need to stop an ongoing simulation first.</string>
-    <string name="simulation_needed">Simulation has not started yet.</string>
-    <string name="simulation_stopped">Simulation was stopped.</string>
-    <string name="all_stuck">All simulation threads are stuck.</string>
-    <string name="solution_found">Final state was reached.</string>
-    <string name="simulated_max_steps">%1$d steps were simulated.</string>
-    <string name="breakpoint_hit">A breakpoint was hit.</string>
-    <string name="grammar_confirmation">Want to save your changes? If you click no, your grammar will be lost.</string>
-    <string name="machine_confirmation">Want to save your changes? If you click no, your machine will be lost.</string>
-
-    <!--Popup Simulation Activity Help-->
-    <string name="simulation_help_input_machine_tape">Input machine tape</string>
-    <string name="simulation_help_stack_tape">Stack</string>
-    <string name="simulation_help_diagram">Diagram</string>
-    <string name="simulation_help_simulation_flow">Simulation Flow</string>
-    <string name="simulation_help_control">Controls</string>
-
-    <!--Configuration Activity-->
-    <string name="configure">Configure</string>
-    <string name="configure_FSA">Configure FSA</string>
-    <string name="configure_PDA">Configure PDA</string>
-    <string name="configure_LBA">Configure LBA</string>
-    <string name="configure_TM">Configure TM</string>
-    <string name="alphabet">Alphabet</string>
-    <string name="input_alphabet">Input Alphabet</string>
-    <string name="stack_alphabet">Stack Alphabet</string>
-    <string name="states">States</string>
-    <string name="transitions">Transitions</string>
-    <string name="diagram">Diagram</string>
-    <string name="add_symbol">Add New Symbol</string>
-    <string name="add_input_symbol">Add New Input Symbol</string>
-    <string name="add_stack_symbol">Add New Stack Symbol</string>
-    <string name="add_state">Add New State</string>
-    <string name="add_transition">Add New Transition</string>
-    <string name="remove_symbol">Do you really want to remove this symbol?</string>
-    <string name="remove_state">Do you really want to remove this state?</string>
-    <string name="remove_transition">Do you really want to remove this transition?</string>
-    <string name="convert_error_no_initial_state">Cannot convert the machine because there is no initial state</string>
-
-    <!--Popup Symbol Configuration Activity-->
-    <string name="new_symbol">New Symbol</string>
-    <string name="edit_symbol">Edit Symbol</string>
-    <string name="POP_symbol">POP</string>
-    <string name="PUSH_symbol">PUSH</string>
-    <string name="start_stack_symbol_mark">(Stack Start)</string>
-    <string name="empty_symbol_mark">(Empty Symbol)</string>
-    <string name="right_bound_mark">(Right End)</string>
-    <string name="left_bound_mark">(Left End)</string>
-
-    <!--Popup State Configuration Activity-->
-    <string name="new_state">New State</string>
-    <string name="edit_state">Edit State</string>
-    <string name="initial_state">Initial State</string>
-    <string name="final_state">Final State</string>
-    <string name="initial_state_mark">(Initial)</string>
-    <string name="final_state_mark">(Final)</string>
-
-    <!--Popup Transition Configuration Activity-->
-    <string name="new_transition">New Transition</string>
-    <string name="edit_transition">Edit Transition</string>
-    <string name="choose_transition">Choose transition</string>
-    <string name="from_state">From State</string>
-    <string name="read_symbol">Read Symbol</string>
-    <string name="to_state">To State</string>
-    <string name="write_symbol">Write Symbol</string>
-    <string name="direction">Direction</string>
-    <string name="left">Left</string>
-    <string name="right">Right</string>
-
-    <!--Popup Convert to Deterministic Configuration Activity-->
-    <string name="convert_to_deterministic_dialog_text">Do you wish to change the machine you are working
-        on to deterministic (<b>this cannot be undone - your unsaved work will be lost</b>), or create
-        a deterministic machine as a file?
-    </string>
-    <string name="convert_to_deterministic_dialog_convert">Change Current Machine</string>
-    <string name="convert_to_deterministic_dialog_create_file">Create New File</string>
-
-    <!--Toasts Configuration Activity-->
-    <string name="warning">Warning!</string>
-    <string name="symbol_save_error">Unknown error occurred while saving new symbol!</string>
-    <string name="state_save_error">Unknown error occurred while saving new state!</string>
-    <string name="transition_save_error">Unknown error occurred while saving new transition!</string>
-    <string name="symbol_remove_error">Unknown error occurred while removing symbol!</string>
-    <string name="state_remove_error">Unknown error occurred while removing state!</string>
-    <string name="transition_remove_error">Unknown error occurred while removing transition!</string>
-    <string name="symbol_missing">Symbol textfield is empty!</string>
-    <string name="state_missing">State textfield is empty!</string>
-    <string name="symbol_duplicity">Symbol already exists!</string>
-    <string name="state_duplicity">State already exists!</string>
-    <string name="transition_duplicity">Transition already exists!</string>
-    <string name="error_initial_state">Initial state already exists!</string>
-    <string name="need_symbol">You need at least one symbol to create a transition!</string>
-    <string name="need_state">You need at least one state to create a transition!</string>
-    <string name="need_both">You need at least one symbol and one state to create a transition!</string>
-    <string name="unable_remove_symbol">Unable to remove! Symbol is used in transition.</string>
-    <string name="unable_remove_state">Unable to remove! State is used in transition.</string>
-
-    <!--Bulk Test Activity-->
-    <string name="test_inputs">Test Inputs</string>
-    <string name="new_test">Add New Test</string>
-    <string name="run_bulk_test">Run Tests</string>
-    <string name="view_in_simulation">View in the Simulation Activity</string>
-
-    <!--Bulk Test Results-->
-    <string name="accept">Accepted</string>
-    <string name="reject">Rejected</string>
-    <string name="not_halt">Took too long</string>
-    <string name="incorrect_output">Incorrect output</string>
-    <string name="correct_output_but_reject">Correct output, rejected</string>
-
-    <!--Popup New/Edit Test-->
-    <string name="new_test_popup_title">New Test</string>
-    <string name="edit_test_popup_title">Edit Test</string>
-    <string name="input_word">Input Word</string>
-    <string name="output_word">Output Word</string>
-    <string name="set_output_word">Set Output Word</string>
-    <string name="bulk_incomplete_tape_error">Initial tape needs to be a continuous sequence of nonblank symbols.</string>
-
-    <!--Tasks Activity-->
-    <string name="find_tasks">Find Tasks</string>
-    <string name="new_task">New Task</string>
-    <string name="load_task">Load Task</string>
-    <string name="example_tasks">Example Tasks</string>
-
-    <!--Grammar Activity-->
-    <string name="grammar_file">File</string>
-    <string name="grammar_test">Test</string>
-    <string name="grammar_grammarType">Grammar Type</string>
-    <string name="grammar_specialSymbols">Special Symbols</string>
-    <string name="grammar_hint_rule_left">Left side of the rule</string>
-    <string name="grammar_hint_rule_right">Right side of the rule</string>
-    <string name="grammar_definition">Grammar definition</string>
-    <string name="grammar_simulation">Grammar simulation</string>
-    <string name="definition">Definition</string>
-    <string name="non_terminals">Non-terminals</string>
-    <string name="terminals">Terminals</string>
-    <string name="grammar_add_row">Add row</string>
-    <string name="grammar_missing_start">Starting non-terminal: S is missing</string>
-
-    <!--Grammar Simulation Activity-->
-    <string name="grammar_simulation_test">Test input</string>
-    <string name="grammar_simulation_multiple_tests">Multiple tests</string>
-    <string name="grammar_simulation_input">Input:</string>
-    <string name="grammar_simulation_result">Result:</string>
-    <string name="grammar_simulation_step">Step</string>
-    <string name="grammar_simulation_step_back">Step back</string>
-    <string name="grammar_simulation_tree_constraint">Derivation tree is only available for Regular and Context-free grammars.</string>
-    <string name="grammar_simulation_end">The simulation has ended.</string>
-
-    <!--Grammar Multiple Tests Activity-->
-    <string name="grammar_multiple_tests">Multiple tests</string>
-    <string name="grammar_multiple_tests_test_all">Test all</string>
-    <string name="grammar_multiple_tests_clear">Clear</string>
-    <string name="grammar_multiple_tests_hint">Enter words in the table and chose which belong to the language and which not!</string>
-
-    <!--Derivation Table Fragment-->
-    <string name="production">Production</string>
-    <string name="derivation">Derivation</string>
-
-    <!--Fixed Derivation Fragment-->
-    <string name="productions">Productions</string>
-
-
-    <!--Example Tasks-->
-    <string name="task_example1">Modify Finite State Automaton</string>
-    <string name="task_example2">Create Push-down Automaton</string>
-    <string name="task_example3">Fix error in Turing Machine</string>
-    <string name="task_example_asset1">FSA_task_en.cmst</string>
-    <string name="task_example_asset2">PDA_task_en.cmst</string>
-    <string name="task_example_asset3">TM_task_en.cmst</string>
-
-    <!--Task dialog-->
-    <string name="remaining_time" >Time left:</string>
-    <string name="available_time" >Available time:</string>
-    <string name="turn_in">Turn in</string>
-    <string name="solve">Solve</string>
-    <string name="back_to_task_edit">Back to task edit screen</string>
-    <string name="back_to_menu">Back to Main Menu</string>
-    <string name="done">Done</string>
-
-    <!--Find Tasks Activity-->
-    <string name="name">Name:</string>
-    <string name="no_name">You must enter a name!</string>
-    <string name="refresh">Refresh</string>
-
-    <!--Edit Tasks Activity-->
-    <string name="edit_task">Edit Task</string>
-    <string name="title">Title</string>
-    <string name="task_text">Text</string>
-    <string name="set_test_inputs_and_automaton">Set Test Inputs and Machine</string>
-    <string name="show_test_inputs">Show Test Inputs</string>
-    <string name="set_time_limit">Set Time Limit</string>
-    <string name="launch_task">Launch Task</string>
-    <string name="automaton_not_created">You need to create a machine before launching the task!</string>
-    <string name="no_task_title">You cannot launch a task without a title!</string>
-
-    <!--Launched Task Activity-->
-    <string name="stop">Stop</string>
-
-    <!--Launched Task Activity dialog-->
-    <string name="stop_task">Stop Task</string>
-    <string name="stop_task_confirm">Do you really want to stop this task?</string>
-
-    <!--Tasks Network Error messages-->
-    <string name="error">Error</string>
-    <string name="bind_socket_error">The application will be unable to find tasks because it\
-        failed to bind a networking socket. This may be caused by the socket already being in\
-        use by other applications. Try closing other applications that may be accessing the\
-        network and try again.</string>
-    <string name="unknown_socket_error">The application will be unable to find tasks because it\
-        failed to open a networking socket. Try restarting the application. If the problem\
-        persists, please, report it to the developer.</string>
-    <string name="sending_result_error">Could not send the results to the assigner.</string>
-
-    <!--Task popups-->
-    <string name="task_leave_warning">You are about to leave the activity without turning in the task. If you proceed,
-        your progress will be lost! Are you sure you want to proceed? (To turn in the task, tap the red exclamation mark
-        in the top bar)
-    </string>
-    <string name="task_no_longer_available">The task is no longer available (if it should be, the application may be
-        encountering problems with the network connection)
-    </string>
-
-    <!--specifications-->
-    <string name="formal_spec">Formal Specification</string>
-    <string name="spec_fsa">FSA = (K, Σ, δ, q0, F)</string>
-    <string name="spec_pda">PDA = (K, Σ, Γ, δ, q0, Z, F)</string>
-    <string name="spec_lba">LBA = (K, Σ, Γ, δ, q0, F)</string>
-    <string name="spec_tm">TM = (K, Σ, Γ, δ, q0, F)</string>
-    <string name="spec_state">K =</string>
-    <string name="spec_input_alphabet">Σ =</string>
-    <string name="spec_tape_alphabet">Γ =</string>
-    <string name="spec_initial_state">q0 =</string>
-    <string name="spec_initial_stack_symbol">Z =</string>
-    <string name="spec_final_state">F =</string>
-
-    <!--guide-->
-    <string name="guide_see_also">See also:</string>
-
-    <!--Contents-->
-    <string name="contents">Contents</string>
-
-    <!--Credits-->
-    <string name="guide_title_credits">Credits</string>
-    <string name="application_version" translatable="false">CMSimulator v4.2.2 2019</string>
-    <string name="authors">written by:</string>
-    <string name="author2015" translatable="false">Jakub Trizna (2015)</string>
-    <string name="author2017" translatable="false">Martin Gulis (2017)</string>
-    <string name="author2018" translatable="false">Jakub Sedlář (2018)</string>
-    <string name="author2019" translatable="false">Krisztian Tóth (2019)</string>
-    <string name="supervisor">supervised by doc. Mgr. Daniela Chudá, PhD.</string>
-    <string name="faculty">FIIT STU Bratislava</string>
-    <string name="logo">Logo designed by Adam Trizna</string>
-
-    <!--About-->
-    <string name="guide_title_about">About</string>
-    <string name="guide_about_desc1">CMSimulator app helps you better understand four of the most well-known abstract
-        machines - finite state automaton, push-down automaton, linear-bounded automaton and Turing machine.
-        You can create new or load existing solutions from files. The application also contains eight examples
-        (one deterministic and one nondeterministic for each type of the machine).</string>
-    <string name="guide_about_desc2">You can create a list of symbols, states, transition rules and also choose the
-        initial and final states.
-        Then you can fill the tape and simulate the solution step by step, or go directly to the end of
-        simulation. You can also mark any tape element as breakpoint to pause the simulation when the
-        machine reaches this breakpoint.</string>
-    <string name="guide_about_desc3">Nondeterministic machines and solutions are also supported.</string>
-    <string name="guide_about_desc4">Since version 3, the application also allows the creation and solving
-        of interactive assignments over the local area network.</string>
-    <string name="guide_about_desc5">The application was developed as part of several bachelor\'s projects
-        by students of the Faculty of Informatics and Information Technologies of the Slovak University
-        of Technology in Bratislava.</string>
-    <string name="guide_about_desc6">Since version 4, the application has been extended by simulation and visualization of
-    formal grammars from the Chomsky hierarchy. In CMSimulator you can create, analyze and test Regular, Context-free,
-    Context-sensitive and Unrestricted grammars. The application support saving and loading existing grammars, as well as
-    4 different kinds of visualizations - Derivation Table, Derivation Tree, Linear derivation and Fixed derivation.</string>
-
-    <!--Getting Started-->
-    <string name="guide_title_getting_started">Getting Started</string>
-    <string name="guide_getting_started_new_machine">To create a new machine, tap the <b>New Machine</b>
-        button in the main menu, then select what type of machine you would like to create. You will be taken to
-        the Configuration Activity, where you can edit and save your new machine.</string>
-    <string name="guide_getting_started_example_machine">If you would like to view an example machine
-        created in CMSimulator, tap the <b>Example Machines</b> button in the main menu and select
-        which machine you would like to open. You will be taken to the Simulation Activity where you
-        can try the machine out.</string>
-    <string name="guide_getting_started_example_grammar">If you would like to view an example grammar
-        created in CMSimulator, tap the <b>Example Grammars</b> button in the main menu and select
-        which grammar you would like to open. You will be taken to the Grammar Activity where you
-        can try the grammar out.</string>
-    <string name="guide_getting_started_example_machine_list">The available example machines are:\n
-        \t \u2022 A deterministic finite automaton accepting words with 3k+1 characters\n
-        \t \u2022 A deterministic finite automaton accepting words in the form of a<sup><small>N</small></sup> \n
-        \t \u2022 A nondeterministic finite automaton accepting words ending with "01" or "10"\n
-        \t \u2022 A deterministic push-down automaton accepting palindromes with marked middle\n
-        \t \u2022 A deterministic push-down automaton accepting words in the form of
-        a<sup><small>N</small></sup>b<sup><small>N</small></sup>\n
-        \t \u2022 A nondeterministic push-down automaton accepting palindromes of even length\n
-        \t \u2022 A deterministic linear-bounded automaton accepting words in the form of
-        a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup>\n
-        \t \u2022 A nondeterministic linear-bounded automaton accepting non-prime numbers in unary system\n
-        \t \u2022 A deterministic Turing machine that multiplies two numbers in the unary system\n
-        \t \u2022 A nondeterministic Turing machine that finds if one word is a substring of another
-    </string>
-    <string name="guide_getting_started_example_grammar_list">The available example grammars are:\n
-        \t \u2022 A regular grammar accepting words in the form of a<sup><small>N</small></sup> \n
-        \t \u2022 A regular grammar accepting words with 3k+1 characters\n
-        \t \u2022 A regular grammar accepting words ending with "01" or "10"\n
-        \t \u2022 A context free grammar accepting words in the form of a<sup><small>N</small></sup>b<sup><small>N</small></sup>\n
-        \t \u2022 A context free grammar accepting words in the form of a<sup><small>N</small></sup>b<sup><small>N</small></sup>
-        in the Chomsky normal form\n
-        \t \u2022 A context free grammar accepting words in the form of ww<sup><small>R</small></sup>\n
-        \t \u2022 A context sensitive grammar accepting words in the form of
-        a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup>
-    </string>
-    <string name="guide_getting_started_load_machine">To load a previously-saved machine, tap the
-        <b>Load Machine</b> button in the main menu, then select the file you would like to open.
-    </string>
-    <string name="guide_getting_started_tasks">To enter the Tasks menu, tap the <b>Tasks</b> button in
-        the main menu. Then, to solve tasks currently assigned by people in your vicinity, tap the
-        <b>Find Tasks</b> button. To create a new task for others to solve, tap the <b>New Task</b> button.
-        To load a task you have previously prepared, tap the <b>Load Task</b> button.
-    </string>
-    <string name="guide_getting_started_grammar">To enter the Grammar menu, tap the <b>Grammar</b> button
-        in the main menu. You will be taken to the grammar definition screen, where you can define or load
-        the grammar you would like to work with.</string>
-    <string name="guide_getting_started_settings">To view or change the application\'s settings, tap the
-    <b>Settings</b> button in the main menu.</string>
-
-    <!--Configuration Guide-->
-    <string name="guide_title_configuration_activity">Configuration Activity</string>
-    <string name="guide_configuration_introduction">The Configuration Activity is where you can create and
-        edit your machines. You can define the machine\'s alphabet, add or remove states and declare transitions.
-        The activity is divided into a number of tabs, each dedicated to a different action.
-    </string>
-    <string name="guide_configuration_menu">The menu in this activity allows you to save the machine, view
-        the formal specification, or move to the Simulation Activity, Bulk Testing Activity, or Settings.
-    </string>
-    <string name="guide_title_diagram_tab">Diagram Tab</string>
-    <string name="guide_configuration_diagram_tab">In the Diagram tab you can view and edit the state diagram of the
-        machine. You can select a tool from the bottom panel to edit the diagram.\n\
-        You can zoom the diagram in and out by pinching the screen in the diagram area.
-    </string>
-    <string name="guide_configuration_move"><b>Move -</b> while this tool is selected, you can drag the states
-        around. Drag the empty space around states to pan the entire diagram.
-    </string>
-    <string name="guide_configuration_new_state"><b>New State -</b> tap anywhere in the diagram to place a new
-        state there.
-    </string>
-    <string name="guide_configuration_new_transition"><b>New Transition -</b> touch the initial state of the transition
-        and drag to the final state of the transition. A popup window will appear where you can specify other
-        properties of the transition, such as the read symbol.
-    </string>
-    <string name="guide_configuration_edit"><b>Edit -</b> tap a state or transition to edit it.</string>
-    <string name="guide_configuration_remove"><b>Remove -</b> tap a state or transition to remove it.</string>
-
-    <string name="guide_title_other_tabs">Other Tabs</string>
-    <string name="guide_configuration_other_tabs">The other tabs let you define different properties of the
-        machine individually. All machines have a tab for <b>input alphabet</b>, <b>states</b>
-        and <b>transitions</b>. Push-down automata also have a tab for the <b>stack alphabet</b>. You can
-        add new elements by tapping the button at the bottom of the activity.
-    </string>
-    <string name="guide_configuration_edit_button"><b>Edit -</b> edit the element.</string>
-    <string name="guide_configuration_remove_button"><b>Remove -</b> remove the element.</string>
-
-    <!--Special Symbols Guide-->
-    <string name="guide_title_special_symbols">Special Symbols</string>
-    <string name="guide_special_symbols_introduction">Some symbols in the input alphabet and the stack alphabet
-        have a special significance. Special symbols are automatically inserted into the alphabet when the
-        machine is created and cannot be removed. However, you can customize some of them.
-    </string>
-    <string name="guide_special_symbols_epsilon"><b>ε (epsilon) -</b> the empty symbol for finite automata and
-        push-down automata. Creating a transition with epsilon as the read symbol signifies that the transition
-        may be performed without reading <i>any</i> symbol. Epsilon transitions are inherently nondeterministic -
-        the machine may or may not choose to perform them at all (though a push-down automaton may be forced to
-        if it is the only viable transition for the current state of the stack). Epsilon cannot be part of the input word.\n
-        Epsilon is also used as a stack symbol with similar semantics - placing epsilon on the stack means nothing
-        will be placed, and popping epsilon off the stack means nothing gets popped.
-    </string>
-    <string name="guide_special_symbols_blank"><b># (blank symbol) -</b> the default tape symbol for linear-bounded
-        automata and Turing machines. This symbol can be customized.
-    </string>
-    <string name="guide_special_symbols_stack_start"><b>Z (stack start symbol) -</b> the symbol that is automatically placed
-        at the bottom of the stack before the simulation starts. This symbol can be customized.
-    </string>
-    <string name="guide_special_symbols_left_end"><b>|&lt; (left end) -</b> marks the left end of the linear-bounded
-        automaton\'s tape. It is inserted just before the simulation starts, and is ignored for the purposes of "expected
-        output" in the <b>Bulk Test Activity</b>. It can be used as an input symbol in transitions, but it cannot be
-        overwritten and the machine\'s head cannot move left of it. This symbol can be customized.
-    </string>
-    <string name="guide_special_symbols_right_end"><b>&gt;| (right end) -</b> marks the right end of the linear-bounded
-        automaton\'s tape. It is inserted just before the simulation starts, and is ignored for the purposes of "expected
-        output" in the <b>Bulk Test Activity</b>. It can be used as an input symbol in transitions, but it cannot be
-        overwritten and the machine\'s head cannot move right of it.
-    </string>
-
-    <!--Simulation Guide-->
-    <string name="guide_title_simulation_activity">Simulation Activity</string>
-    <string name="guide_simulation_introduction">In the Simulation Activity, you can set the content of the
-        machine\'s tape and simulate it fully to see whether or not the input gets accepted, or sep-by-step
-        and watch how the machine is working. The activity provides you with an overview about the machine\'s
-        current state, current state of the tape (and, for push-down automata, stack), and history of
-        transitions.\nFor nondeterministic machines, the state and tape of every branch of the computation
-        is shown, labelled with different color.\nYou can use the slider on the right edge of the screen to
-        change the ratio between the display areas of the state diagram and the transition history diagram.\nThe
-        state diagram and the transition history diagram can be zoomed in and out by pinching the screen in
-        their respective areas.
-    </string>
-    <string name="guide_simulation_menu">The menu in this activity allows you to save the machine, view
-        the formal specification, clear the tape, or move to the Configuration Activity,
-        Bulk Testing Activity, or Settings.
-    </string>
-    <string name="guide_title_tape">The Tape</string>
-    <string name="guide_simulation_tape">The tape is shown at the top of the screen. It can only be manipulated
-        while a simulation is not in progress.
-    </string>
-    <string name="guide_simulation_add_tape_element"><b>Add tape element -</b> tap to add a new element at the
-        respective end of the tape.
-    </string>
-    <string name="guide_simulation_tape_element"><b>Tape element -</b> tap to set the symbol on the tape element.
-        Tap and hold to open a context menu.
-    </string>
-    <string name="guide_simulation_tape_element_context_menu">The tape element context menu offers you
-        the following options:\n\
-        \t \u2022 <b>Set as Initial Tape Element -</b> the machine\'s head will be set to this element
-        at the start of the simulation.\n\
-        \t \u2022 <b>Place/Remove Breakpoint -</b> mark the tape element as breakpoint, or clears away the breakpoint.
-        See the "Breakpoints" section for more information.\n\
-        \t \u2022 <b>Remove -</b> remove the tape element.
-    </string>
-
-    <string name="guide_title_controls">Controls</string>
-    <string name="guide_simulation_step_back"><b>Step back -</b> undo the last step of the simulation.</string>
-    <string name="guide_simulation_step_forward"><b>Step forward -</b> simulate one step of the machine.</string>
-    <string name="guide_simulation_simulate_fully"><b>Simulate fully -</b> simulate the machine until it stops, or
-        until it performs the maximum number of steps (100 by default, can be changed in Settings).
-    </string>
-    <string name="guide_simulation_stop"><b>Stop -</b> stop the simulation, allowing you to edit the tape.</string>
-    <string name="guide_simulation_remove_breakpoints"><b>Remove breakpoints -</b>Removes all breakpoints. See
-        the "Breakpoints" section for more information.
-    </string>
-
-    <string name="guide_title_breakpoints">Breakpoints</string>
-    <string name="guide_simulation_breakpoints">Breakpoints help you to analyze the machine\'s behaviour at a
-        specific point without having to run the entire simulation step-by-step. When "simulating fully", the
-        machine will pause just before reading a symbol marked with breakpoint. A nondeterministic machine will
-        pause if any branch of executions reaches a breakpoint. You can resume the simulation by tapping the
-        <b>Simulate fully</b> button again (the machine will pause again after reaching the next breakpoint),
-        or you can proceed step-by-step from that point.\nBreakpoints are marked on the tape in red color.
-    </string>
-
-    <!--Bulk Testing Guide-->
-    <string name="guide_title_bulk_test_activity">Bulk Testing Activity</string>
-    <string name="guide_bulk_test_introduction">This activity allows you to define several input words and
-        quickly run them all on your machine, informing you which ones were accepted. This lets you easily
-        verify the correctness of your solutions. For linear-bounded automate and Turing machines, you
-        can also check whether the machine produces a particular output. For nondeterministic machines, the
-        output is considered valid if it matches the output of any possible path.
-    </string>
-    <string name="guide_bulk_test_menu">
-        The menu in this activity allows you to save the machine, view
-        the formal specification, or move to the Configuration Activity, Simulation Activity, or Settings.
-    </string>
-    <string name="guide_bulk_test_results">Running an input may end in one of the following results:\n
-        <b>Accepted</b> - the input was accepted and if you set and expected output,
-        the output was also correct.\n
-        <b>Took too long</b> - the machine was stopped after executing the
-        maximum number of steps (100 by default, can be changed in the Settings).\n
-        <b>Correct output, rejected</b> - the input was rejected, but the
-        output word matches the expected one. This result only appears if you have set the expected output word.\n
-        <b>Rejected</b> - the input was rejected. If the output word is set,
-        the output is also incorrect.\n
-        <b>Incorrect output</b> - the input was accepted, but the
-        output word does not match the expected one. This result only appears if you have set the expected output word.
-    </string>
-    <string name="guide_bulk_test_to_simulation">If you would like to more closely observe the machine\'s
-        behaviour for a specific input, tap and hold the input in the list and you will be offered an option
-        to test it in the Simulation Activity.
-    </string>
-    <string name="guide_bulk_test_buttons">To create a new testing input, tap the <b>Add New Test</b> button.
-        To run the tests, tap the <b>Run Tests</b> button.
-    </string>
-    <string name="guide_bulk_test_edit_button"><b>Edit -</b> edit the test scenario.</string>
-    <string name="guide_bulk_test_remove_button"><b>Remove -</b> remove the test scenario.</string>
-
-    <!--Saving and loading Guide-->
-    <string name="guide_title_save_load">Saving and Loading Machines and Tasks</string>
-    <string name="guide_save_load_introduction">You can save the machine you are working with via the menu button
-        in most activities. The machines are saved into the CMSolutions folder on your device. Saved machines can
-        be subsequently loaded via the <b>Load Machine</b> button in the main menu.\nTasks can be saved via the menu
-        button in the Task Editing Activity and loaded via the <b>Load Task</b> button in the Tasks Menu.
-    </string>
-    <string name="guide_save_load_format">When saving a machine, you are offered to choose the file format. The CMS
-        format is CMSimulator\'s native and preferred format. JFF is a file format used by the JFLAP formal machine
-        simulator for desktop devices. It is strongly recommended to use the CMS format unless you want to later
-        work with the machine using JFLAP, because the CMS format is specifically tailored for the CMSimulation
-        application and supports features not supported by JFLAP, such as storing the machine tape.\nSaving a task
-        generates a file with the .cmst extension. This extension indicates the file contains a task, but
-        internally they use the same format as plain CMS files and can be used interchangeably with them.
-    </string>
-
-    <!--Tasks Guide-->
-    <string name="guide_title_tasks">Tasks</string>
-    <string name="guide_tasks_introduction1">In addition to allowing you to create and simulate abstract machines,
-        CMSimulator also provides a platform for solving interactive tasks. Using the Tasks Menu, you can either
-        create tasks for others to solve, or find tasks assigned to you by other users in the local network.
-    </string>
-    <string name="guide_tasks_introduction2">The goal of a task is to create a machine that matches given criteria.
-        The machine can be evaluated based on whether or not it accepts the inputs it is supposed to accept, rejects the
-        inputs it is supposed to reject, and generates the outputs it is supposed to generate. The machine is simulated
-        for up to the maximum number of steps set by the assigner in their <b>Settings</b>, and inputs for which
-        the machine runs too long are considered to be rejected. The task is typically described verbally, and the
-        actual tests that are run may or may not be shown to the solvers, based on how the assigner decides.
-    </string>
-
-    <!--Solve Tasks Guide-->
-    <string name="guide_title_solving_tasks">Finding and Solving Tasks</string>
-    <string name="guide_solving_tasks_introduction">To find tasks currently being assigned by people in
-        your local network, tap the <b>Find Tasks</b> button in the Tasks Menu. The application will automatically
-        connect to nearby devices and show the list of available tasks. If you are not seeing a task that should be
-        available, you can try reloading them using the <b>Refresh</b> button.
-    </string>
-    <string name="guide_solving_arrow_button"><b>Detail -</b> show details about the task and offer option to solve it.
-    </string>
-    <string name="guide_title_solving_task">Solving a Task</string>
-    <string name="guide_solving_task_menu">If you are allowed to view the evaluation inputs, the Bulk Testing option
-        in menus will be replaced by two separate options - <b>Correct Inputs</b> and <b>Incorrect Inputs</b>. You
-        can view and launch these tests, but you cannot remove or edit them.
-    </string>
-    <string name="guide_solving_tasks_task_button"><b>Task info -</b> tap this button to show the task popup,
-        allowing you to read the assignment again, see how much time you have left, and turn in the task.
-    </string>
-
-    <!--Create Tasks Guide-->
-    <string name="guide_title_creating_tasks">Creating Tasks</string>
-    <string name="guide_creating_tasks_introduction">To create a new task, tap the <b>New Task</b> button in the
-        Tasks Menu. To load a previously saved task, tap the <b>Load Task</b> button. You will be taken to the
-        Task Editing Activity, where you can set the task\'s properties and edit the associated machine.
-    </string>
-
-    <string name="guide_title_edit_task_activity">Task Editing Activity</string>
-
-    <string name="guide_edit_task_activty">In the Task Editing Activity, you can set the task\'s title,
-        verbal assignment, time limit, and whether or not you wish to share the test inputs with the
-        solvers. Tap the <b>Set Test Inputs and Machine</b> button to set the test inputs and edit the
-        associated machine.
-    </string>
-
-    <string name="guide_edit_task_menu">The menu in this activity allows you to save the task, view Help
-        or go to Settings.
-    </string>
-
-    <string name="guide_creating_task_launch">Tap the <b>Launch Task</b> button to launch the task, allowing
-        users in the local network to find it and start solving it. You will see the names of the solvers who
-        turn the task in, along with the number of positive and negative tests their machine passed. Tap the
-        <b>Stop Task</b> button to prevent any more people from finding the task or turning it in. The displayed timer
-        is purely informative - the time limit is enforced by the application on solver\'s side.\nYou can save
-        the displayed results as a text file via the menu.
-    </string>
-
-    <string name="guide_title_creating_tasks_machine">Editing the associated machine</string>
-
-    <string name="guide_creating_tasks_machine_menu">While editing the machine associated with the task, the
-        Bulk Testing option in menus will be replaced by two separate options - <b>Correct Inputs</b> and
-        <b>Incorrect Inputs</b>, where you can set the testing inputs that will be used to evaluate the
-        solutions.
-    </string>
-
-    <string name="guide_creating_tasks_task_button"><b>Task info -</b> tap this button to show the task popup,
-        allowing you to check the assignment and return to the Task Edit Activity.
-    </string>
-
-    <!--Settings Guide-->
-    <string name="guide_title_settings">Settings</string>
-    <string name="guide_settings_max_steps"><b>Maximum number of automatically simulated steps -</b> the maximum
-        number of steps that will be executed after pressing the <b>simulate fully</b> button in the <b>Simulation
-        activity</b>, as well as the maximum number of steps for which each input in the <b>Bulk Testing Activity</b>
-        is simulated.
-    </string>
-    <string name="guide_settings_mark_nondeterminism"><b>Mark nondeterministic transitions -</b> all nondeterministic
-        transitions in the transition diagrams in the Configuration and Simulation activities will be shown in red.
-    </string>
-    <string name="guide_settings_colors"><b>Machine colors -</b> edit the colors that will be assigned to the machines
-        during simulation.
-    </string>
-
-    <!--Grammar Definition Guide-->
-    <string name="guide_title_grammar_definition">Grammar Definition</string>
-    <string name="guide_grammar_definition_instruction">In the grammar definition activity you can define the rules of your own grammar
-    or alternatively load them from external .CMSG or .JFF files. After te grammar is defined you can check various information about it and
-    proceed to testing.</string>
-    <string name="guide_grammar_definition_menu">The menu in this activity allows you to create a new grammar, load or save existing ones and access the
-    help page.</string>
-    <string name="guide_title_grammar_input_table">The input table</string>
-    <string name="guide_grammar_input_table_instruction">You can define the rules of your grammar in this table by entering the rules to the left columns
-    and derivations to the right column. If there are several derivations from the same rule, you can divide them by <b>pipe</b> <i>(See Grammar special symbols)</i>.
-    If you wish to enter an empty word, please use <b>epsilon</b> <i>(See Grammar special symbols)</i>. Since these characters are uncommon on Android keyboards you can
-    enter them by pressing the shortcut buttons. If you run out of rows in the table, you can add more by pressing the <b>Add row</b> button.</string>
-    <string name="guide_title_grammar_definition_table">Grammar definition table</string>
-    <string name="guide_grammar_definition_table_instructions">In the grammar definition table you can see various information about the entered grammar
-    including the type of the grammar in the Chomsky hierarchy, its formal definition, the used terminals and non-terminals.</string>
-
-    <!--Grammar Simulation Guide-->
-    <string name="guide_title_grammar_simulation">Grammar Simulation</string>
-    <string name="guide_grammar_simulation_instruction">In the grammar simulation activity you can test, simulate and visualize the derivation
-    of words from the grammar rules. You can test words if they belong to the defined language and visualize them using either a derivation table,
-    derivation tree, linear derivation or fixed derivation. Furthermore you can analyze the whole derivation sequence by stepping forward and
-    backwards.</string>
-    <string name="guide_grammar_simulation_menu">The menu in this activity allows you to switch back and forth between the 4 available kinds of
-    visualizations and access the help page.</string>
-    <string name="guide_title_grammar_input_testing">Input testing</string>
-    <string name="guide_grammar_input_testing_instruction">The input testing allows you to enter words to the text field and check if the input
-    word belongs to the defined language by pressing the <b>Test input</b> button. You can use the <b>Clear</b> button the clear the content of the input field.
-    If you wish to test the empty word, please leave the input field clear.</string>
-    <string name="guide_title_grammar_stepping">Stepping</string>
-    <string name="guide_grammar_stepping_instruction">During the simulation process, you can step forward and backwards by selecting the
-    appropriate buttons on the bottom of the screen. Each time a button is selected a different step of the simulation is shown on the screen.</string>
-    <string name="guide_grammar_derivation_tree_instruction">The derivation tree visualizes the derivation sequence by drawing nodes for each
-    symbol of each derivation and connecting them with lines. Each step of the simulation is represented by a new depth of the tree. The non-terminal
-    symbols are colored yellow while the terminal symbols are colored green. At the end of the simulation the green nodes show the result.</string>
-    <string name="guide_grammar_derivation_table_instruction">The derivation table visualizes the derivation sequence by showing the used rule
-    and the output word next to each other in each step of the simulation.</string>
-    <string name="guide_grammar_derivation_linear_instruction">The linear derivation visualizes the derivation sequence by writing the generated
-    words in each step of the simulation in one line. The replaced part of the word is coloured yellow, while the new part of the word is
-    coloured green. At the end of the simulation the result is shown underlined and bold.</string>
-    <string name="guide_grammar_derivation_fixed_instruction">The fixed derivation visualizes the derivation sequence by showing the current
-    word in one place in each step of the simulation. Apart from that a list of all the used rules are shown under the current word. In each step of
-    the simulation the new parts of the word is coloured green and at the end of the simulation the result is shown underlined and bold.</string>
-
-    <!--Multiple Tests Guide-->
-    <string name="guide_title_multiple_tests">Multiple Tests of Grammar</string>
-    <string name="guide_multiple_tests_instruction">In this activity you can test multiple words simultaneously if the belong to the defined
-    language. Furthermore you can also express your opinion by selecting which words do you think belong to the language and which do not.</string>
-    <string name="guide_multiple_tests_menu">The menu in this activity allows you to access the help page.</string>
-    <string name="guide_title_multiple_tests_table">Multiple tests table</string>
-    <string name="guide_multiple_test_table_instruction">The multiple tests table is divided into two parts. In the left column you can enter the
-    words you wish to be tested. In the right column you can you can enter your guess for each word. By default the check box is set to empty,
-    if you tap once, a tick appears which means that the word should belong to the language. By tapping twice you select the option that you
-    do not think, that the word is accepted byt the language. If you tap once more, the check box resets to the default state, where nothing is
-    selected. By selecting the <b>Clear</b> button you clear the contents of the whole table.</string>
-    <string name="guide_title_multiple_tests_evaluation">Evaluation</string>
-    <string name="guide_multiple_tests_evaluation_instruction">By pressing the <b>Test all</b> button, the entered words and guesses are evaluated
-    and the result is shown on the screen. In the left column of the table, each row is coloured accordingly, if the entered word belongs
-    to the language, the background appears in green colour, if it does not belong, the colouring will be red. Your guesses are also evaluated
-    and one of the following state appear in each row:</string>
-    <string name="guide_multiple_tests_accept_right">You selected that the word belongs to the language and you were right.</string>
-    <string name="guide_multiple_tests_accept_wrong">You selected that the word belongs to the language and you were wrong.</string>
-    <string name="guide_multiple_tests_reject_right">You selected that the word does not belong to the language and you were right.</string>
-    <string name="guide_multiple_tests_reject_wrong">You selected that the word does not belong to the language and you were wrong.</string>
-    <string name="guide_multiple_tests_default_wrong">You did not select anything, therefore you were wrong about the result.</string>
-
-    <!--Grammar Special Symbols Guide-->
-    <string name="guide_title_grammar_special_symbols">Grammar Special Symbols</string>
-    <string name="guide_grammar_special_symbols_instruction">While working with grammars, you can use two special symbols for various tasks,
-    the <b>Pipe</b> and <b>Epsilon</b></string>
-    <string name="guide_title_grammar_special_symbols_pipe">Pipe - |</string>
-    <string name="guide_pipe_instruction">With the use of the <b>Pipe</b> you can divide the derivations which belong to the same rule, that way
-    you can enter the grammar faster.\n In the following example the 2 grammars are equivalent:\n
-    \t S -> aS | ε \n \n
-    \t S -> aS \n
-    \t S -> ε</string>
-    <string name="guide_title_grammar_special_symbols_epsilon">Epsilon - ε</string>
-    <string name="guide_epsilon_instruction">The <b>Epsilon</b> symbol means the empty word. <b>Epsilon</b> is frequently used as the closing symbol
-    of a grammar, and some languages also accept the empty word as a valid input. In the grammar definition activity you can enter the empty
-    word by tapping the <b>Epsilon</b> button. During the grammar simulation activity, if you wish to test the empty word, leave the input field
-    empty and <b>Epsilon</b> symbol gets added automatically.</string>
-
-    <!--Grammar Load/save Guide-->
-    <string name="guide_title_grammar_load_save">Saving and Loading Grammars</string>
-    <string name="guide_grammar_load_save_instruction">You can save the grammar you are working on for future purposes or load existing grammars
-    from external sources.</string>
-    <string name="guide_grammar_load_instruction">You can load existing grammars via the menu in the grammar definition activity by selecting the
-    <b>Load grammar</b> button. The application supports 2 file formats, .cmsg which is the native CMSimulator file format
-    and .jff which is the format used by a desktop application for grammar simulation called JFLAP. Therefore you can load grammars created in
-    JFLAP and work with them in CMSimulator.</string>
-    <string name="guide_grammar_save_instruction">You can save the currently entered grammar via the menu in the grammar definition activity by
-    selecting the <b>Save grammar</b> button. You have to enter a filename and chose between the 2 available formats .cmsg and .jff. If you chose
-    .jff you can open the file in JFLAP. The file is saved to the CMSolutions folder in your device.</string>
+	<string name="app_name">CMSimulator</string>
+
+	<!--internal constants-->
+	<string name="network_encoding" translatable="false">UTF-8</string>
+
+	<!--menu items-->
+	<string name="automatas">Automatas</string>
+	<string name="grammars">Grammars</string>
+	<string name="extras">Extras</string>
+	<string name="settings">Settings</string>
+	<string name="help">Help</string>
+	<string name="reset_settings">Reset to default</string>
+	<string name="tape_reset">Tape reset</string>
+	<string name="specification">Formal Specification</string>
+	<string name="save_machine">Save Machine</string>
+	<string name="bulk_test">Bulk Testing</string>
+	<string name="save_task">Save Task</string>
+	<string name="correct_inputs">Correct Inputs</string>
+	<string name="incorrect_inputs">Incorrect Inputs</string>
+	<string name="convert_to_deterministic">Convert to Deterministic</string>
+	<string name="pipe">|</string>
+	<string name="epsilon">ε</string>
+	<string name="load">Load</string>
+	<string name="save">Save</string>
+	<string name="derivation_table">Derivation table</string>
+	<string name="derivation_linear">Linear derivation</string>
+	<string name="derivation_fixed">Fixed derivation</string>
+	<string name="derivation_tree">Derivation tree</string>
+	<string name="load_grammar">Load grammar</string>
+	<string name="save_grammar">Save grammar</string>
+	<string name="new_grammar">New grammar</string>
+
+	<!--image descriptions-->
+	<string name="back">Back</string>
+	<string name="menu">Menu</string>
+	<string name="move">Move</string>
+	<string name="remove">Remove</string>
+	<string name="sim_step_b">Step back</string>
+	<string name="sim_step_f">Step forward</string>
+	<string name="sim_full">Full simulation</string>
+	<string name="sim_stop">Stop simulation</string>
+	<string name="sim_remove_brk">Remove breakpoints</string>
+	<string name="task_details">Task details</string>
+	<string name="previous_page">Previous page</string>
+	<string name="next_page">Next page</string>
+
+
+	<string name="edit">Edit</string>
+	<string name="discard">Discard</string>
+	<string name="cancel">Cancel</string>
+
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	<string name="ok">OK</string>
+
+	<!--files-->
+	<string name="file_name">File Name</string>
+	<string name="save_file">Save File</string>
+	<string name="choose_file">Choose File</string>
+	<string name="CMS">CMS</string>
+	<string name="CMSG">CMSG</string>
+	<string name="JFF">JFF</string>
+	<string name="save_succ">was successfully saved!</string>
+	<string name="file_not_loaded">File could not be loaded.</string>
+	<string name="file_not_saved">File could not be saved.</string>
+	<string name="default_folder">CMSolutions</string>
+
+	<!--Basic Elements-->
+	<string name="symbol">Symbol</string>
+	<string name="state">State</string>
+	<string name="transition">Transition</string>
+
+	<!--Main Activity-->
+	<string name="new_machine">New Machine</string>
+	<string name="example_machine">Example Machines</string>
+	<string name="example_grammar">Example Grammars</string>
+	<string name="load_machine">Load Machine</string>
+	<string name="tasks">Tasks</string>
+	<string name="help_about">Help/About</string>
+	<string name="grammar">Grammar</string>
+
+	<!--Popup Main Activity new-->
+	<string name="finite_state_automaton">Finite State Automaton</string>
+	<string name="pushdown_automaton">Pushdown Automaton</string>
+	<string name="linear_bounded_automaton">Linear Bounded Automaton</string>
+	<string name="turing_machine">Turing Machine</string>
+
+	<!--Popup Main Activity examples-->
+	<string name="finite_state_automaton_example1">DFSA - 3k+1</string>
+	<string name="finite_state_automaton_example2">NFSA - ends with 01 or 10</string>
+	<string name="finite_state_automaton_example3">DFSA - a
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="pushdown_automaton_example1">DPDA - wcw
+		<sup>
+			<small>R</small>
+		</sup>
+	</string>
+	<string name="pushdown_automaton_example2">NPDA - ww
+		<sup>
+			<small>R</small>
+		</sup>
+	</string>
+	<string name="pushdown_automaton_example3">DPDA - a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="linear_bounded_automaton_example1">DLBA - a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		c
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="linear_bounded_automaton_example2">NLBA - 1
+		<sup>
+			<small>N</small>
+		</sup>
+		, where N is not a prime
+	</string>
+	<string name="turing_machine_example1">DTM - multiply two unary numbers</string>
+	<string name="turing_machine_example2">NTM - w
+		<sub>
+			<small>1</small>
+		</sub>
+		$w
+		<sub>
+			<small>2</small>
+		</sub>
+		, where w
+		<sub>
+			<small>2</small>
+		</sub>
+		is a substring of w
+		<sub>
+			<small>1</small>
+		</sub>
+	</string>
+
+	<!--Popup Main Activity grammar examples-->
+	<string name="example_grammar1">Greg - a
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="example_grammar2">Greg - 3k+1</string>
+	<string name="example_grammar3">Greg - ends with 01 or 10</string>
+	<string name="example_grammar4">Gcf - a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="example_grammar5">Gcf - a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		in Chomsky normal form
+	</string>
+	<string name="example_grammar6">Gcf - ww
+		<sup>
+			<small>R</small>
+		</sup>
+	</string>
+	<string name="example_grammar7">Gcs - a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		c
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+
+	<!--Options Activity-->
+	<string name="simulation_settings">Simulation settings</string>
+	<string name="simulation_colors">Automatas colors</string>
+	<string name="markNondeterminism">Mark nondeterministic transitions</string>
+	<string name="colors">Machine colors</string>
+	<string name="add_color">Add New Color</string>
+	<string name="remove_color">Do you really want to remove this color?</string>
+	<string name="color_save_error">Unknown error occurred while saving new color!</string>
+	<string name="color_remove10_error">At least 10 color must exist!</string>
+	<string name="color_remove_error">Unknown error occurred while removing color!</string>
+	<string name="maximum_steps">Maximum number of automatically simulated steps</string>
+
+	<!--Simulation Activity-->
+	<string name="simulate">Simulate</string>
+	<string name="simulation_FSA">FSA</string>
+	<string name="simulation_PDA">PDA</string>
+	<string name="simulation_LBA">LBA</string>
+	<string name="simulation_TM">TM</string>
+	<string name="add_tape">+</string>
+	<string name="machine_tape">Machine tape</string>
+	<string name="stack_tape">Stack</string>
+	<string name="tape_element_save_error">Unknown error occurred while saving new tape element!</string>
+	<string name="exit_confirmation">Do you really wish to exit? All unsaved work will be lost!</string>
+	<string name="choose_action">Choose action</string>
+	<string name="set_initial">Set as initial tape element</string>
+	<string name="set_ordinary">Set as ordinary tape element</string>
+	<string name="place_breakpoint">Place breakpoint</string>
+	<string name="remove_breakpoint">Remove breakpoint</string>
+	<string name="remove_tape_element">Do you really want to remove this tape element?</string>
+	<string name="initial_tape_element_exists_error">Unable to set as initial tape element. Initial tape element already
+		exists.
+	</string>
+	<string name="initial_state_error">Unable to start simulation, because initial state does not exist. Please create
+		initial state in configuration and try again.
+	</string>
+	<string name="final_state_error">Unable to start simulation, because final state does not exist. Please create final
+		state in configuration and try again.
+	</string>
+	<string name="both_states_error">Unable to start simulation, because initial and final states do not exist. Please
+		create initial and final state in configuration and try again.
+	</string>
+	<string name="initial_tape_element_error">Unable to start simulation. Initial tape position needs to be set.
+	</string>
+	<string name="initial_tape_symbol_error">Unable to start simulation. Initial tape position cannot be blank symbol.
+	</string>
+	<string name="simulation_incomplete_tape_error">Unable to start simulation. Initial tape needs to be a continuous
+		sequence of nonblank symbols.
+	</string>
+	<string name="unable_simulation">Unable to perform selected action. You need to stop an ongoing simulation first.
+	</string>
+	<string name="simulation_needed">Simulation has not started yet.</string>
+	<string name="simulation_stopped">Simulation was stopped.</string>
+	<string name="all_stuck">All simulation threads are stuck.</string>
+	<string name="solution_found">Final state was reached.</string>
+	<string name="simulated_max_steps">%1$d steps were simulated.</string>
+	<string name="breakpoint_hit">A breakpoint was hit.</string>
+	<string name="grammar_confirmation">Want to save your changes? If you click no, your grammar will be lost.</string>
+	<string name="machine_confirmation">Want to save your changes? If you click no, your machine will be lost.</string>
+
+	<!--Popup Simulation Activity Help-->
+	<string name="simulation_help_input_machine_tape">Input machine tape</string>
+	<string name="simulation_help_stack_tape">Stack</string>
+	<string name="simulation_help_diagram">Diagram</string>
+	<string name="simulation_help_simulation_flow">Simulation Flow</string>
+	<string name="simulation_help_control">Controls</string>
+
+	<!--Configuration Activity-->
+	<string name="configure">Configure</string>
+	<string name="configure_FSA">Configure FSA</string>
+	<string name="configure_PDA">Configure PDA</string>
+	<string name="configure_LBA">Configure LBA</string>
+	<string name="configure_TM">Configure TM</string>
+	<string name="alphabet">Alphabet</string>
+	<string name="input_alphabet">Input Alphabet</string>
+	<string name="stack_alphabet">Stack Alphabet</string>
+	<string name="states">States</string>
+	<string name="transitions">Transitions</string>
+	<string name="diagram">Diagram</string>
+	<string name="add_symbol">Add New Symbol</string>
+	<string name="add_input_symbol">Add New Input Symbol</string>
+	<string name="add_stack_symbol">Add New Stack Symbol</string>
+	<string name="add_state">Add New State</string>
+	<string name="add_transition">Add New Transition</string>
+	<string name="remove_symbol">Do you really want to remove this symbol?</string>
+	<string name="remove_state">Do you really want to remove this state?</string>
+	<string name="remove_transition">Do you really want to remove this transition?</string>
+	<string name="convert_error_no_initial_state">Cannot convert the machine because there is no initial state</string>
+
+	<!--Popup Symbol Configuration Activity-->
+	<string name="new_symbol">New Symbol</string>
+	<string name="edit_symbol">Edit Symbol</string>
+	<string name="POP_symbol">POP</string>
+	<string name="PUSH_symbol">PUSH</string>
+	<string name="start_stack_symbol_mark">(Stack Start)</string>
+	<string name="empty_symbol_mark">(Empty Symbol)</string>
+	<string name="right_bound_mark">(Right End)</string>
+	<string name="left_bound_mark">(Left End)</string>
+
+	<!--Popup State Configuration Activity-->
+	<string name="new_state">New State</string>
+	<string name="edit_state">Edit State</string>
+	<string name="initial_state">Initial State</string>
+	<string name="final_state">Final State</string>
+	<string name="initial_state_mark">(Initial)</string>
+	<string name="final_state_mark">(Final)</string>
+
+	<!--Popup Transition Configuration Activity-->
+	<string name="new_transition">New Transition</string>
+	<string name="edit_transition">Edit Transition</string>
+	<string name="choose_transition">Choose transition</string>
+	<string name="from_state">From State</string>
+	<string name="read_symbol">Read Symbol</string>
+	<string name="to_state">To State</string>
+	<string name="write_symbol">Write Symbol</string>
+	<string name="direction">Direction</string>
+	<string name="left">Left</string>
+	<string name="right">Right</string>
+
+	<!--Popup Convert to Deterministic Configuration Activity-->
+	<string name="convert_to_deterministic_dialog_text">Do you wish to change the machine you are working
+		on to deterministic (<b>this cannot be undone - your unsaved work will be lost</b>), or create
+		a deterministic machine as a file?
+	</string>
+	<string name="convert_to_deterministic_dialog_convert">Change Current Machine</string>
+	<string name="convert_to_deterministic_dialog_create_file">Create New File</string>
+
+	<!--Toasts Configuration Activity-->
+	<string name="warning">Warning!</string>
+	<string name="symbol_save_error">Unknown error occurred while saving new symbol!</string>
+	<string name="state_save_error">Unknown error occurred while saving new state!</string>
+	<string name="transition_save_error">Unknown error occurred while saving new transition!</string>
+	<string name="symbol_remove_error">Unknown error occurred while removing symbol!</string>
+	<string name="state_remove_error">Unknown error occurred while removing state!</string>
+	<string name="transition_remove_error">Unknown error occurred while removing transition!</string>
+	<string name="symbol_missing">Symbol textfield is empty!</string>
+	<string name="state_missing">State textfield is empty!</string>
+	<string name="symbol_duplicity">Symbol already exists!</string>
+	<string name="state_duplicity">State already exists!</string>
+	<string name="transition_duplicity">Transition already exists!</string>
+	<string name="error_initial_state">Initial state already exists!</string>
+	<string name="need_symbol">You need at least one symbol to create a transition!</string>
+	<string name="need_state">You need at least one state to create a transition!</string>
+	<string name="need_both">You need at least one symbol and one state to create a transition!</string>
+	<string name="unable_remove_symbol">Unable to remove! Symbol is used in transition.</string>
+	<string name="unable_remove_state">Unable to remove! State is used in transition.</string>
+
+	<!--Bulk Test Activity-->
+	<string name="test_inputs">Test Inputs</string>
+	<string name="new_test">Add New Test</string>
+	<string name="run_bulk_test">Run Tests</string>
+	<string name="view_in_simulation">View in the Simulation Activity</string>
+
+	<!--Bulk Test Results-->
+	<string name="accept">Accepted</string>
+	<string name="reject">Rejected</string>
+	<string name="not_halt">Took too long</string>
+	<string name="incorrect_output">Incorrect output</string>
+	<string name="correct_output_but_reject">Correct output, rejected</string>
+
+	<!--Popup New/Edit Test-->
+	<string name="new_test_popup_title">New Test</string>
+	<string name="edit_test_popup_title">Edit Test</string>
+	<string name="input_word">Input Word</string>
+	<string name="output_word">Output Word</string>
+	<string name="set_output_word">Set Output Word</string>
+	<string name="bulk_incomplete_tape_error">Initial tape needs to be a continuous sequence of nonblank symbols.
+	</string>
+
+	<!--Tasks Activity-->
+	<string name="find_tasks">Find Tasks</string>
+	<string name="new_task">New Task</string>
+	<string name="load_task">Load Task</string>
+	<string name="example_tasks">Example Tasks</string>
+
+	<!--Grammar Activity-->
+	<string name="grammar_file">File</string>
+	<string name="grammar_test">Test</string>
+	<string name="grammar_grammarType">Grammar Type</string>
+	<string name="grammar_specialSymbols">Special Symbols</string>
+	<string name="grammar_hint_rule_left">Left side of the rule</string>
+	<string name="grammar_hint_rule_right">Right side of the rule</string>
+	<string name="grammar_definition">Grammar definition</string>
+	<string name="grammar_simulation">Grammar simulation</string>
+	<string name="definition">Definition</string>
+	<string name="non_terminals">Non-terminals</string>
+	<string name="terminals">Terminals</string>
+	<string name="grammar_add_row">Add row</string>
+	<string name="grammar_missing_start">Starting non-terminal: S is missing</string>
+
+	<!--Grammar Simulation Activity-->
+	<string name="grammar_simulation_test">Test input</string>
+	<string name="grammar_simulation_multiple_tests">Multiple tests</string>
+	<string name="grammar_simulation_input">Input:</string>
+	<string name="grammar_simulation_result">Result:</string>
+	<string name="grammar_simulation_step">Step</string>
+	<string name="grammar_simulation_step_back">Step back</string>
+	<string name="grammar_simulation_tree_constraint">Derivation tree is only available for Regular and Context-free
+		grammars.
+	</string>
+	<string name="grammar_simulation_end">The simulation has ended.</string>
+
+	<!--Grammar Multiple Tests Activity-->
+	<string name="grammar_multiple_tests">Multiple tests</string>
+	<string name="grammar_multiple_tests_test_all">Test all</string>
+	<string name="grammar_multiple_tests_clear">Clear</string>
+	<string name="grammar_multiple_tests_hint">Enter words in the table and chose which belong to the language and which
+		not!
+	</string>
+
+	<!--Derivation Table Fragment-->
+	<string name="production">Production</string>
+	<string name="derivation">Derivation</string>
+
+	<!--Fixed Derivation Fragment-->
+	<string name="productions">Productions</string>
+
+
+	<!--Example Tasks-->
+	<string name="task_example1">Modify Finite State Automaton</string>
+	<string name="task_example2">Create Push-down Automaton</string>
+	<string name="task_example3">Fix error in Turing Machine</string>
+	<string name="task_example_asset1">FSA_task_en.cmst</string>
+	<string name="task_example_asset2">PDA_task_en.cmst</string>
+	<string name="task_example_asset3">TM_task_en.cmst</string>
+
+	<!--Task dialog-->
+	<string name="remaining_time">Time left:</string>
+	<string name="available_time">Available time:</string>
+	<string name="turn_in">Turn in</string>
+	<string name="solve">Solve</string>
+	<string name="back_to_task_edit">Back to task edit screen</string>
+	<string name="back_to_menu">Back to Main Menu</string>
+	<string name="done">Done</string>
+
+	<!--Find Tasks Activity-->
+	<string name="name">Name:</string>
+	<string name="no_name">You must enter a name!</string>
+	<string name="refresh">Refresh</string>
+
+	<!--Edit Tasks Activity-->
+	<string name="edit_task">Edit Task</string>
+	<string name="title">Title</string>
+	<string name="task_text">Text</string>
+	<string name="set_test_inputs_and_automaton">Set Test Inputs and Machine</string>
+	<string name="show_test_inputs">Show Test Inputs</string>
+	<string name="set_time_limit">Set Time Limit</string>
+	<string name="launch_task">Launch Task</string>
+	<string name="automaton_not_created">You need to create a machine before launching the task!</string>
+	<string name="no_task_title">You cannot launch a task without a title!</string>
+
+	<!--Launched Task Activity-->
+	<string name="stop">Stop</string>
+
+	<!--Launched Task Activity dialog-->
+	<string name="stop_task">Stop Task</string>
+	<string name="stop_task_confirm">Do you really want to stop this task?</string>
+
+	<!--Tasks Network Error messages-->
+	<string name="error">Error</string>
+	<string name="bind_socket_error">The application will be unable to find tasks because it\
+		failed to bind a networking socket. This may be caused by the socket already being in\
+		use by other applications. Try closing other applications that may be accessing the\
+		network and try again.
+	</string>
+	<string name="unknown_socket_error">The application will be unable to find tasks because it\
+		failed to open a networking socket. Try restarting the application. If the problem\
+		persists, please, report it to the developer.
+	</string>
+	<string name="sending_result_error">Could not send the results to the assigner.</string>
+
+	<!--Task popups-->
+	<string name="task_leave_warning">You are about to leave the activity without turning in the task. If you proceed,
+		your progress will be lost! Are you sure you want to proceed? (To turn in the task, tap the red exclamation mark
+		in the top bar)
+	</string>
+	<string name="task_no_longer_available">The task is no longer available (if it should be, the application may be
+		encountering problems with the network connection)
+	</string>
+
+	<!--specifications-->
+	<string name="formal_spec">Formal Specification</string>
+	<string name="spec_fsa">FSA = (K, Σ, δ, q0, F)</string>
+	<string name="spec_pda">PDA = (K, Σ, Γ, δ, q0, Z, F)</string>
+	<string name="spec_lba">LBA = (K, Σ, Γ, δ, q0, F)</string>
+	<string name="spec_tm">TM = (K, Σ, Γ, δ, q0, F)</string>
+	<string name="spec_state">K =</string>
+	<string name="spec_input_alphabet">Σ =</string>
+	<string name="spec_tape_alphabet">Γ =</string>
+	<string name="spec_initial_state">q0 =</string>
+	<string name="spec_initial_stack_symbol">Z =</string>
+	<string name="spec_final_state">F =</string>
+
+	<!--guide-->
+	<string name="guide_see_also">See also:</string>
+
+	<!--Contents-->
+	<string name="contents">Contents</string>
+
+	<!--Credits-->
+	<string name="guide_title_credits">Credits</string>
+	<string name="application_version" translatable="false">CMSimulator v5.0.0 ©2019</string>
+	<string name="authors">written by:</string>
+	<string name="author2015" translatable="false">Jakub Trizna (2015)</string>
+	<string name="author2017" translatable="false">Martin Gulis (2017)</string>
+	<string name="author2018" translatable="false">Jakub Sedlář (2018)</string>
+	<string name="author2019" translatable="false">Krisztian Tóth (2019)</string>
+	<string name="author2020" translatable="false">Kamil Lihan (2020)</string>
+	<string name="supervisor">supervised by doc. Mgr. Daniela Chudá, PhD.</string>
+	<string name="faculty">FIIT STU Bratislava</string>
+	<string name="logo">Logo designed by Adam Trizna</string>
+
+	<!--About-->
+	<string name="guide_title_about">About</string>
+	<string name="guide_about_desc1">CMSimulator app helps you better understand four of the most well-known abstract
+		machines - finite state automaton, push-down automaton, linear-bounded automaton and Turing machine.
+		You can create new or load existing solutions from files. The application also contains eight examples
+		(one deterministic and one nondeterministic for each type of the machine).
+	</string>
+	<string name="guide_about_desc2">You can create a list of symbols, states, transition rules and also choose the
+		initial and final states.
+		Then you can fill the tape and simulate the solution step by step, or go directly to the end of
+		simulation. You can also mark any tape element as breakpoint to pause the simulation when the
+		machine reaches this breakpoint.
+	</string>
+	<string name="guide_about_desc3">Nondeterministic machines and solutions are also supported.</string>
+	<string name="guide_about_desc4">Since version 3, the application also allows the creation and solving
+		of interactive assignments over the local area network.
+	</string>
+	<string name="guide_about_desc5">The application was developed as part of several bachelor\'s projects
+		by students of the Faculty of Informatics and Information Technologies of the Slovak University
+		of Technology in Bratislava.
+	</string>
+	<string name="guide_about_desc6">Since version 4, the application has been extended by simulation and visualization
+		of
+		formal grammars from the Chomsky hierarchy. In CMSimulator you can create, analyze and test Regular,
+		Context-free,
+		Context-sensitive and Unrestricted grammars. The application support saving and loading existing grammars, as
+		well as
+		4 different kinds of visualizations - Derivation Table, Derivation Tree, Linear derivation and Fixed derivation.
+	</string>
+
+	<!--Getting Started-->
+	<string name="guide_title_getting_started">Getting Started</string>
+	<string name="guide_getting_started_new_machine">To create a new machine, tap the
+		<b>New Machine</b>
+		button in the main menu, then select what type of machine you would like to create. You will be taken to
+		the Configuration Activity, where you can edit and save your new machine.
+	</string>
+	<string name="guide_getting_started_example_machine">If you would like to view an example machine
+		created in CMSimulator, tap the <b>Example Machines</b> button in the main menu and select
+		which machine you would like to open. You will be taken to the Simulation Activity where you
+		can try the machine out.
+	</string>
+	<string name="guide_getting_started_example_grammar">If you would like to view an example grammar
+		created in CMSimulator, tap the <b>Example Grammars</b> button in the main menu and select
+		which grammar you would like to open. You will be taken to the Grammar Activity where you
+		can try the grammar out.
+	</string>
+	<string name="guide_getting_started_example_machine_list">The available example machines are:\n
+		\t \u2022 A deterministic finite automaton accepting words with 3k+1 characters\n
+		\t \u2022 A deterministic finite automaton accepting words in the form of a
+		<sup>
+			<small>N</small>
+		</sup>
+		\n
+		\t \u2022 A nondeterministic finite automaton accepting words ending with "01" or "10"\n
+		\t \u2022 A deterministic push-down automaton accepting palindromes with marked middle\n
+		\t \u2022 A deterministic push-down automaton accepting words in the form of
+		a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		\n
+		\t \u2022 A nondeterministic push-down automaton accepting palindromes of even length\n
+		\t \u2022 A deterministic linear-bounded automaton accepting words in the form of
+		a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		c
+		<sup>
+			<small>N</small>
+		</sup>
+		\n
+		\t \u2022 A nondeterministic linear-bounded automaton accepting non-prime numbers in unary system\n
+		\t \u2022 A deterministic Turing machine that multiplies two numbers in the unary system\n
+		\t \u2022 A nondeterministic Turing machine that finds if one word is a substring of another
+	</string>
+	<string name="guide_getting_started_example_grammar_list">The available example grammars are:\n
+		\t \u2022 A regular grammar accepting words in the form of a
+		<sup>
+			<small>N</small>
+		</sup>
+		\n
+		\t \u2022 A regular grammar accepting words with 3k+1 characters\n
+		\t \u2022 A regular grammar accepting words ending with "01" or "10"\n
+		\t \u2022 A context free grammar accepting words in the form of a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		\n
+		\t \u2022 A context free grammar accepting words in the form of a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		in the Chomsky normal form\n
+		\t \u2022 A context free grammar accepting words in the form of ww
+		<sup>
+			<small>R</small>
+		</sup>
+		\n
+		\t \u2022 A context sensitive grammar accepting words in the form of
+		a
+		<sup>
+			<small>N</small>
+		</sup>
+		b
+		<sup>
+			<small>N</small>
+		</sup>
+		c
+		<sup>
+			<small>N</small>
+		</sup>
+	</string>
+	<string name="guide_getting_started_load_machine">To load a previously-saved machine, tap the
+		<b>Load Machine</b>
+		button in the main menu, then select the file you would like to open.
+	</string>
+	<string name="guide_getting_started_tasks">To enter the Tasks menu, tap the <b>Tasks</b> button in
+		the main menu. Then, to solve tasks currently assigned by people in your vicinity, tap the
+		<b>Find Tasks</b>
+		button. To create a new task for others to solve, tap the <b>New Task</b> button.
+		To load a task you have previously prepared, tap the <b>Load Task</b> button.
+	</string>
+	<string name="guide_getting_started_grammar">To enter the Grammar menu, tap the <b>Grammar</b> button
+		in the main menu. You will be taken to the grammar definition screen, where you can define or load
+		the grammar you would like to work with.
+	</string>
+	<string name="guide_getting_started_settings">To view or change the application\'s settings, tap the
+		<b>Settings</b>
+		button in the main menu.
+	</string>
+
+	<!--Configuration Guide-->
+	<string name="guide_title_configuration_activity">Configuration Activity</string>
+	<string name="guide_configuration_introduction">The Configuration Activity is where you can create and
+		edit your machines. You can define the machine\'s alphabet, add or remove states and declare transitions.
+		The activity is divided into a number of tabs, each dedicated to a different action.
+	</string>
+	<string name="guide_configuration_menu">The menu in this activity allows you to save the machine, view
+		the formal specification, or move to the Simulation Activity, Bulk Testing Activity, or Settings.
+	</string>
+	<string name="guide_title_diagram_tab">Diagram Tab</string>
+	<string name="guide_configuration_diagram_tab">In the Diagram tab you can view and edit the state diagram of the
+		machine. You can select a tool from the bottom panel to edit the diagram.\n\
+		You can zoom the diagram in and out by pinching the screen in the diagram area.
+	</string>
+	<string name="guide_configuration_move">
+		<b>Move -</b>
+		while this tool is selected, you can drag the states
+		around. Drag the empty space around states to pan the entire diagram.
+	</string>
+	<string name="guide_configuration_new_state">
+		<b>New State -</b>
+		tap anywhere in the diagram to place a new
+		state there.
+	</string>
+	<string name="guide_configuration_new_transition">
+		<b>New Transition -</b>
+		touch the initial state of the transition
+		and drag to the final state of the transition. A popup window will appear where you can specify other
+		properties of the transition, such as the read symbol.
+	</string>
+	<string name="guide_configuration_edit">
+		<b>Edit -</b>
+		tap a state or transition to edit it.
+	</string>
+	<string name="guide_configuration_remove">
+		<b>Remove -</b>
+		tap a state or transition to remove it.
+	</string>
+
+	<string name="guide_title_other_tabs">Other Tabs</string>
+	<string name="guide_configuration_other_tabs">The other tabs let you define different properties of the
+		machine individually. All machines have a tab for <b>input alphabet</b>,
+		<b>states</b>
+		and <b>transitions</b>. Push-down automata also have a tab for the <b>stack alphabet</b>. You can
+		add new elements by tapping the button at the bottom of the activity.
+	</string>
+	<string name="guide_configuration_edit_button">
+		<b>Edit -</b>
+		edit the element.
+	</string>
+	<string name="guide_configuration_remove_button">
+		<b>Remove -</b>
+		remove the element.
+	</string>
+
+	<!--Special Symbols Guide-->
+	<string name="guide_title_special_symbols">Special Symbols</string>
+	<string name="guide_special_symbols_introduction">Some symbols in the input alphabet and the stack alphabet
+		have a special significance. Special symbols are automatically inserted into the alphabet when the
+		machine is created and cannot be removed. However, you can customize some of them.
+	</string>
+	<string name="guide_special_symbols_epsilon">
+		<b>ε (epsilon) -</b>
+		the empty symbol for finite automata and
+		push-down automata. Creating a transition with epsilon as the read symbol signifies that the transition
+		may be performed without reading <i>any</i> symbol. Epsilon transitions are inherently nondeterministic -
+		the machine may or may not choose to perform them at all (though a push-down automaton may be forced to
+		if it is the only viable transition for the current state of the stack). Epsilon cannot be part of the input
+		word.\n
+		Epsilon is also used as a stack symbol with similar semantics - placing epsilon on the stack means nothing
+		will be placed, and popping epsilon off the stack means nothing gets popped.
+	</string>
+	<string name="guide_special_symbols_blank">
+		<b># (blank symbol) -</b>
+		the default tape symbol for linear-bounded
+		automata and Turing machines. This symbol can be customized.
+	</string>
+	<string name="guide_special_symbols_stack_start">
+		<b>Z (stack start symbol) -</b>
+		the symbol that is automatically placed
+		at the bottom of the stack before the simulation starts. This symbol can be customized.
+	</string>
+	<string name="guide_special_symbols_left_end">
+		<b>|&lt; (left end) -</b>
+		marks the left end of the linear-bounded
+		automaton\'s tape. It is inserted just before the simulation starts, and is ignored for the purposes of
+		"expected
+		output" in the <b>Bulk Test Activity</b>. It can be used as an input symbol in transitions, but it cannot be
+		overwritten and the machine\'s head cannot move left of it. This symbol can be customized.
+	</string>
+	<string name="guide_special_symbols_right_end">
+		<b>&gt;| (right end) -</b>
+		marks the right end of the linear-bounded
+		automaton\'s tape. It is inserted just before the simulation starts, and is ignored for the purposes of
+		"expected
+		output" in the <b>Bulk Test Activity</b>. It can be used as an input symbol in transitions, but it cannot be
+		overwritten and the machine\'s head cannot move right of it.
+	</string>
+
+	<!--Simulation Guide-->
+	<string name="guide_title_simulation_activity">Simulation Activity</string>
+	<string name="guide_simulation_introduction">In the Simulation Activity, you can set the content of the
+		machine\'s tape and simulate it fully to see whether or not the input gets accepted, or sep-by-step
+		and watch how the machine is working. The activity provides you with an overview about the machine\'s
+		current state, current state of the tape (and, for push-down automata, stack), and history of
+		transitions.\nFor nondeterministic machines, the state and tape of every branch of the computation
+		is shown, labelled with different color.\nYou can use the slider on the right edge of the screen to
+		change the ratio between the display areas of the state diagram and the transition history diagram.\nThe
+		state diagram and the transition history diagram can be zoomed in and out by pinching the screen in
+		their respective areas.
+	</string>
+	<string name="guide_simulation_menu">The menu in this activity allows you to save the machine, view
+		the formal specification, clear the tape, or move to the Configuration Activity,
+		Bulk Testing Activity, or Settings.
+	</string>
+	<string name="guide_title_tape">The Tape</string>
+	<string name="guide_simulation_tape">The tape is shown at the top of the screen. It can only be manipulated
+		while a simulation is not in progress.
+	</string>
+	<string name="guide_simulation_add_tape_element">
+		<b>Add tape element -</b>
+		tap to add a new element at the
+		respective end of the tape.
+	</string>
+	<string name="guide_simulation_tape_element">
+		<b>Tape element -</b>
+		tap to set the symbol on the tape element.
+		Tap and hold to open a context menu.
+	</string>
+	<string name="guide_simulation_tape_element_context_menu">The tape element context menu offers you
+		the following options:\n\
+		\t \u2022 <b>Set as Initial Tape Element -</b> the machine\'s head will be set to this element
+		at the start of the simulation.\n\
+		\t \u2022 <b>Place/Remove Breakpoint -</b> mark the tape element as breakpoint, or clears away the breakpoint.
+		See the "Breakpoints" section for more information.\n\
+		\t \u2022 <b>Remove -</b> remove the tape element.
+	</string>
+
+	<string name="guide_title_controls">Controls</string>
+	<string name="guide_simulation_step_back">
+		<b>Step back -</b>
+		undo the last step of the simulation.
+	</string>
+	<string name="guide_simulation_step_forward">
+		<b>Step forward -</b>
+		simulate one step of the machine.
+	</string>
+	<string name="guide_simulation_simulate_fully">
+		<b>Simulate fully -</b>
+		simulate the machine until it stops, or
+		until it performs the maximum number of steps (100 by default, can be changed in Settings).
+	</string>
+	<string name="guide_simulation_stop">
+		<b>Stop -</b>
+		stop the simulation, allowing you to edit the tape.
+	</string>
+	<string name="guide_simulation_remove_breakpoints"><b>Remove breakpoints -</b>Removes all breakpoints. See
+		the "Breakpoints" section for more information.
+	</string>
+
+	<string name="guide_title_breakpoints">Breakpoints</string>
+	<string name="guide_simulation_breakpoints">Breakpoints help you to analyze the machine\'s behaviour at a
+		specific point without having to run the entire simulation step-by-step. When "simulating fully", the
+		machine will pause just before reading a symbol marked with breakpoint. A nondeterministic machine will
+		pause if any branch of executions reaches a breakpoint. You can resume the simulation by tapping the
+		<b>Simulate fully</b>
+		button again (the machine will pause again after reaching the next breakpoint),
+		or you can proceed step-by-step from that point.\nBreakpoints are marked on the tape in red color.
+	</string>
+
+	<!--Bulk Testing Guide-->
+	<string name="guide_title_bulk_test_activity">Bulk Testing Activity</string>
+	<string name="guide_bulk_test_introduction">This activity allows you to define several input words and
+		quickly run them all on your machine, informing you which ones were accepted. This lets you easily
+		verify the correctness of your solutions. For linear-bounded automate and Turing machines, you
+		can also check whether the machine produces a particular output. For nondeterministic machines, the
+		output is considered valid if it matches the output of any possible path.
+	</string>
+	<string name="guide_bulk_test_menu">
+		The menu in this activity allows you to save the machine, view
+		the formal specification, or move to the Configuration Activity, Simulation Activity, or Settings.
+	</string>
+	<string name="guide_bulk_test_results">Running an input may end in one of the following results:\n
+		<b>Accepted</b>
+		- the input was accepted and if you set and expected output,
+		the output was also correct.\n
+		<b>Took too long</b>
+		- the machine was stopped after executing the
+		maximum number of steps (100 by default, can be changed in the Settings).\n
+		<b>Correct output, rejected</b>
+		- the input was rejected, but the
+		output word matches the expected one. This result only appears if you have set the expected output word.\n
+		<b>Rejected</b>
+		- the input was rejected. If the output word is set,
+		the output is also incorrect.\n
+		<b>Incorrect output</b>
+		- the input was accepted, but the
+		output word does not match the expected one. This result only appears if you have set the expected output word.
+	</string>
+	<string name="guide_bulk_test_to_simulation">If you would like to more closely observe the machine\'s
+		behaviour for a specific input, tap and hold the input in the list and you will be offered an option
+		to test it in the Simulation Activity.
+	</string>
+	<string name="guide_bulk_test_buttons">To create a new testing input, tap the <b>Add New Test</b> button.
+		To run the tests, tap the <b>Run Tests</b> button.
+	</string>
+	<string name="guide_bulk_test_edit_button">
+		<b>Edit -</b>
+		edit the test scenario.
+	</string>
+	<string name="guide_bulk_test_remove_button">
+		<b>Remove -</b>
+		remove the test scenario.
+	</string>
+
+	<!--Saving and loading Guide-->
+	<string name="guide_title_save_load">Saving and Loading Machines and Tasks</string>
+	<string name="guide_save_load_introduction">You can save the machine you are working with via the menu button
+		in most activities. The machines are saved into the CMSolutions folder on your device. Saved machines can
+		be subsequently loaded via the <b>Load Machine</b> button in the main menu.\nTasks can be saved via the menu
+		button in the Task Editing Activity and loaded via the <b>Load Task</b> button in the Tasks Menu.
+	</string>
+	<string name="guide_save_load_format">When saving a machine, you are offered to choose the file format. The CMS
+		format is CMSimulator\'s native and preferred format. JFF is a file format used by the JFLAP formal machine
+		simulator for desktop devices. It is strongly recommended to use the CMS format unless you want to later
+		work with the machine using JFLAP, because the CMS format is specifically tailored for the CMSimulation
+		application and supports features not supported by JFLAP, such as storing the machine tape.\nSaving a task
+		generates a file with the .cmst extension. This extension indicates the file contains a task, but
+		internally they use the same format as plain CMS files and can be used interchangeably with them.
+	</string>
+
+	<!--Tasks Guide-->
+	<string name="guide_title_tasks">Tasks</string>
+	<string name="guide_tasks_introduction1">In addition to allowing you to create and simulate abstract machines,
+		CMSimulator also provides a platform for solving interactive tasks. Using the Tasks Menu, you can either
+		create tasks for others to solve, or find tasks assigned to you by other users in the local network.
+	</string>
+	<string name="guide_tasks_introduction2">The goal of a task is to create a machine that matches given criteria.
+		The machine can be evaluated based on whether or not it accepts the inputs it is supposed to accept, rejects the
+		inputs it is supposed to reject, and generates the outputs it is supposed to generate. The machine is simulated
+		for up to the maximum number of steps set by the assigner in their <b>Settings</b>, and inputs for which
+		the machine runs too long are considered to be rejected. The task is typically described verbally, and the
+		actual tests that are run may or may not be shown to the solvers, based on how the assigner decides.
+	</string>
+
+	<!--Solve Tasks Guide-->
+	<string name="guide_title_solving_tasks">Finding and Solving Tasks</string>
+	<string name="guide_solving_tasks_introduction">To find tasks currently being assigned by people in
+		your local network, tap the <b>Find Tasks</b> button in the Tasks Menu. The application will automatically
+		connect to nearby devices and show the list of available tasks. If you are not seeing a task that should be
+		available, you can try reloading them using the <b>Refresh</b> button.
+	</string>
+	<string name="guide_solving_arrow_button">
+		<b>Detail -</b>
+		show details about the task and offer option to solve it.
+	</string>
+	<string name="guide_title_solving_task">Solving a Task</string>
+	<string name="guide_solving_task_menu">If you are allowed to view the evaluation inputs, the Bulk Testing option
+		in menus will be replaced by two separate options - <b>Correct Inputs</b> and <b>Incorrect Inputs</b>. You
+		can view and launch these tests, but you cannot remove or edit them.
+	</string>
+	<string name="guide_solving_tasks_task_button">
+		<b>Task info -</b>
+		tap this button to show the task popup,
+		allowing you to read the assignment again, see how much time you have left, and turn in the task.
+	</string>
+
+	<!--Create Tasks Guide-->
+	<string name="guide_title_creating_tasks">Creating Tasks</string>
+	<string name="guide_creating_tasks_introduction">To create a new task, tap the <b>New Task</b> button in the
+		Tasks Menu. To load a previously saved task, tap the <b>Load Task</b> button. You will be taken to the
+		Task Editing Activity, where you can set the task\'s properties and edit the associated machine.
+	</string>
+
+	<string name="guide_title_edit_task_activity">Task Editing Activity</string>
+
+	<string name="guide_edit_task_activty">In the Task Editing Activity, you can set the task\'s title,
+		verbal assignment, time limit, and whether or not you wish to share the test inputs with the
+		solvers. Tap the <b>Set Test Inputs and Machine</b> button to set the test inputs and edit the
+		associated machine.
+	</string>
+
+	<string name="guide_edit_task_menu">The menu in this activity allows you to save the task, view Help
+		or go to Settings.
+	</string>
+
+	<string name="guide_creating_task_launch">Tap the <b>Launch Task</b> button to launch the task, allowing
+		users in the local network to find it and start solving it. You will see the names of the solvers who
+		turn the task in, along with the number of positive and negative tests their machine passed. Tap the
+		<b>Stop Task</b>
+		button to prevent any more people from finding the task or turning it in. The displayed timer
+		is purely informative - the time limit is enforced by the application on solver\'s side.\nYou can save
+		the displayed results as a text file via the menu.
+	</string>
+
+	<string name="guide_title_creating_tasks_machine">Editing the associated machine</string>
+
+	<string name="guide_creating_tasks_machine_menu">While editing the machine associated with the task, the
+		Bulk Testing option in menus will be replaced by two separate options - <b>Correct Inputs</b> and
+		<b>Incorrect Inputs</b>, where you can set the testing inputs that will be used to evaluate the
+		solutions.
+	</string>
+
+	<string name="guide_creating_tasks_task_button">
+		<b>Task info -</b>
+		tap this button to show the task popup,
+		allowing you to check the assignment and return to the Task Edit Activity.
+	</string>
+
+	<!--Settings Guide-->
+	<string name="guide_title_settings">Settings</string>
+	<string name="guide_settings_max_steps">
+		<b>Maximum number of automatically simulated steps -</b>
+		the maximum
+		number of steps that will be executed after pressing the <b>simulate fully</b> button in the <b>Simulation
+		activity</b>, as well as the maximum number of steps for which each input in the
+		<b>Bulk Testing Activity</b>
+		is simulated.
+	</string>
+	<string name="guide_settings_mark_nondeterminism">
+		<b>Mark nondeterministic transitions -</b>
+		all nondeterministic
+		transitions in the transition diagrams in the Configuration and Simulation activities will be shown in red.
+	</string>
+	<string name="guide_settings_colors">
+		<b>Machine colors -</b>
+		edit the colors that will be assigned to the machines
+		during simulation.
+	</string>
+
+	<!--Grammar Definition Guide-->
+	<string name="guide_title_grammar_definition">Grammar Definition</string>
+	<string name="guide_grammar_definition_instruction">In the grammar definition activity you can define the rules of
+		your own grammar
+		or alternatively load them from external .CMSG or .JFF files. After te grammar is defined you can check various
+		information about it and
+		proceed to testing.
+	</string>
+	<string name="guide_grammar_definition_menu">The menu in this activity allows you to create a new grammar, load or
+		save existing ones and access the
+		help page.
+	</string>
+	<string name="guide_title_grammar_input_table">The input table</string>
+	<string name="guide_grammar_input_table_instruction">You can define the rules of your grammar in this table by
+		entering the rules to the left columns
+		and derivations to the right column. If there are several derivations from the same rule, you can divide them by
+		<b>
+			pipe
+		</b>
+		<i>(See Grammar special symbols)</i>.
+		If you wish to enter an empty word, please use
+		<b>epsilon</b>
+		<i>(See Grammar special symbols)</i>. Since these characters are uncommon on Android keyboards you can
+		enter them by pressing the shortcut buttons. If you run out of rows in the table, you can add more by pressing
+		the <b>Add row</b> button.
+	</string>
+	<string name="guide_title_grammar_definition_table">Grammar definition table</string>
+	<string name="guide_grammar_definition_table_instructions">In the grammar definition table you can see various
+		information about the entered grammar
+		including the type of the grammar in the Chomsky hierarchy, its formal definition, the used terminals and
+		non-terminals.
+	</string>
+
+	<!--Grammar Simulation Guide-->
+	<string name="guide_title_grammar_simulation">Grammar Simulation</string>
+	<string name="guide_grammar_simulation_instruction">In the grammar simulation activity you can test, simulate and
+		visualize the derivation
+		of words from the grammar rules. You can test words if they belong to the defined language and visualize them
+		using either a derivation table,
+		derivation tree, linear derivation or fixed derivation. Furthermore you can analyze the whole derivation
+		sequence by stepping forward and
+		backwards.
+	</string>
+	<string name="guide_grammar_simulation_menu">The menu in this activity allows you to switch back and forth between
+		the 4 available kinds of
+		visualizations and access the help page.
+	</string>
+	<string name="guide_title_grammar_input_testing">Input testing</string>
+	<string name="guide_grammar_input_testing_instruction">The input testing allows you to enter words to the text field
+		and check if the input
+		word belongs to the defined language by pressing the <b>Test input</b> button. You can use the <b>Clear</b> button
+		the clear the content of the input field.
+		If you wish to test the empty word, please leave the input field clear.
+	</string>
+	<string name="guide_title_grammar_stepping">Stepping</string>
+	<string name="guide_grammar_stepping_instruction">During the simulation process, you can step forward and backwards
+		by selecting the
+		appropriate buttons on the bottom of the screen. Each time a button is selected a different step of the
+		simulation is shown on the screen.
+	</string>
+	<string name="guide_grammar_derivation_tree_instruction">The derivation tree visualizes the derivation sequence by
+		drawing nodes for each
+		symbol of each derivation and connecting them with lines. Each step of the simulation is represented by a new
+		depth of the tree. The non-terminal
+		symbols are colored yellow while the terminal symbols are colored green. At the end of the simulation the green
+		nodes show the result.
+	</string>
+	<string name="guide_grammar_derivation_table_instruction">The derivation table visualizes the derivation sequence by
+		showing the used rule
+		and the output word next to each other in each step of the simulation.
+	</string>
+	<string name="guide_grammar_derivation_linear_instruction">The linear derivation visualizes the derivation sequence
+		by writing the generated
+		words in each step of the simulation in one line. The replaced part of the word is coloured yellow, while the
+		new part of the word is
+		coloured green. At the end of the simulation the result is shown underlined and bold.
+	</string>
+	<string name="guide_grammar_derivation_fixed_instruction">The fixed derivation visualizes the derivation sequence by
+		showing the current
+		word in one place in each step of the simulation. Apart from that a list of all the used rules are shown under
+		the current word. In each step of
+		the simulation the new parts of the word is coloured green and at the end of the simulation the result is shown
+		underlined and bold.
+	</string>
+
+	<!--Multiple Tests Guide-->
+	<string name="guide_title_multiple_tests">Multiple Tests of Grammar</string>
+	<string name="guide_multiple_tests_instruction">In this activity you can test multiple words simultaneously if the
+		belong to the defined
+		language. Furthermore you can also express your opinion by selecting which words do you think belong to the
+		language and which do not.
+	</string>
+	<string name="guide_multiple_tests_menu">The menu in this activity allows you to access the help page.</string>
+	<string name="guide_title_multiple_tests_table">Multiple tests table</string>
+	<string name="guide_multiple_test_table_instruction">The multiple tests table is divided into two parts. In the left
+		column you can enter the
+		words you wish to be tested. In the right column you can you can enter your guess for each word. By default the
+		check box is set to empty,
+		if you tap once, a tick appears which means that the word should belong to the language. By tapping twice you
+		select the option that you
+		do not think, that the word is accepted byt the language. If you tap once more, the check box resets to the
+		default state, where nothing is
+		selected. By selecting the <b>Clear</b> button you clear the contents of the whole table.
+	</string>
+	<string name="guide_title_multiple_tests_evaluation">Evaluation</string>
+	<string name="guide_multiple_tests_evaluation_instruction">By pressing the <b>Test all</b> button, the entered words
+		and guesses are evaluated
+		and the result is shown on the screen. In the left column of the table, each row is coloured accordingly, if the
+		entered word belongs
+		to the language, the background appears in green colour, if it does not belong, the colouring will be red. Your
+		guesses are also evaluated
+		and one of the following state appear in each row:
+	</string>
+	<string name="guide_multiple_tests_accept_right">You selected that the word belongs to the language and you were
+		right.
+	</string>
+	<string name="guide_multiple_tests_accept_wrong">You selected that the word belongs to the language and you were
+		wrong.
+	</string>
+	<string name="guide_multiple_tests_reject_right">You selected that the word does not belong to the language and you
+		were right.
+	</string>
+	<string name="guide_multiple_tests_reject_wrong">You selected that the word does not belong to the language and you
+		were wrong.
+	</string>
+	<string name="guide_multiple_tests_default_wrong">You did not select anything, therefore you were wrong about the
+		result.
+	</string>
+
+	<!--Grammar Special Symbols Guide-->
+	<string name="guide_title_grammar_special_symbols">Grammar Special Symbols</string>
+	<string name="guide_grammar_special_symbols_instruction">While working with grammars, you can use two special
+		symbols for various tasks,
+		the <b>Pipe</b> and
+		<b>Epsilon</b>
+	</string>
+	<string name="guide_title_grammar_special_symbols_pipe">Pipe - |</string>
+	<string name="guide_pipe_instruction">With the use of the <b>Pipe</b> you can divide the derivations which belong to
+		the same rule, that way
+		you can enter the grammar faster.\n In the following example the 2 grammars are equivalent:\n
+		\t S -> aS | ε \n \n
+		\t S -> aS \n
+		\t S -> ε
+	</string>
+	<string name="guide_title_grammar_special_symbols_epsilon">Epsilon - ε</string>
+	<string name="guide_epsilon_instruction">The <b>Epsilon</b> symbol means the empty word. <b>Epsilon</b> is
+		frequently used as the closing symbol
+		of a grammar, and some languages also accept the empty word as a valid input. In the grammar definition activity
+		you can enter the empty
+		word by tapping the <b>Epsilon</b> button. During the grammar simulation activity, if you wish to test the empty
+		word, leave the input field
+		empty and <b>Epsilon</b> symbol gets added automatically.
+	</string>
+
+	<!--Grammar Load/save Guide-->
+	<string name="guide_title_grammar_load_save">Saving and Loading Grammars</string>
+	<string name="guide_grammar_load_save_instruction">You can save the grammar you are working on for future purposes
+		or load existing grammars
+		from external sources.
+	</string>
+	<string name="guide_grammar_load_instruction">You can load existing grammars via the menu in the grammar definition
+		activity by selecting the
+		<b>Load grammar</b>
+		button. The application supports 2 file formats, .cmsg which is the native CMSimulator file format
+		and .jff which is the format used by a desktop application for grammar simulation called JFLAP. Therefore you
+		can load grammars created in
+		JFLAP and work with them in CMSimulator.
+	</string>
+	<string name="guide_grammar_save_instruction">You can save the currently entered grammar via the menu in the grammar
+		definition activity by
+		selecting the <b>Save grammar</b> button. You have to enter a filename and chose between the 2 available formats
+		.cmsg and .jff. If you chose
+		.jff you can open the file in JFLAP. The file is saved to the CMSolutions folder in your device.
+	</string>
+	<string name="task_description">Task description</string>
+	<string name="task_config">Task configuration</string>
+	<string name="welcome">Welcome</string>
+	<string name="welcome_message">This app will help you with formal grammars and languages</string>
+	<string name="understood">Got it</string>
+	<string name="automata_message">When you click this button you can create new automata</string>
+	<string name="grammar_message">This button allows you to create new grammar</string>
+	<string name="tasks_message">Over here you can find tasks you have been assigned</string>
+	<string name="tasks_game">Game (EXPERIMENTAL)</string>
+	<string name="select_task">Select task</string>
 
 </resources>

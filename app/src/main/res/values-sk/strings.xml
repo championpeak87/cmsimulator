@@ -3,6 +3,9 @@
     <string name="app_name">CMSimulator</string>
 
     <!--menu items-->
+    <string name="automatas">Automaty</string>
+    <string name="grammars">Gramatiky</string>
+    <string name="extras">Extra</string>
     <string name="settings">Nastavenia</string>
     <string name="help">Pomoc</string>
     <string name="reset_settings">Reset na pôvodné nastavenia</string>
@@ -71,7 +74,7 @@
     <string name="example_grammar">Vzorové gramatiky</string>
     <string name="load_machine">Načítať automat</string>
     <string name="tasks">Úlohy</string>
-    <string name="help_about">Pomoc/O aplikácii</string>
+    <string name="help_about">Pomoc</string>
     <string name="grammar">Gramatika</string>
 
     <!--Popup Main Activity new-->
@@ -102,6 +105,8 @@
     <string name="example_grammar7">Gcs - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
 
     <!--Options Activity-->
+    <string name="simulation_settings">Nastavenia simulácie</string>
+    <string name="simulation_colors">Farby automatov</string>
     <string name="markNondeterminism">Označuj nedeterministické prechody</string>
     <string name="colors">Farby automatov</string>
     <string name="add_color">Pridať novú farbu</string>
@@ -320,7 +325,7 @@
     <string name="refresh">Obnoviť</string>
 
     <!--Edit Tasks Activity-->
-    <string name="edit_task">Upráva úlohy</string>
+    <string name="edit_task">Úprava úlohy</string>
     <string name="title">Názov</string>
     <string name="task_text">Zadanie</string>
     <string name="set_test_inputs_and_automaton">Nastaviť testovacie vstupy a automat</string>
@@ -802,4 +807,16 @@
     <string name="guide_grammar_save_instruction">Uložiť gramatiku môžete v rámci menu na obrazovke pre definíciu gramatiky vybraním tlačidla
     <b>Uložiť gramatiku</b>. Následne zadajte meno súboru a vyberte jeden z dvoch dostupných formátov .cmsg a .jff. Ak si zvolíte .jff môžete
     otvoriť vytvorený súbor v simulátore JFLAP. Vytvorený súbor bude uložený do priečinku CMSolutions vo vašom zariadení.</string>
+	<string name="task_description">Popis úlohy</string>
+    <string name="task_config">Konfigurácia úlohy</string>
+	<string name="welcome">Vitaj</string>
+    <string name="welcome_message">Tento simulátor ti pomôže so simuláciou formálnych gramatík a jazykov na rôznych
+        automatoch
+    </string>
+    <string name="understood">Rozumiem</string>
+	<string name="automata_message">Kliknutím na toto tlačidlo môžeš vytvoriť nový automat</string>
+    <string name="grammar_message">Toto tlačidlo ti umožní zadefinovať novú gramatiku</string>
+    <string name="tasks_message">Tu môžeš nájsť úlohy, ktoré môžeš vyriešiť</string>
+	<string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
+	<string name="select_task">Vyber úlohu</string>
 </resources>

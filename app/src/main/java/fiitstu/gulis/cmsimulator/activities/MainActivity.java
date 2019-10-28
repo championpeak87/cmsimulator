@@ -14,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import fiitstu.gulis.cmsimulator.database.DataSource;
@@ -23,6 +25,12 @@ import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import io.blushine.android.ui.showcase.MaterialShowcase;
+import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
+import io.blushine.android.ui.showcase.MaterialShowcaseView;
+import io.blushine.android.ui.showcase.ShowcaseConfig;
+
+import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 
 /**
@@ -42,6 +50,7 @@ public class MainActivity extends FragmentActivity
     public static final String CONFIGURATION_TYPE = "CONFIGURATION_TYPE";
     public static final String DEFAULT_FORMAT = "DEFAULT_FORMAT";
     public static final String FILE_NAME = "FILE_NAME";
+    public static final String FIRST_LAUNCH = "FIRST_LAUNCH";
     public static final String TASK = "TASK";
 
     //dialog value
@@ -88,12 +97,84 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTheme(R.style.MainMenuTheme);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_main_landscape);
         }
         else {
             setContentView(R.layout.activity_main_portrait);
+        }
+
+        ImageView image = findViewById(R.id.imageView_main_logo);
+
+
+        MaterialShowcaseSequence firstLaunchSequence = new MaterialShowcaseSequence(this);
+        MaterialShowcaseView firstLaunchMessage = new MaterialShowcaseView.Builder(this)
+                .renderOverNavigationBar()
+                .setTitleText(getString(R.string.welcome))
+                .setContentText(getString(R.string.welcome_message))
+                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                .setDismissText(R.string.understood)
+                .setDelay(500)
+                .build();
+
+        Button newAutomata = findViewById(R.id.button_main_new),
+               newGrammar = findViewById(R.id.button_main_grammar),
+               tasks = findViewById(R.id.button_main_tasks);
+
+        MaterialShowcaseView newAutomataMessage = new MaterialShowcaseView.Builder(this)
+                .renderOverNavigationBar()
+                .setTarget(newAutomata)
+                .setTitleText(getString(R.string.automatas))
+                .setContentText(getString(R.string.automata_message))
+                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                .setDismissText(R.string.understood)
+                .setDelay(500)
+                .build();
+
+        MaterialShowcaseView newGrammarMessage = new MaterialShowcaseView.Builder(this)
+                .renderOverNavigationBar()
+                .setTarget(newGrammar)
+                .setTitleText(getString(R.string.grammar))
+                .setContentText(getString(R.string.grammar_message))
+                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                .setDismissText(R.string.understood)
+                .setDelay(500)
+                .build();
+
+        MaterialShowcaseView tasksMessage = new MaterialShowcaseView.Builder(this)
+                .renderOverNavigationBar()
+                .setTarget(tasks)
+                .setTitleText(getString(R.string.tasks))
+                .setContentText(getString(R.string.tasks_message))
+                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                .setDismissText(R.string.understood)
+                .setDelay(500)
+                .build();
+
+        firstLaunchSequence.addSequenceItem(firstLaunchMessage);
+        firstLaunchSequence.addSequenceItem(newAutomataMessage);
+        firstLaunchSequence.addSequenceItem(newGrammarMessage);
+        firstLaunchSequence.addSequenceItem(tasksMessage);
+        firstLaunchSequence.setSingleUse(FIRST_LAUNCH);
+        firstLaunchSequence.show();
+
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        ImageView logo = findViewById(R.id.imageView_main_logo);
+        switch (nightModeFlags) {
+
+            case Configuration.UI_MODE_NIGHT_YES:
+
+                logo.setImageResource(R.drawable.logo_v1_dark);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                logo.setImageResource(R.drawable.logo_v1_light);
+                break;
         }
 
         Log.v(TAG, "onCreate initialization started");
