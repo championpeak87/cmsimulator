@@ -26,6 +26,7 @@ import fiitstu.gulis.cmsimulator.database.FileFormatException;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExampleTaskDialog;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
+import fiitstu.gulis.cmsimulator.dialogs.TasksGameDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
 
@@ -36,12 +37,13 @@ import java.io.IOException;
  * <p>
  * Created by Jakub Sedlář on 05.01.2018.
  */
-public class TasksActivity extends FragmentActivity implements ExampleTaskDialog.ExampleTaskDialogListener {
+public class TasksActivity extends FragmentActivity implements ExampleTaskDialog.ExampleTaskDialogListener, TasksGameDialog.TasksGameDialogListener {
 
     //log tag
     private static final String TAG = TasksActivity.class.getName();
 
     private static final String EXAMPLE_DIALOG = "EXAMPLE_DIALOG";
+    private static final String GAME_DIALOG = "GAME_DIALOG";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,17 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 FragmentManager fm = getSupportFragmentManager();
                 ExampleTaskDialog exampleTaskDialog = ExampleTaskDialog.newInstance();
                 exampleTaskDialog.show(fm, EXAMPLE_DIALOG);
+
+            }
+        });
+
+        Button game = findViewById(R.id.button_tasks_game);
+        game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                TasksGameDialog dialog = TasksGameDialog.newInstance();
+                dialog.show(fm, GAME_DIALOG);
             }
         });
 
@@ -182,6 +195,11 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
             }
         });
         fileSelector.selectFile(TasksActivity.this);
+    }
+
+    @Override
+    public void tasksGameDialogClick(String assetName) {
+        Toast.makeText(getApplicationContext(), "TOTO JE TOAST", Toast.LENGTH_LONG).show();
     }
 
     @Override

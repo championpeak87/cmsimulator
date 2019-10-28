@@ -432,8 +432,6 @@ public class SimulationActivity extends FragmentActivity
             case MainActivity.EDIT_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
 
-                //taskButton.setIcon(getDrawable(R.drawable.excl_green));
-                //taskButton.setVisible(true);
                 filename = task.getTitle();
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);

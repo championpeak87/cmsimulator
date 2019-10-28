@@ -13,48 +13,34 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"/>
-
         <Button
                 android:id="@+id/button_tasks_find"
                 android:text="@string/find_tasks"
                 style="@style/TasksButtonStyle" />
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"/>
+
 
         <Button
                 android:id="@+id/button_tasks_new"
                 android:text="@string/new_task"
                 style="@style/TasksButtonStyle" />
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"/>
+
 
         <Button
                 android:id="@+id/button_tasks_load"
                 android:text="@string/load_task"
                 style="@style/TasksButtonStyle" />
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"/>
+
         <Button
                 android:id="@+id/button_tasks_examples"
                 android:text="@string/example_tasks"
                 style="@style/TasksButtonStyle" />
 
-        <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"/>
+        <Button
+                android:id="@+id/button_tasks_game"
+                android:text="@string/tasks_game"
+                style="@style/TasksButtonStyle" />
     </LinearLayout>
 </LinearLayout>

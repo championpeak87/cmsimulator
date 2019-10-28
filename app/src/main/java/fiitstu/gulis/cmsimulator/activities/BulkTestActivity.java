@@ -41,14 +41,14 @@ import java.util.List;
 
 /**
  * The activity used for bulk-testing multiple inputs.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * MACHINE_TYPE (int) - type of the machine (one of MainActivity's static fields)
  * NEGATIVE (boolean) - if true, "incorrect inputs" are shown; for non-tasks should always be false
  * TASK_CONFIGURATION (int) - 0 (not a task), MainActivity.EditTask, or MainActivity.SolveTask
  * FILE_NAME (String) - the name of the currently open file (or the default filename)
  * TASK (Serializable - Task) - the task being solved (or null); TASK = null <=> TASK_CONFIGURATION = 0
- *
+ * <p>
  * Created by Jakub Sedlář on 14.10.2017.
  */
 public class BulkTestActivity extends FragmentActivity implements SaveMachineDialog.SaveDialogListener,
@@ -83,17 +83,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         // menu
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        if (taskConfiguration != 0) {
-            if (negative) {
-                actionBar.setTitle(R.string.incorrect_inputs);
-            }
-            else {
-                actionBar.setTitle(R.string.correct_inputs);
-            }
-        }
-        else {
-            actionBar.setTitle(R.string.test_inputs);
-        }
+
 
         Bundle inputBundle = getIntent().getExtras();
         machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
@@ -101,15 +91,27 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         filename = inputBundle.getString(MainActivity.FILE_NAME);
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
 
+        if (taskConfiguration != 0) {
+            if (negative) {
+                actionBar.setTitle(R.string.incorrect_inputs);
+            } else {
+                actionBar.setTitle(R.string.correct_inputs);
+            }
+        } else {
+            actionBar.setTitle(R.string.test_inputs);
+        }
+
         Button newTestButton = findViewById(R.id.button_bulk_test_add_test);
         newTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view){
+            @Override
+            public void onClick(View view) {
                 onNewTestClick();
             }
         });
         Button runTestsButton = findViewById(R.id.button_bulk_test_run);
         runTestsButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view){
+            @Override
+            public void onClick(View view) {
                 ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_bulktest_working),
                         new Runnable() {
                             @Override
@@ -152,7 +154,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                                         DataSource dataSource = DataSource.getInstance();
                                         dataSource.dropTapeElements();
                                         int order = 0;
-                                        for (Symbol symbol: test.getInputWord()) {
+                                        for (Symbol symbol : test.getInputWord()) {
                                             dataSource.addTapeElement(symbol, order);
                                             order++;
                                         }
@@ -175,9 +177,10 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 FragmentManager fm = getSupportFragmentManager();
                 EditTestDialog editTestDialog = EditTestDialog.newInstance(
                         machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON
-                        || machineType == MainActivity.TURING_MACHINE, editTest, false);
+                                || machineType == MainActivity.TURING_MACHINE, editTest, false);
                 editTestDialog.show(fm, EDIT_TEST_DIALOG);
             }
+
             public void onRemoveItemClick(TestScenario test) {
                 Log.v(TAG, "remove test button click noted");
                 scenariosListAdapter.clearRowColors();
@@ -188,10 +191,21 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         });
 
 
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView_bulk_test_scenarios);
         recyclerView.setAdapter(scenariosListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        MenuItem taskInfoButton = menu.getItem(0);
+        Bundle inputBundle = getIntent().getExtras();
+
+        if (taskConfiguration != 0) {
+            taskInfoButton.setVisible(true);
+        }
+
+        return true;
     }
 
     @Override
@@ -199,7 +213,12 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.menu_bulk_test, menu);
 
+        Bundle inputBundle = getIntent().getExtras();
+        Button newTestButton = findViewById(R.id.button_bulk_test_add_test);
+
         if (taskConfiguration != 0) {
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
+
             if (task.getPublicInputs() || taskConfiguration != MainActivity.SOLVE_TASK) {
                 MenuItem otherTestItem = menu.findItem(R.id.menu_bulk_test_other_test);
                 if (negative) {
@@ -211,33 +230,21 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             }
         }
 
-        Bundle inputBundle = getIntent().getExtras();
-        Button newTestButton = findViewById(R.id.button_bulk_test_add_test);
-        if (taskConfiguration != 0) {
-            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-            MenuItem taskInfoButton = findViewById(R.id.menu_bulk_test_info);
-            taskInfoButton.setVisible(true);
-        }
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
             case R.id.menu_bulk_test_info:
-                if (taskConfiguration == MainActivity.SOLVE_TASK)
-                {
+                if (taskConfiguration == MainActivity.SOLVE_TASK) {
                     FragmentManager fm = getSupportFragmentManager();
                     TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
                     taskDialog.show(fm, TASK_DIALOG);
-                }
-                else
-                {
+                } else {
                     FragmentManager fm = getSupportFragmentManager();
                     TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
                     taskDialog.show(fm, TASK_DIALOG);
@@ -312,7 +319,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
     private void onNewTestClick() {
         Log.v(TAG, "new test button click noted");
         FragmentManager fm = getSupportFragmentManager();
-        editTest = new TestScenario(new ArrayList<Symbol>(),  null);
+        editTest = new TestScenario(new ArrayList<Symbol>(), null);
         EditTestDialog editTestDialog = EditTestDialog.newInstance(machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON
                 || machineType == MainActivity.TURING_MACHINE, editTest, true);
         editTestDialog.show(fm, EDIT_TEST_DIALOG);
@@ -333,8 +340,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 case MachineStep.STUCK:
                     if (testScenario.getOutputWord() != null && machine.getTape().matches(testScenario.getOutputWord())) {
                         status = TestScenarioListAdapter.Status.CORRECT_OUTPUT_REJECTED;
-                    }
-                    else {
+                    } else {
                         status = TestScenarioListAdapter.Status.REJECT;
                     }
                     break;
@@ -345,8 +351,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                     if (testScenario.getOutputWord() == null
                             || machine.matchTapeNondeterministic(testScenario.getOutputWord())) {
                         status = TestScenarioListAdapter.Status.ACCEPT;
-                    }
-                    else {
+                    } else {
                         status = TestScenarioListAdapter.Status.INCORRECT_OUTPUT;
                     }
                     break;
@@ -371,7 +376,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         boolean emptyTapeError = false;
         if ((machineType == MainActivity.FINITE_STATE_AUTOMATON || machineType == MainActivity.PUSHDOWN_AUTOMATON)
                 && !input.isEmpty()) {
-            for (Symbol symbol: input) {
+            for (Symbol symbol : input) {
                 if (symbol.isEmpty()) {
                     emptyTapeError = true;
                     break;
@@ -391,8 +396,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         scenariosListAdapter.clearStatuses();
         if (isNew) {
             scenariosListAdapter.addItem(editTest);
-        }
-        else {
+        } else {
             scenariosListAdapter.notifyItemChanged(editTest);
         }
         Log.i(TAG, "TestScenario '" + editTest.getInputWord() + "' saved");
@@ -431,8 +435,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             FileHandler fileHandler = new FileHandler(format);
             if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
                 fileHandler.setData(dataSource, machineType);
-            }
-            else { //test inputs are supposed to be hidden, do not save them
+            } else { //test inputs are supposed to be hidden, do not save them
                 List<Transition> transitions;
                 List<Symbol> inputAlphabet = dataSource.getInputAlphabetFullExtract();
                 List<State> states = dataSource.getStateFullExtract();
@@ -470,6 +473,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
 
     /**
      * Toggles between displaying positive and negative tests
+     *
      * @param negative if true, negative tests will be shown, if false, positive tests will be shown
      */
     private void setNegative(boolean negative) {
@@ -480,7 +484,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         this.getActionBar().setTitle(negative ? R.string.incorrect_inputs : R.string.correct_inputs);
     }
 
-    private class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+    private class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
@@ -499,8 +503,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(nextActivityIntent);
             taskDialog.dismiss();
-        }
-        else if (dialogMode == TaskDialog.SOLVING) {
+        } else if (dialogMode == TaskDialog.SOLVING) {
             TaskResultSender resultSender = new TaskResultSender(task, machineType);
 
             resultSender.setOnFinish(new Runnable() {
@@ -546,8 +549,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
 
             taskDialog.freeze();
             resultSender.execute();
-        }
-        else if (dialogMode == TaskDialog.SOLVED) {
+        } else if (dialogMode == TaskDialog.SOLVED) {
             DataSource.getInstance().open();
             DataSource.getInstance().globalDrop();
             DataSource.getInstance().close();

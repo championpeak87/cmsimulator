@@ -1170,5 +1170,7 @@
 	<string name="automata_message">When you click this button you can create new automata</string>
 	<string name="grammar_message">This button allows you to create new grammar</string>
 	<string name="tasks_message">Over here you can find tasks you have been assigned</string>
+	<string name="tasks_game">Game (EXPERIMENTAL)</string>
+	<string name="select_task">Select task</string>
 
 </resources>

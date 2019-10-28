@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/boarder"
     android:baselineAligned="false">
 
     <LinearLayout
@@ -12,7 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_weight="1"
-        android:background="@drawable/boarder"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="4dp">
@@ -29,8 +27,7 @@
         android:layout_width="0dp"
         android:gravity="center"
         android:layout_weight="0.3"
-        android:layout_height="match_parent"
-        android:background="@drawable/boarder">
+        android:layout_height="match_parent">
 
         <fiitstu.gulis.cmsimulator.elements.ThreeStateCheckBox
             android:id="@+id/checkBox_multiple_tests_accept"
