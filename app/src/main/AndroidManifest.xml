@@ -31,7 +31,6 @@
 				android:configChanges="orientation|screenSize"/>
 		<activity
 				android:name=".activities.TaskLoginActivity"
-				android:configChanges="orientation|screenSize"
 		android:theme="@style/LoginTheme"/>
 		<activity
 				android:name=".activities.HelpActivity"

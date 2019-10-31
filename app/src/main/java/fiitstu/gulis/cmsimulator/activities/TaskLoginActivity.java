@@ -1,10 +1,10 @@
 package fiitstu.gulis.cmsimulator.activities;
 
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,11 +26,71 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private Button signInButton, signUpButton;
 
+    private Bundle onPauseBundle;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_task_login_landscape);
+        }
+        else {
+            setContentView(R.layout.activity_task_login_portrait);
+        }
+
+        findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
+
+        rememberCheckBox = findViewById(R.id.checkbox_remember_password);
+
+        usernameEditText = findViewById(R.id.edittext_username);
+        passwordEditText = findViewById(R.id.edittext_password);
+
+        signInButton = findViewById(R.id.button_sign_in);
+        signUpButton = findViewById(R.id.button_sign_up);
+
+        loginProgressBar = findViewById(R.id.progressbar_login);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+
+        usernameEditText.setText(savedInstanceState.getString("username"));
+        passwordEditText.setText(savedInstanceState.getString("password"));
+        rememberCheckBox.setChecked(savedInstanceState.getBoolean("save_password"));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+
+        savedInstanceState.putString("username", usernameEditText.getText().toString());
+        savedInstanceState.putString("password", passwordEditText.getText().toString());
+        savedInstanceState.putBoolean("save_password", rememberCheckBox.isChecked());
+
+        // etc.
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_login);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_task_login_landscape);
+        }
+        else {
+            setContentView(R.layout.activity_task_login_portrait);
+        }
+
+        findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
 
         rememberCheckBox = findViewById(R.id.checkbox_remember_password);
 
