@@ -8,6 +8,8 @@
               android:gravity="center_vertical"
               android:background="@drawable/login_background">
 
+
+
 	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
 	          android:layout_gravity="center_horizontal" android:text="@string/log_in_header" android:textSize="60sp"
 	          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300"
@@ -58,6 +60,9 @@
 		        android:textColor="@color/md_white_1000" android:layout_gravity="center_horizontal"
 		        android:layout_margin="10dp" style="?android:buttonBarButtonStyle"/>
 	</LinearLayout>
+
+	<ProgressBar android:id="@+id/progressbar_login"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal"  android:padding="10dp" android:visibility="invisible"/>
 
 
 </LinearLayout>

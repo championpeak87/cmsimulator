@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.network.ServerController;
@@ -18,6 +19,8 @@ import java.net.URL;
 
 public class TaskLoginActivity extends FragmentActivity {
     private CheckBox rememberCheckBox;
+
+    private ProgressBar loginProgressBar;
 
     private TextInputEditText usernameEditText, passwordEditText;
 
@@ -36,6 +39,8 @@ public class TaskLoginActivity extends FragmentActivity {
 
         signInButton = findViewById(R.id.button_sign_in);
         signUpButton = findViewById(R.id.button_sign_up);
+
+        loginProgressBar = findViewById(R.id.progressbar_login);
     }
 
 
@@ -49,6 +54,12 @@ public class TaskLoginActivity extends FragmentActivity {
             URL url = urlManager.getLoginUrl(username, password);
 
             class ServerResponseAsync extends AsyncTask<URL, Void, String> {
+
+                @Override
+                protected void onPreExecute() {
+                    setLoginProgressBarVisibility(true);
+                }
+
                 @Override
                 protected String doInBackground(URL... urls) {
                     String out;
@@ -70,6 +81,7 @@ public class TaskLoginActivity extends FragmentActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                     }
+                    setLoginProgressBarVisibility(false);
                 }
             }
 
@@ -104,6 +116,24 @@ public class TaskLoginActivity extends FragmentActivity {
     private void loginUnsuccessful() {
         usernameEditText.setError(getString(R.string.login_incorrect));
         passwordEditText.setError(getString(R.string.login_incorrect));
+    }
+
+    private void setLoginProgressBarVisibility(boolean value) {
+        if (value) {
+            loginProgressBar.setVisibility(View.VISIBLE);
+            usernameEditText.setEnabled(false);
+            passwordEditText.setEnabled(false);
+            signUpButton.setEnabled(false);
+            signInButton.setEnabled(false);
+            rememberCheckBox.setEnabled(false);
+        } else {
+            loginProgressBar.setVisibility(View.INVISIBLE);
+            usernameEditText.setEnabled(true);
+            passwordEditText.setEnabled(true);
+            signUpButton.setEnabled(true);
+            signInButton.setEnabled(true);
+            rememberCheckBox.setEnabled(true);
+        }
     }
 
 
