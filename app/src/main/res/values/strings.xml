@@ -1177,5 +1177,14 @@
 	<string name="gotit">Got it</string>
 	<string name="game_new_state_title">Create new state</string>
 	<string name="game_welcome1">This will help you learn basic finite automata construction</string>
+	<string name="username">Username</string>
+	<string name="password">Password</string>
+	<string name="sign_in">Sign in</string>
+	<string name="sign_up">Sign up</string>
+	<string name="log_in_header">Log in</string>
+	<string name="remember_future_logins">Remember future logins</string>
+	<string name="username_empty">Username field cannot be blank</string>
+	<string name="password_empty">Password cannot be blank</string>
+	<string name="login_incorrect">Username or password is incorrect</string>
 
 </resources>

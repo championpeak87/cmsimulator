@@ -824,4 +824,13 @@
     <string name="gotit">Rozumiem</string>
     <string name="game_new_state_title">Vytvor nový stav</string>
     <string name="game_welcome1">Táto hra ti pomôže sa naučiť základy tvorby konečných automatov</string>
+	<string name="username">Prihlasovacie meno</string>
+	<string name="password">Heslo</string>
+	<string name="sign_in">Prihlásiť sa</string>
+	<string name="sign_up">Registrovať sa</string>
+	<string name="log_in_header">Prihlásenie</string>
+	<string name="remember_future_logins">Zapamätať si</string>
+	<string name="username_empty">Používateľské meno nie je vyplnené</string>
+    <string name="password_empty">Heslo nebolo zadané</string>
+	<string name="login_incorrect">Prihlasovacie meno alebo heslo je nesprávne</string>
 </resources>

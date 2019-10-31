@@ -296,7 +296,7 @@ public class MainActivity extends FragmentActivity
             //tasks
             case R.id.button_main_tasks:
                 Log.v(TAG, "tasks click noted");
-                Intent nextActivityIntent = new Intent(this, TasksActivity.class);
+                Intent nextActivityIntent = new Intent(this, TaskLoginActivity.class);
                 startActivity(nextActivityIntent);
                 Log.i(TAG, "tasksActivity intent executed");
                 break;
