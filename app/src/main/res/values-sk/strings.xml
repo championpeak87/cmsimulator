@@ -824,4 +824,6 @@
     <string name="gotit">Rozumiem</string>
     <string name="game_new_state_title">Vytvor nový stav</string>
     <string name="game_welcome1">Táto hra ti pomôže sa naučiť základy tvorby konečných automatov</string>
+	<string name="logged_user">Prihlásený používateľ</string>
+	<string name="log_in">Prihlásiť sa</string>
 </resources>

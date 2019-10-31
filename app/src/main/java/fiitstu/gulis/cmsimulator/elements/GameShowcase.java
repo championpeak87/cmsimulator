@@ -71,11 +71,12 @@ public class GameShowcase {
                             break;
 
                         default:
+                            stateCounter = 0;
                             Toast.makeText(activity, R.string.generic_error, Toast.LENGTH_SHORT).show();
                             break;
-
                     }
-                    stateCounter++;
+                    if (++stateCounter > 2)
+                        stateCounter = 0;
 
                     break;
             }

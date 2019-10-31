@@ -1177,5 +1177,7 @@
 	<string name="gotit">Got it</string>
 	<string name="game_new_state_title">Create new state</string>
 	<string name="game_welcome1">This will help you learn basic finite automata construction</string>
+	<string name="logged_user">Logged user</string>
+	<string name="log_in">Log in</string>
 
 </resources>
