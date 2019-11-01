@@ -367,7 +367,7 @@
 	</string>
 
 	<!--Tasks Activity-->
-	<string name="find_tasks">Find Tasks</string>
+	<string name="">Find Automata Tasks</string>
 	<string name="new_task">New Task</string>
 	<string name="load_task">Load Task</string>
 	<string name="example_tasks">Example Tasks</string>
@@ -1186,5 +1186,9 @@
 	<string name="username_empty">Username field cannot be blank</string>
 	<string name="password_empty">Password cannot be blank</string>
 	<string name="login_incorrect">Username or password is incorrect</string>
+	<string name="logged_user">Logged user</string>
+	<string name="find_task">Find tasks</string>
+	<string name="create_task">Create task</string>
+	<string name="games">Games</string>
 
 </resources>

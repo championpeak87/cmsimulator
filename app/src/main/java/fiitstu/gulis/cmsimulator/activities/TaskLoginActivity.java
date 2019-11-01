@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +12,11 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.models.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
+import fiitstu.gulis.cmsimulator.network.UserParser;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -139,7 +143,9 @@ public class TaskLoginActivity extends FragmentActivity {
                     if (s == null || s.isEmpty()) {
                         loginUnsuccessful();
                     } else {
-                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                        User loggedUser = returnLoggedUser(s);
+                        showMainTaskActivity(loggedUser);
+
                     }
                     setLoginProgressBarVisibility(false);
                 }
@@ -194,6 +200,32 @@ public class TaskLoginActivity extends FragmentActivity {
             signInButton.setEnabled(true);
             rememberCheckBox.setEnabled(true);
         }
+    }
+
+    private User returnLoggedUser(String json)
+    {
+        UserParser userParser = new UserParser();
+        User loggedUser;
+        try {
+        loggedUser = userParser.getUserFromJson(json);}
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return loggedUser;
+    }
+
+    private void showMainTaskActivity(User user)
+    {
+        Intent showMainTaskActivity = new Intent(this, TasksActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("username", user.getUsername());
+
+        showMainTaskActivity.putExtra("bundle", bundle);
+        startActivity(showMainTaskActivity);
+        finish();
     }
 
 

@@ -259,7 +259,7 @@
     <string name="bulk_incomplete_tape_error">Vstupná páska musí obsahovať súvislú postupnosť neprázdnych symbolov.</string>
 
     <!--Tasks Activity-->
-    <string name="find_tasks">Vyhľadať úlohy</string>
+    <string name="">Vyhľadať úlohy</string>
     <string name="new_task">Vytvoriť úlohu</string>
     <string name="load_task">Načítať úlohu</string>
     <string name="example_tasks">Vzorové úlohy</string>
@@ -833,4 +833,8 @@
 	<string name="username_empty">Používateľské meno nie je vyplnené</string>
     <string name="password_empty">Heslo nebolo zadané</string>
 	<string name="login_incorrect">Prihlasovacie meno alebo heslo je nesprávne</string>
+	<string name="logged_user">Prihlásený používateľ</string>
+    <string name="find_task">Nájsť úlohy</string>
+    <string name="create_task">Vytvoriť úlohu</string>
+    <string name="games">Hry</string>
 </resources>
