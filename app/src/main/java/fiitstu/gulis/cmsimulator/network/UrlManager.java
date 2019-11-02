@@ -83,10 +83,9 @@ public class UrlManager {
         return url;
     }
 
-    public URL getAddUserUrl(String username, String first_name, String last_name, String password, User.user_type user_type)
+    public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type)
     {
         PasswordManager passwordManager = new PasswordManager();
-        String authKey = passwordManager.getAuthkey(password);
 
         String user_type_string = "";
 
@@ -107,7 +106,7 @@ public class UrlManager {
                 .appendQueryParameter(FIRST_NAME_KEY, first_name)
                 .appendQueryParameter(LAST_NAME_KEY, last_name)
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
-                .appendQueryParameter(AUTHKEY_QUERY_KEY, authKey)
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
                 .appendQueryParameter(USER_TYPE_KEY, user_type_string)
                 .build();
 

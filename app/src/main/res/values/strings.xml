@@ -1203,6 +1203,7 @@
 	<string name="username_length_small">Username must have 5 or more characters</string>
 	<string name="password_length_error">Password must have 6 or more characters</string>
 	<string name="username_exists_error">This username is already in use</string>
-	<string name="sign_up_header">Registrácia</string>
+	<string name="sign_up_header">Sign up</string>
+	<string name="successful_signup_toast_message">User {0} was successfully signed up.</string>
 
 </resources>

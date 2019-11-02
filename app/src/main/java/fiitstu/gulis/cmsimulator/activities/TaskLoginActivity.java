@@ -162,10 +162,26 @@ public class TaskLoginActivity extends FragmentActivity {
         }
     }
 
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(0, resultCode, data);
+
+        if (requestCode == 0)
+        {
+            if (resultCode == 0)
+            {
+                String username = data.getStringExtra("username");
+                usernameEditText.setText(username);
+            }
+        }
+    }
+
     public void signUp(View view) {
         Intent signUpIntent = new Intent(this, TaskSignUpActivity.class);
 
-        startActivity(signUpIntent);
+        startActivityForResult(signUpIntent, 0);
     }
 
     private boolean verifyFields() {

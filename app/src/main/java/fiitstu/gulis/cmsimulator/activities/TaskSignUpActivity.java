@@ -109,6 +109,7 @@ public class TaskSignUpActivity extends FragmentActivity {
 
 
     public void signUp(View view) throws IOException {
+        setUserExistsError(false);
         boolean canSignUp = verifyFields();
 
         if (canSignUp) {
@@ -121,10 +122,13 @@ public class TaskSignUpActivity extends FragmentActivity {
 
             // IMPLEMENT SIGN UP API CALL
             class addUserAsync extends AsyncTask<User, Void, String> {
+                private User addedUser = null;
+
                 @Override
                 protected String doInBackground(User... users) {
                     ServerController serverController = new ServerController();
                     UrlManager urlManager = new UrlManager();
+                    addedUser = users[0];
                     URL addUserUrl = urlManager.getAddUserUrl(
                             users[0].getUsername(),
                             users[0].getFirst_name(),
@@ -152,11 +156,11 @@ public class TaskSignUpActivity extends FragmentActivity {
                     }
                     else if (s.equals("USER EXISTS!"))
                     {
-                        setUserExistsError();
+                        setUserExistsError(true);
                     }
                     else if (s.equals("USER WAS ADDED!"))
                     {
-                        Toast.makeText(TaskSignUpActivity.this, "SUCCESS", Toast.LENGTH_LONG).show();
+                        setSuccessfulSigningUp(addedUser.getUsername());
                     }
                 }
             }
@@ -231,13 +235,23 @@ public class TaskSignUpActivity extends FragmentActivity {
         cancelButton.setEnabled(!value);
     }
 
-    private void setUserExistsError() {
-        usernameEditText.setError(getString(R.string.username_exists_error));
+    private void setUserExistsError(boolean value) {
+        if (value)
+            usernameEditText.setError(getString(R.string.username_exists_error));
+        else
+            usernameEditText.setError(null);
     }
 
-    private void setSuccessfulSigningUp()
+    private void setSuccessfulSigningUp(String username)
     {
+        Intent returnIntent = new Intent();
 
+        returnIntent.putExtra("username", username);
+        setResult(0, returnIntent);
+
+        Toast.makeText(this, getString(R.string.successful_signup_toast_message).replace("{0}", username), Toast.LENGTH_LONG).show();
+
+        finish();
     }
 
 }

@@ -850,4 +850,6 @@
     <string name="username_length_small">Používateľské meno musí mať 5 alebo viac znakov</string>
     <string name="password_length_error">Heslo musí mať 6 alebo viac znakov</string>
     <string name="username_exists_error">Toto používateľské meno sa už používa</string>
+	<string name="sign_up_header">Registrácia</string>
+    <string name="successful_signup_toast_message">Používateľ {0} bol úspešne zaregistrovaný.</string>
 </resources>
