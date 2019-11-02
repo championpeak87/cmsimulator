@@ -27,6 +27,16 @@
         <item name="colorControlActivated">@color/md_white_1000</item>
     </style>
 
+    <style name="PasswordChangeTextFields" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/primary_color</item>
+        <item name="colorControlNormal">@color/primary_color</item>
+        <item name="colorControlActivated">@color/primary_color</item>
+    </style>
+
     <style name="LoginTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/md_white_1000</item>

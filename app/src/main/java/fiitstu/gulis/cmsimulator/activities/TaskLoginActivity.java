@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.models.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -31,6 +32,8 @@ public class TaskLoginActivity extends FragmentActivity {
     private Button signInButton, signUpButton;
 
     private Bundle onPauseBundle;
+
+    DataSource dataSource = DataSource.getInstance();
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -220,10 +223,8 @@ public class TaskLoginActivity extends FragmentActivity {
     private void showMainTaskActivity(User user)
     {
         Intent showMainTaskActivity = new Intent(this, TasksActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("username", user.getUsername());
 
-        showMainTaskActivity.putExtra("bundle", bundle);
+        showMainTaskActivity.putExtra("username", user.getUsername());
         startActivity(showMainTaskActivity);
         finish();
     }

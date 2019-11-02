@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class UrlManager {
 
-    private final String URI = "http://192.168.137.1:3000";
+    private final String URI = "http://192.168.1.235:3000";
 
     private final String LOGIN_PATH = "/api/login";
 

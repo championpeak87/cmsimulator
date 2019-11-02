@@ -2,24 +2,21 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.PopupMenu;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
@@ -31,6 +28,7 @@ import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
 
 import java.io.IOException;
+import java.util.zip.Inflater;
 
 /**
  * A main-ish menu for task-related activities.
@@ -54,6 +52,11 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
         Log.v(TAG, "onCreate initialization started");
+
+        Bundle bundle = new Bundle();
+        bundle = getIntent().getExtras();
+        TextView username = (TextView) findViewById(R.id.textview_tasks_username);
+        username.setText(bundle.getString("username"));
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -160,6 +163,62 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 }
             }
         }
+    }
+
+    public void changePassword(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View dialog_view = inflater.inflate(R.layout.dialog_password_change, null);
+
+        final AlertDialog changePasswordDialog = new AlertDialog.Builder(this)
+                .setView(R.layout.dialog_password_change)
+                .setTitle(R.string.change_password)
+                .setCancelable(true)
+                .setPositiveButton(R.string.change_password, null)
+                .setNeutralButton(R.string.cancel, null)
+                .create();
+
+        changePasswordDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(final DialogInterface dialog) {
+
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        TextInputEditText oldPassword = dialog_view.findViewById(R.id.edittext_old_password);
+                        TextInputEditText newPassword = dialog_view.findViewById(R.id.edittext_new_password);
+                        TextInputEditText newPasswordCheck = dialog_view.findViewById(R.id.edittext_new_password_check);
+
+                        String oldPassword_passwd = oldPassword.getText().toString();
+                        String newPassword_passwd = newPassword.getText().toString();
+                        String newPasswordCheck_passwd = newPasswordCheck.getText().toString();
+
+                        boolean oldPasswordEmpty = oldPassword_passwd.isEmpty();
+                        boolean newPasswordEmpty = newPassword_passwd.isEmpty();
+                        boolean passwordsMatch = newPassword_passwd.equals(newPassword_passwd);
+
+                        if (oldPasswordEmpty) {
+                            oldPassword.setError(getString(R.string.password_empty));
+                        }
+                        if (newPasswordEmpty) {
+                            oldPassword.setError(getString(R.string.password_empty));
+                        }
+                        if (!passwordsMatch) {
+                            newPasswordCheck.setError(getString(R.string.passwords_dont_match));
+                        }
+
+                        if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch) {
+                            Toast.makeText(getApplicationContext(), "HESLO BOLO ZMENENE", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+
+        changePasswordDialog.show();
     }
 
     private void loadTask() {

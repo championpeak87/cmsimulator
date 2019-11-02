@@ -367,7 +367,7 @@
 	</string>
 
 	<!--Tasks Activity-->
-	<string name="">Find Automata Tasks</string>
+	<string name="find_tasks">Find Tasks</string>
 	<string name="new_task">New Task</string>
 	<string name="load_task">Load Task</string>
 	<string name="example_tasks">Example Tasks</string>
@@ -1190,5 +1190,11 @@
 	<string name="find_task">Find tasks</string>
 	<string name="create_task">Create task</string>
 	<string name="games">Games</string>
+	<string name="change_password">Change password</string>
+	<string name="sign_out">Sign out</string>
+	<string name="old_password">Old password</string>
+	<string name="new_password">New password</string>
+	<string name="new_password_confirm">Confirm new password</string>
+	<string name="passwords_dont_match">Passwords don\'t match</string>
 
 </resources>

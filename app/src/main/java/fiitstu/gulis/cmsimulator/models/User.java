@@ -1,7 +1,5 @@
 package fiitstu.gulis.cmsimulator.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import fiitstu.gulis.cmsimulator.network.PasswordManager;
 
 public class User {
@@ -10,6 +8,11 @@ public class User {
     private String last_name;
     private Integer user_id;
     private String auth_key;
+
+    public enum user_type{
+        lector,
+        student
+    }
 
     public User()
     {}
