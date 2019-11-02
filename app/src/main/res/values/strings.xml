@@ -1196,5 +1196,13 @@
 	<string name="new_password">New password</string>
 	<string name="new_password_confirm">Confirm new password</string>
 	<string name="passwords_dont_match">Passwords don\'t match</string>
+	<string name="first_name">First name</string>
+	<string name="last_name">Last name</string>
+	<string name="first_name_empty">First name is empty</string>
+	<string name="last_name_empty">Last name is empty</string>
+	<string name="username_length_small">Username must have 5 or more characters</string>
+	<string name="password_length_error">Password must have 6 or more characters</string>
+	<string name="username_exists_error">This username is already in use</string>
+	<string name="sign_up_header">Registrácia</string>
 
 </resources>

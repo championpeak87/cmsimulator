@@ -13,16 +13,16 @@
 			android:id="@+id/imageView_main_logo"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="0.52"
+			android:layout_weight="0.2"
 			android:contentDescription="@string/logo"
 			android:src="@drawable/logo_v1_light"
 
 	/>
 
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-	          android:layout_gravity="center_horizontal" android:text="@string/log_in_header" android:textSize="40sp"
-	          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300"
-	          android:shadowRadius="8" android:layout_marginBottom="40dp"/>
+<!--	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+<!--	          android:layout_gravity="center_horizontal" android:text="@string/log_in_header" android:textSize="60sp"-->
+<!--	          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300"-->
+<!--	          android:shadowRadius="8" android:layout_marginBottom="40dp"/>-->
 
 	<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"
 	                                               android:layout_width="match_parent"
@@ -50,21 +50,29 @@
 				android:inputType="textPassword"/>
 	</android.support.design.widget.TextInputLayout>
 
-	<CheckBox android:id="@+id/checkbox_remember_password"
-			android:layout_width="match_parent" android:layout_height="wrap_content"
-	          android:text="@string/remember_future_logins" android:layout_gravity="center_horizontal"
-	          android:layout_marginTop="5dp"/>
+	<android.support.design.widget.TextInputLayout android:layout_width="match_parent"
+	                                               android:layout_height="wrap_content"
+	                                               style="@style/LoginTextFields"
+	                                               app:errorEnabled="true"
+	                                               app:passwordToggleEnabled="true">
+		<android.support.design.widget.TextInputEditText
+				android:id="@+id/edittext_password_confirm"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:hint="@string/new_password_confirm"
+				android:inputType="textPassword"/>
+	</android.support.design.widget.TextInputLayout>
 
 	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
 	              android:orientation="horizontal" android:gravity="center_horizontal" android:layout_marginTop="20dp">
-		<Button android:id="@+id/button_sign_up"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sign_up"
+		<Button android:id="@+id/button_sign_up_cancel"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cancel"
 		        android:textColor="@color/md_white_1000" android:layout_gravity="center_horizontal"
 		        android:layout_margin="10dp" style="?android:buttonBarButtonStyle"
 		android:onClick="signUp"/>
-		<Button android:id="@+id/button_sign_in"
+		<Button android:id="@+id/button_sign_up"
 		        android:onClick="signIn"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sign_in"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sign_up"
 		        android:textColor="@color/md_white_1000" android:layout_gravity="center_horizontal"
 		        android:layout_margin="10dp" style="?android:buttonBarButtonStyle"/>
 	</LinearLayout>

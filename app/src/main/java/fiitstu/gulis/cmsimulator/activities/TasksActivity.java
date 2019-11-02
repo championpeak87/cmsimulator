@@ -75,18 +75,16 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
         int user_id = bundle.getInt(User.USER_ID_KEY);
 
-        switch (user_type)
-        {
-            case "fiitstu.gulis.cmsimulator.models.Lector":
-                loggedUser = new Lector(username, first_name, last_name, user_id, authkey);
-                break;
-            case "fiitstu.gulis.cmsimulator.models.Admin":
-                loggedUser = new Admin(username, first_name, last_name, user_id, authkey);
-                break;
-            case "fiitstu.gulis.cmsimulator.models.Student":
-                loggedUser = new Student(username, first_name, last_name, user_id, authkey, -1);
-                break;
-        }
+        final String Lector_tag = Lector.class.getName();
+        final String Student_tag = Student.class.getName();
+        final String Admin_tag = Admin.class.getName();
+
+        if (user_type.equals(Lector_tag))
+            loggedUser = new Lector(username, first_name, last_name, user_id, authkey);
+        else if (user_type.equals(Student_tag))
+            loggedUser = new Admin(username, first_name, last_name, user_id, authkey);
+        else if (user_type.equals(Admin_tag))
+            loggedUser = new Student(username, first_name, last_name, user_id, authkey, -1);
 
         TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
         fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());
@@ -165,8 +163,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         return true;
     }
 
-    public void signOut(View view)
-    {
+    public void signOut(View view) {
         Intent signInActivity = new Intent(this, TaskLoginActivity.class);
         startActivity(signInActivity);
 
@@ -266,15 +263,12 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
                             final URL passwordChangeURL = urlManager.getChangePasswordUrl(user_id, oldPassword_passwd, newPassword_passwd);
 
-                            class ChangePasswordAsync extends AsyncTask<URL, Void, Boolean>
-                            {
+                            class ChangePasswordAsync extends AsyncTask<URL, Void, Boolean> {
                                 @Override
                                 protected Boolean doInBackground(URL... urls) {
                                     try {
                                         serverController.getResponseFromServer(urls[0]);
-                                    }
-                                    catch (IOException e)
-                                    {
+                                    } catch (IOException e) {
                                         e.printStackTrace();
                                         return false;
                                     }

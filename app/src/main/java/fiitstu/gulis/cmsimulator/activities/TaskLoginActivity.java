@@ -163,8 +163,9 @@ public class TaskLoginActivity extends FragmentActivity {
     }
 
     public void signUp(View view) {
-        Toast toast = Toast.makeText(this, "SIGN UP INVOKED", Toast.LENGTH_LONG);
-        toast.show();
+        Intent signUpIntent = new Intent(this, TaskSignUpActivity.class);
+
+        startActivity(signUpIntent);
     }
 
     private boolean verifyFields() {

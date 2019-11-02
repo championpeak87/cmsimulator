@@ -17,9 +17,10 @@ public class User {
     private Integer user_id;
     private String auth_key;
 
-    public enum user_type{
+    public enum user_type {
         lector,
-        student
+        student,
+        admin
     }
 
     public User()

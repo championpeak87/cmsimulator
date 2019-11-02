@@ -1,7 +1,9 @@
 package fiitstu.gulis.cmsimulator.network;
 
 import android.net.Uri;
+import fiitstu.gulis.cmsimulator.models.User;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -11,12 +13,19 @@ public class UrlManager {
 
     private final String URI = "http://192.168.1.235:3000";
 
+    // PATHS
     private final String LOGIN_PATH = "/api/login";
     private final String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
+    private final String ADD_NEW_USER_PATH = "/api/user/signup";
 
     // LOGIN QUERY KEYS
     private final String USERNAME_QUERY_KEY = "username";
     private final String AUTHKEY_QUERY_KEY = "auth_key";
+
+    // SIGN UP QUERY KEYS
+    private final String FIRST_NAME_KEY = "first_name";
+    private final String LAST_NAME_KEY = "last_name";
+    private final String USER_TYPE_KEY = "user_type";
 
     // CHANGE PASSWORD QUERY KEYS
     private final String USER_ID_KEY = "user_id";
@@ -73,4 +82,47 @@ public class UrlManager {
 
         return url;
     }
+
+    public URL getAddUserUrl(String username, String first_name, String last_name, String password, User.user_type user_type)
+    {
+        PasswordManager passwordManager = new PasswordManager();
+        String authKey = passwordManager.getAuthkey(password);
+
+        String user_type_string = "";
+
+        switch (user_type)
+        {
+            case admin:
+                user_type_string = "admin";
+                break;
+            case lector:
+                user_type_string = "lector";
+                break;
+            case student:
+                user_type_string = "student";
+                break;
+        }
+
+        Uri builtUri = Uri.parse(URI + ADD_NEW_USER_PATH).buildUpon()
+                .appendQueryParameter(FIRST_NAME_KEY, first_name)
+                .appendQueryParameter(LAST_NAME_KEY, last_name)
+                .appendQueryParameter(USERNAME_QUERY_KEY, username)
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, authKey)
+                .appendQueryParameter(USER_TYPE_KEY, user_type_string)
+                .build();
+
+        URL builtURL = null;
+
+        try
+        {
+            builtURL = new URL(builtUri.toString());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return builtURL;
+    }
+
 }
