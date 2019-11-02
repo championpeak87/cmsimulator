@@ -170,7 +170,7 @@ public class TaskSignUpActivity extends FragmentActivity {
     }
 
     public void cancel(View view) {
-        finish();
+        quitSignUp();
     }
 
     private boolean verifyFields() {
@@ -253,5 +253,14 @@ public class TaskSignUpActivity extends FragmentActivity {
 
         finish();
     }
+
+    private void quitSignUp()
+    {
+        Intent returnIntent = new Intent();
+        setResult(1, returnIntent);
+
+        finish();
+    }
+
 
 }
