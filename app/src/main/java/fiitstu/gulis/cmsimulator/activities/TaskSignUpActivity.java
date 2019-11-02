@@ -125,6 +125,13 @@ public class TaskSignUpActivity extends FragmentActivity {
                 private User addedUser = null;
 
                 @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+
+                    setSignUpProgressBarVisibility(true);
+                }
+
+                @Override
                 protected String doInBackground(User... users) {
                     ServerController serverController = new ServerController();
                     UrlManager urlManager = new UrlManager();
@@ -162,6 +169,8 @@ public class TaskSignUpActivity extends FragmentActivity {
                     {
                         setSuccessfulSigningUp(addedUser.getUsername());
                     }
+
+                    setSignUpProgressBarVisibility(false);
                 }
             }
 
@@ -220,7 +229,7 @@ public class TaskSignUpActivity extends FragmentActivity {
                 usernameLength);
     }
 
-    private void setLoginProgressBarVisibility(boolean value) {
+    private void setSignUpProgressBarVisibility(boolean value) {
         if (value) {
             signUpProgressBar.setVisibility(View.VISIBLE);
         } else {
@@ -229,6 +238,7 @@ public class TaskSignUpActivity extends FragmentActivity {
 
         usernameEditText.setEnabled(!value);
         passwordEditText.setEnabled(!value);
+        passwordConfirmEditText.setEnabled(!value);
         firstNameEditText.setEnabled(!value);
         lastNameEditText.setEnabled(!value);
         signUpButton.setEnabled(!value);
