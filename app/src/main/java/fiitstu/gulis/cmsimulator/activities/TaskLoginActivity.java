@@ -13,6 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.models.Admin;
+import fiitstu.gulis.cmsimulator.models.Lector;
+import fiitstu.gulis.cmsimulator.models.Student;
 import fiitstu.gulis.cmsimulator.models.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -224,7 +227,13 @@ public class TaskLoginActivity extends FragmentActivity {
     {
         Intent showMainTaskActivity = new Intent(this, TasksActivity.class);
 
-        showMainTaskActivity.putExtra("username", user.getUsername());
+        showMainTaskActivity.putExtra(User.USER_TYPE_KEY, user.getClass().getName());
+        showMainTaskActivity.putExtra(User.USERNAME_KEY, user.getUsername());
+        showMainTaskActivity.putExtra(User.FIRST_NAME_KEY, user.getFirst_name());
+        showMainTaskActivity.putExtra(User.LAST_NAME_KEY, user.getLast_name());
+        showMainTaskActivity.putExtra(User.AUTHKEY_KEY, user.getAuth_key());
+        showMainTaskActivity.putExtra(User.USER_ID_KEY, user.getUser_id());
+
         startActivity(showMainTaskActivity);
         finish();
     }

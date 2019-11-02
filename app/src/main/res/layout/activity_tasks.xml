@@ -65,6 +65,7 @@
 					<Button android:id="@+id/button_tasks_sign_out"
 					        android:layout_width="wrap_content" android:layout_height="wrap_content"
 					        android:text="Odhlásiť sa"
+					        android:onClick="signOut"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"/>
 				</LinearLayout>
 

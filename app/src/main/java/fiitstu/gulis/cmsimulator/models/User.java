@@ -3,6 +3,14 @@ package fiitstu.gulis.cmsimulator.models;
 import fiitstu.gulis.cmsimulator.network.PasswordManager;
 
 public class User {
+    public static final String USER_TYPE_KEY = "user_type";
+    public static final String USERNAME_KEY = "username";
+    public static final String FIRST_NAME_KEY = "first_name";
+    public static final String LAST_NAME_KEY = "last_name";
+    public static final String AUTHKEY_KEY = "auth_key";
+    public static final String GROUP_ID_KEY = "group_id";
+    public static final String USER_ID_KEY = "user_id";
+
     private String username;
     private String first_name;
     private String last_name;

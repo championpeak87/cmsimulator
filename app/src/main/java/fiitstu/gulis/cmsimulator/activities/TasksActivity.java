@@ -3,9 +3,11 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,8 +28,15 @@ import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.dialogs.TasksGameDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import fiitstu.gulis.cmsimulator.models.Admin;
+import fiitstu.gulis.cmsimulator.models.Lector;
+import fiitstu.gulis.cmsimulator.models.Student;
+import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.zip.Inflater;
 
 /**
@@ -47,16 +56,43 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
     public static final int GAME_EXAMPLE_PREVIEW = 0;
 
+    public static User loggedUser;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
         Log.v(TAG, "onCreate initialization started");
 
-        Bundle bundle = new Bundle();
+        Bundle bundle;
         bundle = getIntent().getExtras();
-        TextView username = (TextView) findViewById(R.id.textview_tasks_username);
-        username.setText(bundle.getString("username"));
+
+        String username = bundle.getString(User.USERNAME_KEY),
+                first_name = bundle.getString(User.FIRST_NAME_KEY),
+                last_name = bundle.getString(User.LAST_NAME_KEY),
+                authkey = bundle.getString(User.AUTHKEY_KEY),
+                user_type = bundle.getString(User.USER_TYPE_KEY);
+
+        int user_id = bundle.getInt(User.USER_ID_KEY);
+
+        switch (user_type)
+        {
+            case "fiitstu.gulis.cmsimulator.models.Lector":
+                loggedUser = new Lector(username, first_name, last_name, user_id, authkey);
+                break;
+            case "fiitstu.gulis.cmsimulator.models.Admin":
+                loggedUser = new Admin(username, first_name, last_name, user_id, authkey);
+                break;
+            case "fiitstu.gulis.cmsimulator.models.Student":
+                loggedUser = new Student(username, first_name, last_name, user_id, authkey, -1);
+                break;
+        }
+
+        TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
+        fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());
+
+        TextView usernameTextView = findViewById(R.id.textview_tasks_username);
+        usernameTextView.setText(loggedUser.getUsername());
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -129,6 +165,15 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         return true;
     }
 
+    public void signOut(View view)
+    {
+        Intent signInActivity = new Intent(this, TaskLoginActivity.class);
+        startActivity(signInActivity);
+
+        finish();
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -139,6 +184,12 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 FragmentManager fm = getSupportFragmentManager();
                 GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.TASKS);
                 guideFragment.show(fm, "HELP_DIALOG");
+                return true;
+            case R.id.menu_tasks_change_password:
+                changePassword(null);
+                return true;
+            case R.id.menu_tasks_sign_out:
+                signOut(null);
                 return true;
         }
 
@@ -166,8 +217,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
     }
 
     public void changePassword(View view) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        final View dialog_view = inflater.inflate(R.layout.dialog_password_change, null);
+
 
         final AlertDialog changePasswordDialog = new AlertDialog.Builder(this)
                 .setView(R.layout.dialog_password_change)
@@ -187,9 +237,9 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
                     @Override
                     public void onClick(View view) {
-                        TextInputEditText oldPassword = dialog_view.findViewById(R.id.edittext_old_password);
-                        TextInputEditText newPassword = dialog_view.findViewById(R.id.edittext_new_password);
-                        TextInputEditText newPasswordCheck = dialog_view.findViewById(R.id.edittext_new_password_check);
+                        TextInputEditText oldPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_old_password);
+                        TextInputEditText newPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password);
+                        TextInputEditText newPasswordCheck = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password_check);
 
                         String oldPassword_passwd = oldPassword.getText().toString();
                         String newPassword_passwd = newPassword.getText().toString();
@@ -197,20 +247,43 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
                         boolean oldPasswordEmpty = oldPassword_passwd.isEmpty();
                         boolean newPasswordEmpty = newPassword_passwd.isEmpty();
-                        boolean passwordsMatch = newPassword_passwd.equals(newPassword_passwd);
+                        boolean passwordsMatch = newPassword_passwd.equals(newPasswordCheck_passwd);
 
                         if (oldPasswordEmpty) {
                             oldPassword.setError(getString(R.string.password_empty));
                         }
                         if (newPasswordEmpty) {
-                            oldPassword.setError(getString(R.string.password_empty));
+                            newPassword.setError(getString(R.string.password_empty));
                         }
                         if (!passwordsMatch) {
                             newPasswordCheck.setError(getString(R.string.passwords_dont_match));
                         }
 
                         if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch) {
-                            Toast.makeText(getApplicationContext(), "HESLO BOLO ZMENENE", Toast.LENGTH_LONG).show();
+                            final ServerController serverController = new ServerController();
+                            UrlManager urlManager = new UrlManager();
+                            int user_id = loggedUser.getUser_id();
+
+                            final URL passwordChangeURL = urlManager.getChangePasswordUrl(user_id, oldPassword_passwd, newPassword_passwd);
+
+                            class ChangePasswordAsync extends AsyncTask<URL, Void, Boolean>
+                            {
+                                @Override
+                                protected Boolean doInBackground(URL... urls) {
+                                    try {
+                                        serverController.getResponseFromServer(urls[0]);
+                                    }
+                                    catch (IOException e)
+                                    {
+                                        e.printStackTrace();
+                                        return false;
+                                    }
+
+                                    return true;
+                                }
+                            }
+
+                            new ChangePasswordAsync().execute(passwordChangeURL);
                             dialog.dismiss();
                         }
                     }
