@@ -163,4 +163,4 @@ app.get('/api/tasks/automata', (req, res) => {
   })
 })
 
-app.listen(port, () => console.log(`CMSimulator server listening on port ${port}!`))
+app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

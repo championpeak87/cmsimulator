@@ -241,6 +241,23 @@ public class MainActivity extends FragmentActivity
             setContentView(R.layout.activity_main_portrait);
         }
 
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        ImageView logo = findViewById(R.id.imageView_main_logo);
+        switch (nightModeFlags) {
+
+            case Configuration.UI_MODE_NIGHT_YES:
+
+                logo.setImageResource(R.drawable.logo_v1_dark);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                logo.setImageResource(R.drawable.logo_v1_light);
+                break;
+        }
+
         Button newMachineButton = findViewById(R.id.button_main_new);
         newMachineButton.setOnClickListener(this);
 
@@ -309,10 +326,12 @@ public class MainActivity extends FragmentActivity
                 break;
             //example grammar
             case R.id.button_main_example_grammar:
-                Log.v(TAG, "grammar grammar button click noted");
+                Intent newIntent = new Intent(this, ExampleAutomatas.class);
+                startActivity(newIntent);
+                /*Log.v(TAG, "grammar grammar button click noted");
                 fm = getSupportFragmentManager();
                 ExampleGrammarDialog exampleGrammarDialog = ExampleGrammarDialog.newInstance();
-                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);
+                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);*/
                 break;
             //options
             case R.id.button_main_options:

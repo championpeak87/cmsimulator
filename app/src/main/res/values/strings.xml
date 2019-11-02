@@ -88,24 +88,24 @@
 	<string name="turing_machine">Turing Machine</string>
 
 	<!--Popup Main Activity examples-->
-	<string name="finite_state_automaton_example1">DFSA - 3k+1</string>
-	<string name="finite_state_automaton_example2">NFSA - ends with 01 or 10</string>
-	<string name="finite_state_automaton_example3">DFSA - a
+	<string name="finite_state_automaton_example1">3k+1</string>
+	<string name="finite_state_automaton_example2">ends with 01 or 10</string>
+	<string name="finite_state_automaton_example3">a
 		<sup>
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example1">DPDA - wcw
+	<string name="pushdown_automaton_example1">wcw
 		<sup>
 			<small>R</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example2">NPDA - ww
+	<string name="pushdown_automaton_example2">ww
 		<sup>
 			<small>R</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example3">DPDA - a
+	<string name="pushdown_automaton_example3">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -114,7 +114,7 @@
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="linear_bounded_automaton_example1">DLBA - a
+	<string name="linear_bounded_automaton_example1">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -127,14 +127,14 @@
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="linear_bounded_automaton_example2">NLBA - 1
+	<string name="linear_bounded_automaton_example2">1
 		<sup>
 			<small>N</small>
 		</sup>
 		, where N is not a prime
 	</string>
-	<string name="turing_machine_example1">DTM - multiply two unary numbers</string>
-	<string name="turing_machine_example2">NTM - w
+	<string name="turing_machine_example1">multiply two unary numbers</string>
+	<string name="turing_machine_example2">w
 		<sub>
 			<small>1</small>
 		</sub>
@@ -1205,5 +1205,13 @@
 	<string name="username_exists_error">This username is already in use</string>
 	<string name="sign_up_header">Sign up</string>
 	<string name="successful_signup_toast_message">User {0} was successfully signed up.</string>
+	<string name="deterministic_FA">Deterministic finite automata</string>
+	<string name="nondeterministic_fa">Nondeterministic finite automata</string>
+	<string name="deterministic_pushdown">Deterministic pushdown automata</string>
+	<string name="nondeterministic_pushdown">Nondeterministic pushdown automata</string>
+	<string name="deterministic_loa">Deterministic linear bouded automata</string>
+	<string name="nondeterministic_loa">Nondeterministic linear bounded automata</string>
+	<string name="deterministic_tm">Deterministic Turing machine</string>
+	<string name="nondeterministic_tm">Nondeterministic Turing machine</string>
 
 </resources>

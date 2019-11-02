@@ -84,16 +84,16 @@
     <string name="turing_machine">Turingov stroj</string>
 
     <!--Popup Main Activity examples-->
-    <string name="finite_state_automaton_example1">DKA - 3k+1</string>
-    <string name="finite_state_automaton_example2">NKA - končiace 01 alebo 10</string>
-    <string name="finite_state_automaton_example3">DKA - a<sup><small>N</small></sup></string>
-    <string name="pushdown_automaton_example1">DZA - wcw<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example2">NZA - ww<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example3">DZA - a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example1">DLOA - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example2">NLOA - 1<sup><small>N</small></sup>, kde N nie je prvočíslo</string>
-    <string name="turing_machine_example1">DTS - násobenie dvoch čísel v unárnej sústave</string>
-    <string name="turing_machine_example2">NTS - w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
+    <string name="finite_state_automaton_example1">3k+1</string>
+    <string name="finite_state_automaton_example2">končiace 01 alebo 10</string>
+    <string name="finite_state_automaton_example3">a<sup><small>N</small></sup></string>
+    <string name="pushdown_automaton_example1">wcw<sup><small>R</small></sup></string>
+    <string name="pushdown_automaton_example2">ww<sup><small>R</small></sup></string>
+    <string name="pushdown_automaton_example3">a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
+    <string name="linear_bounded_automaton_example1">a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
+    <string name="linear_bounded_automaton_example2">1<sup><small>N</small></sup>, kde N nie je prvočíslo</string>
+    <string name="turing_machine_example1">násobenie dvoch čísel v unárnej sústave</string>
+    <string name="turing_machine_example2">w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
 
     <!--Popup Main Activity grammar examples-->
     <string name="example_grammar1">Greg - a<sup><small>N</small></sup></string>
@@ -852,4 +852,12 @@
     <string name="username_exists_error">Toto používateľské meno sa už používa</string>
 	<string name="sign_up_header">Registrácia</string>
     <string name="successful_signup_toast_message">Používateľ {0} bol úspešne zaregistrovaný.</string>
+	<string name="deterministic_FA">Deterministický konečný automat</string>
+    <string name="nondeterministic_fa">Nedeterministický konečný automat</string>
+    <string name="deterministic_pushdown">Deterministický zásobníkový automat</string>
+    <string name="nondeterministic_pushdown">Nedeterministický zásobníkový automat</string>
+    <string name="deterministic_loa">Deterministický lineárne ohraničený automat</string>
+    <string name="nondeterministic_loa">Nedeterministický lineárne ohraničený automat</string>
+    <string name="deterministic_tm">Deterministický Turingov stroj</string>
+    <string name="nondeterministic_tm">Nedeterministický turingov stroj</string>
 </resources>

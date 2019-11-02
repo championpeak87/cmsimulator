@@ -27,6 +27,9 @@
 			</intent-filter>
 		</activity>
 		<activity
+				android:name=".activities.ExampleAutomatas"
+				android:configChanges="orientation|screenSize"/>
+		<activity
 				android:name=".activities.OptionsActivity"
 				android:configChanges="orientation|screenSize"/>
 		<activity

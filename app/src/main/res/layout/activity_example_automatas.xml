@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+	<ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+		<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+		              android:orientation="vertical">
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/finite_state_automaton_example1"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_FA"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/finite_state_automaton_example3"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_FA"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/finite_state_automaton_example2"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/nondeterministic_fa"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			// ZASOBNIKOVE AUTOMATY
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/pushdown_automaton_example1"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_pushdown"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/pushdown_automaton_example2"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_pushdown"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/pushdown_automaton_example2"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/nondeterministic_pushdown"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			// LOA
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/linear_bounded_automaton_example1"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_loa"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/linear_bounded_automaton_example2"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/nondeterministic_loa"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			// TURINGOVE STROJE
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/turing_machine_example1"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/deterministic_tm"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+
+			<android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="200dp"
+			                                    android:layout_margin="15dp"
+			                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+			                                    card_view:cardCornerRadius="8dp"
+			                                    card_view:cardElevation="10dp">
+
+				<TextView android:layout_width="match_parent" android:layout_height="match_parent" android:text="@string/turing_machine_example2"
+				          android:gravity="center" android:textSize="20sp"/>
+
+
+				<android.support.constraint.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content" android:background="@color/primary_color">
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+					          android:gravity="center_vertical" android:text="@string/nondeterministic_tm"
+					          android:lines="2"
+					          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+					          android:textStyle="bold" app:layout_constraintLeft_toLeftOf="parent"
+					          app:layout_constraintTop_toTopOf="parent"/>
+				</android.support.constraint.ConstraintLayout>
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:gravity="right" android:layout_gravity="bottom"
+				              android:background="@color/primary_color_light">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Nápoveda"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Spustiť"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
+					        android:textColor="@color/md_white_1000"/>
+				</LinearLayout>
+			</android.support.v7.widget.CardView>
+		</LinearLayout>
+
+	</ScrollView>
+
+
+</LinearLayout>
