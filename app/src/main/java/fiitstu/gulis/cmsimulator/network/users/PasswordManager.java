@@ -1,4 +1,4 @@
-package fiitstu.gulis.cmsimulator.network;
+package fiitstu.gulis.cmsimulator.network.users;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

@@ -97,7 +97,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         actionBar.setTitle(R.string.tasks);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Button findTasksButton = findViewById(R.id.button_tasks_find);
+        /*Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +150,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 TasksGameDialog dialog = TasksGameDialog.newInstance();
                 dialog.show(fm, GAME_DIALOG);
             }
-        });
+        });*/
 
         Log.i(TAG, "onCreate initialized");
     }
@@ -191,6 +191,11 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         }
 
         return false;
+    }
+
+    public void findAutomataTasks(View view)
+    {
+
     }
 
     @Override

@@ -36,8 +36,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example1_finite_state_automatom"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -71,8 +71,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example2_finite_state_automatom"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -106,8 +106,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example3_finite_state_automatom"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -142,8 +142,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example1_pushdown_automaton"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -177,8 +177,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example2_pushdown_automaton"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -212,8 +212,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example3_pushdown_automaton"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -248,8 +248,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example1_linear_bounded_automaton"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -283,8 +283,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example2_linear_bounded_automaton"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -319,8 +319,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example1_turing_machine"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>
@@ -354,8 +354,8 @@
 					        android:text="Nápoveda"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
-					<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-					        android:text="Spustiť"
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_popup_main_example2_turing_machine"
+					        android:text="Spustiť" android:onClick="onExampleStart"
 					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 					        android:textColor="@color/md_white_1000"/>
 				</LinearLayout>

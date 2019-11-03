@@ -10,16 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
-import fiitstu.gulis.cmsimulator.models.Admin;
-import fiitstu.gulis.cmsimulator.models.Lector;
-import fiitstu.gulis.cmsimulator.models.Student;
 import fiitstu.gulis.cmsimulator.models.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
-import fiitstu.gulis.cmsimulator.network.UserParser;
+import fiitstu.gulis.cmsimulator.network.users.UserParser;
 import org.json.JSONException;
 
 import java.io.IOException;

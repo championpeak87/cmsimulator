@@ -128,37 +128,49 @@ app.get('/api/login', (req, res) => {
   })
 })
 
-app.get('/api/tasks/automata', (req, res) => {
-  const username = req.query.username;
-  const password = req.query.auth_key;
+// app.get('/api/tasks/automata', (req, res) => {
+//   const username = req.query.username;
+//   const password = req.query.auth_key;
 
-  pool.query('SELECT * FROM users WHERE username = $1;', [username], (error, results) => {
+//   pool.query('SELECT * FROM users WHERE username = $1;', [username], (error, results) => {
+//     if (error) { throw error }
+
+//     if (results.rowCount > 0) {
+//       if (results.rows[0].password_hash == password) {
+//         pool.query('SELECT * FROM automata_tasks;', (err, result) => {
+//           if (error) { throw error }
+
+//           if (result.rowCount > 0) {
+//             console.log(Date() + ' ', [username], 'has downloaded automata tasks.');
+//             res.status(HTTP_OK).send(result.rows);
+//           }
+//           else {
+//             console.log(Date() + ' ', [username], 'has no tasks found!');
+//             res.status(HTTP_NOT_FOUND).send('No tasks have been found!');
+//           }
+//         })
+
+//       }
+//       else {
+//         console.log(Date() + ' ', [username], 'was unable to log in.');
+//         res.status(HTTP_FORBIDDEN).send('Unable to log in!');
+//       }
+//     }
+//     else {
+//       console.log(Date() + 'Unable to perform requested operation!');
+//       res.status(HTTP_NOT_FOUND).send('User was not found!');
+//     }
+//   })
+// })
+
+app.get('/api/tasks/automata', (req, res) =>
+{
+  pool.query('SELECT * FROM automata_tasks WHERE task_id=4;', (error, results) =>
+  {
     if (error) { throw error }
-
-    if (results.rowCount > 0) {
-      if (results.rows[0].password_hash == password) {
-        pool.query('SELECT * FROM automata_tasks;', (err, result) => {
-          if (error) { throw error }
-
-          if (result.rowCount > 0) {
-            console.log(Date() + ' ', [username], 'has downloaded automata tasks.');
-            res.status(HTTP_OK).send(result.rows);
-          }
-          else {
-            console.log(Date() + ' ', [username], 'has no tasks found!');
-            res.status(HTTP_NOT_FOUND).send('No tasks have been found!');
-          }
-        })
-
-      }
-      else {
-        console.log(Date() + ' ', [username], 'was unable to log in.');
-        res.status(HTTP_FORBIDDEN).send('Unable to log in!');
-      }
-    }
-    else {
-      console.log(Date() + 'Unable to perform requested operation!');
-      res.status(HTTP_NOT_FOUND).send('User was not found!');
+    if (results.rowCount > 0)
+    {
+        res.status(HTTP_OK).sendfile(results.rows[0].file_name);
     }
   })
 })

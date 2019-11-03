@@ -1,10 +1,20 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -30,6 +40,9 @@ import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
 import io.blushine.android.ui.showcase.MaterialShowcaseView;
 import io.blushine.android.ui.showcase.ShowcaseConfig;
 
+import java.io.File;
+import java.io.IOException;
+
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 
@@ -44,6 +57,9 @@ public class MainActivity extends FragmentActivity
 
     //log tag
     private static final String TAG = MainActivity.class.getName();
+
+    // FILE BROWSER
+    private static final int READ_REQUEST_CODE = 42;
 
     //bundle values
     public static final String MACHINE_TYPE = "MACHINE_TYPE";
@@ -184,6 +200,8 @@ public class MainActivity extends FragmentActivity
         dataSource.globalDrop();
         dataSource.close();
 
+
+
         //main window buttons initializations
         //new machine
         Button newMachineButton = findViewById(R.id.button_main_new);
@@ -283,6 +301,36 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            if (data != null)
+            {
+                Uri uri = data.getData();
+                String path = uri.getPath();
+                path = path.replace("/document/primary:", "/storage/emulated/0/");
+                String[] temp = uri.getPath().split("\\.");
+                if (temp[temp.length - 1].equals("cms") || temp[temp.length - 1].equals("cmst"))
+                {
+                    Bundle outputBundle = new Bundle();
+                    outputBundle.putInt(CONFIGURATION_TYPE, LOAD_MACHINE);
+                    outputBundle.putBoolean(DEFAULT_FORMAT, true);
+                    outputBundle.putString(FILE_NAME, path);
+                    Log.v(TAG, "outputBundle initialized");
+
+                    Intent nextActivityIntent = new Intent(MainActivity.this, SimulationActivity.class);
+                    nextActivityIntent.putExtras(outputBundle);
+                    startActivity(nextActivityIntent);
+                    Log.i(TAG, "simulation activity intent executed");
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.file_not_loaded, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             //new machine
@@ -293,22 +341,29 @@ public class MainActivity extends FragmentActivity
                 break;
             //example machine
             case R.id.button_main_example:
+                Intent newIntent = new Intent(this, ExampleAutomatas.class);
+                startActivity(newIntent);
                 Log.v(TAG, "example machine button click noted");
-                fm = getSupportFragmentManager();
+                /*fm = getSupportFragmentManager();
                 ExampleMachineDialog exampleMachineDialog = ExampleMachineDialog.newInstance();
-                exampleMachineDialog.show(fm, EXAMPLE_MACHINE_DIALOG);
+                exampleMachineDialog.show(fm, EXAMPLE_MACHINE_DIALOG);*/
                 break;
             //load machine
             case R.id.button_main_load:
                 Log.v(TAG, "load machine click noted");
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQUEST_READ_STORAGE);
-                } else {
-                    loadMachine();
-                }
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                startActivityForResult(intent, READ_REQUEST_CODE);
+
+//                if (Build.VERSION.SDK_INT > 15
+//                        && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                    ActivityCompat.requestPermissions(this,
+//                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                            REQUEST_READ_STORAGE);
+//                } else {
+//                    loadMachine();
+//                }
                 break;
             //tasks
             case R.id.button_main_tasks:
@@ -326,12 +381,10 @@ public class MainActivity extends FragmentActivity
                 break;
             //example grammar
             case R.id.button_main_example_grammar:
-                Intent newIntent = new Intent(this, ExampleAutomatas.class);
-                startActivity(newIntent);
-                /*Log.v(TAG, "grammar grammar button click noted");
+                Log.v(TAG, "grammar grammar button click noted");
                 fm = getSupportFragmentManager();
                 ExampleGrammarDialog exampleGrammarDialog = ExampleGrammarDialog.newInstance();
-                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);*/
+                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);
                 break;
             //options
             case R.id.button_main_options:

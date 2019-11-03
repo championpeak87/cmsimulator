@@ -2,12 +2,11 @@ package fiitstu.gulis.cmsimulator.network;
 
 import android.net.Uri;
 import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 
 public class UrlManager {
 

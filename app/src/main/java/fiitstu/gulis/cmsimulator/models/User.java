@@ -1,6 +1,6 @@
 package fiitstu.gulis.cmsimulator.models;
 
-import fiitstu.gulis.cmsimulator.network.PasswordManager;
+import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
 public class User {
     public static final String USER_TYPE_KEY = "user_type";

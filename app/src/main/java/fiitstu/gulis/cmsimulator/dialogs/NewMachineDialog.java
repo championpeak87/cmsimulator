@@ -37,7 +37,7 @@ public class NewMachineDialog extends DialogFragment implements View.OnClickList
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getDialog().setTitle(R.string.new_machine);
         return inflater.inflate(R.layout.dialog_main_new, container);
     }
 

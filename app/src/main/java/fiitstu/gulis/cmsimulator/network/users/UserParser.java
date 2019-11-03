@@ -1,4 +1,4 @@
-package fiitstu.gulis.cmsimulator.network;
+package fiitstu.gulis.cmsimulator.network.users;
 
 import fiitstu.gulis.cmsimulator.models.Admin;
 import fiitstu.gulis.cmsimulator.models.Lector;

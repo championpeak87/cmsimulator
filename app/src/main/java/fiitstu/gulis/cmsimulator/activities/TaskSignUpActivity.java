@@ -8,17 +8,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.models.Student;
 import fiitstu.gulis.cmsimulator.models.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
-import fiitstu.gulis.cmsimulator.network.UserParser;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -178,8 +174,13 @@ public class TaskSignUpActivity extends FragmentActivity {
         }
     }
 
-    public void cancel(View view) {
+    @Override
+    public void onBackPressed() {
         quitSignUp();
+    }
+
+    public void cancel(View view) {
+        onBackPressed();
     }
 
     private boolean verifyFields() {
