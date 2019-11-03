@@ -1,21 +1,16 @@
 package fiitstu.gulis.cmsimulator.activities;
 
-import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -28,16 +23,15 @@ import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.dialogs.TasksGameDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
-import fiitstu.gulis.cmsimulator.models.Admin;
-import fiitstu.gulis.cmsimulator.models.Lector;
-import fiitstu.gulis.cmsimulator.models.Student;
-import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.models.users.Admin;
+import fiitstu.gulis.cmsimulator.models.users.Lector;
+import fiitstu.gulis.cmsimulator.models.users.Student;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.zip.Inflater;
 
 /**
  * A main-ish menu for task-related activities.

@@ -273,8 +273,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
-                .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.cancel, null)
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dataSource.globalDrop();

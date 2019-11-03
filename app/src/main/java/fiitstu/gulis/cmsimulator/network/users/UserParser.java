@@ -1,9 +1,9 @@
 package fiitstu.gulis.cmsimulator.network.users;
 
-import fiitstu.gulis.cmsimulator.models.Admin;
-import fiitstu.gulis.cmsimulator.models.Lector;
-import fiitstu.gulis.cmsimulator.models.Student;
-import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.models.users.Admin;
+import fiitstu.gulis.cmsimulator.models.users.Lector;
+import fiitstu.gulis.cmsimulator.models.users.Student;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 

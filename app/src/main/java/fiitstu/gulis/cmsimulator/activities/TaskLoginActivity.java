@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
-import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.users.UserParser;

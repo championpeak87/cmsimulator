@@ -1,7 +1,7 @@
 package fiitstu.gulis.cmsimulator.network;
 
 import android.net.Uri;
-import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
 import java.io.IOException;

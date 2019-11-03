@@ -47,6 +47,7 @@
             <Button
                     android:id="@+id/button_main_load"
                     android:text="@string/load_machine"
+
                     android:drawableTop="@drawable/baseline_folder_open_24"
                     style="@style/mainMenuButtonStyle"/>
         </LinearLayout>

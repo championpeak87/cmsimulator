@@ -860,4 +860,5 @@
     <string name="nondeterministic_loa">Nedeterministický lineárne ohraničený automat</string>
     <string name="deterministic_tm">Deterministický Turingov stroj</string>
     <string name="nondeterministic_tm">Nedeterministický turingov stroj</string>
+	<string name="available_tasks">Dostupné úlohy</string>
 </resources>

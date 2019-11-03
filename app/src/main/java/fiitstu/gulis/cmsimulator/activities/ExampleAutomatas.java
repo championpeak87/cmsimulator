@@ -1,21 +1,52 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
+import fiitstu.gulis.cmsimulator.models.automata_tasks.AutomataTask;
+import fiitstu.gulis.cmsimulator.models.automata_tasks.FiniteAutomataTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExampleAutomatas extends FragmentActivity {
+
+    private List<AutomataTask> listOfTasks;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview_automata_examples);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int noOfColumns = (int) (dpWidth / 180);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
+        recyclerView.setLayoutManager(layoutManager);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +57,108 @@ public class ExampleAutomatas extends FragmentActivity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.example_machine);
+
+        // create list of tasks
+        listOfTasks = new ArrayList<>();
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                true,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                true,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));listOfTasks.add(new FiniteAutomataTask("3k + 1",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+        listOfTasks.add(new FiniteAutomataTask("an",
+                "pocet znakov musi byt 3k + 1",
+                false,
+                1, "file.xml"));
+
+
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerview_automata_examples);
+        AutomataTaskAdapter adapter = new AutomataTaskAdapter(this, listOfTasks);
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int noOfColumns = (int) (dpWidth / 180);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

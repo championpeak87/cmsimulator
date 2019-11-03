@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const xmlParser = require('fast-xml-parser');
 const app = express()
 const port = 3000
 
@@ -165,12 +166,12 @@ app.get('/api/login', (req, res) => {
 
 app.get('/api/tasks/automata', (req, res) =>
 {
-  pool.query('SELECT * FROM automata_tasks WHERE task_id=4;', (error, results) =>
+  pool.query('SELECT * FROM automata_tasks;', (error, results) =>
   {
     if (error) { throw error }
     if (results.rowCount > 0)
     {
-        res.status(HTTP_OK).sendfile(results.rows[0].file_name);
+        res.send(results.rows);
     }
   })
 })

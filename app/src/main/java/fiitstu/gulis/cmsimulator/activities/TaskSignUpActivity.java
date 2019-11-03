@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.models.Student;
-import fiitstu.gulis.cmsimulator.models.User;
+import fiitstu.gulis.cmsimulator.models.users.Student;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 

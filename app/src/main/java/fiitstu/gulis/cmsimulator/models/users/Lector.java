@@ -1,4 +1,4 @@
-package fiitstu.gulis.cmsimulator.models;
+package fiitstu.gulis.cmsimulator.models.users;
 
 public class Lector extends User {
 

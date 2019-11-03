@@ -1213,5 +1213,6 @@
 	<string name="nondeterministic_loa">Nondeterministic linear bounded automata</string>
 	<string name="deterministic_tm">Deterministic Turing machine</string>
 	<string name="nondeterministic_tm">Nondeterministic Turing machine</string>
+	<string name="available_tasks">Available tasks</string>
 
 </resources>
