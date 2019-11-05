@@ -387,8 +387,12 @@
 	          android:text="@string/available_tasks"
 	          android:theme="@style/text_subheader"
 	          android:layout_marginTop="20dp"
-	android:layout_marginLeft="20dp"/>
+	          android:layout_marginLeft="20dp"/>
 
-	<android.support.v7.widget.RecyclerView android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginTop="15dp" android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
-	                                        android:id="@+id/recyclerview_automata_examples" android:layoutAnimation="@anim/layout_animation"/>
+	<android.support.v7.widget.RecyclerView android:layout_width="match_parent" android:layout_height="match_parent"
+	                                        android:layout_marginTop="15dp" android:layout_marginLeft="15dp"
+	                                        android:layout_marginRight="15dp"
+	                                        android:id="@+id/recyclerview_automata_examples"
+	                                        android:layoutAnimation="@anim/layout_animation"/>
+
 </LinearLayout>

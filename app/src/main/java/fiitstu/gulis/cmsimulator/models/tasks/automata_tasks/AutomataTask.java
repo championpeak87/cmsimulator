@@ -1,13 +1,15 @@
-package fiitstu.gulis.cmsimulator.models.automata_tasks;
+package fiitstu.gulis.cmsimulator.models.tasks.automata_tasks;
+
+import fiitstu.gulis.cmsimulator.models.tasks.task_solved_state;
 
 public class AutomataTask {
     private String task_name;
     private String task_description;
-    private boolean solved;
+    private task_solved_state solved;
     private int task_id;
     private String file_name;
 
-    public AutomataTask(String task_name, String task_description, boolean solved, int task_id, String file_name) {
+    public AutomataTask(String task_name, String task_description, task_solved_state solved, int task_id, String file_name) {
         this.task_name = task_name;
         this.task_description = task_description;
         this.solved = solved;
@@ -31,11 +33,11 @@ public class AutomataTask {
         this.task_description = task_description;
     }
 
-    public boolean isSolved() {
+    public task_solved_state getSolved() {
         return solved;
     }
 
-    public void setSolved(boolean solved) {
+    public void setSolved(task_solved_state solved) {
         this.solved = solved;
     }
 

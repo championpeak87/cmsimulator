@@ -37,4 +37,15 @@
 		<item name="android:windowFullscreen">false</item>
 		<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
 	</style>
+	<style name="splashTheme" parent="Theme.AppCompat.DayNight">
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowActionBar">false</item>
+		<item name="android:windowFullscreen">false</item>
+		<item name="android:colorPrimary">@color/primary_color</item>
+		<item name="android:colorPrimaryDark">@color/primary_color</item>
+		<item name="android:colorAccent">@color/primary_color</item>
+		<item name="android:windowBackground">@drawable/activity_splash</item>
+		<item name="android:navigationBarColor">@color/primary_color</item>
+		<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+	</style>
 </resources>

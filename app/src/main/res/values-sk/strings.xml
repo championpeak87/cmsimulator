@@ -861,4 +861,7 @@
     <string name="deterministic_tm">Deterministický Turingov stroj</string>
     <string name="nondeterministic_tm">Nedeterministický turingov stroj</string>
 	<string name="available_tasks">Dostupné úlohy</string>
+	<string name="example_automata_description1">"Počet písmen a alebo b v slove musí byť 3k + 1. "</string>
+	<string name="start_task">Spustiť</string>
+    <string name="task_hint">Nápoveda</string>
 </resources>

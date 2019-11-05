@@ -5,7 +5,7 @@
                                     android:layout_height="200dp" xmlns:app="http://schemas.android.com/tools"
                                     android:layout_margin="5dp"
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                    card_view:cardCornerRadius="4dp"
+                                    card_view:cardCornerRadius="10dp"
                                     card_view:cardElevation="10dp">
 
 
@@ -32,12 +32,13 @@
 	              android:gravity="right" android:layout_gravity="bottom"
 	              android:background="@color/primary_color_light">
 		<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-		        android:text="Nápoveda"
+		        android:text="@string/task_hint"
+		        android:id="@+id/button_task_hint"
 		        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
-		        android:textColor="@color/md_white_1000"/>
+		        android:textColor="@color/md_white_1000" android:textSize="13sp"/>
 		<Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-		        android:id="@+id/button_popup_main_example1_finite_state_automatom"
-		        android:text="Spustiť" android:onClick="onExampleStart"
+		        android:id="@+id/button_start_task"
+		        android:text="@string/start_task" android:onClick="onExampleStart" android:textSize="13sp"
 		        android:layout_gravity="right" style="?android:buttonBarButtonStyle"
 		        android:textColor="@color/md_white_1000"/>
 	</LinearLayout>

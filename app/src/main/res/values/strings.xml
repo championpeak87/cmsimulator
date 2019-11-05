@@ -1214,5 +1214,8 @@
 	<string name="deterministic_tm">Deterministic Turing machine</string>
 	<string name="nondeterministic_tm">Nondeterministic Turing machine</string>
 	<string name="available_tasks">Available tasks</string>
+	<string name="example_automata_description1">Number of letters a or b has to be of 3k + 1</string>
+	<string name="start_task">Start</string>
+	<string name="task_hint">Hint</string>
 
 </resources>

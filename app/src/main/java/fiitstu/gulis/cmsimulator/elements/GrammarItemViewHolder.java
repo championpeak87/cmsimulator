@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import android.widget.ImageView;
 import fiitstu.gulis.cmsimulator.R;
 
 public class GrammarItemViewHolder extends RecyclerView.ViewHolder {
@@ -18,4 +19,3 @@ public class GrammarItemViewHolder extends RecyclerView.ViewHolder {
         editText_grammar_table_right = itemView.findViewById(R.id.editText_grammar_table_right);
     }
 }
-
