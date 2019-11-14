@@ -120,6 +120,7 @@ public class TaskLoginActivity extends FragmentActivity {
         if (autologin)
             try {
                 usernameEditText.setText(sharedPref.getString(AUTOLOGIN_USERNAME, ""));
+                rememberCheckBox.setChecked(true);
                 signIn(null);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -272,7 +273,7 @@ public class TaskLoginActivity extends FragmentActivity {
         showMainTaskActivity.putExtra(User.AUTHKEY_KEY, user.getAuth_key());
         showMainTaskActivity.putExtra(User.USER_ID_KEY, user.getUser_id());
 
-        if (rememberCheckBox.isChecked()) {
+        if (rememberCheckBox.isChecked() || autologin) {
             String username = user.getUsername();
             String authkey = user.getAuth_key();
             Context context = this.getApplicationContext();
