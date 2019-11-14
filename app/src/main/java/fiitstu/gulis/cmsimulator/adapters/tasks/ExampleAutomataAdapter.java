@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,17 +20,18 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.activities.SimulationActivity;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
+import fiitstu.gulis.cmsimulator.models.tasks.deterministic;
 import fiitstu.gulis.cmsimulator.models.tasks.task_solved_state;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapter.CardViewBuilder> {
+public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomataAdapter.CardViewBuilder> {
 
     private Context mContext;
     private List<AutomataTask> listOfTasks;
 
-    public AutomataTaskAdapter(Context mContext) {
+    public ExampleAutomataAdapter(Context mContext) {
         this.mContext = mContext;
 
         this.listOfTasks = new ArrayList<>();
@@ -39,73 +39,73 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 new FiniteAutomataTask(
                         mContext.getString(R.string.finite_state_automaton_example1),
                         mContext.getString(R.string.example_automata_description1),
-                        task_solved_state.NEW,
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
 
         listOfTasks.add(
                 new FiniteAutomataTask(
                         mContext.getString(R.string.finite_state_automaton_example2),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description2),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
         listOfTasks.add(
                 new FiniteAutomataTask(
                         mContext.getString(R.string.finite_state_automaton_example3),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description3),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.NONDETERMINISTIC));
         listOfTasks.add(
-                new FiniteAutomataTask(
+                new PushdownAutomataTask(
                         mContext.getString(R.string.pushdown_automaton_example1),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description4),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
         listOfTasks.add(
                 new PushdownAutomataTask(
                         mContext.getString(R.string.pushdown_automaton_example2),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description5),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
         listOfTasks.add(
                 new PushdownAutomataTask(
                         mContext.getString(R.string.pushdown_automaton_example3),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description6),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.NONDETERMINISTIC));
         listOfTasks.add(
                 new LinearBoundedAutomataTask(
                         mContext.getString(R.string.linear_bounded_automaton_example1),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description7),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
         listOfTasks.add(
                 new LinearBoundedAutomataTask(
                         mContext.getString(R.string.linear_bounded_automaton_example2),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description8),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.NONDETERMINISTIC));
         listOfTasks.add(
                 new TuringMachineTask(
                         mContext.getString(R.string.turing_machine_example1),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description9),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.DETERMINISTIC));
         listOfTasks.add(
                 new TuringMachineTask(
                         mContext.getString(R.string.turing_machine_example2),
-                        "",
-                        task_solved_state.NEW,
+                        mContext.getString(R.string.example_automata_description10),
                         1,
-                        "file.xml"));
+                        "file.xml",
+                        deterministic.NONDETERMINISTIC));
     }
 
     @NonNull
@@ -120,7 +120,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
     @Override
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
-        AutomataTask currentTask = listOfTasks.get(position);
+        final AutomataTask currentTask = listOfTasks.get(position);
         Animation showUpAnimation = AnimationUtils.loadAnimation(mContext, R.anim.item_show_animation);
 
         holder.cardView.setAnimation(showUpAnimation);
@@ -138,6 +138,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         String task_name = currentTask.getTask_name();
         holder.task_name.setText(task_name);
 
+        holder.determinism.setText(currentTask.getDeterminism().toString());
+
         task_solved_state solvedTask = currentTask.getSolved();
 
         switch (solvedTask) {
@@ -146,6 +148,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 final int light_green = mContext.getColor(R.color.correct_answer_bottom_bar);
                 holder.topBar.setBackgroundColor(green);
                 holder.bottomBar.setBackgroundColor(light_green);
+                holder.determinism.setBackgroundColor(light_green);
                 break;
 
             case WRONG:
@@ -153,6 +156,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 final int light_red = mContext.getColor(R.color.wrong_answer_bottom_bar);
                 holder.topBar.setBackgroundColor(red);
                 holder.bottomBar.setBackgroundColor(light_red);
+                holder.determinism.setBackgroundColor(light_red);
                 break;
 
             case NEW:
@@ -160,6 +164,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 final int light_blue = mContext.getColor(R.color.primary_color_light);
                 holder.topBar.setBackgroundColor(blue);
                 holder.bottomBar.setBackgroundColor(light_blue);
+                holder.determinism.setBackgroundColor(light_blue);
                 break;
 
             case IN_PROGRESS:
@@ -167,6 +172,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 final int light_orange = mContext.getColor(R.color.in_progress_bottom_bar);
                 holder.topBar.setBackgroundColor(orange);
                 holder.bottomBar.setBackgroundColor(light_orange);
+                holder.determinism.setBackgroundColor(light_orange);
                 break;
         }
 
@@ -227,7 +233,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             public void onClick(View v) {
                 new AlertDialog.Builder(mContext)
                         .setTitle(R.string.task_hint)
-                        .setMessage(R.string.example_automata_description1)
+                        .setMessage(currentTask.getTask_description())
                         .setPositiveButton("OK", null)
                         .show();
             }
@@ -244,8 +250,9 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     public static class CardViewBuilder extends RecyclerView.ViewHolder {
         TextView automataType;
         TextView task_name;
+        TextView determinism;
         LinearLayout bottomBar;
-        ConstraintLayout topBar;
+        TextView topBar;
         CardView cardView;
         Button startButton;
         Button hintButton;
@@ -258,9 +265,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             automataType = itemView.findViewById(R.id.textview_automata_type);
             task_name = itemView.findViewById(R.id.textview_task_name);
             bottomBar = itemView.findViewById(R.id.task_bottom_bar);
-            topBar = itemView.findViewById(R.id.task_top_bar);
+            topBar = itemView.findViewById(R.id.textview_automata_type);
+            determinism = itemView.findViewById(R.id.textview_automata_type_deterministic);
             startButton = itemView.findViewById(R.id.button_start_task);
             hintButton = itemView.findViewById(R.id.button_task_hint);
+            determinism = itemView.findViewById(R.id.textview_automata_type_deterministic);
 
         }
     }

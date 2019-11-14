@@ -18,7 +18,7 @@ import fiitstu.gulis.cmsimulator.elements.*;
 
 /**
  * Class that handles interactions with the database, allows storing and retrieving of all entities.
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class DataSource {
@@ -49,7 +49,8 @@ public class DataSource {
     /**
      * Takes a formatted string representation of a list of symbol IDs and a LongSparseArray that
      * maps the IDs to symbols, returns an ArrayList of the symbols
-     * @param string a list of IDs of stack symbols represented by a formatted String
+     *
+     * @param string           a list of IDs of stack symbols represented by a formatted String
      * @param stackAlphabetMap a LongSparseArray that maps the IDs to Symbols
      * @return an ArrayList of the stack symbols
      */
@@ -83,8 +84,7 @@ public class DataSource {
             } catch (Exception e) {
                 Log.e(TAG, "error while opening database", e);
             }
-        }
-        else {
+        } else {
             Log.w(TAG, "tried to re-open the database");
         }
     }
@@ -140,9 +140,10 @@ public class DataSource {
         try {
             cursor = database.query(DbOpenHelper.TABLE_STACK_ALPHABET,
                     new String[]{DbOpenHelper.COLUMN_STACK_SYMBOL_ID, DbOpenHelper.COLUMN_STACK_SYMBOL_VALUE,
-                        DbOpenHelper.COLUMN_STACK_SYMBOL_PROPERTIES},
+                            DbOpenHelper.COLUMN_STACK_SYMBOL_PROPERTIES},
                     "( " + DbOpenHelper.COLUMN_STACK_SYMBOL_PROPERTIES + " & " + properties + " ) = " + properties,
-                    null, null, null, null);            Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
+                    null, null, null, null);
+            Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
 
             if (cursor.moveToNext()) {
                 long id = cursor.getLong(cursor.getColumnIndex(DbOpenHelper.COLUMN_STACK_SYMBOL_ID));
@@ -370,18 +371,19 @@ public class DataSource {
 
     /**
      * Adds PDA transition into database, throws exception if not successful
-     * @param fromState the state the machine is in when the transition happens
-     * @param readSymbol the symbol that is read when the transition happens
-     * @param toState the state the machine will be in after the transition
-     * @param emptySymbolId the ID of the symbol that is being used as empty symbol
-     * @param popSymbolList list of symbols that are popped from the stack when the transition happens
+     *
+     * @param fromState      the state the machine is in when the transition happens
+     * @param readSymbol     the symbol that is read when the transition happens
+     * @param toState        the state the machine will be in after the transition
+     * @param emptySymbolId  the ID of the symbol that is being used as empty symbol
+     * @param popSymbolList  list of symbols that are popped from the stack when the transition happens
      * @param pushSymbolList list of symbols that are pushed onto the stack after teh transition
      * @return the inserted Transition
      * @throws android.database.SQLException
      */
     public Transition addPdaTransition(State fromState, Symbol readSymbol, State toState, long emptySymbolId,
                                        List<Symbol> popSymbolList, List<Symbol> pushSymbolList)
-                                        throws android.database.SQLException {
+            throws android.database.SQLException {
         Log.v(TAG, "addPdaTransition method started");
         Transition transition;
         ContentValues contentValues = new ContentValues();
@@ -506,17 +508,17 @@ public class DataSource {
         return grammarRule;
     }
 
-    public void clearGrammarRuleTable(){
+    public void clearGrammarRuleTable() {
         Cursor cursor = null;
-        try{
+        try {
             cursor = database.query(DbOpenHelper.TABLE_GRAMMAR_RULE,
                     new String[]{DbOpenHelper.COLUMN_GRAMMAR_RULE_ID, DbOpenHelper.COLUMN_LEFT_RULE,
                             DbOpenHelper.COLUMN_RIGHT_RULE},
                     null, null, null, null, null);
-            if(cursor.getCount() > 0){
+            if (cursor.getCount() > 0) {
                 database.execSQL("DELETE FROM " + DbOpenHelper.TABLE_GRAMMAR_RULE);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "error while getting content of GRAMMAR RULE table", e);
         } finally {
             if (cursor != null) {
@@ -526,7 +528,7 @@ public class DataSource {
     }
 
     //method to get whole content of GRAMMAR RULE table
-    public List<GrammarRule> getGrammarRuleFullExtract(){
+    public List<GrammarRule> getGrammarRuleFullExtract() {
         Log.v(TAG, "getGrammarRuleFullExtract method started");
         List<GrammarRule> grammarRuleList = new ArrayList<>();
         Cursor cursor = null;
@@ -560,6 +562,7 @@ public class DataSource {
     /**
      * Adds a test scenario into the database or updates it if already stored and returns its primary key.
      * Throws if not successful.
+     *
      * @param test the test to be added or updated
      * @return the primary key of the added/updated test
      * @throws android.database.SQLException
@@ -577,8 +580,7 @@ public class DataSource {
             Log.i(TAG, "test '" + test.getInputWord() + ", " + test.getOutputWord()
                     + "' added into database");
             return id;
-        }
-        else {
+        } else {
             database.update(table, contentValues, DbOpenHelper.COLUMN_TEST_ID + " = ?", new String[]{String.valueOf(test.getId())});
             Log.i(TAG, "test '" + test.getInputWord() + ", " + test.getOutputWord()
                     + "' updated in database");
@@ -588,6 +590,7 @@ public class DataSource {
 
     /**
      * Deletes a test from the database. Throws if not successful.
+     *
      * @param test the test to be deleted
      * @throws android.database.SQLException
      */
@@ -601,6 +604,7 @@ public class DataSource {
 
     /**
      * Returns the entire contents of the TEST table or NEGATIVE_TEST table
+     *
      * @param negative if true, contents of NEGATIVE_TEST are returned, if false, TEST
      * @param alphabet list of iput alphabet symbols
      * @return the entire contents of the TEST table or NEGATIVE_TEST table
@@ -651,7 +655,7 @@ public class DataSource {
         try {
             cursor = database.query(DbOpenHelper.TABLE_INPUT_ALPHABET,
                     new String[]{DbOpenHelper.COLUMN_INPUT_SYMBOL_ID, DbOpenHelper.COLUMN_INPUT_SYMBOL_VALUE,
-                        DbOpenHelper.COLUMN_INPUT_SYMBOL_PROPERTIES},
+                            DbOpenHelper.COLUMN_INPUT_SYMBOL_PROPERTIES},
                     null, null, null, null, null);
             Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
 
@@ -682,7 +686,7 @@ public class DataSource {
         try {
             cursor = database.query(DbOpenHelper.TABLE_STACK_ALPHABET,
                     new String[]{DbOpenHelper.COLUMN_STACK_SYMBOL_ID, DbOpenHelper.COLUMN_STACK_SYMBOL_VALUE,
-                        DbOpenHelper.COLUMN_STACK_SYMBOL_PROPERTIES},
+                            DbOpenHelper.COLUMN_STACK_SYMBOL_PROPERTIES},
                     null, null, null, null, null);
             Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
 
@@ -1117,16 +1121,15 @@ public class DataSource {
         Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
         if (cursor.getCount() > 0) {
             cursor.moveToNext();
-            result = (byte)cursor.getInt(cursor.getColumnIndex(DbOpenHelper.COLUMN_OPTIONS_REQUEST_ID));
-        }
-        else {
+            result = (byte) cursor.getInt(cursor.getColumnIndex(DbOpenHelper.COLUMN_OPTIONS_REQUEST_ID));
+        } else {
             addOptions();
             result = Options.REQUEST_ID_DEFAULT;
         }
         cursor.close();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DbOpenHelper.COLUMN_OPTIONS_REQUEST_ID, (byte)(result + 1));
+        contentValues.put(DbOpenHelper.COLUMN_OPTIONS_REQUEST_ID, (byte) (result + 1));
         Log.v(TAG, "contentValues prepared");
 
         database.update(DbOpenHelper.TABLE_OPTIONS, contentValues, null, null);
@@ -1146,8 +1149,7 @@ public class DataSource {
         if (cursor.getCount() > 0) {
             cursor.moveToNext();
             result = cursor.getString(cursor.getColumnIndex(DbOpenHelper.COLUMN_OPTIONS_USER_NAME));
-        }
-        else {
+        } else {
             addOptions();
             result = Options.USER_NAME_DEFAULT;
         }
@@ -1178,8 +1180,7 @@ public class DataSource {
         if (cursor.getCount() > 0) {
             cursor.moveToNext();
             result = cursor.getInt(cursor.getColumnIndex(DbOpenHelper.COLUMN_OPTIONS_MAX_STEPS));
-        }
-        else {
+        } else {
             addOptions();
             result = Options.MAX_STEPS_DEFAULT;
         }
@@ -1198,6 +1199,7 @@ public class DataSource {
         database.update(DbOpenHelper.TABLE_OPTIONS, contentValues, null, null);
         Log.i(TAG, "user name option updated in database");
     }
+
 
     private void addOptions() {
         Log.v(TAG, "addOptions started");

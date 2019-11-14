@@ -864,4 +864,27 @@
 	<string name="example_automata_description1">"Počet písmen a alebo b v slove musí byť 3k + 1. "</string>
 	<string name="start_task">Spustiť</string>
     <string name="task_hint">Nápoveda</string>
+	<string name="deterministic">Deterministický</string>
+    <string name="nondeterministic">Nedeterministický</string>
+	<string name="unknown_machine">Neznámy automat</string>
+	<string name="example_automata_description2">Slovo sa musí končiť na 01 alebo 10.</string>
+    <string name="example_automata_description3">Písmeno \'a\' sa musí opakovať N-krát.</string>
+    <string name="example_automata_description4">Slovo pozostávajúce z písmen a alebo b nasledované písmenom c je
+        nasledované obráteným počiatočným slovom.
+    </string>
+    <string name="example_automata_description5">Po slove nasleduje jeho obrátený tvar.</string>
+    <string name="example_automata_description7">Písmeno a sa musí opakovať N-krát, nasledované písmenom b, ktoré sa
+        musí opakovať N-krát, nasledované písmenom C, ktoré sa musí opakovať N-krát.
+    </string>
+    <string name="example_automata_description6">Písmeno a sa musí opakovať N-krát, nasledované písmenom b, ktoré sa
+        musí opakovať N-krát.
+    </string>
+    <string name="example_automata_description8">Číslo 1, za ktorým bezprostredne nasleduje prvočíslo.</string>
+    <string name="example_automata_description10">Dané sú dve slová w1 a w2 oddelené znakom $. Slovo w2 je podreťazec
+        slova w1.
+    </string>
+    <string name="example_automata_description9">Pri násobení číslic môžeš použiť len jednu algebraickú operáciu.
+    </string>
+	<string name="view_results">Prehliadať výsledky</string>
+	<string name="manage_users">Spravovať používateľov</string>
 </resources>

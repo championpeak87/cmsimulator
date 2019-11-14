@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:paddingBottom="@dimen/activity_vertical_margin"
+			android:paddingLeft="@dimen/activity_horizontal_margin"
+			android:paddingRight="@dimen/activity_horizontal_margin"
+			android:paddingTop="@dimen/activity_vertical_margin">
+
+		<TextView android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:text="@string/logged_user"
+		          android:theme="@style/text_subheader"
+		          android:layout_marginTop="5dp"
+		          android:layout_marginBottom="5dp"
+		          android:layout_marginLeft="20dp"
+		          android:layout_marginRight="10dp"/>
+
+		<android.support.v7.widget.CardView
+				xmlns:card_view="http://schemas.android.com/apk/res-auto"
+				android:id="@+id/card_view"
+				android:layout_gravity="center"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_margin="5dp"
+				card_view:cardCornerRadius="4dp">
+			<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+			              android:orientation="vertical" android:layout_margin="10dp">
+
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+				              android:orientation="horizontal" android:layout_margin="10dp">
+					<ImageView android:layout_width="50dp" android:layout_height="50dp"
+					           android:src="@drawable/baseline_account_circle_24"/>
+
+					<TextView
+							android:id="@+id/textview_tasks_fullname"
+							android:gravity="center_vertical"
+							android:layout_width="wrap_content"
+							android:layout_height="match_parent"
+							android:textSize="20sp"
+							android:layout_marginLeft="10dp"/>
+
+					<TextView
+							android:id="@+id/textview_tasks_username"
+							android:gravity="center_vertical|right"
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:textSize="16sp"
+							android:layout_marginLeft="10dp"/>
+				</LinearLayout>
+				<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="right">
+					<Button android:id="@+id/button_tasks_change_password"
+					        android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Zmeniť heslo"
+					        android:onClick="changePassword"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"/>
+					<Button android:id="@+id/button_tasks_sign_out"
+					        android:layout_width="wrap_content" android:layout_height="wrap_content"
+					        android:text="Odhlásiť sa"
+					        android:onClick="signOut"
+					        android:layout_gravity="right" style="?android:buttonBarButtonStyle"/>
+				</LinearLayout>
+
+			</LinearLayout>
+
+
+		</android.support.v7.widget.CardView>
+
+		<TextView android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:text="@string/automatas"
+		          android:theme="@style/text_subheader"
+		          android:layout_marginTop="20dp"
+		          android:layout_marginLeft="20dp"
+		          android:layout_marginRight="10dp"/>
+
+		<LinearLayout android:layout_width="match_parent"
+		              android:layout_height="wrap_content"
+		              android:orientation="horizontal"
+		              android:layout_marginLeft="10dp"
+		              android:layout_marginTop="10dp"
+		              android:layout_marginBottom="10dp">
+			<Button
+					android:id="@+id/button_tasks_find_automata"
+					android:text="@string/create_task"
+					android:drawableTop="@drawable/baseline_add_box_24"
+					android:onClick="findAutomataTasks"
+					style="@style/mainMenuButtonStyle"/>
+
+			<Button
+					android:id="@+id/button_tasks_create_automata"
+					android:text="@string/find_tasks"
+					android:drawableTop="@drawable/baseline_cloud_download_24"
+					style="@style/mainMenuButtonStyle"/>
+
+			<Button
+					android:id="@+id/button_tasks_results_automata"
+					android:text="@string/view_results"
+					android:drawableTop="@drawable/baseline_view_list_24"
+					style="@style/mainMenuButtonStyle"/>
+		</LinearLayout>
+
+		<TextView android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:text="@string/grammar"
+		          android:theme="@style/text_subheader"
+		          android:layout_marginTop="20dp"
+		          android:layout_marginLeft="20dp"
+		          android:layout_marginRight="10dp"/>
+
+		<LinearLayout android:layout_width="match_parent"
+		              android:layout_height="wrap_content"
+		              android:orientation="horizontal"
+		              android:layout_marginLeft="10dp"
+		              android:layout_marginTop="10dp"
+		              android:layout_marginBottom="10dp">
+			<Button
+					android:id="@+id/button_tasks_create_grammar"
+					android:text="@string/create_task"
+					android:drawableTop="@drawable/baseline_add_box_24"
+					style="@style/mainMenuButtonStyle"/>
+
+			<Button
+					android:id="@+id/button_tasks_find_grammar"
+					android:text="@string/find_tasks"
+					android:drawableTop="@drawable/baseline_slideshow_24"
+					style="@style/mainMenuButtonStyle"/>
+
+			<Button
+					android:id="@+id/button_tasks_results_gramamar"
+					android:text="@string/view_results"
+					android:drawableTop="@drawable/baseline_view_list_24"
+					style="@style/mainMenuButtonStyle"/>
+		</LinearLayout>
+
+		<TextView android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:text="@string/games"
+		          android:theme="@style/text_subheader"
+		          android:layout_marginTop="20dp"
+		          android:layout_marginLeft="20dp"
+		          android:layout_marginRight="10dp"/>
+
+		<LinearLayout android:layout_width="match_parent"
+		              android:layout_height="wrap_content"
+		              android:orientation="horizontal"
+		              android:layout_marginLeft="10dp"
+		              android:layout_marginTop="10dp"
+		              android:layout_marginBottom="10dp">
+			<Button
+					android:id="@+id/button_tasks_games_automatas"
+					android:text="@string/automatas"
+					android:drawableTop="@drawable/baseline_videogame_asset_24"
+					style="@style/mainMenuButtonStyle"/>
+
+			<Button
+					android:id="@+id/button_tasks_games_grammars"
+					android:text="@string/grammars"
+					android:drawableTop="@drawable/baseline_videogame_asset_24"
+					style="@style/mainMenuButtonStyle"/>
+
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

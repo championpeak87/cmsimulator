@@ -10,7 +10,7 @@ import java.net.URL;
 
 public class UrlManager {
 
-    private final String URI = "http://192.168.1.235:3000";
+    private final String URI = "http://192.168.0.102:3000";
 
     // PATHS
     private final String LOGIN_PATH = "/api/login";
@@ -37,6 +37,27 @@ public class UrlManager {
         PasswordManager passwordManager = new PasswordManager();
         String authkey = passwordManager.getAuthkey(password);
 
+        Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
+                .appendQueryParameter(USERNAME_QUERY_KEY, username)
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getLoginUrlWithAuthkey(String username, String authkey)
+    {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)

@@ -15,13 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
+import fiitstu.gulis.cmsimulator.adapters.tasks.ExampleAutomataAdapter;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
-import fiitstu.gulis.cmsimulator.models.tasks.task_solved_state;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExampleAutomatas extends FragmentActivity {
 
@@ -49,7 +44,7 @@ public class ExampleAutomatas extends FragmentActivity {
         actionBar.setTitle(R.string.example_machine);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview_automata_examples);
-        AutomataTaskAdapter adapter = new AutomataTaskAdapter(this);
+        ExampleAutomataAdapter adapter = new ExampleAutomataAdapter(this);
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;

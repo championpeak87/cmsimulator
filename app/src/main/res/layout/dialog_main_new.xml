@@ -15,24 +15,29 @@
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/button_popup_main_new_finite_state_automatom"
-        android:text="@string/finite_state_automaton"
-        style="@style/newMachineButtonStyle" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button_popup_main_new_pushdown_automaton"
-        android:text="@string/pushdown_automaton"
-        style="@style/newMachineButtonStyle" />
+            <Button
+                    android:id="@+id/button_popup_main_new_finite_state_automatom"
+                    android:text="@string/finite_state_automaton"
+                    style="@style/newMachineButtonStyle" />
 
-    <Button
-        android:id="@+id/button_popup_main_new_linear_bounded_automaton"
-        android:text="@string/linear_bounded_automaton"
-        style="@style/newMachineButtonStyle" />
+            <Button
+                    android:id="@+id/button_popup_main_new_pushdown_automaton"
+                    android:text="@string/pushdown_automaton"
+                    style="@style/newMachineButtonStyle" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button_popup_main_new_turing_machine"
-        android:text="@string/turing_machine"
-        style="@style/newMachineButtonStyle" />
+            <Button
+                    android:id="@+id/button_popup_main_new_linear_bounded_automaton"
+                    android:text="@string/linear_bounded_automaton"
+                    style="@style/newMachineButtonStyle" />
+
+            <Button
+                    android:id="@+id/button_popup_main_new_turing_machine"
+                    android:text="@string/turing_machine"
+                    style="@style/newMachineButtonStyle" />
+        </LinearLayout>
 
 </LinearLayout>

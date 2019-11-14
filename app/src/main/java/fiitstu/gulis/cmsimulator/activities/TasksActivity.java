@@ -91,6 +91,16 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         actionBar.setTitle(R.string.tasks);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        Button example = findViewById(R.id.button_tasks_find_automata);
+        example.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivityIntent = new Intent(TasksActivity.this, EditTaskActivity.class);
+                nextActivityIntent.putExtras(new Bundle());
+                startActivity(nextActivityIntent);
+            }
+        });
+
         /*Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,8 +197,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         return false;
     }
 
-    public void findAutomataTasks(View view)
-    {
+    public void findAutomataTasks(View view) {
 
     }
 

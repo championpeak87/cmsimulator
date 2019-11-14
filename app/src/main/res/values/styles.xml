@@ -116,6 +116,7 @@
     <style name="GrammarButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">50dp</item>
+        <item name="android:textColor">@color/md_white_1000</item>
     </style>
 
     <style name="formalSpecTextStyle">
@@ -128,9 +129,9 @@
     </style>
 
     <style name="newMachineButtonStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">0.20</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
