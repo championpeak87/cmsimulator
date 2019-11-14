@@ -13,8 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.models.users.Admin;
+import fiitstu.gulis.cmsimulator.models.users.Lector;
+import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -37,10 +41,10 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private boolean autologin = false;
 
-    private static final String SETTINGS_KEY = "SETTINGS";
-    private static final String AUTOLOGIN_SETTING = "AUTOLOGIN";
-    private static final String AUTOLOGIN_USERNAME = "AUTOLOGIN_USERNAME";
-    private static final String AUTOLOGIN_AUTHKEY = "AUTOLOGIN_AUTHKEY";
+    public static final String SETTINGS_KEY = "SETTINGS";
+    public static final String AUTOLOGIN_SETTING = "AUTOLOGIN";
+    public static final String AUTOLOGIN_USERNAME = "AUTOLOGIN_USERNAME";
+    public static final String AUTOLOGIN_AUTHKEY = "AUTOLOGIN_AUTHKEY";
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -230,6 +234,15 @@ public class TaskLoginActivity extends FragmentActivity {
     private void loginUnsuccessful() {
         usernameEditText.setError(getString(R.string.login_incorrect));
         passwordEditText.setError(getString(R.string.login_incorrect));
+
+        Context context = this.getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                SETTINGS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(AUTOLOGIN_SETTING, false);
+        editor.putString(AUTOLOGIN_USERNAME, "");
+        editor.putString(AUTOLOGIN_AUTHKEY, "");
+        editor.commit();
     }
 
     private void setLoginProgressBarVisibility(boolean value) {
@@ -264,14 +277,6 @@ public class TaskLoginActivity extends FragmentActivity {
     }
 
     private void showMainTaskActivity(User user) {
-        Intent showMainTaskActivity = new Intent(this, TasksActivity.class);
-
-        showMainTaskActivity.putExtra(User.USER_TYPE_KEY, user.getClass().getName());
-        showMainTaskActivity.putExtra(User.USERNAME_KEY, user.getUsername());
-        showMainTaskActivity.putExtra(User.FIRST_NAME_KEY, user.getFirst_name());
-        showMainTaskActivity.putExtra(User.LAST_NAME_KEY, user.getLast_name());
-        showMainTaskActivity.putExtra(User.AUTHKEY_KEY, user.getAuth_key());
-        showMainTaskActivity.putExtra(User.USER_ID_KEY, user.getUser_id());
 
         if (rememberCheckBox.isChecked() || autologin) {
             String username = user.getUsername();
@@ -294,6 +299,25 @@ public class TaskLoginActivity extends FragmentActivity {
             editor.putString(AUTOLOGIN_AUTHKEY, "");
             editor.commit();
         }
+
+        Intent showMainTaskActivity = null;
+
+        if (user instanceof Admin) {
+            showMainTaskActivity = new Intent(this, TasksActivity.class);
+            Toast.makeText(this, "ADMIN", Toast.LENGTH_SHORT).show();
+        } else if (user instanceof Lector) {
+            showMainTaskActivity = new Intent(this, TasksActivity.class);
+            Toast.makeText(this, "LECTOR", Toast.LENGTH_SHORT).show();
+        } else if (user instanceof Student) {
+            showMainTaskActivity = new Intent(this, TasksActivity.class);
+            Toast.makeText(this, "STUDENT", Toast.LENGTH_SHORT).show();
+        }
+        showMainTaskActivity.putExtra(User.USER_TYPE_KEY, user.getClass().getName());
+        showMainTaskActivity.putExtra(User.USERNAME_KEY, user.getUsername());
+        showMainTaskActivity.putExtra(User.FIRST_NAME_KEY, user.getFirst_name());
+        showMainTaskActivity.putExtra(User.LAST_NAME_KEY, user.getLast_name());
+        showMainTaskActivity.putExtra(User.AUTHKEY_KEY, user.getAuth_key());
+        showMainTaskActivity.putExtra(User.USER_ID_KEY, user.getUser_id());
 
         startActivity(showMainTaskActivity);
         finish();

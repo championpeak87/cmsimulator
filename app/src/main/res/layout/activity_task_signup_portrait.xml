@@ -22,7 +22,7 @@
 		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
 		          android:layout_gravity="center_horizontal" android:text="@string/sign_up_header" android:textSize="40sp"
 		          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300"
-		          android:shadowRadius="8" android:layout_marginBottom="40dp"/>
+		          android:shadowRadius="8" android:layout_marginBottom="40dp" android:textColor="@color/md_white_1000"/>
 
 	<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"
 	                                               android:layout_width="match_parent"

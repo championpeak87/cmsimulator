@@ -37,7 +37,7 @@
         <item name="colorControlActivated">@color/primary_color</item>
     </style>
 
-    <style name="LoginTheme" parent="Theme.AppCompat.DayNight">
+    <style name="LoginTheme" parent="@android:style/Theme.Material">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/md_white_1000</item>
         <item name="android:colorPrimaryDark">@color/primary_color_dark</item>

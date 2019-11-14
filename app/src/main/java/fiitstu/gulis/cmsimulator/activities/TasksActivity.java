@@ -2,8 +2,10 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -170,6 +172,15 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
     public void signOut(View view) {
         Intent signInActivity = new Intent(this, TaskLoginActivity.class);
         startActivity(signInActivity);
+
+        Context context = this.getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                TaskLoginActivity.SETTINGS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(TaskLoginActivity.AUTOLOGIN_SETTING, false);
+        editor.putString(TaskLoginActivity.AUTOLOGIN_USERNAME, "");
+        editor.putString(TaskLoginActivity.AUTOLOGIN_AUTHKEY, "");
+        editor.commit();
 
         finish();
     }
