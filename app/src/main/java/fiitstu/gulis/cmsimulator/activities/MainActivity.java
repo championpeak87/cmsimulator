@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
@@ -37,6 +38,7 @@ import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import fiitstu.gulis.cmsimulator.network.ServerController;
 import io.blushine.android.ui.showcase.MaterialShowcase;
 import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
 import io.blushine.android.ui.showcase.MaterialShowcaseView;
@@ -337,6 +339,7 @@ public class MainActivity extends FragmentActivity
                 FragmentManager fm = getSupportFragmentManager();
                 NewMachineDialog newMachineDialog = NewMachineDialog.newInstance();
                 newMachineDialog.show(fm, NEW_MACHINE_DIALOG);
+
                 Log.v(TAG, "new machine button click noted");
                 break;
             //example machine

@@ -42,7 +42,7 @@
 	          android:elevation="10dp"
 	          android:gravity="center" android:textSize="20sp" card_view:layout_constraintTop_toBottomOf="@id/textview_automata_type_deterministic"/>
 
-	<LinearLayout android:id="@+id/task_bottom_bar" android:elevation="20dp"
+	<LinearLayout android:id="@+id/task_bottom_bar" android:elevation="50dp"
 			      android:layout_width="match_parent" android:layout_height="wrap_content"
 	              android:gravity="right" android:layout_gravity="bottom"
 	              android:background="@color/primary_color_light">

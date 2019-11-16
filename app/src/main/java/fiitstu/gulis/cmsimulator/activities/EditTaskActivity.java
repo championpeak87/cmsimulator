@@ -3,9 +3,11 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,16 +30,18 @@ import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.elements.TaskResult;
+import fiitstu.gulis.cmsimulator.network.ServerController;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.io.*;
 
 /**
  * Activity for editing tasks.
- *
+ * <p>
  * Expected Intent arguments (extras) (KEY (TYPE) - MEANING):
  * TASK (Serializable - Task) - the task being edited
- *
+ * <p>
  * Created by Jakub Sedlář on 12.01.2018.
  */
 public class EditTaskActivity extends FragmentActivity implements SaveMachineDialog.SaveDialogListener,
@@ -98,8 +102,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             minutesEditText.setText(String.valueOf(task.getMinutes()));
         }
 
-        if (timeLimitCheckbox.isChecked())
-        {
+        if (timeLimitCheckbox.isChecked()) {
             minutesEditText.setEnabled(true);
         }
 
@@ -122,8 +125,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                     FragmentManager fm = getSupportFragmentManager();
                     NewMachineDialog newMachineDialog = NewMachineDialog.newInstance();
                     newMachineDialog.show(fm, "MACHINE_CHOICE_DIALOG");
-                }
-                else {
+                } else {
                     editAutomaton(false);
                 }
             }
@@ -135,11 +137,9 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             public void onClick(View v) {
                 if (machineType == MainActivity.UNDEFINED) {
                     Toast.makeText(EditTaskActivity.this, R.string.automaton_not_created, Toast.LENGTH_SHORT).show();
-                }
-                else if (titleEditText.getText().toString().isEmpty()) {
+                } else if (titleEditText.getText().toString().isEmpty()) {
                     Toast.makeText(EditTaskActivity.this, R.string.no_task_title, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Bundle outputBundle = new Bundle();
                     FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
                     DataSource dataSource = DataSource.getInstance();
@@ -179,8 +179,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -207,8 +206,58 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                 guideFragment.show(fm, "HELP_DIALOG");
                 return true;
             case R.id.menu_edit_task_upload_task:
-                // TODO: Implement task uploading
-                Toast.makeText(this, "THIS FEATURE HAS NOT BEEN IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                // IN_PROGRESS: Implement task uploading
+                if (machineType == MainActivity.UNDEFINED) {
+                    Toast.makeText(EditTaskActivity.this, R.string.automaton_not_created, Toast.LENGTH_SHORT).show();
+                } else if (titleEditText.getText().toString().isEmpty()) {
+                    Toast.makeText(EditTaskActivity.this, R.string.no_task_title, Toast.LENGTH_SHORT).show();
+                } else {
+                    Bundle outputBundle = new Bundle();
+                    FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+                    DataSource dataSource = DataSource.getInstance();
+                    dataSource.open();
+                    try {
+                        fileHandler.setData(dataSource, machineType);
+                        updateTask();
+                        task.setResultVersion(TaskResult.CURRENT_VERSION);
+                        fileHandler.writeTask(task);
+
+                        String taskDoc = fileHandler.writeToString();
+
+                        File file = new File(this.getFilesDir(), "file.xml");
+                        FileOutputStream outputStream;
+
+                        outputStream = openFileOutput("file.xml", Context.MODE_PRIVATE);
+                        outputStream.write(taskDoc.getBytes());
+                        outputStream.close();
+
+                        class uploadTask extends AsyncTask<File, Void, String>
+                        {
+                            @Override
+                            protected String doInBackground(File... files) {
+                                ServerController serverController = new ServerController();
+                                return serverController.doPostRequest(files[0]);
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                Toast.makeText(EditTaskActivity.this, s, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        new uploadTask().execute(file);
+
+                        //file.delete();
+
+
+                    } catch (ParserConfigurationException | TransformerException e) {
+                        Log.e(TAG, "Error happened when serializing task", e);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        dataSource.close();
+                    }
+                }
                 return true;
         }
 
@@ -236,7 +285,8 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                 .setCancelable(false)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        DataSource.getInstance().open();;
+                        DataSource.getInstance().open();
+                        ;
                         DataSource.getInstance().globalDrop();
                         DataSource.getInstance().close();
                         finish();
@@ -293,8 +343,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         task.setPublicInputs(publishInputsCheckbox.isChecked());
         if (timeLimitCheckbox.isChecked()) {
             task.setMinutes(Integer.parseInt(minutesEditText.getText().toString()));
-        }
-        else {
+        } else {
             task.setMinutes(0);
         }
         DataSource dataSource = DataSource.getInstance();
@@ -309,8 +358,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
         if (isNew) {
             outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_TASK);
-        }
-        else {
+        } else {
             outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EDIT_TASK);
         }
         outputBundle.putSerializable("TASK", task);
@@ -334,7 +382,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         }
     }
 
-    private class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener{
+    private class MenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {

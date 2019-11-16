@@ -1,7 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const xmlParser = require('fast-xml-parser');
 const app = express()
+var fileuploader = require('express-fileupload');
+app.use(fileuploader());
 const port = 3000
 
 // HTTP STAVOVE KODY
@@ -44,24 +45,19 @@ app.get('/api/user/signup', (req, res) => {
   const user_type = req.query.user_type;
 
   // KONTROLA CI POUZIVATEL UZ NEEXISTUJE
-  pool.query('SELECT * FROM users WHERE username = $1', [username], (error, results) =>
-  {
-    if (error)
-    {
+  pool.query('SELECT * FROM users WHERE username = $1', [username], (error, results) => {
+    if (error) {
       throw error;
     }
 
     // POUZIVATEL EXISTUJE
-    if (results.rowCount > 0)
-    {
+    if (results.rowCount > 0) {
       res.status(HTTP_OK).send("USER EXISTS!");
       console.log(Date() + ' ', [username], 'already exists!');
     }
-    else 
-    {
+    else {
       pool.query('INSERT INTO users(username, type, password_hash, first_name, last_name) VALUES ($1,$2,$3,$4,$5);',
-      [username, user_type, auth_key, first_name, last_name], (err, result) =>
-      {
+        [username, user_type, auth_key, first_name, last_name], (err, result) => {
         res.status(HTTP_OK).send('USER WAS ADDED!');
         console.log(Date() + ' ', [username], 'was successfully added to database');
       });
@@ -164,71 +160,82 @@ app.get('/api/login', (req, res) => {
 //   })
 // })
 
-app.get('/api/tasks/automata', (req, res) =>
-{
-  pool.query('SELECT * FROM automata_tasks;', (error, results) =>
-  {
+app.get('/api/tasks/automata', (req, res) => {
+  pool.query('SELECT * FROM automata_tasks;', (error, results) => {
     if (error) { throw error }
-    if (results.rowCount > 0)
-    {
-        res.send(results.rows);
+    if (results.rowCount > 0) {
+      res.send(results.rows);
     }
   })
 })
 
-app.get('/api/user/getUsers', (req, res) =>
-{
+app.get('/api/user/getUsers', (req, res) => {
   const auth_key = req.query.auth_key;
   console.log([auth_key]);
-  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) =>
-  {
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) => {
     if (err) { throw err }
-    if (results.rowCount > 0)
-    {
-      pool.query('SELECT * FROM users;', (error, foundUsers) =>
-      {
+    if (results.rowCount > 0) {
+      pool.query('SELECT * FROM users;', (error, foundUsers) => {
         if (error) { throw error }
-        if (foundUsers.rowCount > 0)
-        {
+        if (foundUsers.rowCount > 0) {
           res.status(HTTP_OK).send(foundUsers.rows);
           console.log("All users have been requested!");
         }
       })
     }
-    else
-    {
+    else {
       res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
       console.log("Unauthorised request to download all users!");
     }
   })
 })
 
-app.get('/api/user/getUsersFiltered', (req, res) =>
-{
+app.get('/api/user/getUsersFiltered', (req, res) => {
   const auth_key = req.query.auth_key;
   const last_name = req.query.last_name;
   console.log([auth_key]);
-  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) =>
-  {
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) => {
     if (err) { throw err }
-    if (results.rowCount > 0)
-    {
-      pool.query('SELECT * FROM users WHERE last_name LIKE \'%' + last_name + '%\';', (error, foundUsers) =>
-      {
+    if (results.rowCount > 0) {
+      pool.query('SELECT * FROM users WHERE last_name LIKE \'%' + last_name + '%\';', (error, foundUsers) => {
         if (error) { throw error }
-        if (foundUsers.rowCount > 0)
-        {
+        if (foundUsers.rowCount > 0) {
           res.status(HTTP_OK).send(foundUsers.rows);
           console.log("User search performed!");
         }
       })
     }
-    else
-    {
+    else {
       res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
       console.log("Unauthorised request to download all users!");
     }
   })
 })
+
+app.post('/api/tasks/upload', (req, res, next) => {
+  const file = req.files.task;
+  const user_id = req.query.user_id;
+  const task_id = req.query.task_id;
+
+  var mkdirp = require('mkdirp');
+  mkdirp("./uploads/" + user_id + "/", function (err) {
+
+    // path exists unless there was an error
+
+  });
+  if (!file) {
+    console.log(req);
+  }
+  else {
+    file.mv("./uploads/" + user_id + "/" + task_id + ".xml", function (err, results) {
+      if (err) throw err;
+      res.send({
+        success: true,
+        message: "File uploaded!"
+      });
+    });
+  }
+
+});
 
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))
