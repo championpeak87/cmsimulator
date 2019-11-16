@@ -206,6 +206,10 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                 GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.CREATING_TASKS);
                 guideFragment.show(fm, "HELP_DIALOG");
                 return true;
+            case R.id.menu_edit_task_upload_task:
+                // TODO: Implement task uploading
+                Toast.makeText(this, "THIS FEATURE HAS NOT BEEN IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                return true;
         }
 
         return false;

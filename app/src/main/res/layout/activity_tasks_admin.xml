@@ -90,7 +90,7 @@
 					android:id="@+id/button_tasks_find_automata"
 					android:text="@string/create_task"
 					android:drawableTop="@drawable/baseline_add_box_24"
-					android:onClick="findAutomataTasks"
+					android:onClick="createAutomataTasks"
 					style="@style/mainMenuButtonStyle"/>
 
 			<Button

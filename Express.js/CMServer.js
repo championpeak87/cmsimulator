@@ -176,4 +176,59 @@ app.get('/api/tasks/automata', (req, res) =>
   })
 })
 
+app.get('/api/user/getUsers', (req, res) =>
+{
+  const auth_key = req.query.auth_key;
+  console.log([auth_key]);
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) =>
+  {
+    if (err) { throw err }
+    if (results.rowCount > 0)
+    {
+      pool.query('SELECT * FROM users;', (error, foundUsers) =>
+      {
+        if (error) { throw error }
+        if (foundUsers.rowCount > 0)
+        {
+          res.status(HTTP_OK).send(foundUsers.rows);
+          console.log("All users have been requested!");
+        }
+      })
+    }
+    else
+    {
+      res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
+      console.log("Unauthorised request to download all users!");
+    }
+  })
+})
+
+app.get('/api/user/getUsersFiltered', (req, res) =>
+{
+  const auth_key = req.query.auth_key;
+  const last_name = req.query.last_name;
+  console.log([auth_key]);
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) =>
+  {
+    if (err) { throw err }
+    if (results.rowCount > 0)
+    {
+      pool.query('SELECT * FROM users WHERE last_name LIKE \'%' + last_name + '%\';', (error, foundUsers) =>
+      {
+        if (error) { throw error }
+        if (foundUsers.rowCount > 0)
+        {
+          res.status(HTTP_OK).send(foundUsers.rows);
+          console.log("User search performed!");
+        }
+      })
+    }
+    else
+    {
+      res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
+      console.log("Unauthorised request to download all users!");
+    }
+  })
+})
+
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

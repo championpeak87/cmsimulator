@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical">
+
+	<TextView android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="@string/position"
+	          android:theme="@style/text_subheader"
+	          android:layout_marginTop="20dp"
+	          android:layout_marginLeft="20dp"
+	          android:layout_marginRight="10dp"/>
+
+	<RadioGroup android:id="@+id/radiogroup_order" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="25dp" android:layout_marginTop="5dp">
+		<RadioButton android:id="@+id/radiobutton_ascending" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ascending"/>
+		<RadioButton android:id="@+id/radiobutton_descending" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/descending"/>
+	</RadioGroup>
+
+	<TextView android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="@string/order_by"
+	          android:theme="@style/text_subheader"
+	          android:layout_marginTop="20dp"
+	          android:layout_marginLeft="20dp"
+	          android:layout_marginRight="10dp"/>
+
+	<RadioGroup android:id="@+id/radiogroup_orderby" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="25dp" android:layout_marginTop="5dp">
+		<RadioButton android:id="@+id/radiobutton_byFirstName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/by_first_name"/>
+		<RadioButton android:id="@+id/radiobutton_byLastName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/by_last_name"/>
+		<RadioButton android:id="@+id/radiobutton_byUserName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/by_username"/>
+	</RadioGroup>
+
+</LinearLayout>

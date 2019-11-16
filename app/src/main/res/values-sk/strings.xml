@@ -887,4 +887,17 @@
     </string>
 	<string name="view_results">Prehliadať výsledky</string>
 	<string name="manage_users">Spravovať používateľov</string>
+	<string name="upload_task">Upload task</string>
+	<string name="user_management">Správa používateľov</string>
+	<string name="reload">Znovu načítať</string>
+	<string name="details">Detaily</string>
+	<string name="ascending">Vzostupne</string>
+    <string name="descending">Zostupne</string>
+    <string name="position">Poradie</string>
+    <string name="order_by">Zoradiť podľa</string>
+    <string name="by_first_name">Podľa mena</string>
+    <string name="by_last_name">Podľa priezviska</string>
+    <string name="by_username">Podľa prihlasovacieho mena</string>
+	<string name="search_by">Vyhľadať podľa</string>
+    <string name="search">Vyhľadať</string>
 </resources>

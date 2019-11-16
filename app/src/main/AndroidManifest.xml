@@ -33,6 +33,12 @@
 				android:name=".activities.OptionsActivity"
 				android:configChanges="orientation|screenSize"/>
 		<activity
+				android:name=".activities.TasksAdminActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.UsersManagmentActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
 				android:name=".activities.TaskLoginActivity"
 				android:theme="@style/LoginTheme"/>
 		<activity

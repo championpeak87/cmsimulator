@@ -7,8 +7,18 @@
           android:title="Task info"
           android:showAsAction="always"
           android:visible="false"
-          android:icon="@drawable/excl_red"
+          tools:ignore="AppCompatResource"
+          android:iconTint="@color/md_white_1000"
+          android:icon="@drawable/baseline_check_circle_24"
           style="@style/dropDownMenuItemStyle"/>
+    <item android:id="@+id/menu_edit_task_upload_task"
+          android:title="@string/upload_task"
+          android:showAsAction="ifRoom"
+          android:visible="false"
+          android:icon="@drawable/baseline_cloud_upload_24"
+          android:iconTint="@color/md_white_1000"
+          style="@style/dropDownMenuItemStyle"
+          tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/menu_simulation_configure"
         android:title="@string/configure"

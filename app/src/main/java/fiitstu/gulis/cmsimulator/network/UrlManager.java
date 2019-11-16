@@ -16,6 +16,8 @@ public class UrlManager {
     private final String LOGIN_PATH = "/api/login";
     private final String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
     private final String ADD_NEW_USER_PATH = "/api/user/signup";
+    private final String GET_ALL_USERS_PATH = "/api/user/getUsers";
+    private final String SEARCH_USER_PATH = "/api/user/getUsersFiltered";
 
     // LOGIN QUERY KEYS
     private final String USERNAME_QUERY_KEY = "username";
@@ -61,6 +63,47 @@ public class UrlManager {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getAllUsersUrl(String authkey)
+    {
+        Uri builtUri = Uri.parse(URI + GET_ALL_USERS_PATH).buildUpon()
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getSearchedUser(String authkey, String searchedUserLastName)
+    {
+        Uri builtUri = Uri.parse(URI + SEARCH_USER_PATH).buildUpon()
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .appendQueryParameter(LAST_NAME_KEY, searchedUserLastName)
                 .build();
 
         URL url = null;
