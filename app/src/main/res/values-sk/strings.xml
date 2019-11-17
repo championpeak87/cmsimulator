@@ -906,4 +906,5 @@
 	<string name="user_details">Podrobnosti o používateľovi</string>
 	<string name="achieved_results">Dosiahnuté výsledky</string>
 	<string name="account_management">Správa účtu</string>
+	<string name="automata_type">Druh automatu</string>
 </resources>

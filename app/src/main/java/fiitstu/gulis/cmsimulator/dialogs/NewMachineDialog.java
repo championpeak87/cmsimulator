@@ -1,6 +1,11 @@
 package fiitstu.gulis.cmsimulator.dialogs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -9,88 +14,118 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 
+import android.widget.RadioButton;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 
 /**
  * A dialog for selecting tye of machine to be created
  *
  * Created by Martin on 15. 4. 2017.
  */
-public class NewMachineDialog extends DialogFragment implements View.OnClickListener {
+public class NewMachineDialog extends DialogFragment {
+    private RadioButton finiteAutomata;
+    private RadioButton pushdownAutomata;
+    private RadioButton linearBoundedAutomata;
+    private RadioButton turingMachine;
 
-    //log tag
-    private static final String TAG = NewMachineDialog.class.getName();
+    private automata_type selectedAutomata = automata_type.FINITE_AUTOMATA;
 
-    public interface NewMachineDialogListener {
+    private NewMachineDialogListener listener;
+
+    public interface NewMachineDialogListener{
         void newMachineDialogClick(Bundle outputBundle);
     }
 
-    public NewMachineDialog() {
-        // Empty constructor required for DialogFragment
-    }
-
-    public static NewMachineDialog newInstance() {
+    public static NewMachineDialog newInstance()
+    {
         return new NewMachineDialog();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().setTitle(R.string.new_machine);
-        return inflater.inflate(R.layout.dialog_main_new, container);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        listener = (NewMachineDialogListener)context;
     }
 
+    @NonNull
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder((getActivity()));
 
-        //finite state automaton
-        Button finiteStateAutomatonB = view.findViewById(R.id.button_popup_main_new_finite_state_automatom);
-        finiteStateAutomatonB.setOnClickListener(this);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_new_machine, null);
 
-        //pushdown automaton
-        Button pushdownAutomatonB = view.findViewById(R.id.button_popup_main_new_pushdown_automaton);
-        pushdownAutomatonB.setOnClickListener(this);
+        builder.setView(view)
+                .setTitle(R.string.new_machine)
+                .setNeutralButton(R.string.cancel, null)
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Bundle bundle = getOutputBundle();
+                        listener.newMachineDialogClick(bundle);
+                    }
+                });
 
-        //linear bounded automaton
-        Button linearBoundedAutomatonB = view.findViewById(R.id.button_popup_main_new_linear_bounded_automaton);
-        linearBoundedAutomatonB.setOnClickListener(this);
+        finiteAutomata = view.findViewById(R.id.radiobutton_finite_automata);
+        finiteAutomata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedAutomata = automata_type.FINITE_AUTOMATA;
+            }
+        });
 
-        //turing machine
-        Button turingMachineB = view.findViewById(R.id.button_popup_main_new_turing_machine);
-        turingMachineB.setOnClickListener(this);
+        pushdownAutomata = view.findViewById(R.id.radiobutton_pushdown_automata);
+        pushdownAutomata.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                selectedAutomata = automata_type.PUSHDOWN_AUTOMATA;
+            }
+        });
+
+        linearBoundedAutomata = view.findViewById(R.id.radiobutton_linear_bounded_automata);
+        linearBoundedAutomata.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                selectedAutomata = automata_type.LINEAR_BOUNDED_AUTOMATA;
+            }
+        });
+
+        turingMachine = view.findViewById(R.id.radiobutton_turing_machine);
+        turingMachine.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                selectedAutomata = automata_type.TURING_MACHINE;
+            }
+        });
+
+        return builder.create();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(
-                    (int) (getResources().getDisplayMetrics().widthPixels * 0.8),
-                    (int) (getResources().getDisplayMetrics().heightPixels * 0.4));
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
+    private Bundle getOutputBundle()
+    {
         Bundle outputBundle = new Bundle();
         outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_MACHINE);
-        switch (view.getId()) {
-            case R.id.button_popup_main_new_finite_state_automatom:
+        switch (selectedAutomata)
+        {
+            case FINITE_AUTOMATA:
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
                 break;
-            case R.id.button_popup_main_new_pushdown_automaton:
+            case PUSHDOWN_AUTOMATA:
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.PUSHDOWN_AUTOMATON);
                 break;
-            case R.id.button_popup_main_new_linear_bounded_automaton:
+            case LINEAR_BOUNDED_AUTOMATA:
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.LINEAR_BOUNDED_AUTOMATON);
                 break;
-            case R.id.button_popup_main_new_turing_machine:
+            case TURING_MACHINE:
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.TURING_MACHINE);
                 break;
         }
-        ((NewMachineDialogListener) getActivity()).newMachineDialogClick(outputBundle);
+
+       return outputBundle;
     }
+
 }

@@ -3,10 +3,8 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -24,10 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.FileChooser;
@@ -337,8 +332,9 @@ public class MainActivity extends FragmentActivity
             //new machine
             case R.id.button_main_new:
                 FragmentManager fm = getSupportFragmentManager();
-                NewMachineDialog newMachineDialog = NewMachineDialog.newInstance();
+                NewMachineDialog newMachineDialog = new NewMachineDialog();
                 newMachineDialog.show(fm, NEW_MACHINE_DIALOG);
+
 
                 Log.v(TAG, "new machine button click noted");
                 break;

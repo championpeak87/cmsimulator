@@ -1261,5 +1261,6 @@
 	<string name="user_details">User details</string>
 	<string name="achieved_results">Achieved results</string>
 	<string name="account_management">Account management</string>
+	<string name="automata_type">Automata type</string>
 
 </resources>
