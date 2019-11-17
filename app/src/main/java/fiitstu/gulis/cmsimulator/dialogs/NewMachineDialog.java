@@ -69,7 +69,7 @@ public class NewMachineDialog extends DialogFragment implements View.OnClickList
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setLayout(
                     (int) (getResources().getDisplayMetrics().widthPixels * 0.8),
-                    (int) (getResources().getDisplayMetrics().heightPixels * 0.8));
+                    (int) (getResources().getDisplayMetrics().heightPixels * 0.4));
         }
     }
 

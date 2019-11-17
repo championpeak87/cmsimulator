@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.tasks.ExampleAutomataAdapter;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
@@ -53,6 +55,10 @@ public class ExampleAutomatas extends FragmentActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+
+        recyclerView.setAnimation(showUpAnimation);
     }
 
     @Override
@@ -84,10 +90,10 @@ public class ExampleAutomatas extends FragmentActivity {
     public void onExampleStart(View view) {
         Bundle outputBundle = new Bundle();
         switch (view.getId()) {
-            case R.id.button_start_task:
-                outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EXAMPLE_MACHINE1);
-                outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
-                break;
+            //case R.id.button_start_task:
+            //    outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EXAMPLE_MACHINE1);
+             //   outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+              //  break;
             case R.id.button_popup_main_example2_finite_state_automatom:
                 outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EXAMPLE_MACHINE2);
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);

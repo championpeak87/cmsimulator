@@ -90,7 +90,6 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         private TextView automata_type;
         private ImageButton delete_task;
         private ImageButton edit_task;
-        private ImageButton start_task;
         private ImageButton help_task;
         private CardView cardView;
 
@@ -100,7 +99,6 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.automata_type = itemView.findViewById(R.id.textview_automata_type);
             this.delete_task = itemView.findViewById(R.id.button_delete_task);
             this.edit_task = itemView.findViewById(R.id.button_edit_task);
-            this.start_task = itemView.findViewById(R.id.button_start_task);
             this.help_task = itemView.findViewById(R.id.button_help_task);
             this.cardView = itemView.findViewById(R.id.cardview_task);
         }

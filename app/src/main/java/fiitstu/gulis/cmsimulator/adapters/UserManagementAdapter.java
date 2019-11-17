@@ -47,8 +47,11 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     @Override
     public void onBindViewHolder(@NonNull CardViewBuilder holder, int position) {
         User currentUser = listOfUsers.get(position);
-        holder.fullname.setText(currentUser.getLast_name() + ", " + currentUser.getFirst_name());
-        holder.username.setText(currentUser.getUsername());
+        final String username = currentUser.getUsername();
+        final String fullname = currentUser.getLast_name() + ", " + currentUser.getFirst_name();
+        holder.fullname.setText(fullname);
+        holder.username.setText(username);
+
 
         final CardView cardView = holder.cardView;
 
@@ -68,6 +71,8 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, UserDetailActivity.class);
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                intent.putExtra("USERNAME", username);
+                intent.putExtra("FULLNAME", fullname);
                 mContext.startActivity(intent, options.toBundle());
 
             }

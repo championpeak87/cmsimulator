@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
@@ -112,9 +113,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
     @Override
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
         final AutomataExampleTask currentTask = listOfTasks.get(position);
-        Animation showUpAnimation = AnimationUtils.loadAnimation(mContext, R.anim.item_show_animation);
 
-        holder.cardView.setAnimation(showUpAnimation);
 
         if (currentTask.getTask_type() instanceof FiniteAutomataTask) {
             holder.automataType.setText(R.string.finite_state_automaton);
@@ -137,7 +136,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
         holder.bottomBar.setBackgroundColor(light_blue);
         holder.determinism.setBackgroundColor(light_blue);
 
-        holder.startButton.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle outputBundle = new Bundle();
@@ -215,8 +214,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
         LinearLayout bottomBar;
         TextView topBar;
         CardView cardView;
-        Button startButton;
-        Button hintButton;
+        ImageButton hintButton;
 
 
         public CardViewBuilder(View itemView) {
@@ -228,7 +226,6 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
             bottomBar = itemView.findViewById(R.id.task_bottom_bar);
             topBar = itemView.findViewById(R.id.textview_automata_type);
             determinism = itemView.findViewById(R.id.textview_automata_type_deterministic);
-            startButton = itemView.findViewById(R.id.button_start_task);
             hintButton = itemView.findViewById(R.id.button_task_hint);
             determinism = itemView.findViewById(R.id.textview_automata_type_deterministic);
 

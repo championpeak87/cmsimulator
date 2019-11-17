@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -36,6 +37,13 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     private List<Task> listOfTasks;
     private int user_id;
     private String authkey;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        setRecyclerView();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

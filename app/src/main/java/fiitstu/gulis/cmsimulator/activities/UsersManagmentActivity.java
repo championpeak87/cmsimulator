@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +60,7 @@ public class UsersManagmentActivity extends FragmentActivity {
         actionBar.setTitle(R.string.user_management);
 
         reloadUsers();
+        setConnectedTransition();
     }
 
     @Override
@@ -68,8 +71,7 @@ public class UsersManagmentActivity extends FragmentActivity {
         return true;
     }
 
-    public void searchUsers()
-    {
+    public void searchUsers() {
         final AlertDialog searchDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.search)
                 .setView(R.layout.dialog_search_user)
@@ -78,20 +80,17 @@ public class UsersManagmentActivity extends FragmentActivity {
                 .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        RadioGroup orderby = ((AlertDialog)dialog).findViewById(R.id.radiogroup_orderby);
+                        RadioGroup orderby = ((AlertDialog) dialog).findViewById(R.id.radiogroup_orderby);
 
-                        RadioButton byFirstName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byFirstName);
-                        RadioButton byLastName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byLastName);
-                        RadioButton byUserName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byUserName);
+                        RadioButton byFirstName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byFirstName);
+                        RadioButton byLastName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byLastName);
+                        RadioButton byUserName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byUserName);
 
-                        EditText inputString = ((AlertDialog)dialog).findViewById(R.id.edittext_search_string);
+                        EditText inputString = ((AlertDialog) dialog).findViewById(R.id.edittext_search_string);
 
-                        if (orderby.getCheckedRadioButtonId() == -1 || inputString.getText().toString().isEmpty())
-                        {
+                        if (orderby.getCheckedRadioButtonId() == -1 || inputString.getText().toString().isEmpty()) {
                             Toast.makeText(UsersManagmentActivity.this, "WRONG INPUT", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                        } else {
                             class getSearchUsersAsync extends AsyncTask<String, Void, List<User>> {
                                 @Override
                                 protected void onPreExecute() {
@@ -126,7 +125,7 @@ public class UsersManagmentActivity extends FragmentActivity {
                                 protected void onPostExecute(List<User> users) {
                                     super.onPostExecute(users);
 
-                                    UserManagementAdapter adapter = new UserManagementAdapter(getApplicationContext(), users);
+                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
                                     setAdapter(adapter);
                                     showLoadScreen(false);
                                     setUserList(users);
@@ -142,8 +141,7 @@ public class UsersManagmentActivity extends FragmentActivity {
         searchDialog.show();
     }
 
-    public void reloadUsers()
-    {
+    public void reloadUsers() {
         class getUsersAsync extends AsyncTask<Void, Void, List<User>> {
             @Override
             protected void onPreExecute() {
@@ -232,44 +230,37 @@ public class UsersManagmentActivity extends FragmentActivity {
 
                         int orderPosition = 0;
 
-                        RadioGroup order = ((AlertDialog)dialog).findViewById(R.id.radiogroup_order);
-                        RadioGroup orderby = ((AlertDialog)dialog).findViewById(R.id.radiogroup_orderby);
+                        RadioGroup order = ((AlertDialog) dialog).findViewById(R.id.radiogroup_order);
+                        RadioGroup orderby = ((AlertDialog) dialog).findViewById(R.id.radiogroup_orderby);
 
-                        RadioButton byFirstName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byFirstName);
-                        RadioButton byLastName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byLastName);
-                        RadioButton byUserName = ((AlertDialog)dialog).findViewById(R.id.radiobutton_byUserName);
+                        RadioButton byFirstName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byFirstName);
+                        RadioButton byLastName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byLastName);
+                        RadioButton byUserName = ((AlertDialog) dialog).findViewById(R.id.radiobutton_byUserName);
 
-                        RadioButton ascending = ((AlertDialog)dialog).findViewById(R.id.radiobutton_ascending);
-                        RadioButton descending = ((AlertDialog)dialog).findViewById(R.id.radiobutton_descending);
+                        RadioButton ascending = ((AlertDialog) dialog).findViewById(R.id.radiobutton_ascending);
+                        RadioButton descending = ((AlertDialog) dialog).findViewById(R.id.radiobutton_descending);
 
                         String test = ascending.getText().toString();
 
                         // CHECK IF PICKED
-                        if (order.getCheckedRadioButtonId() == -1 || orderby.getCheckedRadioButtonId() == -1)
-                        {
+                        if (order.getCheckedRadioButtonId() == -1 || orderby.getCheckedRadioButtonId() == -1) {
                             Toast.makeText(UsersManagmentActivity.this, "RADIOBUTTON NOT PICKED", Toast.LENGTH_SHORT).show();
                             return;
-                        }
-                        else {
-                            if (byFirstName.isChecked())
-                            {
+                        } else {
+                            if (byFirstName.isChecked()) {
                                 selectedComparator = new SortController.SortByFirstName();
-                            } else if (byLastName.isChecked())
-                            {
+                            } else if (byLastName.isChecked()) {
                                 selectedComparator = new SortController.SortByLastName();
-                            } else if (byUserName.isChecked())
-                            {
+                            } else if (byUserName.isChecked()) {
                                 selectedComparator = new SortController.SortByUsername();
                             }
 
                             orderPosition = ascending.isChecked() ? ASCENDING : DESCENDING;
                         }
 
-                        if (orderPosition == DESCENDING)
-                        {
-                            Collections.sort(userList,  Collections.reverseOrder(selectedComparator));
-                        }
-                        else
+                        if (orderPosition == DESCENDING) {
+                            Collections.sort(userList, Collections.reverseOrder(selectedComparator));
+                        } else
                             Collections.sort(userList, selectedComparator);
 
                         UserManagementAdapter adapter = new UserManagementAdapter(mContext, userList);
@@ -311,9 +302,32 @@ public class UsersManagmentActivity extends FragmentActivity {
         recyclerView.setVisibility(value ? View.GONE : View.VISIBLE);
     }
 
-    public void setUserList(List<User> users)
-    {
+    public void setUserList(List<User> users) {
         userList = users;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RecyclerView users = this.findViewById(R.id.recyclerview_user_management);
+
+        // fix recyclerview layout
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int noOfColumns = (int) (dpWidth / 180) / 2;
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
+        users.setLayoutManager(layoutManager);
+    }
+
+    private void setConnectedTransition() {
+        Fade fade = new Fade();
+        View decor = getWindow().getDecorView();
+        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
+        fade.excludeTarget(android.R.id.statusBarBackground, true);
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+
+        getWindow().setEnterTransition(fade);
+        getWindow().setExitTransition(fade);
+    }
 }
