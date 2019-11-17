@@ -1,8 +1,13 @@
 package fiitstu.gulis.cmsimulator.network.automata_tasks;
 
+import android.util.JsonReader;
+import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.models.tasks.deterministic;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,162 +20,72 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutomataTaskParser {
-    private File inputFile;
 
-    // XML TAGS
-    private static final String AUTOMATA_KEY = "automaton";
-    private static final String AUTOMATA_TYPE_KEY = "type";
-    private static final String AUTOMATA_TYPE_FA_KEY = "fsa";
-    private static final String AUTOMATA_TYPE_TM_KEY = "tm";
-    private static final String AUTOMATA_TYPE_PDA_KEY = "pda";
-    private static final String AUTOMATA_TYPE_LBA_KEY = "lba";
-    private static final String TASK_TITLE_KEY = "title";
-    private static final String TASK_DESCRIPTION_KEY = "text";
-    private static final String TASK_PUBLIC_INPUTS_KEY = "public_inputs";
-    private static final String TASK_MAX_STEPS_KEY = "max_steps";
+    private static final String TASK_NAME_KEY = "task_name";
+    private static final String TASK_DESCRIPTION_KEY = "task_description";
+    private static final String TIME_KEY = "time";
+    private static final String PUBLIC_INPUT_KEY = "public_input";
+    private static final String ASSIGNER_ID_KEY = "assigner_id";
+    private static final String AUTOMATA_TYPE_KEY = "automata_type";
+    private static final String TASK_ID_KEY = "task_id";
+    private static final String FILE_NAME_KEY = "file_name";
 
-    private automata_type getAutomataType() throws IOException, SAXException, ParserConfigurationException {
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(this.inputFile);
+    public Task getTaskFromJson(JSONObject object) throws JSONException {
+        Task parsedTask;
+        String task_name, task_description;
+        int time, assigner_id, task_id;
+        boolean public_input;
 
-        doc.getDocumentElement().normalize();
+        task_name = object.getString(TASK_NAME_KEY);
+        task_description = object.getString(TASK_DESCRIPTION_KEY);
+        time = object.getInt(TIME_KEY);
+        assigner_id = object.getInt(ASSIGNER_ID_KEY);
+        task_id = object.getInt(TASK_ID_KEY);
+        public_input = object.getBoolean(PUBLIC_INPUT_KEY);
 
-        NodeList nList = doc.getElementsByTagName(AUTOMATA_KEY);
-        Node nNode = nList.item(0);
-        Element e = (Element) nNode;
+        String automataType = object.getString(AUTOMATA_TYPE_KEY);
+        final String fa = automata_type.FINITE_AUTOMATA.getApiKey();
+        final String pda = automata_type.PUSHDOWN_AUTOMATA.getApiKey();
+        final String lba = automata_type.LINEAR_BOUNDED_AUTOMATA.getApiKey();
+        final String tm = automata_type.TURING_MACHINE.getApiKey();
 
-        String automata_type = e.getAttribute(AUTOMATA_TYPE_FA_KEY);
-        switch (automata_type) {
-            case AUTOMATA_TYPE_FA_KEY:
-                return fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA;
-            case AUTOMATA_TYPE_TM_KEY:
-                return fiitstu.gulis.cmsimulator.models.tasks.automata_type.TURING_MACHINE;
-            case AUTOMATA_TYPE_PDA_KEY:
-                return fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA;
-            case AUTOMATA_TYPE_LBA_KEY:
-                return fiitstu.gulis.cmsimulator.models.tasks.automata_type.LINEAR_BOUNDED_AUTOMATA;
-            default:
-                return fiitstu.gulis.cmsimulator.models.tasks.automata_type.UNKNOWN;
-        }
-    }
+        parsedTask = new Task(
+                task_name,
+                task_description,
+                time,
+                Integer.toString(assigner_id)
+        );
 
-    private String getTaskTitle() throws IOException, SAXException, ParserConfigurationException {
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(this.inputFile);
-
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName(AUTOMATA_KEY);
-        Node nNode = nList.item(0);
-        Element e = (Element) nNode;
-
-        String taskTitle = e.getAttribute(TASK_TITLE_KEY);
-        return taskTitle;
-    }
-
-    private String getTeskDescription() throws IOException, SAXException, ParserConfigurationException {
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(this.inputFile);
-
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName(AUTOMATA_KEY);
-        Node nNode = nList.item(0);
-        Element e = (Element) nNode;
-
-        String taskDescription = e.getAttribute(TASK_DESCRIPTION_KEY);
-        return taskDescription;
-    }
-
-    private boolean getPublicInputs() throws  IOException, SAXException, ParserConfigurationException {
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(this.inputFile);
-
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName(AUTOMATA_KEY);
-        Node nNode = nList.item(0);
-        Element e = (Element) nNode;
-
-        boolean publicInputs = e.getAttribute(TASK_PUBLIC_INPUTS_KEY) == "true" ? true : false;
-
-        return publicInputs;
-    }
-
-    private int getMaxSteps() throws IOException, SAXException, ParserConfigurationException
-    {
-        final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(this.inputFile);
-
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName(AUTOMATA_KEY);
-        Node nNode = nList.item(0);
-        Element e = (Element) nNode;
-
-        String maxSteps = e.getAttribute(TASK_MAX_STEPS_KEY);
-        int maxSteps_int = Integer.parseInt(maxSteps);
-        return maxSteps_int;
-    }
-
-    public AutomataTask getAutomataTask()
-    {
-        String taskName = "", taskDescription = "", fileName = inputFile.getName();
-        automata_type automata_type = null;
-        boolean publicInputs = true;
-        int maxSteps = -1;
-        try{
-            taskName = this.getTaskTitle();
-            taskDescription = this.getTeskDescription();
-            automata_type = this.getAutomataType();
-            publicInputs = this.getPublicInputs();
-            maxSteps = this.getMaxSteps();
-        } catch(IOException e)
-        {
-            System.err.println("FILE COULD NOT BE OPENED");
-        } catch(SAXException e)
-        {
-            System.err.println("PARSING ERROR");
-        } catch (ParserConfigurationException e)
-        {
-            System.err.println("PARSING ERROR");
+        switch (automataType) {
+            case "finite_automata":
+                return (FiniteAutomataTask)parsedTask;
+            case "pushdown_automata":
+                return (PushdownAutomataTask)parsedTask;
+            case "linear_bounded_automata":
+                return (LinearBoundedAutomataTask)parsedTask;
+            case "turing_machine":
+                return (TuringMachineTask)parsedTask;
         }
 
-        AutomataTask newAutomataTask;
-        switch (automata_type)
-        {
-            case TURING_MACHINE:
-//                newAutomataTask = new TuringMachineTask(
-//                        taskName,
-//                        taskDescription,
-//                        maxSteps,
-//                        "",
-//                        deterministic.NONDETERMINISTIC,
-//                );
-//                return newAutomataTask;
-            case UNKNOWN:
+        return parsedTask;
+    }
 
-                break;
-            case FINITE_AUTOMATA:
-//                newAutomataTask = new FiniteAutomataTask();
-//                return newAutomataTask;
-            case LINEAR_BOUNDED_AUTOMATA:
-//                newAutomataTask = new LinearBoundedAutomataTask();
-//                return newAutomataTask;
-            case PUSHDOWN_AUTOMATA:
-//                newAutomataTask = new PushdownAutomataTask();
-//                return newAutomataTask;
-            default:
-                return null;
+    public List<Task> getTasksFromJsonArray(String in) throws JSONException {
+        JSONArray array = new JSONArray(in);
+        final int arrayLength = array.length();
+        List<Task> listOfTasks = new ArrayList<>();
+
+        for (int i = 0; i < arrayLength; i++)
+        {
+            JSONObject currentObject = array.getJSONObject(i);
+            Task parsedTask = getTaskFromJson(currentObject);
+            listOfTasks.add(parsedTask);
         }
 
-        return null;
+        return listOfTasks;
     }
 }

@@ -1,6 +1,12 @@
 package fiitstu.gulis.cmsimulator.network;
 
 import android.net.Uri;
+import fiitstu.gulis.cmsimulator.activities.MainActivity;
+import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
@@ -10,28 +16,39 @@ import java.net.URL;
 
 public class UrlManager {
 
-    private final String URI = "http://192.168.0.102:3000";
+    private final static String URI = "http://192.168.0.102:3000";
 
     // PATHS
-    private final String LOGIN_PATH = "/api/login";
-    private final String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
-    private final String ADD_NEW_USER_PATH = "/api/user/signup";
-    private final String GET_ALL_USERS_PATH = "/api/user/getUsers";
-    private final String SEARCH_USER_PATH = "/api/user/getUsersFiltered";
+    private final static String LOGIN_PATH = "/api/login";
+    private final static String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
+    private final static String ADD_NEW_USER_PATH = "/api/user/signup";
+    private final static String GET_ALL_USERS_PATH = "/api/user/getUsers";
+    private final static String SEARCH_USER_PATH = "/api/user/getUsersFiltered";
+    private final static String PUBLISH_TASK_PATH = "/api/tasks/upload";
+    private final static String ADD_TASK_TO_TABLE = "/api/tasks/add";
 
     // LOGIN QUERY KEYS
-    private final String USERNAME_QUERY_KEY = "username";
-    private final String AUTHKEY_QUERY_KEY = "auth_key";
+    private final static String USERNAME_QUERY_KEY = "username";
+    private final static String AUTHKEY_QUERY_KEY = "auth_key";
 
     // SIGN UP QUERY KEYS
-    private final String FIRST_NAME_KEY = "first_name";
-    private final String LAST_NAME_KEY = "last_name";
-    private final String USER_TYPE_KEY = "user_type";
+    private final static String FIRST_NAME_KEY = "first_name";
+    private final static String LAST_NAME_KEY = "last_name";
+    private final static String USER_TYPE_KEY = "user_type";
 
     // CHANGE PASSWORD QUERY KEYS
-    private final String USER_ID_KEY = "user_id";
-    private final String NEW_AUTH_KEY = "new_auth_key";
-    private final String OLD_AUTH_KEY = "auth_key";
+    private final static String USER_ID_KEY = "user_id";
+    private final static String NEW_AUTH_KEY = "new_auth_key";
+    private final static String OLD_AUTH_KEY = "auth_key";
+
+    // ADD TASK TO TABLE QUERY KEYS
+    private final static String TASK_NAME_KEY = "task_name";
+    private final static String TASK_DESCRIPTION_KEY = "task_description";
+    private final static String TIME_KEY = "time";
+    private final static String ASSIGNER_KEY = "assigner";
+    private final static String PUBLIC_INPUT_KEY = "public_input";
+    private final static String FILE_NAME_KEY = "file_name";
+    private final static String AUTOMATA_TYPE_KEY = "automata_type";
 
 
     public URL getLoginUrl(String username, String password)
@@ -146,6 +163,70 @@ public class UrlManager {
         return url;
     }
 
+    public URL getPublishAutomataTaskURL(String file_name)
+    {
+
+        Uri builtUri = Uri.parse(URI + PUBLISH_TASK_PATH).buildUpon()
+                .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getPushAutomataTaskToTable(Task task, int user_id, int machine_id)
+    {
+        String type = null;
+        switch (machine_id)
+        {
+            case MainActivity
+                    .FINITE_STATE_AUTOMATON:
+                type = automata_type.FINITE_AUTOMATA.getApiKey();
+                break;
+            case MainActivity.PUSHDOWN_AUTOMATON:
+                type = automata_type.PUSHDOWN_AUTOMATA.getApiKey();
+                break;
+            case MainActivity.LINEAR_BOUNDED_AUTOMATON:
+                type = automata_type.LINEAR_BOUNDED_AUTOMATA.getApiKey();
+                break;
+            case MainActivity.TURING_MACHINE:
+                type = automata_type.TURING_MACHINE.getApiKey();
+                break;
+        }
+        Uri builtUri = Uri.parse(URI + ADD_TASK_TO_TABLE).buildUpon()
+                .appendQueryParameter(TASK_NAME_KEY, task.getTitle())
+                .appendQueryParameter(TASK_DESCRIPTION_KEY, task.getText())
+                .appendQueryParameter(TIME_KEY, Integer.toString(task.getMinutes()))
+                .appendQueryParameter(PUBLIC_INPUT_KEY, Boolean.toString(task.getPublicInputs()))
+                .appendQueryParameter(ASSIGNER_KEY, Integer.toString(user_id))
+                .appendQueryParameter(FILE_NAME_KEY, task.getTitle() + ".cmst")
+                .appendQueryParameter(AUTOMATA_TYPE_KEY, type)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
     public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type)
     {
         PasswordManager passwordManager = new PasswordManager();
@@ -186,5 +267,7 @@ public class UrlManager {
 
         return builtURL;
     }
+
+
 
 }

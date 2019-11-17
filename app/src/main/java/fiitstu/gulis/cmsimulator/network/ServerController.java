@@ -40,11 +40,13 @@ public class ServerController {
 
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
-                .addFormDataPart("task", "file.txt", RequestBody.create(MediaType.parse("multipart/form-data"), file))
+                .addFormDataPart("task", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file))
                 .build();
 
+        UrlManager urlManager = new UrlManager();
+
         Request request = new Request.Builder()
-                .url("http://192.168.0.102:3000/api/tasks/upload?user_id=92081&task_id=9808167600")
+                .url(urlManager.getPublishAutomataTaskURL(file.getName()))
                 .post(requestBody)
                 .build();
 
@@ -59,6 +61,8 @@ public class ServerController {
 
         return response.toString();
     }
+
+
 
 
 }

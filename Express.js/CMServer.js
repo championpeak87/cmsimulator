@@ -58,9 +58,9 @@ app.get('/api/user/signup', (req, res) => {
     else {
       pool.query('INSERT INTO users(username, type, password_hash, first_name, last_name) VALUES ($1,$2,$3,$4,$5);',
         [username, user_type, auth_key, first_name, last_name], (err, result) => {
-        res.status(HTTP_OK).send('USER WAS ADDED!');
-        console.log(Date() + ' ', [username], 'was successfully added to database');
-      });
+          res.status(HTTP_OK).send('USER WAS ADDED!');
+          console.log(Date() + ' ', [username], 'was successfully added to database');
+        });
     }
   })
 })
@@ -125,41 +125,6 @@ app.get('/api/login', (req, res) => {
   })
 })
 
-// app.get('/api/tasks/automata', (req, res) => {
-//   const username = req.query.username;
-//   const password = req.query.auth_key;
-
-//   pool.query('SELECT * FROM users WHERE username = $1;', [username], (error, results) => {
-//     if (error) { throw error }
-
-//     if (results.rowCount > 0) {
-//       if (results.rows[0].password_hash == password) {
-//         pool.query('SELECT * FROM automata_tasks;', (err, result) => {
-//           if (error) { throw error }
-
-//           if (result.rowCount > 0) {
-//             console.log(Date() + ' ', [username], 'has downloaded automata tasks.');
-//             res.status(HTTP_OK).send(result.rows);
-//           }
-//           else {
-//             console.log(Date() + ' ', [username], 'has no tasks found!');
-//             res.status(HTTP_NOT_FOUND).send('No tasks have been found!');
-//           }
-//         })
-
-//       }
-//       else {
-//         console.log(Date() + ' ', [username], 'was unable to log in.');
-//         res.status(HTTP_FORBIDDEN).send('Unable to log in!');
-//       }
-//     }
-//     else {
-//       console.log(Date() + 'Unable to perform requested operation!');
-//       res.status(HTTP_NOT_FOUND).send('User was not found!');
-//     }
-//   })
-// })
-
 app.get('/api/tasks/automata', (req, res) => {
   pool.query('SELECT * FROM automata_tasks;', (error, results) => {
     if (error) { throw error }
@@ -214,28 +179,71 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
 
 app.post('/api/tasks/upload', (req, res, next) => {
   const file = req.files.task;
-  const user_id = req.query.user_id;
-  const task_id = req.query.task_id;
+  const file_name = req.query.file_name;
 
   var mkdirp = require('mkdirp');
-  mkdirp("./uploads/" + user_id + "/", function (err) {
-
-    // path exists unless there was an error
-
-  });
+  mkdirp("./uploads/automataTasks/", function (err) { });
   if (!file) {
     console.log(req);
   }
   else {
-    file.mv("./uploads/" + user_id + "/" + task_id + ".xml", function (err, results) {
+    file.mv("./uploads/automataTasks/" + file.name, function (err, results) {
       if (err) throw err;
       res.send({
         success: true,
         message: "File uploaded!"
       });
+      console.log("NEW TASK UPLOADED!");
     });
   }
 
 });
+
+app.get('/api/tasks/add', (req, res) => {
+  const task_name = req.query.task_name;
+  const task_description = req.query.task_description;
+  const time = req.query.time;
+  const assigner = req.query.assigner;
+  const public_input = req.query.public_input;
+  const file_name = req.query.file_name;
+  const automata_type = req.query.automata_type;
+
+
+  pool.query('INSERT INTO automata_tasks(assigner_id, file_name, public_input, automata_type, task_description, task_name, time) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+    [assigner, file_name, public_input, automata_type, task_description, task_name, time], (err, results) => {
+      if (err) { throw err };
+
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(
+          {
+            task_name: task_name,
+            task_description: task_description,
+            time: time,
+            public_input: public_input,
+            file_name: file_name,
+            automata_type: automata_type
+          }
+        )
+      }
+    });
+
+})
+
+app.get('/api/tasks/getTasks', (req, res) => {
+  const user_id = req.query.user_id;
+  const auth_key = req.query.auth_key;
+
+  pool.query('SELECT * FROM automata_tasks;', (err, results) => {
+
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(results.rows);
+      console.log(Date(), [user_id], 'has fetched tasks!');
+    }
+    else{
+      res.status(HTTP_FORBIDDEN).send("FORBIDDEN!");
+    }
+  })
+})
 
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

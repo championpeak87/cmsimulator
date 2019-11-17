@@ -103,7 +103,7 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             @Override
             public void onClick(View v) {
                 Intent nextActivityIntent = new Intent(TasksAdminActivity.this, EditTaskActivity.class);
-                nextActivityIntent.putExtras(new Bundle());
+                nextActivityIntent.putExtra("LOGGED_USER_ID", loggedUser.getUser_id());
                 startActivity(nextActivityIntent);
             }
         });
@@ -164,13 +164,6 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
         });*/
 
         Log.i(TAG, "onCreate initialized");
-    }
-
-    public void createAutomataTask(View view)
-    {
-        Intent nextActivityIntent = new Intent(TasksAdminActivity.this, EditTaskActivity.class);
-        nextActivityIntent.putExtras(new Bundle());
-        startActivity(nextActivityIntent);
     }
 
     @Override

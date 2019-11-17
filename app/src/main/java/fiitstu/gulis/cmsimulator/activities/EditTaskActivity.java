@@ -31,10 +31,12 @@ import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.elements.TaskResult;
 import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
+import java.net.URL;
 
 /**
  * Activity for editing tasks.
@@ -61,6 +63,8 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
     private Task task;
     private int machineType;
 
+    private int logged_user_id;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +75,8 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.edit_task);
+
+        logged_user_id = this.getIntent().getIntExtra("LOGGED_USER_ID", 0);
 
         final Bundle inputBundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
 
@@ -224,32 +230,58 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
                         String taskDoc = fileHandler.writeToString();
 
-                        File file = new File(this.getFilesDir(), "file.xml");
+                        File file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
                         FileOutputStream outputStream;
 
-                        outputStream = openFileOutput("file.xml", Context.MODE_PRIVATE);
+                        outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
                         outputStream.write(taskDoc.getBytes());
                         outputStream.close();
 
-                        class uploadTask extends AsyncTask<File, Void, String>
-                        {
+                        class uploadTaskAsync extends AsyncTask<File, Void, File> {
                             @Override
-                            protected String doInBackground(File... files) {
+                            protected File doInBackground(File... files) {
                                 ServerController serverController = new ServerController();
-                                return serverController.doPostRequest(files[0]);
+                                serverController.doPostRequest(files[0]);
+
+                                return files[0];
+                            }
+
+                            @Override
+                            protected void onPostExecute(File f) {
+                                f.delete();
+                            }
+                        }
+
+                        class addTaskToDatabaseAsync extends AsyncTask<Task, Void, String> {
+                            @Override
+                            protected String doInBackground(Task... tasks) {
+                                UrlManager urlManager = new UrlManager();
+                                URL url = urlManager.getPushAutomataTaskToTable(tasks[0], logged_user_id, machineType);
+
+                                ServerController serverController = new ServerController();
+                                try {
+                                    return serverController.getResponseFromServer(url);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return null;
                             }
 
                             @Override
                             protected void onPostExecute(String s) {
                                 Toast.makeText(EditTaskActivity.this, s, Toast.LENGTH_SHORT).show();
                             }
+
+                            @Override
+                            protected void onProgressUpdate(Void... values) {
+                                super.onProgressUpdate(values);
+                            }
                         }
 
-                        new uploadTask().execute(file);
 
-                        //file.delete();
-
-
+                        new uploadTaskAsync().execute(file);
+                        new addTaskToDatabaseAsync().execute(task);
                     } catch (ParserConfigurationException | TransformerException e) {
                         Log.e(TAG, "Error happened when serializing task", e);
                     } catch (IOException e) {
@@ -342,7 +374,11 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         task.setText(textEditText.getText().toString());
         task.setPublicInputs(publishInputsCheckbox.isChecked());
         if (timeLimitCheckbox.isChecked()) {
-            task.setMinutes(Integer.parseInt(minutesEditText.getText().toString()));
+            if (minutesEditText.getText().toString().isEmpty()) {
+                task.setMinutes(0);
+            } else {
+                task.setMinutes(Integer.parseInt(minutesEditText.getText().toString()));
+            }
         } else {
             task.setMinutes(0);
         }
