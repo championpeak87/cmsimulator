@@ -5,8 +5,11 @@
                                     android:layout_height="250dp"
                                     android:layout_margin="5dp"
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                                    card_view:cardCornerRadius="10dp"
-                                    card_view:cardElevation="10dp">
+                                    card_view:cardCornerRadius="20dp"
+                                    card_view:cardElevation="20dp"
+
+                                    android:foreground="?android:attr/selectableItemBackground"
+                                    android:clickable="true">
 
 
 
@@ -49,8 +52,6 @@
 				android:id="@+id/button_delete_task"
 				android:layout_width="50dp"
 				android:layout_height="50dp"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
 				android:src="@drawable/baseline_delete_24"
 				android:background="@null"
 				android:foreground="?android:attr/selectableItemBackground"
@@ -59,8 +60,6 @@
 				android:id="@+id/button_edit_task"
 				android:layout_width="50dp"
 				android:layout_height="50dp"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
 				android:src="@drawable/baseline_edit_black_24"
 				android:background="@null"
 				android:foreground="?android:attr/selectableItemBackground"
@@ -69,8 +68,6 @@
 				android:id="@+id/button_help_task"
 				android:layout_width="50dp"
 				android:layout_height="50dp"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
 				android:src="@drawable/baseline_help_24"
 				android:background="@null"
 				android:foreground="?android:attr/selectableItemBackground"
@@ -79,8 +76,6 @@
 				android:id="@+id/button_start_task"
 				android:layout_width="50dp"
 				android:layout_height="50dp"
-				android:layout_marginLeft="10dp"
-				android:layout_marginRight="10dp"
 				android:src="@drawable/baseline_play_arrow_24"
 				android:background="@null"
 				android:foreground="?android:attr/selectableItemBackground"

@@ -108,6 +108,15 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             }
         });
 
+        Button findAutomataTasks = findViewById(R.id.button_tasks_create_automata);
+        findAutomataTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TasksAdminActivity.this, BrowseAutomataTasksActivity.class);
+                startActivity(intent);
+            }
+        });
+
         /*Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
