@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/cardview_task"
+									xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="250dp"
+                                    android:layout_margin="5dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardCornerRadius="10dp"
+                                    card_view:cardElevation="10dp">
+
+
+
+
+
+	<android.support.constraint.ConstraintLayout
+			android:id="@+id/task_top_bar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" >
+		<TextView android:id="@+id/textview_automata_type"
+		          android:layout_width="match_parent" android:layout_height="wrap_content"
+		          android:gravity="center_vertical"
+		          android:lines="2"
+		          android:elevation="20dp"
+		          android:background="@color/primary_color"
+		          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+		          android:textStyle="bold" card_view:layout_constraintTop_toTopOf="parent"/>
+		<TextView android:id="@+id/textview_automata_type_deterministic"
+		          android:layout_width="match_parent" android:layout_height="wrap_content"
+		          android:gravity="center_vertical"
+		          android:background="@color/primary_color_light"
+		          android:lines="1"
+		          android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+		          android:textStyle="bold"
+		          card_view:layout_constraintTop_toBottomOf="@id/textview_automata_type"/>
+
+	</android.support.constraint.ConstraintLayout>
+
+	<TextView android:id="@+id/textview_task_name"
+	          android:layout_marginTop="95dp"
+	          android:layout_width="match_parent" android:layout_height="100dp"
+	          android:elevation="10dp"
+	          android:gravity="center" android:textSize="20sp" card_view:layout_constraintTop_toBottomOf="@id/textview_automata_type_deterministic"/>
+
+	<LinearLayout android:id="@+id/task_bottom_bar" android:elevation="50dp"
+			      android:layout_width="match_parent" android:layout_height="wrap_content"
+	              android:gravity="right" android:layout_gravity="bottom"
+	              android:background="@color/primary_color_light">
+		<ImageButton
+				android:id="@+id/button_delete_task"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:src="@drawable/baseline_delete_24"
+				android:background="@null"
+				android:foreground="?android:attr/selectableItemBackground"
+				android:contentDescription="@string/delete"/>
+		<ImageButton
+				android:id="@+id/button_edit_task"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:src="@drawable/baseline_edit_black_24"
+				android:background="@null"
+				android:foreground="?android:attr/selectableItemBackground"
+				android:contentDescription="@string/delete"/>
+		<ImageButton
+				android:id="@+id/button_help_task"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:src="@drawable/baseline_help_24"
+				android:background="@null"
+				android:foreground="?android:attr/selectableItemBackground"
+				android:contentDescription="@string/delete"/>
+		<ImageButton
+				android:id="@+id/button_start_task"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:src="@drawable/baseline_play_arrow_24"
+				android:background="@null"
+				android:foreground="?android:attr/selectableItemBackground"
+				android:contentDescription="@string/delete"/>
+	</LinearLayout>
+</android.support.v7.widget.CardView>

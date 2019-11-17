@@ -21,7 +21,6 @@ import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.activities.SimulationActivity;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
 import fiitstu.gulis.cmsimulator.models.tasks.deterministic;
-import fiitstu.gulis.cmsimulator.models.tasks.task_solved_state;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
     public CardViewBuilder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.list_view_task_item, parent, false);
+        view = inflater.inflate(R.layout.list_view_task_example_item, parent, false);
 
         return new CardViewBuilder(view);
     }
