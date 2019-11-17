@@ -8,6 +8,7 @@
                                     card_view:cardCornerRadius="10dp"
                                     card_view:cardElevation="10dp"
                                     android:foreground="?android:attr/selectableItemBackground"
+                                    android:transitionName="selected_user"
                                     android:clickable="true">
 
 	<LinearLayout android:layout_width="match_parent"
@@ -43,42 +44,56 @@
 				          android:text="LOREM IPSUM"/>
 			</LinearLayout>
 		</LinearLayout>
-		<LinearLayout android:layout_width="match_parent"
-		              android:layout_height="50dp"
-		              android:elevation="20dp"
-		              android:background="@color/primary_color_dark"
-		              android:orientation="horizontal"
-		              android:gravity="right">
-			<ImageButton
-					android:layout_width="50dp"
-					android:layout_height="50dp"
-					android:layout_marginLeft="10dp"
-					android:layout_marginRight="10dp"
-					android:background="@null"
-					android:foreground="?android:attr/selectableItemBackground"
-					android:src="@drawable/baseline_remove_red_eye_24"
-					android:contentDescription="@string/details"/>
+		<android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+		                                             android:layout_height="50dp"
+		                                             android:background="@drawable/gradient_background">
+			<TextView android:id="@+id/textview_user_type"
+					android:layout_width="wrap_content"
+			          android:layout_height="wrap_content"
+			          android:textAllCaps="true"
+			          android:text="LOREM IPSUM"
+			          android:textColor="@color/md_white_1000"
+			          android:gravity="center_vertical"
+			          card_view:layout_constraintLeft_toLeftOf="parent"
+			          card_view:layout_constraintTop_toTopOf="parent"
+			          card_view:layout_constraintBottom_toBottomOf="parent"
+			          android:layout_marginLeft="15dp"
+			          style="@style/text_subheader"/>
+			<LinearLayout android:layout_width="match_parent"
+			              android:layout_height="50dp"
+			              android:elevation="20dp"
+			              card_view:layout_constraintBottom_toBottomOf="parent"
+			              android:orientation="horizontal"
+			              android:gravity="right">
 
-			<ImageButton
-					android:layout_width="50dp"
-					android:layout_height="50dp"
-					android:layout_marginLeft="10dp"
-					android:layout_marginRight="10dp"
-					android:src="@drawable/baseline_delete_24"
-					android:background="@null"
-					android:foreground="?android:attr/selectableItemBackground"
-					android:contentDescription="@string/delete"/>
-			<ImageButton
-					android:layout_width="50dp"
-					android:layout_height="50dp"
-					android:layout_marginLeft="10dp"
-					android:layout_marginRight="10dp"
-					android:src="@drawable/baseline_edit_24"
-					android:background="@null"
-					android:foreground="?android:attr/selectableItemBackground"
-					android:contentDescription="@string/edit"/>
 
-		</LinearLayout>
+				<ImageButton
+						android:layout_width="50dp"
+						android:layout_height="50dp"
+						android:background="@null"
+						android:foreground="?android:attr/selectableItemBackground"
+						android:src="@drawable/baseline_remove_red_eye_24"
+						android:contentDescription="@string/details"/>
+
+				<ImageButton
+						android:layout_width="50dp"
+						android:layout_height="50dp"
+						android:src="@drawable/baseline_delete_24"
+						android:background="@null"
+						android:foreground="?android:attr/selectableItemBackground"
+						android:contentDescription="@string/delete"/>
+				<ImageButton
+						android:layout_width="50dp"
+						android:layout_height="50dp"
+						android:src="@drawable/baseline_edit_24"
+						android:background="@null"
+						android:foreground="?android:attr/selectableItemBackground"
+						android:contentDescription="@string/edit"/>
+
+
+			</LinearLayout>
+		</android.support.constraint.ConstraintLayout>
+
 	</LinearLayout>
 
 

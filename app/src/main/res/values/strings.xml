@@ -1255,5 +1255,8 @@
 	<string name="by_username">By username</string>
 	<string name="search_by">Search by</string>
 	<string name="search">Search</string>
+	<string name="student">Student</string>
+	<string name="lector">Lector</string>
+	<string name="admin">Admin</string>
 
 </resources>

@@ -3,10 +3,13 @@ package fiitstu.gulis.cmsimulator.adapters.tasks;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
@@ -66,6 +69,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                                 .show();
             }
         });
+
+
     }
 
     @Override
@@ -87,6 +92,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         private ImageButton edit_task;
         private ImageButton start_task;
         private ImageButton help_task;
+        private CardView cardView;
 
         public CardViewBuilder(View itemView) {
             super(itemView);
@@ -96,6 +102,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.edit_task = itemView.findViewById(R.id.button_edit_task);
             this.start_task = itemView.findViewById(R.id.button_start_task);
             this.help_task = itemView.findViewById(R.id.button_help_task);
+            this.cardView = itemView.findViewById(R.id.cardview_task);
         }
     }
 }

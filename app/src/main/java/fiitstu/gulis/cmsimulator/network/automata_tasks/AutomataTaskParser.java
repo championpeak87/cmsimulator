@@ -48,30 +48,39 @@ public class AutomataTaskParser {
         public_input = object.getBoolean(PUBLIC_INPUT_KEY);
 
         String automataType = object.getString(AUTOMATA_TYPE_KEY);
-        final String fa = automata_type.FINITE_AUTOMATA.getApiKey();
-        final String pda = automata_type.PUSHDOWN_AUTOMATA.getApiKey();
-        final String lba = automata_type.LINEAR_BOUNDED_AUTOMATA.getApiKey();
-        final String tm = automata_type.TURING_MACHINE.getApiKey();
-
-        parsedTask = new Task(
-                task_name,
-                task_description,
-                time,
-                Integer.toString(assigner_id)
-        );
 
         switch (automataType) {
             case "finite_automata":
-                return (FiniteAutomataTask)parsedTask;
+                return new FiniteAutomataTask(
+                        task_name,
+                        task_description,
+                        time,
+                        Integer.toString(assigner_id)
+                );
             case "pushdown_automata":
-                return (PushdownAutomataTask)parsedTask;
+                return new PushdownAutomataTask(
+                        task_name,
+                        task_description,
+                        time,
+                        Integer.toString(assigner_id)
+                );
             case "linear_bounded_automata":
-                return (LinearBoundedAutomataTask)parsedTask;
+                return new LinearBoundedAutomataTask(
+                        task_name,
+                        task_description,
+                        time,
+                        Integer.toString(assigner_id)
+                );
             case "turing_machine":
-                return (TuringMachineTask)parsedTask;
+                return new TuringMachineTask(
+                        task_name,
+                        task_description,
+                        time,
+                        Integer.toString(assigner_id)
+                );
         }
 
-        return parsedTask;
+        return null;
     }
 
     public List<Task> getTasksFromJsonArray(String in) throws JSONException {

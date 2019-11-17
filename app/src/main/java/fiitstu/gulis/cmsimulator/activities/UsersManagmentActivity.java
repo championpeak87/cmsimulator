@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.SortController;
@@ -295,6 +297,10 @@ public class UsersManagmentActivity extends FragmentActivity {
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
         users.setLayoutManager(layoutManager);
+
+        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+
+        users.setAnimation(showUpAnimation);
     }
 
     public void showLoadScreen(boolean value) {

@@ -113,6 +113,8 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TasksAdminActivity.this, BrowseAutomataTasksActivity.class);
+                intent.putExtra("USER_ID", loggedUser.getUser_id());
+                intent.putExtra("AUTHKEY", loggedUser.getAuth_key());
                 startActivity(intent);
             }
         });

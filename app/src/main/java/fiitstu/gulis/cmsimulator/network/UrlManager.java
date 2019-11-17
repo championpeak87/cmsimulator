@@ -26,6 +26,7 @@ public class UrlManager {
     private final static String SEARCH_USER_PATH = "/api/user/getUsersFiltered";
     private final static String PUBLISH_TASK_PATH = "/api/tasks/upload";
     private final static String ADD_TASK_TO_TABLE = "/api/tasks/add";
+    private final static String GET_ALL_AUTOMATA_TASKS_PATH = "/api/tasks/getTasks";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -168,6 +169,28 @@ public class UrlManager {
 
         Uri builtUri = Uri.parse(URI + PUBLISH_TASK_PATH).buildUpon()
                 .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getFetchAllAutomataTasksUrl(int user_id, String auth_key)
+    {
+
+        Uri builtUri = Uri.parse(URI + GET_ALL_AUTOMATA_TASKS_PATH).buildUpon()
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .build();
 
         URL url = null;

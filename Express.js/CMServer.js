@@ -140,7 +140,7 @@ app.get('/api/user/getUsers', (req, res) => {
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('SELECT * FROM users;', (error, foundUsers) => {
+      pool.query('SELECT * FROM users LIMIT 1000;', (error, foundUsers) => {
         if (error) { throw error }
         if (foundUsers.rowCount > 0) {
           res.status(HTTP_OK).send(foundUsers.rows);

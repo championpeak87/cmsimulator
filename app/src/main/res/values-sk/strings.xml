@@ -900,4 +900,7 @@
     <string name="by_username">Podľa prihlasovacieho mena</string>
 	<string name="search_by">Vyhľadať podľa</string>
     <string name="search">Vyhľadať</string>
+	<string name="student">Študent</string>
+    <string name="lector">Lektor</string>
+    <string name="admin">Administrátor</string>
 </resources>

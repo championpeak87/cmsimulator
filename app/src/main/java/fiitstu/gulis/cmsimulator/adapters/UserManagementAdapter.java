@@ -1,7 +1,12 @@
 package fiitstu.gulis.cmsimulator.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.UserDetailActivity;
 import fiitstu.gulis.cmsimulator.adapters.tasks.ExampleAutomataAdapter;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.Lector;
@@ -44,9 +50,28 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         holder.fullname.setText(currentUser.getLast_name() + ", " + currentUser.getFirst_name());
         holder.username.setText(currentUser.getUsername());
 
-        Animation showUpAnimation = AnimationUtils.loadAnimation(mContext, R.anim.item_show_animation);
+        final CardView cardView = holder.cardView;
 
-        holder.cardView.setAnimation(showUpAnimation);
+        if (currentUser instanceof Admin)
+        {
+            holder.usertype.setText(R.string.admin);
+        } else if (currentUser instanceof Lector)
+        {
+            holder.usertype.setText(R.string.lector);
+        } else {
+            // STUDENT
+            holder.usertype.setText(R.string.student);
+        }
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, UserDetailActivity.class);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                mContext.startActivity(intent, options.toBundle());
+
+            }
+        });
     }
 
     @Override
@@ -57,10 +82,12 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     class CardViewBuilder extends RecyclerView.ViewHolder {
         private TextView username;
         private TextView fullname;
+        private TextView usertype;
         private CardView cardView;
         public CardViewBuilder(View itemView) {
             super(itemView);
 
+            usertype = itemView.findViewById(R.id.textview_user_type);
             username = itemView.findViewById(R.id.textview_user_username);
             fullname = itemView.findViewById(R.id.textview_full_name);
             cardView = itemView.findViewById(R.id.cardview_user);
