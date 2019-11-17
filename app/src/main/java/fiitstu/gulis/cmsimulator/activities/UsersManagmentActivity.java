@@ -21,6 +21,7 @@ import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.SortController;
 import fiitstu.gulis.cmsimulator.adapters.UserManagementAdapter;
+import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
@@ -39,25 +40,20 @@ public class UsersManagmentActivity extends FragmentActivity {
 
     private String authkey;
     private static List<User> userList;
-    private static Context mContext;
+    public static Context mContext;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_users_management);
-        mContext = getApplicationContext();
+        mContext = this;
 
         authkey = this.getIntent().getStringExtra("LOGGED_USER_AUTHKEY");
         // menu
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.user_management);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
 
         reloadUsers();
     }
@@ -180,7 +176,7 @@ public class UsersManagmentActivity extends FragmentActivity {
             protected void onPostExecute(List<User> users) {
                 super.onPostExecute(users);
 
-                UserManagementAdapter adapter = new UserManagementAdapter(getApplicationContext(), users);
+                UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
                 setAdapter(adapter);
                 showLoadScreen(false);
                 setUserList(users);
