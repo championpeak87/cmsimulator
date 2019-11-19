@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
@@ -135,6 +136,20 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         // set recyclerview
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
         AutomataTaskAdapter adapter = new AutomataTaskAdapter(listOfTasks, this);
+        if (listOfTasks.size() == 0)
+        {
+            LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
+            emptyTasks.setVisibility(View.VISIBLE);
+            showLoadScreen(false);
+            recyclerViewTasks.setVisibility(View.GONE);
+        }
+        else
+        {
+            LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
+            emptyTasks.setVisibility(View.GONE);
+            showLoadScreen(false);
+            recyclerViewTasks.setVisibility(View.VISIBLE);
+        }
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;

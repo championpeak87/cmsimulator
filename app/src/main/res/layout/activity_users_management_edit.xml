@@ -77,38 +77,72 @@
 		<TextView android:layout_width="wrap_content"
 		          android:layout_height="wrap_content"
 		          style="@style/text_subheader"
-		          android:text="@string/achieved_results"
+		          android:text="@string/user_details"
 		          android:layout_marginLeft="20dp"/>
 
-
-		<android.support.v7.widget.CardView android:layout_width="match_parent"
-		                                    android:layout_height="wrap_content"
-		                                    android:layout_margin="15dp">
+		<LinearLayout android:layout_width="match_parent"
+		              android:layout_height="wrap_content"
+		              android:layout_marginHorizontal="20dp"
+		              android:layout_marginTop="5dp"
+		              android:orientation="vertical">
 			<LinearLayout android:layout_width="match_parent"
-			              android:layout_height="match_parent"
-			              android:orientation="vertical">
-				<TextView android:layout_width="wrap_content"
+			              android:layout_height="wrap_content"
+			              android:orientation="horizontal"
+			              android:layout_marginVertical="5dp">
+				<TextView android:layout_width="0dp"
 				          android:layout_height="wrap_content"
-				          style="@style/text_subheader"
-				          android:text="@string/automatas"
-				          android:layout_marginLeft="5dp"/>
+				          android:text="@string/user_type"
+				          android:textAllCaps="true"
+				          android:layout_weight="1"/>
+				<Spinner android:id="@+id/spinner_user_type"
+				         android:layout_width="0dp"
+				         android:layout_height="wrap_content"
+				         android:layout_weight="2"/>
 			</LinearLayout>
-		</android.support.v7.widget.CardView>
-		<android.support.v7.widget.CardView android:layout_width="match_parent"
-		                                    android:layout_height="wrap_content"
-		                                    android:layout_margin="15dp">
 			<LinearLayout android:layout_width="match_parent"
-			              android:layout_height="match_parent"
-			              android:orientation="vertical">
-				<TextView android:layout_width="wrap_content"
+			              android:layout_height="wrap_content"
+			              android:orientation="horizontal"
+			              android:layout_marginVertical="5dp">
+				<TextView android:layout_width="0dp"
 				          android:layout_height="wrap_content"
-				          style="@style/text_subheader"
-				          android:text="@string/grammars"
-				          android:layout_marginLeft="5dp"/>
+				          android:text="@string/username"
+				          android:textAllCaps="true"
+				          android:layout_weight="1"/>
+				<EditText android:id="@+id/edittext_username"
+				         android:layout_width="0dp"
+				         android:layout_height="wrap_content"
+				         android:layout_weight="2"/>
 			</LinearLayout>
-		</android.support.v7.widget.CardView>
+			<LinearLayout android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:orientation="horizontal"
+			              android:layout_marginVertical="5dp">
+				<TextView android:layout_width="0dp"
+				          android:layout_height="wrap_content"
+				          android:text="@string/first_name"
+				          android:textAllCaps="true"
+				          android:layout_weight="1"/>
+				<EditText android:id="@+id/edittext_first_name"
+				         android:layout_width="0dp"
+				         android:layout_height="wrap_content"
+				         android:layout_weight="2"/>
+			</LinearLayout>
+			<LinearLayout android:layout_width="match_parent"
+			              android:layout_height="wrap_content"
+			              android:orientation="horizontal"
+			              android:layout_marginVertical="5dp">
+				<TextView android:layout_width="0dp"
+				          android:layout_height="wrap_content"
+				          android:text="@string/last_name"
+				          android:textAllCaps="true"
+				          android:layout_weight="1"/>
+				<EditText android:id="@+id/edittext_last_name"
+				         android:layout_width="0dp"
+				         android:layout_height="wrap_content"
+				         android:layout_weight="2"/>
+			</LinearLayout>
+		</LinearLayout>
 	</LinearLayout>
-
 
 
 </ScrollView>

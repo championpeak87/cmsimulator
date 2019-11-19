@@ -84,9 +84,11 @@ public class AutomataTaskParser {
     }
 
     public List<Task> getTasksFromJsonArray(String in) throws JSONException {
+        List<Task> listOfTasks = new ArrayList<>();
+        if ( in == null || in.isEmpty() )
+            return listOfTasks;
         JSONArray array = new JSONArray(in);
         final int arrayLength = array.length();
-        List<Task> listOfTasks = new ArrayList<>();
 
         for (int i = 0; i < arrayLength; i++)
         {

@@ -226,6 +226,7 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             case R.id.menu_tasks_manage_users:
                 Intent usersActivity = new Intent(this, UsersManagmentActivity.class);
                 usersActivity.putExtra("LOGGED_USER_AUTHKEY", loggedUser.getAuth_key());
+                usersActivity.putExtra("LOGGED_USER_ID", loggedUser.getUser_id());
 
 
                 startActivity(usersActivity);

@@ -1262,5 +1262,17 @@
 	<string name="achieved_results">Achieved results</string>
 	<string name="account_management">Account management</string>
 	<string name="automata_type">Automata type</string>
+	<string name="delete_user">Do you really want to delete user {0}?</string>
+	<string name="delete_user_title">Delete user</string>
+	<string name="no_tasks_available">No tasks are available</string>
+	<string name="user_deleted">User has been deleted.</string>
+	<string name="cant_delete_logged_user">Cannot delete currently logged user!</string>
+	<string name="user_type">User type</string>
+
+	<string-array name="usertype_spinner">
+		<item>@string/student</item>
+		<item>@string/lector</item>
+		<item>@string/admin</item>
+	</string-array>
 
 </resources>

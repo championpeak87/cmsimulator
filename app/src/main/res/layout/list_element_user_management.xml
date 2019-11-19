@@ -66,16 +66,8 @@
 			              android:orientation="horizontal"
 			              android:gravity="right">
 
-
 				<ImageButton
-						android:layout_width="50dp"
-						android:layout_height="50dp"
-						android:background="@null"
-						android:foreground="?android:attr/selectableItemBackground"
-						android:src="@drawable/baseline_remove_red_eye_24"
-						android:contentDescription="@string/details"/>
-
-				<ImageButton
+						android:id="@+id/button_delete_user"
 						android:layout_width="50dp"
 						android:layout_height="50dp"
 						android:src="@drawable/baseline_delete_24"
@@ -83,6 +75,7 @@
 						android:foreground="?android:attr/selectableItemBackground"
 						android:contentDescription="@string/delete"/>
 				<ImageButton
+						android:id="@+id/button_edit_user"
 						android:layout_width="50dp"
 						android:layout_height="50dp"
 						android:src="@drawable/baseline_edit_24"

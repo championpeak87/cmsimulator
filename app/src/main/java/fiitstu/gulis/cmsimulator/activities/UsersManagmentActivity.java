@@ -42,7 +42,8 @@ import java.util.List;
 
 public class UsersManagmentActivity extends FragmentActivity {
 
-    private String authkey;
+    public static String authkey;
+    public static int logged_user_id;
     private static List<User> userList;
     public static Context mContext;
 
@@ -54,6 +55,7 @@ public class UsersManagmentActivity extends FragmentActivity {
         mContext = this;
 
         authkey = this.getIntent().getStringExtra("LOGGED_USER_AUTHKEY");
+        logged_user_id = this.getIntent().getIntExtra("LOGGED_USER_ID", 0);
         // menu
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

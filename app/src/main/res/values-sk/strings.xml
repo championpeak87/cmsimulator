@@ -907,4 +907,10 @@
 	<string name="achieved_results">Dosiahnuté výsledky</string>
 	<string name="account_management">Správa účtu</string>
 	<string name="automata_type">Druh automatu</string>
+	<string name="delete_user">Naozaj chcete vymazať používateľa {0}?</string>
+	<string name="delete_user_title">Vymazať používateľa</string>
+	<string name="no_tasks_available">Žiadne dostupné úlohy.</string>
+	<string name="user_deleted">Používateľ bol vymazaný.</string>
+	<string name="cant_delete_logged_user">Nemôžem vymazať práve prihláseného používateľa!</string>
+	<string name="user_type">Druh používateľa</string>
 </resources>

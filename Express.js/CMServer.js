@@ -134,6 +134,83 @@ app.get('/api/tasks/automata', (req, res) => {
   })
 })
 
+app.get('/api/user/update', (req, res) =>
+{
+  const logged_user_id = req.query.logged_user_id;
+  const auth_key = req.query.auth_key;
+  const user_id = req.query.user_id;
+  const first_name = req.query.first_name;
+  const last_name = req.query.last_name;
+  const password_hash = req.query.password_hash;
+  const type = req.query.type;
+  const username = req.query.username;
+
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
+    if ( err ) { throw err }
+    if (results.rowCount > 0)
+    {
+      pool.query('UPDATE users SET username=$1, type=$2, password_hash=$3, first_name=$4, last_name=$5 WHERE user_id=$6;', [username, type, password_hash, first_name, last_name, user_id], (error, result) =>
+      {
+        if ( error ) { throw error }
+        if (result.rowCount > 0)
+        {
+          res.status(HTTP_OK).send({
+            admin_id: logged_user_id,
+            user_id: user_id,
+            first_name: first_name,
+            last_name: last_name,
+            type: type,
+            username: username,
+            updated: true
+          });
+        }
+        else
+        {
+          res.status(HTTP_NOT_FOUND).send({
+            updated: false
+          });
+        }
+      })
+    }
+  });
+})
+
+app.get('/api/user/delete', (req, res) =>
+{
+  const logged_user_id = req.query.logged_user_id;
+  const auth_key = req.query.auth_key;
+  const user_id = req.query.user_id;
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) =>
+  {
+    if ( err ) { throw err }
+    if (results.rowCount > 0)
+    {
+      pool.query('DELETE FROM users WHERE user_id = $1;', [user_id], (error, result) =>
+      {
+        if ( error ) { throw error }
+        if (result.rowCount > 0)
+        {
+          res.status(HTTP_OK).send(
+            {
+              user_id: user_id,
+              deleted: true
+            }
+          );
+        }
+        else
+        {
+          res.status(HTTP_NOT_FOUND).send(
+            {
+              user_id: user_id,
+              deleted: false
+            }
+          );
+        }
+      })
+    }
+  })
+})
+
 app.get('/api/user/getUsers', (req, res) => {
   const auth_key = req.query.auth_key;
   console.log([auth_key]);

@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class UrlManager {
 
-    private final static String URI = "http://147.175.160.30:3000";
+    private final static String URI = "http://192.168.0.102:3000";
 
     // PATHS
     private final static String LOGIN_PATH = "/api/login";
@@ -27,6 +27,8 @@ public class UrlManager {
     private final static String PUBLISH_TASK_PATH = "/api/tasks/upload";
     private final static String ADD_TASK_TO_TABLE = "/api/tasks/add";
     private final static String GET_ALL_AUTOMATA_TASKS_PATH = "/api/tasks/getTasks";
+    private final static String DELETE_USER_PATH = "/api/user/delete";
+    private final static String UPDATE_USER_PATH = "/api/user/update";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -51,6 +53,12 @@ public class UrlManager {
     private final static String FILE_NAME_KEY = "file_name";
     private final static String AUTOMATA_TYPE_KEY = "automata_type";
 
+    // DELETE USER QUERIES
+    private final static String LOGGED_USER_ID_KEY = "logged_user_id";
+
+    // UPDATE_USER_QUERIES
+    private final static String TYPE_KEY = "type";
+    private final static String PASSWORD_HASH_KEY = "password_hash";
 
     public URL getLoginUrl(String username, String password)
     {
@@ -81,6 +89,33 @@ public class UrlManager {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getUpdateUserUrl(String auth_key, int logged_user_id, int user_id, String first_name, String last_name, String password_hash, String type, String username)
+    {
+        Uri builtUri = Uri.parse(URI + UPDATE_USER_PATH).buildUpon()
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
+                .appendQueryParameter(LOGGED_USER_ID_KEY, Integer.toString(logged_user_id))
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(FIRST_NAME_KEY, first_name)
+                .appendQueryParameter(LAST_NAME_KEY, last_name)
+                .appendQueryParameter(PASSWORD_HASH_KEY, password_hash)
+                .appendQueryParameter(TYPE_KEY, type)
+                .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .build();
 
         URL url = null;
@@ -169,6 +204,29 @@ public class UrlManager {
 
         Uri builtUri = Uri.parse(URI + PUBLISH_TASK_PATH).buildUpon()
                 .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+        URL url = null;
+
+        try
+        {
+            url = new URL(builtUri.toString());
+        }
+        catch (MalformedURLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getDeleteUserUrl(int loggedUserID, int user_id, String auth_key)
+    {
+
+        Uri builtUri = Uri.parse(URI + DELETE_USER_PATH).buildUpon()
+                .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(LOGGED_USER_ID_KEY, Integer.toString(loggedUserID))
                 .build();
 
         URL url = null;

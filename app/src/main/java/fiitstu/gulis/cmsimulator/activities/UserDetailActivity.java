@@ -26,13 +26,16 @@ public class UserDetailActivity extends FragmentActivity {
         // handle data transfer
         TextView username = findViewById(R.id.textview_user_username);
         TextView fullname = findViewById(R.id.textview_full_name);
+        TextView type = findViewById(R.id.textview_user_type);
 
         Intent thisIntent = this.getIntent();
         String user_name = thisIntent.getStringExtra("USERNAME");
         String full_name = thisIntent.getStringExtra("FULLNAME");
+        String user_type = thisIntent.getStringExtra("USER_TYPE");
 
         username.setText(user_name);
         fullname.setText(full_name);
+        type.setText(user_type);
 
         // handle connected transition
         setConnectedTransition();
