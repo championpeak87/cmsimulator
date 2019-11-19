@@ -1,11 +1,14 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.ExampleTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.activities.SimulationActivity;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
@@ -41,7 +45,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
                         mContext.getString(R.string.example_automata_description1),
                         deterministic.DETERMINISTIC,
                         new FiniteAutomataTask()
-                        ));
+                ));
 
         listOfTasks.add(
                 new AutomataExampleTask(
@@ -49,7 +53,7 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
                         mContext.getString(R.string.example_automata_description2),
                         deterministic.DETERMINISTIC,
                         new FiniteAutomataTask()
-                        ));
+                ));
         listOfTasks.add(
                 new AutomataExampleTask(
                         mContext.getString(R.string.finite_state_automaton_example3),
@@ -114,27 +118,35 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
         final AutomataExampleTask currentTask = listOfTasks.get(position);
 
-
+        final String taskType;
         if (currentTask.getTask_type() instanceof FiniteAutomataTask) {
+            taskType = mContext.getString(R.string.finite_state_automaton);
             holder.automataType.setText(R.string.finite_state_automaton);
         } else if (currentTask.getTask_type() instanceof PushdownAutomataTask) {
+            taskType = mContext.getString(R.string.pushdown_automaton);
             holder.automataType.setText(R.string.pushdown_automaton);
         } else if (currentTask.getTask_type() instanceof LinearBoundedAutomataTask) {
+            taskType = mContext.getString(R.string.linear_bounded_automaton);
             holder.automataType.setText(R.string.linear_bounded_automaton);
-        } else if (currentTask.getTask_type() instanceof TuringMachineTask) {
+        } else {
+            taskType = mContext.getString(R.string.turing_machine);
             holder.automataType.setText(R.string.turing_machine);
         }
 
-        String task_name = currentTask.getTask_name();
+        final String task_name = currentTask.getTask_name();
         holder.task_name.setText(task_name);
 
+        final String determinism = currentTask.getDeterminism().toString();
         holder.determinism.setText(currentTask.getDeterminism().toString());
 
-        final int blue = mContext.getColor(R.color.primary_color);
-        final int light_blue = mContext.getColor(R.color.primary_color_light);
-        holder.topBar.setBackgroundColor(blue);
-        holder.bottomBar.setBackgroundColor(light_blue);
-        holder.determinism.setBackgroundColor(light_blue);
+        final int primary;
+        final int light_primary;
+        primary = mContext.getColor(R.color.primary_color);
+        light_primary = mContext.getColor(R.color.primary_color_light);
+
+        holder.topBar.setBackgroundColor(primary);
+        holder.bottomBar.setBackgroundColor(light_primary);
+        holder.determinism.setBackgroundColor(light_primary);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,14 +200,24 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
             }
         });
 
+        final CardView cardView = holder.cardView;
+        final String hint = currentTask.getTask_description();
         holder.hintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle(R.string.task_hint)
-                        .setMessage(currentTask.getTask_description())
-                        .setPositiveButton("OK", null)
-                        .show();
+                Intent intent = new Intent(mContext, ExampleTaskDetailsActivity.class);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                intent.putExtra("TASK_TYPE", taskType);
+                intent.putExtra("DETERMINISM", determinism);
+                intent.putExtra("TASK_NAME", task_name);
+                intent.putExtra("TASK_DESCRIPTION", hint);
+                mContext.startActivity(intent, options.toBundle());
+//                new AlertDialog.Builder(mContext)
+//                        .setTitle(R.string.task_hint)
+//                        .setMessage(currentTask.getTask_description())
+//                        .setPositiveButton("OK", null)
+//                        .show();
             }
         });
 

@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class UrlManager {
 
-    private final static String URI = "http://192.168.0.102:3000";
+    private final static String URI = "http://147.175.160.30:3000";
 
     // PATHS
     private final static String LOGIN_PATH = "/api/login";

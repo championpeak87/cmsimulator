@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -116,6 +119,11 @@ public class TaskLoginActivity extends FragmentActivity {
         signUpButton = findViewById(R.id.button_sign_up);
 
         loginProgressBar = findViewById(R.id.progressbar_login);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         Context context = this.getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(

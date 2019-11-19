@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +60,8 @@ public class ExampleAutomatas extends FragmentActivity {
         Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
 
         recyclerView.setAnimation(showUpAnimation);
+
+        setConnectedTransition();
     }
 
     @Override
@@ -134,5 +137,17 @@ public class ExampleAutomatas extends FragmentActivity {
         Intent nextActivityIntent = new Intent(this, SimulationActivity.class);
         nextActivityIntent.putExtras(outputBundle);
         startActivity(nextActivityIntent);
+    }
+
+    private void setConnectedTransition()
+    {
+        Fade fade = new Fade();
+        View decor = getWindow().getDecorView();
+        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
+        fade.excludeTarget(android.R.id.statusBarBackground, true);
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+
+        getWindow().setEnterTransition(fade);
+        getWindow().setExitTransition(fade);
     }
 }

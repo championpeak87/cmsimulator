@@ -28,6 +28,8 @@
 		</activity>
 		<activity android:name=".activities.UserDetailActivity"
 		          android:configChanges="orientation|screenSize"/>
+		<activity android:name=".activities.ExampleTaskDetailsActivity"
+		          android:configChanges="orientation|screenSize"/>
 		<activity
 				android:name=".activities.BrowseAutomataTasksActivity"
 				android:configChanges="orientation|screenSize"/>
@@ -45,10 +47,12 @@
 				android:configChanges="orientation|screenSize"/>
 		<activity
 				android:name=".activities.TaskLoginActivity"
-				android:theme="@style/LoginTheme"/>
+				android:theme="@style/LoginTheme"
+				android:fitsSystemWindows="true"/>
 		<activity
 				android:name=".activities.TaskSignUpActivity"
-				android:theme="@style/LoginTheme"/>
+				android:theme="@style/LoginTheme"
+				android:fitsSystemWindows="true"/>
 		<activity
 				android:name=".activities.HelpActivity"
 				android:configChanges="orientation|screenSize"/>

@@ -3,10 +3,13 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -87,6 +90,11 @@ public class TaskSignUpActivity extends FragmentActivity {
             setContentView(R.layout.activity_task_signup_landscape);
         } else {
             setContentView(R.layout.activity_task_signup_portrait);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
         findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);

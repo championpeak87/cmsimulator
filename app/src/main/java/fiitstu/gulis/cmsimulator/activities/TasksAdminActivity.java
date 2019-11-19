@@ -162,9 +162,9 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
                 exampleTaskDialog.show(fm, EXAMPLE_DIALOG);
 
             }
-        });
+        });*/
 
-        Button game = findViewById(R.id.button_tasks_game);
+        Button game = findViewById(R.id.button_tasks_games_automatas);
         game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +172,7 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
                 TasksGameDialog dialog = TasksGameDialog.newInstance();
                 dialog.show(fm, GAME_DIALOG);
             }
-        });*/
+        });
 
         Log.i(TAG, "onCreate initialized");
     }

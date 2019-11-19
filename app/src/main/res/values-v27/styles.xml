@@ -24,7 +24,6 @@
 		<item name="android:colorButtonNormal">@color/md_white_1000</item>
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:windowActionBar">false</item>
-		<item name="android:windowFullscreen">false</item>
 		<item name="android:titleTextColor">@color/md_white_1000</item>
 		<item name="android:windowBackground">@drawable/login_background</item>
 		<item name="android:tint">@color/md_white_1000</item>
