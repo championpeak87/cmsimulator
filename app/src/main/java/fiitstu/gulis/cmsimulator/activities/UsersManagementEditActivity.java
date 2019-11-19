@@ -116,6 +116,12 @@ public class UsersManagementEditActivity extends FragmentActivity {
                 // TODO: IMPLEMENT SAVE
                 class updateUserAsync extends AsyncTask<Bundle, Void, String> {
                     @Override
+                    protected void onPreExecute() {
+                        ProgressBar progressBar = findViewById(R.id.progressbar_edit);
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
                     protected String doInBackground(Bundle... bundles) {
                         final int user_id = bundles[0].getInt("USER_ID");
                         final int logged_user_id = bundles[0].getInt("LOGGED_USER_ID");
@@ -153,7 +159,11 @@ public class UsersManagementEditActivity extends FragmentActivity {
                         super.onPostExecute(s);
 
                         if (s == null || s.isEmpty()) {
-                            Toast.makeText(UsersManagementEditActivity.this, UsersManagementEditActivity.this.getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+                            {
+                                Toast.makeText(UsersManagementEditActivity.this, UsersManagementEditActivity.this.getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+                                ProgressBar progressBar = findViewById(R.id.progressbar_edit);
+                                progressBar.setVisibility(View.GONE);
+                            }
                         } else {
                             try {
                                 JSONObject object = new JSONObject(s);
@@ -163,6 +173,9 @@ public class UsersManagementEditActivity extends FragmentActivity {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                            } finally {
+                                ProgressBar progressBar = findViewById(R.id.progressbar_edit);
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -175,14 +188,11 @@ public class UsersManagementEditActivity extends FragmentActivity {
                 int spinnerPosition = userType.getSelectedItemPosition();
                 final String newType = adapter.getItem(spinnerPosition).toString();
                 Bundle updateBundle = new Bundle();
-                if (newType == getString(R.string.lector))
-                {
+                if (newType == getString(R.string.lector)) {
                     updateBundle.putString("USER_TYPE", "lector");
-                } else if (newType == getString(R.string.student))
-                {
+                } else if (newType == getString(R.string.student)) {
                     updateBundle.putString("USER_TYPE", "student");
-                } else
-                {
+                } else {
                     updateBundle.putString("USER_TYPE", "admin");
                 }
                 user_type = newType;
