@@ -44,6 +44,8 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     private Context mContext;
     private List<User> listOfUsers;
 
+    public static int EDIT_ACTIVITY_RETURN_CODE = 234;
+
     public UserManagementAdapter(Context mContext, List<User> listOfUsers) {
         this.mContext = mContext;
         this.listOfUsers = listOfUsers;
@@ -66,6 +68,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         final String fullname = currentUser.getLast_name() + ", " + currentUser.getFirst_name();
         final String firstname = currentUser.getFirst_name();
         final String lastname = currentUser.getLast_name();
+        final String password_hash = currentUser.getAuth_key();
         final int user_id = currentUser.getUser_id();
         holder.fullname.setText(fullname);
         holder.username.setText(username);
@@ -185,7 +188,13 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                 intent.putExtra("USER_TYPE", usertype);
                 intent.putExtra("FIRST_NAME", firstname);
                 intent.putExtra("LAST_NAME", lastname);
-                mContext.startActivity(intent, options.toBundle());
+                intent.putExtra("PASSWORD_HASH", password_hash);
+                intent.putExtra("USER_ID", user_id);
+                UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
+                intent.putExtra("LOGGED_USER_ID", activity.logged_user_id);
+                intent.putExtra("AUTHKEY", activity.authkey);
+                intent.putExtra("ITEM_POSITION", position);
+                ((UsersManagmentActivity) mContext).startActivity(intent, options.toBundle());
             }
         });
     }
@@ -219,17 +228,6 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         listOfUsers.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfUsers.size());
-    }
-
-    private void updateUser(int position)
-    {
-        /*ImageView medicineSelected = (ImageView) view.findViewById(R.id.medicine_selected);
-        medicineSelected.setVisibility(View.VISIBLE);
-        TextView orderQuantity = (TextView) view.findViewById(R.id.order_quantity);
-        orderQuantity.setVisibility(View.VISIBLE);
-        orderQuantity.setText(quantity + " packet added!");*/
-
-        this.notifyItemChanged(position);
     }
 
 }

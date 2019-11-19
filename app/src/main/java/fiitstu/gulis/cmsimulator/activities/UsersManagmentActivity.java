@@ -27,6 +27,8 @@ import fiitstu.gulis.cmsimulator.adapters.SortController;
 import fiitstu.gulis.cmsimulator.adapters.UserManagementAdapter;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
+import fiitstu.gulis.cmsimulator.models.users.Lector;
+import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -44,6 +46,8 @@ public class UsersManagmentActivity extends FragmentActivity {
 
     public static String authkey;
     public static int logged_user_id;
+    public static UserManagementAdapter adapter;
+    public static RecyclerView.LayoutManager layout;
     private static List<User> userList;
     public static Context mContext;
 
@@ -71,6 +75,10 @@ public class UsersManagmentActivity extends FragmentActivity {
         inflater.inflate(R.menu.menu_user_management, menu);
 
         return true;
+    }
+
+    public static List<User> getUserList() {
+        return userList;
     }
 
     public void searchUsers() {
@@ -178,7 +186,7 @@ public class UsersManagmentActivity extends FragmentActivity {
             protected void onPostExecute(List<User> users) {
                 super.onPostExecute(users);
 
-                UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
+                adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
                 setAdapter(adapter);
                 showLoadScreen(false);
                 setUserList(users);
@@ -288,8 +296,8 @@ public class UsersManagmentActivity extends FragmentActivity {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int noOfColumns = (int) (dpWidth / 180) / 2;
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
-        users.setLayoutManager(layoutManager);
+        layout = new GridLayoutManager(this, noOfColumns);
+        users.setLayoutManager(layout);
 
         Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
 
@@ -332,4 +340,57 @@ public class UsersManagmentActivity extends FragmentActivity {
         getWindow().setEnterTransition(fade);
         getWindow().setExitTransition(fade);
     }
+
+    public static void notifyUpdate(int position, Bundle newValues, RecyclerView.LayoutManager layout) {
+        View view = layout.findViewByPosition(position);
+        TextView fullname = view.findViewById(R.id.textview_full_name);
+        TextView usertype = view.findViewById(R.id.textview_user_type);
+        TextView username = view.findViewById(R.id.textview_user_username);
+
+        final String s_username = newValues.getString("USERNAME");
+        final String s_fullname = newValues.getString("FULL_NAME");
+        final String s_usertype = newValues.getString("USER_TYPE");
+        final String s_firstname = newValues.getString("FIRST_NAME");
+        final String s_lastname = newValues.getString("LAST_NAME");
+        final String s_passwordhash = newValues.getString("PASSWORD_HASH");
+
+        fullname.setText(s_fullname);
+        usertype.setText(s_usertype);
+        username.setText(s_username);
+
+        final int userid = userList.get(position).getUser_id();
+        User updatedUser;
+
+        if (s_usertype == mContext.getString(R.string.lector)) {
+            updatedUser = new Lector();
+            updatedUser.setUsername(s_username);
+            updatedUser.setAuth_key(s_passwordhash);
+            updatedUser.setFirst_name(s_firstname);
+            updatedUser.setLast_name(s_lastname);
+            updatedUser.setUsername(s_username);
+            updatedUser.setUser_id(userid);
+        } else if (s_usertype == mContext.getString(R.string.admin)) {
+            updatedUser = new Admin();
+            updatedUser.setUsername(s_username);
+            updatedUser.setAuth_key(s_passwordhash);
+            updatedUser.setFirst_name(s_firstname);
+            updatedUser.setLast_name(s_lastname);
+            updatedUser.setUsername(s_username);
+            updatedUser.setUser_id(userid);
+        } else {
+            // STUDENT
+            updatedUser = new Student();
+            updatedUser.setUsername(s_username);
+            updatedUser.setAuth_key(s_passwordhash);
+            updatedUser.setFirst_name(s_firstname);
+            updatedUser.setLast_name(s_lastname);
+            updatedUser.setUsername(s_username);
+            updatedUser.setUser_id(userid);
+        }
+
+        userList.set(position, updatedUser);
+
+        adapter.notifyItemChanged(position);
+    }
+
 }

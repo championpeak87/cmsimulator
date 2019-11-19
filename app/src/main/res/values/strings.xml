@@ -1274,5 +1274,6 @@
 		<item>@string/lector</item>
 		<item>@string/admin</item>
 	</string-array>
+	<string name="user_updated">User was updated!</string>
 
 </resources>
