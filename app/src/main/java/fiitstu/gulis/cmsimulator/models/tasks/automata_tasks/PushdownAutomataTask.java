@@ -10,6 +10,10 @@ public class PushdownAutomataTask extends Task {
         super(title, text, minutes, assigner);
     }
 
+    public PushdownAutomataTask(String title, String text, int minutes, String assigner, int task_id) {
+        super(title, text, minutes, assigner, task_id);
+    }
+
     public PushdownAutomataTask() {
     }
 }

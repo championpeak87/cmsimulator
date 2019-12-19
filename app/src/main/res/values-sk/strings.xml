@@ -915,4 +915,8 @@
 	<string name="user_type">Druh používateľa</string>
 	<string name="user_updated">Používateľ bol aktualizovaný!</string>
     <string name="upload_task_complete">Úloha bola úspešne nahraná!</string>
+    <string name="task_delete_message">Ste si istý, že chcete odstrániť túto úlohu?</string>
+    <string name="delete_task">Vymazať úlohu</string>
+    <string name="task_deleted">Úloha bola úspešne odstránená</string>
+    <string name="task_not_found">Vybraná úloha nebola nájdená!</string>
 </resources>

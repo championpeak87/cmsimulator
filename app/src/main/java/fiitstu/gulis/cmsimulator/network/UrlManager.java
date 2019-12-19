@@ -30,6 +30,7 @@ public class UrlManager {
     private final static String DELETE_USER_PATH = "/api/user/delete";
     private final static String UPDATE_USER_PATH = "/api/user/update";
     private final static String GET_USER_SALT_PATH = "/api/login_salt";
+    private final static String DELETE_AUTOMATA_TASK_PATH = "/api/tasks/delete";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -61,6 +62,26 @@ public class UrlManager {
     // UPDATE_USER_QUERIES
     private final static String TYPE_KEY = "type";
     private final static String PASSWORD_HASH_KEY = "password_hash";
+
+    // DELETE TASK QUERIES
+    private final static String TASK_ID_KEY = "task_id";
+
+    public URL getDeleteAutomataTaskURL(int task_id)
+    {
+        Uri uri = Uri.parse(URI + DELETE_AUTOMATA_TASK_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
 
     public URL getLoginSaltUrl(String username)
     {

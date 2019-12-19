@@ -15,12 +15,21 @@ public class Task implements Serializable {
     private String assigner;
     private boolean publicInputs;
     private int maxSteps;
+    private int task_id;
 
     private int resultVersion;
 
     public Task() {
         publicInputs = true;
         resultVersion = TaskResult.CURRENT_VERSION;
+    }
+
+    public Task(String title, String text, int minutes, String assigner, int task_id) {
+        this.title = title;
+        this.text = text;
+        this.minutes = minutes;
+        this.assigner = assigner;
+        this.task_id = task_id;
     }
 
     public Task(String title, String text, int minutes, boolean publicInputs, int maxSteps, int resultVersion) {
@@ -37,6 +46,18 @@ public class Task implements Serializable {
         this.text = text;
         this.minutes = minutes;
         this.assigner = assigner;
+    }
+
+    public boolean isPublicInputs() {
+        return publicInputs;
+    }
+
+    public int getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(int task_id) {
+        this.task_id = task_id;
     }
 
     public String getTitle() {

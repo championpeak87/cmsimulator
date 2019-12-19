@@ -1,6 +1,7 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const filesystem = require('fs');
+const app = express();
 var fileuploader = require('express-fileupload');
 app.use(fileuploader());
 const port = 3000
@@ -273,6 +274,42 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
     else {
       res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
       console.log("Unauthorised request to download all users!");
+    }
+  })
+})
+
+app.get('/api/tasks/delete', (req, res, next) => {
+  const task_id = req.query.task_id;
+
+  pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) =>
+  {
+    if (err) {throw err}
+    if (result.rowCount > 0)
+    {
+      const filename = "./uploads/automataTasks/" + result.rows[0].file_name;
+      filesystem.unlink(filename, (error) =>
+      {
+        if (error) {throw error}
+      });
+    }
+  })
+  pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) =>
+  {
+    if (err) {throw err}
+    if (result.rowCount > 0)
+    {
+      console.log([task_id], "Task has been deleted!");
+      res.status(HTTP_OK).send({
+        task_id: task_id,
+        deleted: true
+      })
+    }
+    else
+    {
+      res.status(HTTP_OK).send({
+        task_id: task_id,
+        deleted: false
+      })
     }
   })
 })

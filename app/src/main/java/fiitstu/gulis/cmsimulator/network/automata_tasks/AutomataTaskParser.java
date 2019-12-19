@@ -55,28 +55,32 @@ public class AutomataTaskParser {
                         task_name,
                         task_description,
                         time,
-                        Integer.toString(assigner_id)
+                        Integer.toString(assigner_id),
+                        task_id
                 );
             case "pushdown_automata":
                 return new PushdownAutomataTask(
                         task_name,
                         task_description,
                         time,
-                        Integer.toString(assigner_id)
+                        Integer.toString(assigner_id),
+                        task_id
                 );
             case "linear_bounded_automata":
                 return new LinearBoundedAutomataTask(
                         task_name,
                         task_description,
                         time,
-                        Integer.toString(assigner_id)
+                        Integer.toString(assigner_id),
+                        task_id
                 );
             case "turing_machine":
                 return new TuringMachineTask(
                         task_name,
                         task_description,
                         time,
-                        Integer.toString(assigner_id)
+                        Integer.toString(assigner_id),
+                        task_id
                 );
         }
 

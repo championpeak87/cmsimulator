@@ -2,6 +2,8 @@ package fiitstu.gulis.cmsimulator.adapters.tasks;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
@@ -20,7 +23,13 @@ import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapter.CardViewBuilder> {
@@ -44,7 +53,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewBuilder holder, int position) {
+    public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
         final Task currentTask = listOfTasks.get(position);
         holder.task_name.setText(currentTask.getTitle());
         String automataType = null;
@@ -62,11 +71,63 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         holder.help_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        new AlertDialog.Builder(mContext)
-                                .setTitle(R.string.task_hint)
-                                .setMessage(currentTask.getText())
-                                .setPositiveButton("OK", null)
-                                .show();
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.task_hint)
+                        .setMessage(currentTask.getText())
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        });
+
+        holder.delete_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.delete_task)
+                        .setMessage(R.string.task_delete_message)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                class DeleteTaskAsync extends AsyncTask<URL, Void, String> {
+                                    @Override
+                                    protected String doInBackground(URL... urls) {
+                                        ServerController serverController = new ServerController();
+                                        String output = null;
+                                        try {
+                                            output = serverController.getResponseFromServer(urls[0]);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            return output;
+                                        }
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(String s) {
+                                        if (s == null) {
+                                            Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            try {
+                                                JSONObject reader = new JSONObject(s);
+                                                if (reader.getBoolean("deleted")) {
+                                                    Toast.makeText(mContext, R.string.task_deleted, Toast.LENGTH_SHORT).show();
+                                                    removeTask(position);
+                                                } else
+                                                    Toast.makeText(mContext, R.string.task_not_found, Toast.LENGTH_SHORT).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                UrlManager urlManager = new UrlManager();
+                                URL deleteUrl = urlManager.getDeleteAutomataTaskURL(currentTask.getTask_id());
+                                new DeleteTaskAsync().execute(deleteUrl);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
             }
         });
 
@@ -102,5 +163,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.help_task = itemView.findViewById(R.id.button_help_task);
             this.cardView = itemView.findViewById(R.id.cardview_task);
         }
+    }
+
+    private void removeTask(int position) {
+        listOfTasks.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, listOfTasks.size());
     }
 }
