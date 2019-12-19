@@ -1275,5 +1275,6 @@
 		<item>@string/admin</item>
 	</string-array>
 	<string name="user_updated">User was updated!</string>
+	<string name="upload_task_complete">Task has been uploaded successfully!</string>
 
 </resources>

@@ -173,7 +173,12 @@ public class DataSource {
         Log.v(TAG, "contentValues prepared");
 
 
-        long id = database.insertOrThrow(DbOpenHelper.TABLE_INPUT_ALPHABET, null, contentValues);
+        long id = 0;
+        try {
+            id = database.insertOrThrow(DbOpenHelper.TABLE_INPUT_ALPHABET, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         symbol = new Symbol(id, value, properties);
         Log.i(TAG, "input symbol '" + symbol.getValue() + "' added into database");
         return symbol;
@@ -900,7 +905,12 @@ public class DataSource {
         contentValues.put(DbOpenHelper.COLUMN_TAPE_BREAKPOINT, 0);
         Log.v(TAG, "contentValues prepared");
 
-        long id = database.insertOrThrow(DbOpenHelper.TABLE_TAPE, null, contentValues);
+        long id = 0;
+        try {
+            database.insertOrThrow(DbOpenHelper.TABLE_TAPE, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         tapeElement = new TapeElement(id, symbol, order, false);
         Log.i(TAG, "tape element '" + tapeElement.getSymbol().getValue() + "' added into database");
         return tapeElement;

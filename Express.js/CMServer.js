@@ -282,6 +282,7 @@ app.post('/api/tasks/upload', (req, res, next) => {
   const file_name = req.query.file_name;
 
   var mkdirp = require('mkdirp');
+  mkdirp("./uploads/", function (err) { });
   mkdirp("./uploads/automataTasks/", function (err) { });
   if (!file) {
     console.log(req);

@@ -914,4 +914,5 @@
 	<string name="cant_delete_logged_user">Nemôžem vymazať práve prihláseného používateľa!</string>
 	<string name="user_type">Druh používateľa</string>
 	<string name="user_updated">Používateľ bol aktualizovaný!</string>
+    <string name="upload_task_complete">Úloha bola úspešne nahraná!</string>
 </resources>
