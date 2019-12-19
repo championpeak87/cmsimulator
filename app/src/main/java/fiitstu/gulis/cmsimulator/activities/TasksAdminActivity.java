@@ -85,7 +85,7 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
         else if (user_type.equals(Student_tag))
             loggedUser = new Admin(username, first_name, last_name, user_id, authkey);
         else if (user_type.equals(Admin_tag))
-            loggedUser = new Student(username, first_name, last_name, user_id, authkey, -1);
+            loggedUser = new Student(username, first_name, last_name, user_id, authkey);
 
         TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
         fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());

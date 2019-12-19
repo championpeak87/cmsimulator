@@ -47,6 +47,8 @@ public class ExampleAutomatas extends FragmentActivity {
         actionBar.setTitle(R.string.example_machine);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview_automata_examples);
+        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+        recyclerView.setAnimation(showUpAnimation);
         ExampleAutomataAdapter adapter = new ExampleAutomataAdapter(this);
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -57,9 +59,7 @@ public class ExampleAutomatas extends FragmentActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
 
-        recyclerView.setAnimation(showUpAnimation);
 
         setConnectedTransition();
     }

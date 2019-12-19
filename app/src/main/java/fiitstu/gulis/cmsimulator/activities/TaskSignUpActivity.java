@@ -18,6 +18,7 @@ import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
+import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -122,7 +123,9 @@ public class TaskSignUpActivity extends FragmentActivity {
             final String firstname = firstNameEditText.getText().toString().trim();
             final String lastname = lastNameEditText.getText().toString().trim();
 
-            User newUser = new Student(-1, username, firstname, lastname, password, -1);
+            PasswordManager passwordManager = new PasswordManager();
+            String generatedSalt = passwordManager.saltPassword();
+            User newUser = new Student(username, firstname, lastname, -1, password, generatedSalt);
 
             // IMPLEMENT SIGN UP API CALL
             class addUserAsync extends AsyncTask<User, Void, String> {
@@ -145,7 +148,8 @@ public class TaskSignUpActivity extends FragmentActivity {
                             users[0].getFirst_name(),
                             users[0].getLast_name(),
                             users[0].getAuth_key(),
-                            User.user_type.student
+                            User.user_type.student,
+                            users[0].getSalt()
                     );
 
                     String response = null;

@@ -18,12 +18,20 @@ public class UserParser {
     private final static String AUTHKEY_KEY = "password_hash";
     private final static String USER_ID_KEY = "user_id";
     private final static String USER_TYPE_KEY = "type";
+    private final static String SALT_KEY = "salt";
 
     private final static String USER_TYPE_LECTOR = "lector";
     private final static String USER_TYPE_STUDENT = "student";
     private final static String USER_TYPE_ADMIN = "admin";
 
     private final static int NULL_USER_GROUP = -1;
+
+    public String getSaltFromJson(String in) throws JSONException {
+        JSONObject reader = new JSONObject(in);
+        String salt = reader.getString(SALT_KEY);
+
+        return salt;
+    }
 
     public User getUserFromJson(String in) throws JSONException {
         JSONObject reader = new JSONObject(in);
@@ -62,8 +70,7 @@ public class UserParser {
                         firstName,
                         lastName,
                         userid,
-                        authkey,
-                        NULL_USER_GROUP);
+                        authkey);
                 break;
             default:
                 parsedUser = null;
@@ -109,8 +116,7 @@ public class UserParser {
                         firstName,
                         lastName,
                         userid,
-                        authkey,
-                        NULL_USER_GROUP);
+                        authkey);
                 break;
             default:
                 parsedUser = null;

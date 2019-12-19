@@ -25,6 +25,7 @@ import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
+import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 import fiitstu.gulis.cmsimulator.network.users.UserParser;
 import org.json.JSONException;
 
@@ -145,23 +146,10 @@ public class TaskLoginActivity extends FragmentActivity {
         boolean canSignIn = verifyFields();
 
         if (canSignIn) {
-            UrlManager urlManager = new UrlManager();
-            String username, password;
-            URL url;
-            if (!autologin) {
-                username = usernameEditText.getText().toString().trim();
-                password = passwordEditText.getText().toString();
-                url = urlManager.getLoginUrl(username, password);
+            final String username = usernameEditText.getText().toString().trim();
+            final String password = passwordEditText.getText().toString();
 
-            } else {
-                SharedPreferences sharedPreferences = this.getSharedPreferences(SETTINGS_KEY, MODE_PRIVATE);
-                username = sharedPreferences.getString(AUTOLOGIN_USERNAME, "");
-                password = sharedPreferences.getString(AUTOLOGIN_AUTHKEY, "");
-                url = urlManager.getLoginUrlWithAuthkey(username, password);
-            }
-
-
-            class ServerResponseAsync extends AsyncTask<URL, Void, String> {
+            class ServerResponseAsync extends AsyncTask<Void, Void, String> {
 
                 @Override
                 protected void onPreExecute() {
@@ -169,11 +157,31 @@ public class TaskLoginActivity extends FragmentActivity {
                 }
 
                 @Override
-                protected String doInBackground(URL... urls) {
-                    String out;
+                protected String doInBackground(Void... voids) {
+                    UrlManager urlManager = new UrlManager();
+                    URL getSaltURL = urlManager.getLoginSaltUrl(username);
                     ServerController serverController = new ServerController();
+                    String saltJson = null;
                     try {
-                        out = serverController.getResponseFromServer(urls[0]);
+                        saltJson = serverController.getResponseFromServer(getSaltURL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    UserParser userParser = new UserParser();
+                    String salt = null;
+                    try {
+                        salt = userParser.getSaltFromJson(saltJson);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    PasswordManager passwordManager = new PasswordManager();
+                    String authkey = passwordManager.getAuthkey(password, salt);
+                    URL loginURL = urlManager.getLoginUrl(username, authkey);
+                    String out;
+                    try {
+                        out = serverController.getResponseFromServer(loginURL);
                         return out;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -195,7 +203,7 @@ public class TaskLoginActivity extends FragmentActivity {
                 }
             }
 
-            new ServerResponseAsync().execute(url);
+            new ServerResponseAsync().execute();
 
         }
     }

@@ -270,12 +270,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
                             @Override
                             protected void onPostExecute(String s) {
-                                Toast.makeText(EditTaskActivity.this, s, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            protected void onProgressUpdate(Void... values) {
-                                super.onProgressUpdate(values);
+                                //Toast.makeText(EditTaskActivity.this, s, Toast.LENGTH_SHORT).show();
                             }
                         }
 

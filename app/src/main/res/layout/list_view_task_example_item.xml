@@ -8,7 +8,7 @@
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                                     android:transitionName="card_transition"
                                     card_view:cardCornerRadius="20dp"
-                                    card_view:cardElevation="20dp"
+                                    card_view:cardElevation="5dp"
                                     android:foreground="?android:attr/selectableItemBackground"
                                     android:clickable="true">
 
@@ -22,7 +22,7 @@
 		          android:layout_height="wrap_content"
 		          android:gravity="center_vertical"
 		          android:lines="2"
-		          android:elevation="20dp"
+		          android:elevation="5dp"
 		          android:background="@color/primary_color"
 		          android:textColor="@color/md_white_1000"
 		          android:padding="10dp"

@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class UrlManager {
 
-    private final static String URI = "http://192.168.0.102:3000";
+    private final static String URI = "http://192.168.1.235:3000";
 
     // PATHS
     private final static String LOGIN_PATH = "/api/login";
@@ -29,6 +29,7 @@ public class UrlManager {
     private final static String GET_ALL_AUTOMATA_TASKS_PATH = "/api/tasks/getTasks";
     private final static String DELETE_USER_PATH = "/api/user/delete";
     private final static String UPDATE_USER_PATH = "/api/user/update";
+    private final static String GET_USER_SALT_PATH = "/api/login_salt";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -38,6 +39,7 @@ public class UrlManager {
     private final static String FIRST_NAME_KEY = "first_name";
     private final static String LAST_NAME_KEY = "last_name";
     private final static String USER_TYPE_KEY = "user_type";
+    private final static String SALT_KEY = "salt";
 
     // CHANGE PASSWORD QUERY KEYS
     private final static String USER_ID_KEY = "user_id";
@@ -60,11 +62,27 @@ public class UrlManager {
     private final static String TYPE_KEY = "type";
     private final static String PASSWORD_HASH_KEY = "password_hash";
 
-    public URL getLoginUrl(String username, String password)
+    public URL getLoginSaltUrl(String username)
     {
-        PasswordManager passwordManager = new PasswordManager();
-        String authkey = passwordManager.getAuthkey(password);
+        Uri builtUri = Uri.parse(URI + GET_USER_SALT_PATH).buildUpon()
+            .appendQueryParameter(USERNAME_QUERY_KEY, username)
+            .build();
 
+        URL url = null;
+
+
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally
+        {
+            return url;
+        }
+    }
+
+    public URL getLoginUrl(String username, String authkey)
+    {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
@@ -176,13 +194,13 @@ public class UrlManager {
     public URL getChangePasswordUrl(int user_id, String old_password, String new_password)
     {
         PasswordManager passwordManager = new PasswordManager();
-        String old_auth = passwordManager.getAuthkey(old_password);
-        String new_auth = passwordManager.getAuthkey(new_password);
+        //String old_auth = passwordManager.getAuthkey(old_password);
+        //String new_auth = passwordManager.getAuthkey(new_password);
 
         Uri builtUri = Uri.parse(URI + CHANGE_PASSWORD_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
-                .appendQueryParameter(NEW_AUTH_KEY, new_auth)
-                .appendQueryParameter(OLD_AUTH_KEY, old_auth)
+//                .appendQueryParameter(NEW_AUTH_KEY, new_auth)
+//                .appendQueryParameter(OLD_AUTH_KEY, old_auth)
                 .build();
 
         URL url = null;
@@ -308,7 +326,7 @@ public class UrlManager {
         return url;
     }
 
-    public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type)
+    public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type, String salt)
     {
         PasswordManager passwordManager = new PasswordManager();
 
@@ -333,6 +351,7 @@ public class UrlManager {
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
                 .appendQueryParameter(USER_TYPE_KEY, user_type_string)
+                .appendQueryParameter(SALT_KEY, salt)
                 .build();
 
         URL builtURL = null;

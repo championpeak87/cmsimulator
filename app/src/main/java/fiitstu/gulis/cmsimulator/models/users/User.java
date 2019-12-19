@@ -16,6 +16,7 @@ public class User {
     private String last_name;
     private Integer user_id;
     private String auth_key;
+    private String salt;
 
     public enum user_type {
         lector,
@@ -23,8 +24,8 @@ public class User {
         admin
     }
 
-    public User()
-    {}
+    public User() {
+    }
 
     public User(String username, String first_name, String last_name, Integer user_id, String auth_key) {
         this.username = username;
@@ -34,16 +35,24 @@ public class User {
         this.auth_key = auth_key;
     }
 
-    public User(Integer user_id, String username, String first_name, String last_name, String password) {
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public User(String username, String first_name, String last_name, Integer user_id, String password, String salt) {
         this.username = username;
         this.first_name = first_name;
         this.last_name = last_name;
         this.user_id = user_id;
 
         PasswordManager passwordManager = new PasswordManager();
-        String _authkey = passwordManager.getAuthkey(password);
-
+        String _authkey = passwordManager.getAuthkey(password, salt);
         this.auth_key = _authkey;
+        this.salt = salt;
     }
 
     public String getUsername() {

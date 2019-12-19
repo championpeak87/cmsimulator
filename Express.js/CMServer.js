@@ -43,6 +43,7 @@ app.get('/api/user/signup', (req, res) => {
   const last_name = req.query.last_name;
   const auth_key = req.query.auth_key;
   const user_type = req.query.user_type;
+  const salt = req.query.salt;
 
   // KONTROLA CI POUZIVATEL UZ NEEXISTUJE
   pool.query('SELECT * FROM users WHERE username = $1', [username], (error, results) => {
@@ -56,14 +57,15 @@ app.get('/api/user/signup', (req, res) => {
       console.log(Date() + ' ', [username], 'already exists!');
     }
     else {
-      pool.query('INSERT INTO users(username, type, password_hash, first_name, last_name) VALUES ($1,$2,$3,$4,$5);',
-        [username, user_type, auth_key, first_name, last_name], (err, result) => {
+      pool.query('INSERT INTO users(username, type, password_hash, first_name, last_name, salt) VALUES ($1,$2,$3,$4,$5,$6);',
+        [username, user_type, auth_key, first_name, last_name, salt], (err, result) => {
           res.status(HTTP_OK).send('USER WAS ADDED!');
           console.log(Date() + ' ', [username], 'was successfully added to database');
         });
     }
   })
 })
+
 
 
 // ZMENA HESLA
@@ -121,6 +123,27 @@ app.get('/api/login', (req, res) => {
     else {
       console.log(Date() + 'Unable to perform requested operation!');
       res.status(HTTP_NOT_FOUND).send('User was not found!');
+    }
+  })
+})
+
+// ZISKANIE SALTU
+app.get('/api/login_salt', (req, res) => {
+  const username = req.query.username;
+
+  pool.query('SELECT salt FROM users WHERE username = $1;', [username], (error, results) => {
+    if (error) { throw error }
+
+    if (results.rowCount > 0)
+    {
+      res.status(HTTP_OK).send({
+        username: username,
+        salt: results.rows[0].salt
+      })
+    }
+    else
+    {
+      res.status(HTTP_NOT_FOUND).send("Selected user was not found!");
     }
   })
 })
@@ -217,7 +240,7 @@ app.get('/api/user/getUsers', (req, res) => {
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('SELECT * FROM users LIMIT 1000;', (error, foundUsers) => {
+      pool.query('SELECT * FROM users LIMIT 20;', (error, foundUsers) => {
         if (error) { throw error }
         if (foundUsers.rowCount > 0) {
           res.status(HTTP_OK).send(foundUsers.rows);
@@ -262,6 +285,7 @@ app.post('/api/tasks/upload', (req, res, next) => {
   mkdirp("./uploads/automataTasks/", function (err) { });
   if (!file) {
     console.log(req);
+    console.log("FILE NOT SAVED!");
   }
   else {
     file.mv("./uploads/automataTasks/" + file.name, function (err, results) {
