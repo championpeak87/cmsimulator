@@ -1,10 +1,14 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.AutomataTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
@@ -56,7 +61,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
         final Task currentTask = listOfTasks.get(position);
         holder.task_name.setText(currentTask.getTitle());
-        String automataType = null;
+        final String automataType;
         if (currentTask instanceof FiniteAutomataTask) {
             automataType = automata_type.FINITE_AUTOMATA.toString();
         } else if (currentTask instanceof PushdownAutomataTask) {
@@ -68,14 +73,20 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         }
         holder.automata_type.setText(automataType);
 
+        final CardView cardView = holder.cardView;
         holder.help_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle(R.string.task_hint)
-                        .setMessage(currentTask.getText())
-                        .setPositiveButton("OK", null)
-                        .show();
+                Intent detailsIntent = new Intent(mContext, AutomataTaskDetailsActivity.class);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                detailsIntent.putExtra("TASK_TYPE", automataType);
+                detailsIntent.putExtra("TASK_NAME", currentTask.getTitle());
+                detailsIntent.putExtra("TASK_DESCRIPTION", currentTask.getText());
+                detailsIntent.putExtra("PUBLIC_INPUT", currentTask.getPublicInputs());
+                detailsIntent.putExtra("TIME", currentTask.getMinutes());
+
+                mContext.startActivity(detailsIntent, options.toBundle());
             }
         });
 

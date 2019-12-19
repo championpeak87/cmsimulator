@@ -56,7 +56,8 @@ public class AutomataTaskParser {
                         task_description,
                         time,
                         Integer.toString(assigner_id),
-                        task_id
+                        task_id,
+                        public_input
                 );
             case "pushdown_automata":
                 return new PushdownAutomataTask(
@@ -64,7 +65,8 @@ public class AutomataTaskParser {
                         task_description,
                         time,
                         Integer.toString(assigner_id),
-                        task_id
+                        task_id,
+                        public_input
                 );
             case "linear_bounded_automata":
                 return new LinearBoundedAutomataTask(
@@ -72,7 +74,8 @@ public class AutomataTaskParser {
                         task_description,
                         time,
                         Integer.toString(assigner_id),
-                        task_id
+                        task_id,
+                        public_input
                 );
             case "turing_machine":
                 return new TuringMachineTask(
@@ -80,7 +83,8 @@ public class AutomataTaskParser {
                         task_description,
                         time,
                         Integer.toString(assigner_id),
-                        task_id
+                        task_id,
+                        public_input
                 );
         }
 

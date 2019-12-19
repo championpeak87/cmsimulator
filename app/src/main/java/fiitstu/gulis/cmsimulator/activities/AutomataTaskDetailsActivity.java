@@ -17,11 +17,13 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
     private TextView name;
     private TextView determinismText;
     private EditText description;
+    private EditText publicInputs;
+    private EditText minutes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_example_task_details);
+        this.setContentView(R.layout.activity_automata_task_details);
 
         // menu
         ActionBar actionBar = this.getActionBar();
@@ -32,19 +34,26 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
 
         Intent intent = this.getIntent();
         final String task_name = intent.getStringExtra("TASK_NAME");
-        final String determinism = intent.getStringExtra("DETERMINISM");
         final String task_type = intent.getStringExtra("TASK_TYPE");
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
+        final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
+        final int time = intent.getIntExtra("TIME", 0);
 
         type = findViewById(R.id.textview_automata_type);
         name = findViewById(R.id.textview_task_name);
-        determinismText = findViewById(R.id.textview_automata_type_deterministic);
         description = findViewById(R.id.edittext_task_description);
+        publicInputs = findViewById(R.id.edittext_task_test_inputs);
+        minutes = findViewById(R.id.edittext_task_solution_time);
 
         type.setText(task_type);
         name.setText(task_name);
-        determinismText.setText(determinism);
         description.setText(hint);
+        if (time > 0)
+            minutes.setText(Integer.toString(time) + " min");
+        else
+            minutes.setText(R.string.unlimited_time);
+
+        publicInputs.setText(public_inputs ? R.string.yes : R.string.no);
 
         setConnectedTransition();
     }

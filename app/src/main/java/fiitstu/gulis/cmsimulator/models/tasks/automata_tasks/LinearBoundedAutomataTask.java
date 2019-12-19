@@ -14,6 +14,11 @@ public class LinearBoundedAutomataTask extends Task {
         super(title, text, minutes, assigner, task_id);
     }
 
+    public LinearBoundedAutomataTask(String title, String text, int minutes, String assigner, int task_id, boolean public_inputs) {
+        super(title, text, minutes, assigner, task_id);
+        this.setPublicInputs(public_inputs);
+    }
+
     public LinearBoundedAutomataTask() {
     }
 }

@@ -919,4 +919,5 @@
     <string name="delete_task">Vymazať úlohu</string>
     <string name="task_deleted">Úloha bola úspešne odstránená</string>
     <string name="task_not_found">Vybraná úloha nebola nájdená!</string>
+    <string name="unlimited_time">Neobmedzený čas</string>
 </resources>

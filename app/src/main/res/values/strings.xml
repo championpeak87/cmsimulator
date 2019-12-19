@@ -1280,5 +1280,6 @@
 	<string name="delete_task">Delete task</string>
 	<string name="task_deleted">Task was successfully deleted!</string>
 	<string name="task_not_found">Selected task could not be found!</string>
+	<string name="unlimited_time">Unlimited time</string>
 
 </resources>
