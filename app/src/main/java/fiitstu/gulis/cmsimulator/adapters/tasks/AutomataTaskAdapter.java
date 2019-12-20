@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.activities.AutomataTaskDetailsActivity;
-import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
-import fiitstu.gulis.cmsimulator.activities.MainActivity;
+import fiitstu.gulis.cmsimulator.activities.*;
+import fiitstu.gulis.cmsimulator.database.FileFormatException;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
+import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
@@ -33,9 +36,12 @@ import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapter.CardViewBuilder> {
 
@@ -87,6 +93,62 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("TIME", currentTask.getMinutes());
 
                 mContext.startActivity(detailsIntent, options.toBundle());
+            }
+        });
+
+        cardView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                class DownloadTaskAsync extends AsyncTask<Void, Void, String>
+                {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id());
+                        ServerController serverController = new ServerController();
+                        String output = null;
+                        try {
+                            output = serverController.getResponseFromServer(downloadUrl);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        saveDownloadedFile(s);
+                        int machineType;
+                        if (currentTask instanceof FiniteAutomataTask) {
+                            machineType = MainActivity.FINITE_STATE_AUTOMATON;
+                        } else if (currentTask instanceof PushdownAutomataTask) {
+                            machineType = MainActivity.PUSHDOWN_AUTOMATON;
+                        } else if (currentTask instanceof LinearBoundedAutomataTask) {
+                            machineType = MainActivity.LINEAR_BOUNDED_AUTOMATON;
+                        } else {
+                            machineType = MainActivity.TURING_MACHINE;
+                        }
+
+                        Intent intent = new Intent(mContext, ConfigurationActivity.class);
+
+                        Bundle outputBundle = new Bundle();
+                        outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
+                        outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
+                        outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                        outputBundle.putSerializable(MainActivity.TASK, currentTask);
+
+                        intent.putExtras(outputBundle);
+
+                        mContext.startActivity(intent);
+                        /*TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.ENTERING, machineType);
+                        taskDialog.show(getSupportFragmentManager(), TASK_DIALOG);
+                        Log.v(TAG, "Task \"" + task.getTitle() + "\" button click noted");*/
+                    }
+                }
+
+                new DownloadTaskAsync().execute();
             }
         });
 
@@ -170,7 +232,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.task_name = itemView.findViewById(R.id.textview_task_name);
             this.automata_type = itemView.findViewById(R.id.textview_automata_type);
             this.delete_task = itemView.findViewById(R.id.button_delete_task);
-            this.edit_task = itemView.findViewById(R.id.button_edit_task);
+            //this.edit_task = itemView.findViewById(R.id.button_edit_task);
             this.help_task = itemView.findViewById(R.id.button_help_task);
             this.cardView = itemView.findViewById(R.id.cardview_task);
         }
@@ -181,4 +243,20 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfTasks.size());
     }
+
+    private void saveDownloadedFile(String input)
+    {
+        File file = new File(FileHandler.PATH + "/automataTask.cmst");
+        BufferedWriter writer = null;
+        try {
+             writer = new BufferedWriter(new FileWriter(file));
+            writer.write(input);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+    }
+
 }

@@ -43,14 +43,6 @@
 				android:foreground="?android:attr/selectableItemBackground"
 				android:contentDescription="@string/delete"/>
 		<ImageButton
-				android:id="@+id/button_edit_task"
-				android:layout_width="50dp"
-				android:layout_height="50dp"
-				android:src="@drawable/baseline_edit_black_24"
-				android:background="@null"
-				android:foreground="?android:attr/selectableItemBackground"
-				android:contentDescription="@string/edit"/>
-		<ImageButton
 				android:id="@+id/button_help_task"
 				android:layout_width="50dp"
 				android:layout_height="50dp"

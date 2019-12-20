@@ -31,6 +31,7 @@ public class UrlManager {
     private final static String UPDATE_USER_PATH = "/api/user/update";
     private final static String GET_USER_SALT_PATH = "/api/login_salt";
     private final static String DELETE_AUTOMATA_TASK_PATH = "/api/tasks/delete";
+    private final static String DOWNLOAD_AUTOMATA_TASK_PATH = "/api/tasks/download";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -69,6 +70,23 @@ public class UrlManager {
     public URL getDeleteAutomataTaskURL(int task_id)
     {
         Uri uri = Uri.parse(URI + DELETE_AUTOMATA_TASK_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getAutomataTaskDownloadURL(int task_id)
+    {
+        Uri uri = Uri.parse(URI + DOWNLOAD_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .build();
 
