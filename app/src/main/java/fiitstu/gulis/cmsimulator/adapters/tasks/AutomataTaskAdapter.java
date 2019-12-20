@@ -45,10 +45,12 @@ import static android.support.constraint.Constraints.TAG;
 
 public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapter.CardViewBuilder> {
 
-    private List<Task> listOfTasks = null;
-    private Context mContext;
+    private static final String TASK_DIALOG = "TASK_DIALOG";
 
-    public AutomataTaskAdapter(List<Task> listOfTasks, Context mContext) {
+    private List<Task> listOfTasks = null;
+    private BrowseAutomataTasksActivity mContext;
+
+    public AutomataTaskAdapter(List<Task> listOfTasks, BrowseAutomataTasksActivity mContext) {
         this.listOfTasks = listOfTasks;
         this.mContext = mContext;
     }
@@ -131,17 +133,9 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                             machineType = MainActivity.TURING_MACHINE;
                         }
 
-                        Intent intent = new Intent(mContext, ConfigurationActivity.class);
+                        TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
+                        taskDialog.show(mContext.getSupportFragmentManager(), TASK_DIALOG);
 
-                        Bundle outputBundle = new Bundle();
-                        outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
-                        outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
-                        outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
-                        outputBundle.putSerializable(MainActivity.TASK, currentTask);
-
-                        intent.putExtras(outputBundle);
-
-                        mContext.startActivity(intent);
                         /*TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.ENTERING, machineType);
                         taskDialog.show(getSupportFragmentManager(), TASK_DIALOG);
                         Log.v(TAG, "Task \"" + task.getTitle() + "\" button click noted");*/

@@ -42,7 +42,6 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
         setRecyclerView();
     }
 

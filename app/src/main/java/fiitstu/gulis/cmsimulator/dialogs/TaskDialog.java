@@ -3,6 +3,8 @@ package fiitstu.gulis.cmsimulator.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,9 +16,12 @@ import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 
+import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
+import fiitstu.gulis.cmsimulator.activities.ConfigurationActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 
+import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.elements.Task;
 
 import java.util.Timer;
@@ -231,7 +236,16 @@ public class TaskDialog extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((TaskDialogListener)getActivity()).onTaskDialogClick(task, machineType, mode);
+                    Intent intent = new Intent(getContext(), ConfigurationActivity.class);
+                    Bundle outputBundle = new Bundle();
+                    outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
+                    outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
+                    outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putSerializable(MainActivity.TASK, task);
+
+                    intent.putExtras(outputBundle);
+
+                    startActivity(intent);
                 }
             });
 
