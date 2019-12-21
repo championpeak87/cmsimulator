@@ -151,49 +151,90 @@ public class UsersManagmentActivity extends FragmentActivity {
         searchDialog.show();
     }
 
-    public void reloadUsers() {
-        class getUsersAsync extends AsyncTask<Void, Void, List<User>> {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
+    private class loadMoreUsersAsync extends AsyncTask<Integer, Void, List<User>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-                showLoadScreen(true);
-            }
-
-            @Override
-            protected List<User> doInBackground(Void... voids) {
-                UrlManager urlManager = new UrlManager();
-                URL getUsersURL = urlManager.getAllUsersUrl(authkey);
-
-                ServerController serverController = new ServerController();
-                String output;
-                List<User> listOfAllUsers = null;
-                try {
-                    output = serverController.getResponseFromServer(getUsersURL);
-
-                    UserParser userParser = new UserParser();
-                    listOfAllUsers = userParser.getListOfUsers(output);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                return listOfAllUsers;
-            }
-
-            @Override
-            protected void onPostExecute(List<User> users) {
-                super.onPostExecute(users);
-
-                adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
-                setAdapter(adapter);
-                showLoadScreen(false);
-                setUserList(users);
-            }
+            //showLoadScreen(true);
         }
 
-        new getUsersAsync().execute();
+        @Override
+        protected List<User> doInBackground(Integer... integers) {
+            UrlManager urlManager = new UrlManager();
+            int offset = 20 * ((integers[0] / 20) + 1);
+            URL getUsersURL = urlManager.getAllUsersUrl(authkey, offset);
+
+            ServerController serverController = new ServerController();
+            String output;
+            List<User> listOfNewUsers = null;
+            try {
+                output = serverController.getResponseFromServer(getUsersURL);
+
+                UserParser userParser = new UserParser();
+                listOfNewUsers = userParser.getListOfUsers(output);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return listOfNewUsers;
+        }
+
+        @Override
+        protected void onPostExecute(List<User> users) {
+            super.onPostExecute(users);
+
+            //showLoadScreen(false);
+            adapter.addUsers(users);
+        }
+    }
+
+    private class getUsersAsync extends AsyncTask<Integer, Void, List<User>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            showLoadScreen(true);
+        }
+
+        @Override
+        protected List<User> doInBackground(Integer... integers) {
+            UrlManager urlManager = new UrlManager();
+            URL getUsersURL = urlManager.getAllUsersUrl(authkey, integers[0]);
+
+            ServerController serverController = new ServerController();
+            String output;
+            List<User> listOfAllUsers = null;
+            try {
+                output = serverController.getResponseFromServer(getUsersURL);
+
+                UserParser userParser = new UserParser();
+                listOfAllUsers = userParser.getListOfUsers(output);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return listOfAllUsers;
+        }
+
+        @Override
+        protected void onPostExecute(List<User> users) {
+            super.onPostExecute(users);
+
+            showLoadScreen(false);
+            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
+            setAdapter(adapter);
+            setUserList(users);
+        }
+    }
+
+    public void reloadUsers() {
+
+        new getUsersAsync().execute(0);
     }
 
 
@@ -300,6 +341,13 @@ public class UsersManagmentActivity extends FragmentActivity {
         users.setLayoutManager(layout);
 
         Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+
+        adapter.setOnBottomReachedListener(new UserManagementAdapter.OnBottomReachedListener() {
+            @Override
+            public void onBottomReached(int position) {
+                new loadMoreUsersAsync().execute(position);
+            }
+        });
 
         users.setAnimation(showUpAnimation);
     }

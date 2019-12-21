@@ -237,11 +237,12 @@ app.get('/api/user/delete', (req, res) =>
 
 app.get('/api/user/getUsers', (req, res) => {
   const auth_key = req.query.auth_key;
+  const offset = req.query.offset;
   console.log([auth_key]);
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND type = \'admin\';', [auth_key], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('SELECT * FROM users LIMIT 20;', (error, foundUsers) => {
+      pool.query('SELECT * FROM users LIMIT 20 OFFSET $1;', [offset], (error, foundUsers) => {
         if (error) { throw error }
         if (foundUsers.rowCount > 0) {
           res.status(HTTP_OK).send(foundUsers.rows);

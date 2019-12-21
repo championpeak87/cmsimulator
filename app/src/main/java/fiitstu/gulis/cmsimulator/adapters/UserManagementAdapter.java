@@ -44,7 +44,17 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     private Context mContext;
     private List<User> listOfUsers;
 
+    OnBottomReachedListener onBottomReachedListener;
+
     public static int EDIT_ACTIVITY_RETURN_CODE = 234;
+
+    public interface OnBottomReachedListener {
+        void onBottomReached(int position);
+    }
+
+    public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener) {
+        this.onBottomReachedListener = onBottomReachedListener;
+    }
 
     public UserManagementAdapter(Context mContext, List<User> listOfUsers) {
         this.mContext = mContext;
@@ -73,6 +83,10 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         holder.fullname.setText(fullname);
         holder.username.setText(username);
 
+        if (position == listOfUsers.size() - 1) {
+
+            onBottomReachedListener.onBottomReached(position);
+        }
 
         final CardView cardView = holder.cardView;
 
@@ -158,12 +172,9 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
 
                                 Bundle deleteUserBundle = new Bundle();
                                 UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
-                                if (activity.logged_user_id == user_id)
-                                {
+                                if (activity.logged_user_id == user_id) {
                                     Toast.makeText(mContext, R.string.cant_delete_logged_user, Toast.LENGTH_LONG).show();
-                                }
-                                else
-                                {
+                                } else {
 
                                     deleteUserBundle.putInt("LOGGED_USER_ID", activity.logged_user_id);
                                     deleteUserBundle.putInt("USER_ID", user_id);
@@ -228,6 +239,20 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         listOfUsers.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfUsers.size());
+    }
+
+    private void notifyNewUser(int start, int numberOfUsers) {
+        notifyItemRangeInserted(start, numberOfUsers);
+    }
+
+    public void addUsers(List<User> listOfUsers)
+    {
+        int userSizeStart = this.listOfUsers.size();
+        for (User user:
+                listOfUsers) {
+            this.listOfUsers.add(user);
+        }
+        notifyNewUser(userSizeStart, 20);
     }
 
 }

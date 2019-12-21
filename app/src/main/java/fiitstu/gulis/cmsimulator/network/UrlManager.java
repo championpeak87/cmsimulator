@@ -67,6 +67,9 @@ public class UrlManager {
     // DELETE TASK QUERIES
     private final static String TASK_ID_KEY = "task_id";
 
+    // GET ALL USERS QUERIES
+    private final static String OFFSET_QUERY_KEY = "offset";
+
     public URL getDeleteAutomataTaskURL(int task_id)
     {
         Uri uri = Uri.parse(URI + DELETE_AUTOMATA_TASK_PATH).buildUpon()
@@ -189,10 +192,11 @@ public class UrlManager {
         return url;
     }
 
-    public URL getAllUsersUrl(String authkey)
+    public URL getAllUsersUrl(String authkey, int offset)
     {
         Uri builtUri = Uri.parse(URI + GET_ALL_USERS_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
+                .appendQueryParameter(OFFSET_QUERY_KEY, Integer.toString(offset))
                 .build();
 
         URL url = null;
