@@ -44,6 +44,9 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     private Context mContext;
     private List<User> listOfUsers;
 
+    private static final int VIEW_TYPE_ITEM = 0;
+    private static final int VIEW_TYPE_LOADING = 1;
+
     OnBottomReachedListener onBottomReachedListener;
 
     public static int EDIT_ACTIVITY_RETURN_CODE = 234;
@@ -65,149 +68,171 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     @Override
     public CardViewBuilder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.list_element_user_management, parent, false);
+        if (viewType == VIEW_TYPE_ITEM) {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            view = inflater.inflate(R.layout.list_element_user_management, parent, false);
+        } else {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            view = inflater.inflate(R.layout.list_element_loading_user_management, parent, false);
+        }
 
         return new UserManagementAdapter.CardViewBuilder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
-        final User currentUser = listOfUsers.get(position);
-        final String username = currentUser.getUsername();
-        final String fullname = currentUser.getLast_name() + ", " + currentUser.getFirst_name();
-        final String firstname = currentUser.getFirst_name();
-        final String lastname = currentUser.getLast_name();
-        final String password_hash = currentUser.getAuth_key();
-        final int user_id = currentUser.getUser_id();
-        holder.fullname.setText(fullname);
-        holder.username.setText(username);
 
-        if (position == listOfUsers.size() - 1) {
+//        if (position == listOfUsers.size() - 1) {
+//
+//            onBottomReachedListener.onBottomReached(position);
+//        }
 
-            onBottomReachedListener.onBottomReached(position);
-        }
+        if (holder instanceof CardViewBuilder && listOfUsers.get(position) != null) {
+            final User currentUser = listOfUsers.get(position);
+            final String username = currentUser.getUsername();
+            final String fullname = currentUser.getLast_name() + ", " + currentUser.getFirst_name();
+            final String firstname = currentUser.getFirst_name();
+            final String lastname = currentUser.getLast_name();
+            final String password_hash = currentUser.getAuth_key();
+            final int user_id = currentUser.getUser_id();
 
-        final CardView cardView = holder.cardView;
+            holder.fullname.setText(fullname);
+            holder.username.setText(username);
 
-        final String usertype;
-        if (currentUser instanceof Admin) {
-            usertype = mContext.getString(R.string.admin);
-        } else if (currentUser instanceof Lector) {
-            usertype = mContext.getString(R.string.lector);
-        } else {
-            // STUDENT
-            usertype = mContext.getString(R.string.student);
-        }
 
-        holder.usertype.setText(usertype);
+            final CardView cardView = holder.cardView;
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, UserDetailActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
-                intent.putExtra("USERNAME", username);
-                intent.putExtra("FULLNAME", fullname);
-                intent.putExtra("USER_TYPE", usertype);
-                mContext.startActivity(intent, options.toBundle());
-
+            final String usertype;
+            if (currentUser instanceof Admin) {
+                usertype = mContext.getString(R.string.admin);
+            } else if (currentUser instanceof Lector) {
+                usertype = mContext.getString(R.string.lector);
+            } else {
+                // STUDENT
+                usertype = mContext.getString(R.string.student);
             }
-        });
 
-        holder.removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String contentMessage = mContext.getString(R.string.delete_user).replace("{0}", fullname);
+            holder.usertype.setText(usertype);
 
-                // TODO: wire positive button, add api to delete user
-                AlertDialog deleteUser = new AlertDialog.Builder(mContext)
-                        .setTitle(R.string.delete_user_title)
-                        .setMessage(contentMessage)
-                        .setNeutralButton(android.R.string.cancel, null)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                class deleteUserAsync extends AsyncTask<Bundle, Void, String> {
-                                    @Override
-                                    protected String doInBackground(Bundle... bundles) {
-                                        final int logged_user_id = bundles[0].getInt("LOGGED_USER_ID", 0);
-                                        final int user_id = bundles[0].getInt("USER_ID", 0);
-                                        final String auth_key = bundles[0].getString("AUTH_KEY");
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, UserDetailActivity.class);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                    intent.putExtra("USERNAME", username);
+                    intent.putExtra("FULLNAME", fullname);
+                    intent.putExtra("USER_TYPE", usertype);
+                    mContext.startActivity(intent, options.toBundle());
 
-                                        UrlManager urlManager = new UrlManager();
-                                        URL deleteUserUrl = urlManager.getDeleteUserUrl(logged_user_id, user_id, auth_key);
+                }
+            });
 
-                                        ServerController serverController = new ServerController();
-                                        try {
-                                            return serverController.getResponseFromServer(deleteUserUrl);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
+            holder.removeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String contentMessage = mContext.getString(R.string.delete_user).replace("{0}", fullname);
 
-                                        return null;
-                                    }
+                    // TODO: wire positive button, add api to delete user
+                    AlertDialog deleteUser = new AlertDialog.Builder(mContext)
+                            .setTitle(R.string.delete_user_title)
+                            .setMessage(contentMessage)
+                            .setNeutralButton(android.R.string.cancel, null)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    class deleteUserAsync extends AsyncTask<Bundle, Void, String> {
+                                        @Override
+                                        protected String doInBackground(Bundle... bundles) {
+                                            final int logged_user_id = bundles[0].getInt("LOGGED_USER_ID", 0);
+                                            final int user_id = bundles[0].getInt("USER_ID", 0);
+                                            final String auth_key = bundles[0].getString("AUTH_KEY");
 
-                                    @Override
-                                    protected void onPostExecute(String s) {
-                                        super.onPostExecute(s);
+                                            UrlManager urlManager = new UrlManager();
+                                            URL deleteUserUrl = urlManager.getDeleteUserUrl(logged_user_id, user_id, auth_key);
 
-                                        if (s == null || s.isEmpty()) {
-                                            Toast.makeText(mContext, mContext.getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
-                                        } else {
+                                            ServerController serverController = new ServerController();
                                             try {
-                                                JSONObject object = new JSONObject(s);
-                                                if (object.getBoolean("deleted")) {
-                                                    Toast.makeText(mContext, mContext.getString(R.string.user_deleted), Toast.LENGTH_SHORT).show();
-                                                    removeUser(position);
-                                                }
-
-                                            } catch (JSONException e) {
+                                                return serverController.getResponseFromServer(deleteUserUrl);
+                                            } catch (IOException e) {
                                                 e.printStackTrace();
                                             }
 
+                                            return null;
+                                        }
+
+                                        @Override
+                                        protected void onPostExecute(String s) {
+                                            super.onPostExecute(s);
+
+                                            if (s == null || s.isEmpty()) {
+                                                Toast.makeText(mContext, mContext.getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                try {
+                                                    JSONObject object = new JSONObject(s);
+                                                    if (object.getBoolean("deleted")) {
+                                                        Toast.makeText(mContext, mContext.getString(R.string.user_deleted), Toast.LENGTH_SHORT).show();
+                                                        removeUser(position);
+                                                    }
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                            }
                                         }
                                     }
+
+                                    Bundle deleteUserBundle = new Bundle();
+                                    UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
+                                    if (activity.logged_user_id == user_id) {
+                                        Toast.makeText(mContext, R.string.cant_delete_logged_user, Toast.LENGTH_LONG).show();
+                                    } else {
+
+                                        deleteUserBundle.putInt("LOGGED_USER_ID", activity.logged_user_id);
+                                        deleteUserBundle.putInt("USER_ID", user_id);
+                                        deleteUserBundle.putString("AUTH_KEY", activity.authkey);
+                                        new deleteUserAsync().execute(deleteUserBundle);
+                                    }
                                 }
+                            })
+                            .create();
 
-                                Bundle deleteUserBundle = new Bundle();
-                                UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
-                                if (activity.logged_user_id == user_id) {
-                                    Toast.makeText(mContext, R.string.cant_delete_logged_user, Toast.LENGTH_LONG).show();
-                                } else {
+                    deleteUser.show();
+                }
+            });
 
-                                    deleteUserBundle.putInt("LOGGED_USER_ID", activity.logged_user_id);
-                                    deleteUserBundle.putInt("USER_ID", user_id);
-                                    deleteUserBundle.putString("AUTH_KEY", activity.authkey);
-                                    new deleteUserAsync().execute(deleteUserBundle);
-                                }
-                            }
-                        })
-                        .create();
+            holder.editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, UsersManagementEditActivity.class);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                    intent.putExtra("USERNAME", username);
+                    intent.putExtra("FULLNAME", fullname);
+                    intent.putExtra("USER_TYPE", usertype);
+                    intent.putExtra("FIRST_NAME", firstname);
+                    intent.putExtra("LAST_NAME", lastname);
+                    intent.putExtra("PASSWORD_HASH", password_hash);
+                    intent.putExtra("USER_ID", user_id);
+                    UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
+                    intent.putExtra("LOGGED_USER_ID", activity.logged_user_id);
+                    intent.putExtra("AUTHKEY", activity.authkey);
+                    intent.putExtra("ITEM_POSITION", position);
+                    ((UsersManagmentActivity) mContext).startActivity(intent, options.toBundle());
+                }
+            });
+        }
+    }
 
-                deleteUser.show();
-            }
-        });
+    public void addNullData()
+    {
+        this.listOfUsers.add(null);
+        notifyItemInserted(this.listOfUsers.size() - 1);
+    }
 
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, UsersManagementEditActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
-                intent.putExtra("USERNAME", username);
-                intent.putExtra("FULLNAME", fullname);
-                intent.putExtra("USER_TYPE", usertype);
-                intent.putExtra("FIRST_NAME", firstname);
-                intent.putExtra("LAST_NAME", lastname);
-                intent.putExtra("PASSWORD_HASH", password_hash);
-                intent.putExtra("USER_ID", user_id);
-                UsersManagmentActivity activity = (UsersManagmentActivity) mContext;
-                intent.putExtra("LOGGED_USER_ID", activity.logged_user_id);
-                intent.putExtra("AUTHKEY", activity.authkey);
-                intent.putExtra("ITEM_POSITION", position);
-                ((UsersManagmentActivity) mContext).startActivity(intent, options.toBundle());
-            }
-        });
+    public void removeNullData()
+    {
+        this.listOfUsers.remove(this.listOfUsers.size() - 1);
+        notifyItemRemoved(this.listOfUsers.size());
     }
 
     @Override
@@ -215,7 +240,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         return listOfUsers.size();
     }
 
-    class CardViewBuilder extends RecyclerView.ViewHolder {
+    class CardViewBuilder extends CustomCardViewBuilder {
         private TextView username;
         private TextView fullname;
         private TextView usertype;
@@ -235,6 +260,43 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (listOfUsers.get(position) != null)
+            return VIEW_TYPE_ITEM;
+        else
+            return VIEW_TYPE_LOADING;
+    }
+
+    class CustomCardViewBuilder extends RecyclerView.ViewHolder {
+
+
+        public CustomCardViewBuilder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    class ProgressCardViewBuilder extends CustomCardViewBuilder {
+        private TextView username;
+        private TextView fullname;
+        private TextView usertype;
+        private CardView cardView;
+        private ImageButton removeButton;
+        private ImageButton editButton;
+
+        public ProgressCardViewBuilder(View itemView) {
+            super(itemView);
+
+            usertype = itemView.findViewById(R.id.textview_user_type);
+            username = itemView.findViewById(R.id.textview_user_username);
+            fullname = itemView.findViewById(R.id.textview_full_name);
+            cardView = itemView.findViewById(R.id.cardview_user);
+            removeButton = itemView.findViewById(R.id.button_delete_user);
+            editButton = itemView.findViewById(R.id.button_edit_user);
+        }
+    }
+
+
     private void removeUser(int position) {
         listOfUsers.remove(position);
         notifyItemRemoved(position);
@@ -245,10 +307,9 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         notifyItemRangeInserted(start, numberOfUsers);
     }
 
-    public void addUsers(List<User> listOfUsers)
-    {
+    public void addUsers(List<User> listOfUsers) {
         int userSizeStart = this.listOfUsers.size();
-        for (User user:
+        for (User user :
                 listOfUsers) {
             this.listOfUsers.add(user);
         }

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.adapters.InfiniteScrollListener;
 import fiitstu.gulis.cmsimulator.adapters.SortController;
 import fiitstu.gulis.cmsimulator.adapters.UserManagementAdapter;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
@@ -42,7 +44,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class UsersManagmentActivity extends FragmentActivity {
+public class UsersManagmentActivity extends FragmentActivity implements InfiniteScrollListener.OnLoadMoreListener {
 
     public static String authkey;
     public static int logged_user_id;
@@ -50,7 +52,19 @@ public class UsersManagmentActivity extends FragmentActivity {
     public static RecyclerView.LayoutManager layout;
     private static List<User> userList;
     public static Context mContext;
+    InfiniteScrollListener infiniteScrollListener;
 
+    @Override
+    public void onLoadMore() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new LoadMoreUsersAsync().execute();
+
+                infiniteScrollListener.setLoaded();
+            }
+        }, 2000);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,18 +165,11 @@ public class UsersManagmentActivity extends FragmentActivity {
         searchDialog.show();
     }
 
-    private class loadMoreUsersAsync extends AsyncTask<Integer, Void, List<User>> {
+    private class LoadMoreUsersAsync extends AsyncTask<Void, Void, List<User>> {
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //showLoadScreen(true);
-        }
-
-        @Override
-        protected List<User> doInBackground(Integer... integers) {
+        protected List<User> doInBackground(Void... voids) {
             UrlManager urlManager = new UrlManager();
-            int offset = 20 * ((integers[0] / 20) + 1);
+            int offset = 20 * ((adapter.getItemCount() / 20));
             URL getUsersURL = urlManager.getAllUsersUrl(authkey, offset);
 
             ServerController serverController = new ServerController();
@@ -184,10 +191,9 @@ public class UsersManagmentActivity extends FragmentActivity {
 
         @Override
         protected void onPostExecute(List<User> users) {
-            super.onPostExecute(users);
-
-            //showLoadScreen(false);
+            adapter.removeNullData();
             adapter.addUsers(users);
+            adapter.addNullData();
         }
     }
 
@@ -227,6 +233,7 @@ public class UsersManagmentActivity extends FragmentActivity {
 
             showLoadScreen(false);
             adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
+            adapter.addNullData();
             setAdapter(adapter);
             setUserList(users);
         }
@@ -333,6 +340,7 @@ public class UsersManagmentActivity extends FragmentActivity {
         RecyclerView users = this.findViewById(R.id.recyclerview_user_management);
         users.setAdapter(adapter);
 
+
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int noOfColumns = (int) (dpWidth / 180) / 2;
@@ -340,14 +348,11 @@ public class UsersManagmentActivity extends FragmentActivity {
         layout = new GridLayoutManager(this, noOfColumns);
         users.setLayoutManager(layout);
 
-        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+        infiniteScrollListener = new InfiniteScrollListener((GridLayoutManager) layout, this);
+        infiniteScrollListener.setLoaded();
+        users.addOnScrollListener(infiniteScrollListener);
 
-        adapter.setOnBottomReachedListener(new UserManagementAdapter.OnBottomReachedListener() {
-            @Override
-            public void onBottomReached(int position) {
-                new loadMoreUsersAsync().execute(position);
-            }
-        });
+        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
 
         users.setAnimation(showUpAnimation);
     }
