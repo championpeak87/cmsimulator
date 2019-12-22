@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +27,10 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +42,18 @@ import fiitstu.gulis.cmsimulator.adapters.configuration.ConfigurationListAdapter
 import fiitstu.gulis.cmsimulator.diagram.DiagramView;
 import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.FiniteStateAutomatonStep;
+import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
 import io.blushine.android.ui.showcase.MaterialShowcaseView;
 import io.blushine.android.ui.showcase.ShowcaseListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
@@ -175,8 +188,7 @@ public class ConfigurationActivity extends FragmentActivity
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
 
-        if (taskConfiguration == MainActivity.GAME_MACHINE)
-        {
+        if (taskConfiguration == MainActivity.GAME_MACHINE) {
             gameNumber = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
             GameShowcase gameShowcase = new GameShowcase();
             gameShowcase.showTutorial(gameNumber, this);
@@ -337,17 +349,15 @@ public class ConfigurationActivity extends FragmentActivity
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (taskConfiguration != 0) {
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-            MenuItem taskInfoButton = menu.getItem(0);
+            MenuItem saveButton = menu.getItem(0);
+            MenuItem submitTaskButton = menu.getItem(1);
             //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
 
             if (taskConfiguration == MainActivity.SOLVE_TASK) {
-                taskInfoButton.setIcon(R.drawable.excl_red);
-                taskInfoButton.setVisible(true);
-            } else if (taskConfiguration == MainActivity.EDIT_TASK) {
-                taskInfoButton.setIcon(R.drawable.excl_green);
-                taskInfoButton.setVisible(true);
+                saveButton.setVisible(true);
+                submitTaskButton.setVisible(true);
             }
-            if (taskConfiguration != MainActivity.SOLVE_TASK || task.getPublicInputs()) {
+            if (taskConfiguration == MainActivity.EDIT_TASK || task.getPublicInputs()) {
                 menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
                 menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
             } else {
@@ -383,16 +393,64 @@ public class ConfigurationActivity extends FragmentActivity
                     showSaveMachineDialog();
                 }
                 return true;
-            case R.id.menu_configuration_task_info:
-                if (taskConfiguration == MainActivity.SOLVE_TASK) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                    taskDialog.show(fm, TASK_DIALOG);
-                } else {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                    taskDialog.show(fm, TASK_DIALOG);
+            case R.id.menu_save_task:
+                // TODO: SAVE TASK TO CLOUD
+                File inputFile = new File(filename);
+                final String file_name = inputFile.getName();
+                final int user_id = BrowseAutomataTasksActivity.user_id;
+                class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
+                    @Override
+                    protected String doInBackground(File... files) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL pushToCloudURL = urlManager.getSaveTaskURL(file_name, user_id);
+
+                        String output = null;
+                        try {
+                            output = serverController.doPostRequest(pushToCloudURL, files[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s.equalsIgnoreCase("OK"))
+                            Toast.makeText(ConfigurationActivity.this, R.string.save_complete, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+
+                File file = null;
+                try {
+                    DataSource dataSource = DataSource.getInstance();
+                    dataSource.open();
+                    fileHandler.setData(dataSource, machineType);
+                    task.setResultVersion(TaskResult.CURRENT_VERSION);
+                    fileHandler.writeTask(task);
+
+                    String taskDoc = fileHandler.writeToString();
+
+                    file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
+                    FileOutputStream outputStream;
+
+                    outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
+                    outputStream.write(taskDoc.getBytes());
+                    outputStream.close();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                new SaveTaskToCloudAsync().execute(file);
                 return true;
             case R.id.menu_configuration_convert:
                 if (initialState == null) {

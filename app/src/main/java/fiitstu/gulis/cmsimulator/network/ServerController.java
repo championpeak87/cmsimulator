@@ -36,17 +36,15 @@ public class ServerController {
         }
     }
 
-    public String doPostRequest(File file) {
+    public String doPostRequest(URL url, File file) {
 
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
                 .addFormDataPart("task", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file))
                 .build();
 
-        UrlManager urlManager = new UrlManager();
-
         Request request = new Request.Builder()
-                .url(urlManager.getPublishAutomataTaskURL(file.getName()))
+                .url(url)
                 .post(requestBody)
                 .build();
 
@@ -59,7 +57,7 @@ public class ServerController {
             e.printStackTrace();
         }
 
-        return response.toString();
+        return response.message();
     }
 
 

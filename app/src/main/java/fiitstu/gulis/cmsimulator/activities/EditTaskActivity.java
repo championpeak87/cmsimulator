@@ -137,41 +137,6 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             }
         });
 
-//        Button launchButton = findViewById(R.id.button_edit_task_launch);
-//        launchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (machineType == MainActivity.UNDEFINED) {
-//                    Toast.makeText(EditTaskActivity.this, R.string.automaton_not_created, Toast.LENGTH_SHORT).show();
-//                } else if (titleEditText.getText().toString().isEmpty()) {
-//                    Toast.makeText(EditTaskActivity.this, R.string.no_task_title, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Bundle outputBundle = new Bundle();
-//                    FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
-//                    DataSource dataSource = DataSource.getInstance();
-//                    dataSource.open();
-//                    try {
-//                        fileHandler.setData(dataSource, machineType);
-//                        updateTask();
-//                        task.setResultVersion(TaskResult.CURRENT_VERSION);
-//                        fileHandler.writeTask(task);
-//
-//                        String taskDoc = fileHandler.writeToString();
-//                        outputBundle.putString(LaunchedTaskActivity.TASK_DOCUMENT, taskDoc);
-//                        outputBundle.putInt(LaunchedTaskActivity.TIME, task.getMinutes());
-//                        outputBundle.putString(LaunchedTaskActivity.TITLE, task.getTitle());
-//                    } catch (ParserConfigurationException | TransformerException e) {
-//                        Log.e(TAG, "Error happened when serializing task", e);
-//                    } finally {
-//                        dataSource.close();
-//                    }
-//                    Intent nextActivityIntent = new Intent(EditTaskActivity.this, LaunchedTaskActivity.class);
-//                    nextActivityIntent.putExtras(outputBundle);
-//                    startActivity(nextActivityIntent);
-//                }
-//            }
-//        });
-
         Log.i(TAG, "onCreate initialized");
     }
 
@@ -240,8 +205,10 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                         class uploadTaskAsync extends AsyncTask<File, Void, File> {
                             @Override
                             protected File doInBackground(File... files) {
+                                UrlManager urlManager = new UrlManager();
                                 ServerController serverController = new ServerController();
-                                serverController.doPostRequest(files[0]);
+                                URL uploadTaskUrl = urlManager.getPublishAutomataTaskURL(files[0].getName());
+                                serverController.doPostRequest(uploadTaskUrl, files[0]);
 
                                 return files[0];
                             }
@@ -400,6 +367,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.EDIT_TASK);
         }
         outputBundle.putSerializable("TASK", task);
+        outputBundle.putInt("USER_ID", logged_user_id);
         Intent nextActivityIntent = new Intent(EditTaskActivity.this, SimulationActivity.class);
         nextActivityIntent.putExtras(outputBundle);
         startActivity(nextActivityIntent);

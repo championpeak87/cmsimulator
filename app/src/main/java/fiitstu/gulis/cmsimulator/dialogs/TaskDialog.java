@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +21,22 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.ConfigurationActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.TuringMachineTask;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -123,6 +136,47 @@ public class TaskDialog extends DialogFragment {
             }
         }
     }
+
+    public void markAsStarted(final Task.TASK_STATUS status, final int task_id, final int user_id)
+    {
+        class ChangeTaskFlagAsync extends AsyncTask<Void, Void, String>
+        {
+            @Override
+            protected String doInBackground(Void... voids) {
+                UrlManager urlManager = new UrlManager();
+                ServerController serverController = new ServerController();
+                URL changeFlagURL = urlManager.getChangeFlagUrl(status, task_id, user_id);
+
+                String output = null;
+
+                try {
+                    output = serverController.getResponseFromServer(changeFlagURL);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    return output;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    if (!jsonObject.getBoolean("updated"))
+                        Log.e("SERVER", "ERROR CHANGING TASK FLAG!");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Task.TASK_STATUS currentStatus = task.getStatus();
+        if (currentStatus == Task.TASK_STATUS.WRONG || currentStatus == Task.TASK_STATUS.CORRECT)
+            return;
+        else
+            new ChangeTaskFlagAsync().execute();
+    }
+
 
     /**
      * Changes the dialog mode to SOLVED and the positive button text to "back to menu"
@@ -241,7 +295,10 @@ public class TaskDialog extends DialogFragment {
                     outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
                     outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
                     outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);
+
+                    markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id() );
 
                     intent.putExtras(outputBundle);
 
@@ -271,7 +328,7 @@ public class TaskDialog extends DialogFragment {
         int minutes = seconds / 60;
         seconds %= 60;
 
-        timeRemainingTextView.setText(minutes + "min " + seconds + "s");
+        timeRemainingTextView.setText(minutes + "zmin " + seconds + "s");
 
         if (minutes == 0 && seconds == 0 && mode == SOLVING) {
             timeOut = true;

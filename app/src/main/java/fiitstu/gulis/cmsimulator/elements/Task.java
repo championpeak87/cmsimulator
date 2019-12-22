@@ -16,6 +16,7 @@ public class Task implements Serializable {
     private boolean publicInputs;
     private int maxSteps;
     private int task_id;
+    private TASK_STATUS status;
 
     private int resultVersion;
 
@@ -24,12 +25,32 @@ public class Task implements Serializable {
         resultVersion = TaskResult.CURRENT_VERSION;
     }
 
+    public enum TASK_STATUS {
+        IN_PROGRESS("in_progress"),
+        CORRECT("correct"),
+        WRONG("wrong"),
+        NEW("new");
+
+        private String query;
+
+        TASK_STATUS(String query) {
+            this.query = query;
+        }
+
+
+        @Override
+        public String toString() {
+            return query;
+        }
+    }
+
     public Task(String title, String text, int minutes, String assigner, int task_id) {
         this.title = title;
         this.text = text;
         this.minutes = minutes;
         this.assigner = assigner;
         this.task_id = task_id;
+        this.status = TASK_STATUS.NEW;
     }
 
     public Task(String title, String text, int minutes, boolean publicInputs, int maxSteps, int resultVersion) {
@@ -39,6 +60,7 @@ public class Task implements Serializable {
         this.publicInputs = publicInputs;
         this.maxSteps = maxSteps;
         this.resultVersion = resultVersion;
+        this.status = TASK_STATUS.NEW;
     }
 
     public Task(String title, String text, int minutes, String assigner) {
@@ -46,6 +68,15 @@ public class Task implements Serializable {
         this.text = text;
         this.minutes = minutes;
         this.assigner = assigner;
+        this.status = TASK_STATUS.NEW;
+    }
+
+    public TASK_STATUS getStatus() {
+        return status;
+    }
+
+    public void setStatus(TASK_STATUS status) {
+        this.status = status;
     }
 
     public boolean isPublicInputs() {

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
@@ -81,6 +82,38 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         }
         holder.automata_type.setText(automataType);
 
+        Task.TASK_STATUS currentStatus = currentTask.getStatus();
+        final int primary;
+        final int light_primary;
+
+
+        switch (currentStatus) {
+
+            case WRONG:
+                primary = mContext.getColor(R.color.wrong_answer_top_bar);
+                light_primary = mContext.getColor(R.color.wrong_answer_bottom_bar);
+                break;
+
+            case IN_PROGRESS:
+                primary = mContext.getColor(R.color.in_progress_top_bar);
+                light_primary = mContext.getColor(R.color.in_progress_bottom_bar);
+                break;
+
+            case CORRECT:
+                primary = mContext.getColor(R.color.correct_answer_top_bar);
+                light_primary = mContext.getColor(R.color.correct_answer_bottom_bar);
+                break;
+
+            case NEW:
+            default:
+                primary = mContext.getColor(R.color.primary_color);
+                light_primary = mContext.getColor(R.color.primary_color_light);
+                break;
+        }
+
+        holder.topBar.setBackgroundColor(primary);
+        holder.bottomBar.setBackgroundColor(light_primary);
+
         final CardView cardView = holder.cardView;
         holder.help_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,18 +125,18 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("TASK_NAME", currentTask.getTitle());
                 detailsIntent.putExtra("TASK_DESCRIPTION", currentTask.getText());
                 detailsIntent.putExtra("PUBLIC_INPUT", currentTask.getPublicInputs());
+                detailsIntent.putExtra("PRIMARY_COLOR", primary);
+                detailsIntent.putExtra("LIGHT_PRIMARY", light_primary);
                 detailsIntent.putExtra("TIME", currentTask.getMinutes());
 
                 mContext.startActivity(detailsIntent, options.toBundle());
             }
         });
 
-        cardView.setOnClickListener(new View.OnClickListener()
-        {
+        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                class DownloadTaskAsync extends AsyncTask<Void, Void, String>
-                {
+                class DownloadTaskAsync extends AsyncTask<Void, Void, String> {
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
@@ -135,10 +168,6 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                         TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
                         taskDialog.show(mContext.getSupportFragmentManager(), TASK_DIALOG);
-
-                        /*TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.ENTERING, machineType);
-                        taskDialog.show(getSupportFragmentManager(), TASK_DIALOG);
-                        Log.v(TAG, "Task \"" + task.getTitle() + "\" button click noted");*/
                     }
                 }
 
@@ -209,26 +238,24 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             return listOfTasks.size();
     }
 
-    public void setListOfTasks(List<Task> listOfTasks) {
-        this.listOfTasks = listOfTasks;
-    }
-
     public static class CardViewBuilder extends RecyclerView.ViewHolder {
         private TextView task_name;
         private TextView automata_type;
         private ImageButton delete_task;
-        private ImageButton edit_task;
         private ImageButton help_task;
         private CardView cardView;
+        private LinearLayout bottomBar;
+        private TextView topBar;
 
         public CardViewBuilder(View itemView) {
             super(itemView);
             this.task_name = itemView.findViewById(R.id.textview_task_name);
             this.automata_type = itemView.findViewById(R.id.textview_automata_type);
             this.delete_task = itemView.findViewById(R.id.button_delete_task);
-            //this.edit_task = itemView.findViewById(R.id.button_edit_task);
             this.help_task = itemView.findViewById(R.id.button_help_task);
             this.cardView = itemView.findViewById(R.id.cardview_task);
+            this.bottomBar = itemView.findViewById(R.id.task_bottom_bar);
+            this.topBar = itemView.findViewById(R.id.textview_automata_type);
         }
     }
 
@@ -238,12 +265,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         notifyItemRangeChanged(position, listOfTasks.size());
     }
 
-    private void saveDownloadedFile(String input)
-    {
+    private void saveDownloadedFile(String input) {
         File file = new File(FileHandler.PATH + "/automataTask.cmst");
         BufferedWriter writer = null;
         try {
-             writer = new BufferedWriter(new FileWriter(file));
+            writer = new BufferedWriter(new FileWriter(file));
             writer.write(input);
             writer.close();
         } catch (IOException e) {

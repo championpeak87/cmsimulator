@@ -920,4 +920,6 @@
     <string name="task_deleted">Úloha bola úspešne odstránená</string>
     <string name="task_not_found">Vybraná úloha nebola nájdená!</string>
     <string name="unlimited_time">Neobmedzený čas</string>
+    <string name="submit_task">Odovzdať úlohu</string>
+    <string name="save_complete">Úloha bola úspešne uložená</string>
 </resources>

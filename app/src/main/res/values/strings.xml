@@ -1281,5 +1281,7 @@
 	<string name="task_deleted">Task was successfully deleted!</string>
 	<string name="task_not_found">Selected task could not be found!</string>
 	<string name="unlimited_time">Unlimited time</string>
+	<string name="submit_task">Submit task</string>
+	<string name="save_complete">Task was successfully saved!</string>
 
 </resources>

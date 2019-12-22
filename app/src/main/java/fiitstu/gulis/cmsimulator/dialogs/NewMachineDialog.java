@@ -21,7 +21,7 @@ import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 
 /**
  * A dialog for selecting tye of machine to be created
- *
+ * <p>
  * Created by Martin on 15. 4. 2017.
  */
 public class NewMachineDialog extends DialogFragment {
@@ -34,12 +34,11 @@ public class NewMachineDialog extends DialogFragment {
 
     private NewMachineDialogListener listener;
 
-    public interface NewMachineDialogListener{
+    public interface NewMachineDialogListener {
         void newMachineDialogClick(Bundle outputBundle);
     }
 
-    public static NewMachineDialog newInstance()
-    {
+    public static NewMachineDialog newInstance() {
         return new NewMachineDialog();
     }
 
@@ -47,7 +46,7 @@ public class NewMachineDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        listener = (NewMachineDialogListener)context;
+        listener = (NewMachineDialogListener) context;
     }
 
     @NonNull
@@ -78,7 +77,7 @@ public class NewMachineDialog extends DialogFragment {
         });
 
         pushdownAutomata = view.findViewById(R.id.radiobutton_pushdown_automata);
-        pushdownAutomata.setOnClickListener(new View.OnClickListener(){
+        pushdownAutomata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAutomata = automata_type.PUSHDOWN_AUTOMATA;
@@ -86,8 +85,7 @@ public class NewMachineDialog extends DialogFragment {
         });
 
         linearBoundedAutomata = view.findViewById(R.id.radiobutton_linear_bounded_automata);
-        linearBoundedAutomata.setOnClickListener(new View.OnClickListener()
-        {
+        linearBoundedAutomata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAutomata = automata_type.LINEAR_BOUNDED_AUTOMATA;
@@ -95,7 +93,7 @@ public class NewMachineDialog extends DialogFragment {
         });
 
         turingMachine = view.findViewById(R.id.radiobutton_turing_machine);
-        turingMachine.setOnClickListener(new View.OnClickListener(){
+        turingMachine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedAutomata = automata_type.TURING_MACHINE;
@@ -105,12 +103,10 @@ public class NewMachineDialog extends DialogFragment {
         return builder.create();
     }
 
-    private Bundle getOutputBundle()
-    {
+    private Bundle getOutputBundle() {
         Bundle outputBundle = new Bundle();
         outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_MACHINE);
-        switch (selectedAutomata)
-        {
+        switch (selectedAutomata) {
             case FINITE_AUTOMATA:
                 outputBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
                 break;
@@ -125,7 +121,7 @@ public class NewMachineDialog extends DialogFragment {
                 break;
         }
 
-       return outputBundle;
+        return outputBundle;
     }
 
 }

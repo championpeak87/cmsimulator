@@ -33,12 +33,20 @@ public class AutomataTaskParser {
     private static final String AUTOMATA_TYPE_KEY = "automata_type";
     private static final String TASK_ID_KEY = "task_id";
     private static final String FILE_NAME_KEY = "file_name";
+    private static final String TASK_STATUS_KEY = "task_status";
+
+    // STATUS KEYS
+    private static final String IN_PROGRESS_KEY = Task.TASK_STATUS.IN_PROGRESS.toString();
+    private static final String WRONG_KEY = Task.TASK_STATUS.WRONG.toString();
+    private static final String CORRECT_KEY = Task.TASK_STATUS.CORRECT.toString();
+    private static final String NEW_KEY = Task.TASK_STATUS.NEW.toString();
 
     public Task getTaskFromJson(JSONObject object) throws JSONException {
         Task parsedTask;
         String task_name, task_description;
         int time, assigner_id, task_id;
         boolean public_input;
+        Task.TASK_STATUS status = Task.TASK_STATUS.NEW;
 
         task_name = object.getString(TASK_NAME_KEY);
         task_description = object.getString(TASK_DESCRIPTION_KEY);
@@ -46,6 +54,23 @@ public class AutomataTaskParser {
         assigner_id = object.getInt(ASSIGNER_ID_KEY);
         task_id = object.getInt(TASK_ID_KEY);
         public_input = object.getBoolean(PUBLIC_INPUT_KEY);
+        if (object.isNull(TASK_STATUS_KEY))
+            status = Task.TASK_STATUS.NEW;
+        else
+            switch (object.getString(TASK_STATUS_KEY)) {
+                case "in_progress":
+                    status = Task.TASK_STATUS.IN_PROGRESS;
+                    break;
+                case "new":
+                    status = Task.TASK_STATUS.NEW;
+                    break;
+                case "wrong":
+                    status = Task.TASK_STATUS.WRONG;
+                    break;
+                case "correct":
+                    status = Task.TASK_STATUS.CORRECT;
+                    break;
+            }
 
         String automataType = object.getString(AUTOMATA_TYPE_KEY);
 
@@ -57,7 +82,8 @@ public class AutomataTaskParser {
                         time,
                         Integer.toString(assigner_id),
                         task_id,
-                        public_input
+                        public_input,
+                        status
                 );
             case "pushdown_automata":
                 return new PushdownAutomataTask(
@@ -66,7 +92,8 @@ public class AutomataTaskParser {
                         time,
                         Integer.toString(assigner_id),
                         task_id,
-                        public_input
+                        public_input,
+                        status
                 );
             case "linear_bounded_automata":
                 return new LinearBoundedAutomataTask(
@@ -75,7 +102,8 @@ public class AutomataTaskParser {
                         time,
                         Integer.toString(assigner_id),
                         task_id,
-                        public_input
+                        public_input,
+                        status
                 );
             case "turing_machine":
                 return new TuringMachineTask(
@@ -84,7 +112,8 @@ public class AutomataTaskParser {
                         time,
                         Integer.toString(assigner_id),
                         task_id,
-                        public_input
+                        public_input,
+                        status
                 );
         }
 
@@ -93,13 +122,12 @@ public class AutomataTaskParser {
 
     public List<Task> getTasksFromJsonArray(String in) throws JSONException {
         List<Task> listOfTasks = new ArrayList<>();
-        if ( in == null || in.isEmpty() )
+        if (in == null || in.isEmpty())
             return listOfTasks;
         JSONArray array = new JSONArray(in);
         final int arrayLength = array.length();
 
-        for (int i = 0; i < arrayLength; i++)
-        {
+        for (int i = 0; i < arrayLength; i++) {
             JSONObject currentObject = array.getJSONObject(i);
             Task parsedTask = getTaskFromJson(currentObject);
             listOfTasks.add(parsedTask);

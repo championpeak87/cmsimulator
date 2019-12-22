@@ -135,15 +135,13 @@ app.get('/api/login_salt', (req, res) => {
   pool.query('SELECT salt FROM users WHERE username = $1;', [username], (error, results) => {
     if (error) { throw error }
 
-    if (results.rowCount > 0)
-    {
+    if (results.rowCount > 0) {
       res.status(HTTP_OK).send({
         username: username,
         salt: results.rows[0].salt
       })
     }
-    else
-    {
+    else {
       res.status(HTTP_NOT_FOUND).send("Selected user was not found!");
     }
   })
@@ -158,8 +156,7 @@ app.get('/api/tasks/automata', (req, res) => {
   })
 })
 
-app.get('/api/user/update', (req, res) =>
-{
+app.get('/api/user/update', (req, res) => {
   const logged_user_id = req.query.logged_user_id;
   const auth_key = req.query.auth_key;
   const user_id = req.query.user_id;
@@ -170,14 +167,11 @@ app.get('/api/user/update', (req, res) =>
   const username = req.query.username;
 
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
-    if ( err ) { throw err }
-    if (results.rowCount > 0)
-    {
-      pool.query('UPDATE users SET username=$1, type=$2, password_hash=$3, first_name=$4, last_name=$5 WHERE user_id=$6;', [username, type, password_hash, first_name, last_name, user_id], (error, result) =>
-      {
-        if ( error ) { throw error }
-        if (result.rowCount > 0)
-        {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      pool.query('UPDATE users SET username=$1, type=$2, password_hash=$3, first_name=$4, last_name=$5 WHERE user_id=$6;', [username, type, password_hash, first_name, last_name, user_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
           res.status(HTTP_OK).send({
             admin_id: logged_user_id,
             user_id: user_id,
@@ -188,8 +182,7 @@ app.get('/api/user/update', (req, res) =>
             updated: true
           });
         }
-        else
-        {
+        else {
           res.status(HTTP_NOT_FOUND).send({
             updated: false
           });
@@ -199,21 +192,16 @@ app.get('/api/user/update', (req, res) =>
   });
 })
 
-app.get('/api/user/delete', (req, res) =>
-{
+app.get('/api/user/delete', (req, res) => {
   const logged_user_id = req.query.logged_user_id;
   const auth_key = req.query.auth_key;
   const user_id = req.query.user_id;
-  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) =>
-  {
-    if ( err ) { throw err }
-    if (results.rowCount > 0)
-    {
-      pool.query('DELETE FROM users WHERE user_id = $1;', [user_id], (error, result) =>
-      {
-        if ( error ) { throw error }
-        if (result.rowCount > 0)
-        {
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      pool.query('DELETE FROM users WHERE user_id = $1;', [user_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
           res.status(HTTP_OK).send(
             {
               user_id: user_id,
@@ -221,8 +209,7 @@ app.get('/api/user/delete', (req, res) =>
             }
           );
         }
-        else
-        {
+        else {
           res.status(HTTP_NOT_FOUND).send(
             {
               user_id: user_id,
@@ -282,31 +269,25 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
 app.get('/api/tasks/delete', (req, res, next) => {
   const task_id = req.query.task_id;
 
-  pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) =>
-  {
-    if (err) {throw err}
-    if (result.rowCount > 0)
-    {
+  pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
+    if (result.rowCount > 0) {
       const filename = "./uploads/automataTasks/" + result.rows[0].file_name;
-      filesystem.unlink(filename, (error) =>
-      {
-        if (error) {throw error}
+      filesystem.unlink(filename, (error) => {
+        if (error) { throw error }
       });
     }
   })
-  pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) =>
-  {
-    if (err) {throw err}
-    if (result.rowCount > 0)
-    {
+  pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
+    if (result.rowCount > 0) {
       console.log([task_id], "Task has been deleted!");
       res.status(HTTP_OK).send({
         task_id: task_id,
         deleted: true
       })
     }
-    else
-    {
+    else {
       res.status(HTTP_OK).send({
         task_id: task_id,
         deleted: false
@@ -373,34 +354,119 @@ app.get('/api/tasks/getTasks', (req, res) => {
   const user_id = req.query.user_id;
   const auth_key = req.query.auth_key;
 
-  pool.query('SELECT * FROM automata_tasks;', (err, results) => {
+  //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
+    pool.query('SELECT automata_tasks.*, automata_task_results.task_status FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {
       res.status(HTTP_OK).send(results.rows);
       console.log(Date(), [user_id], 'has fetched tasks!');
     }
-    else{
+    else {
       res.status(HTTP_FORBIDDEN).send("FORBIDDEN!");
     }
   })
 })
 
-app.get('/api/tasks/download', (req, res) =>
-{
+app.post('/api/tasks/save', (req, res, next) => {
+  const user_id = req.query.user_id;
+  const file_name = req.query.file_name;
+  const file = req.files.task;
+  const makedirPath = "./uploads/" + user_id;
+  const path = "./uploads/" + user_id + "/" + file_name;
+
+  var mkdirp = require('mkdirp');
+  mkdirp("./uploads/", function (err) { });
+  mkdirp(makedirPath, function (err) { });
+  if (!file) {
+    console.log("FILE NOT SAVED!");
+  }
+  else {
+    file.mv(path, function (err, results) {
+      if (err) throw err;
+      res.status(HTTP_OK).send({
+        success: true,
+        message: "File uploaded!"
+      });
+      console.log([user_id], "TASK WAS SAVED!");
+    });
+  }
+});
+
+app.get('/api/tasks/changeFlag', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+  const task_status = req.query.task_status;
+
+  pool.query('SELECT * FROM automata_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (err, result) => {
+    if (err) { throw err; }
+    if (result.rowCount > 0) {
+      pool.query('UPDATE automata_task_results SET task_status=$1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result2) => {
+        if (error) { throw error }
+        res.status(HTTP_OK).send(
+          {
+            task_id: task_id,
+            user_id: user_id,
+            task_status: task_status,
+            updated: true
+          }
+        );
+      });
+    }
+    else {
+      pool.query("INSERT INTO automata_task_results(task_id, time_elapsed, task_status, user_id) VALUES ($1, $2, $3, $4);", [task_id, '00:00:00', task_status, user_id], (error, result2) => {
+        if (error) { throw error }
+        res.status(HTTP_OK).send(
+          {
+            task_id: task_id,
+            user_id: user_id,
+            task_status: task_status,
+            updated: true
+          }
+        )
+      })
+    }
+  })
+})
+
+app.get('/api/tasks/getFlag', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+
+  pool.query('SELECT task_status FROM automata_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (error, results) => {
+    if (error) { throw error }
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(
+        {
+          task_id: task_id,
+          user_id: user_id,
+          task_status: results.rows[0].task_status
+        }
+      )
+    }
+    else {
+      res.status(HTTP_OK).send(
+        {
+          task_id: task_id,
+          user_id: user_id,
+          task_status: 'new'
+        }
+      )
+    }
+  })
+})
+
+app.get('/api/tasks/download', (req, res) => {
   const task_id = req.query.task_id;
 
-  pool.query('SELECT file_name FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) =>
-  {
-    if (err) {throw err}
+  pool.query('SELECT file_name FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
     {
-      if (result.rowCount > 0)
-      {
+      if (result.rowCount > 0) {
         const filePath = "./uploads/automataTasks/" + result.rows[0].file_name;
         res.status(HTTP_OK).download(filePath);
       }
-      else
-      {
+      else {
         res.status(HTTP_NOT_FOUND).send(
           {
             task_id: task_id,

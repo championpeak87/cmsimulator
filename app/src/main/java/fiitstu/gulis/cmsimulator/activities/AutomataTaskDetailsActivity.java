@@ -9,6 +9,7 @@ import android.transition.Fade;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
 
@@ -19,6 +20,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
     private EditText description;
     private EditText publicInputs;
     private EditText minutes;
+    private LinearLayout bottomBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,12 +40,21 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
         final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
         final int time = intent.getIntExtra("TIME", 0);
+        final int primary = intent.getIntExtra("PRIMARY_COLOR", 0);
+        final int light_primary = intent.getIntExtra("LIGHT_PRIMARY", 0);
+
 
         type = findViewById(R.id.textview_automata_type);
         name = findViewById(R.id.textview_task_name);
         description = findViewById(R.id.edittext_task_description);
         publicInputs = findViewById(R.id.edittext_task_test_inputs);
         minutes = findViewById(R.id.edittext_task_solution_time);
+        bottomBar = findViewById(R.id.task_bottom_bar);
+
+        if (primary != 0 && light_primary != 0) {
+            type.setBackgroundColor(primary);
+            bottomBar.setBackgroundColor(light_primary);
+        }
 
         type.setText(task_type);
         name.setText(task_name);
@@ -60,8 +71,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -70,8 +80,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         return false;
     }
 
-    private void setConnectedTransition()
-    {
+    private void setConnectedTransition() {
         Fade fade = new Fade();
         View decor = getWindow().getDecorView();
         fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);

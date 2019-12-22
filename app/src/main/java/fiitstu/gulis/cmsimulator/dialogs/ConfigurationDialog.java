@@ -196,29 +196,33 @@ public class ConfigurationDialog extends DialogFragment {
 
         ConfigurationStackSpinnerAdapter stackSpinnerAdapter = new ConfigurationStackSpinnerAdapter(getContext(), new ArrayList<>(((ConfigurationActivity) getActivity()).getStackAlphabetList()));
 
-        popSymbolAdapter = new ConfigurationStackListAdapter(getActivity(),
-                (((ConfigurationActivity) getActivity()).getInputAlphabetList().get(0)),
-                stackSpinnerAdapter);
-        popSymbolAdapter.setAddItemListener(new ConfigurationStackListAdapter.AddItemListener() {
-            @Override
-            public void onAddItem(int index) {
-                newElementView = popSymbolRecyclerView;
-                ((ConfigurationActivity) getActivity()).showStackSupportConfigurationDialog(index);
-            }
-        });
-        popSymbolRecyclerView.setAdapter(popSymbolAdapter);
+        try {
+            popSymbolAdapter = new ConfigurationStackListAdapter(getActivity(),
+                    (((ConfigurationActivity) getActivity()).getInputAlphabetList().get(0)),
+                    stackSpinnerAdapter);
+            popSymbolAdapter.setAddItemListener(new ConfigurationStackListAdapter.AddItemListener() {
+                @Override
+                public void onAddItem(int index) {
+                    newElementView = popSymbolRecyclerView;
+                    ((ConfigurationActivity) getActivity()).showStackSupportConfigurationDialog(index);
+                }
+            });
+            popSymbolRecyclerView.setAdapter(popSymbolAdapter);
 
-        pushSymbolAdapter = new ConfigurationStackListAdapter(getActivity(),
-                (((ConfigurationActivity) getActivity()).getInputAlphabetList().get(0)),
-                stackSpinnerAdapter);
-        pushSymbolAdapter.setAddItemListener(new ConfigurationStackListAdapter.AddItemListener() {
-            @Override
-            public void onAddItem(int index) {
-                newElementView = pushSymbolRecyclerView;
-                ((ConfigurationActivity) getActivity()).showStackSupportConfigurationDialog(index);
-            }
-        });
-        pushSymbolRecyclerView.setAdapter(pushSymbolAdapter);
+            pushSymbolAdapter = new ConfigurationStackListAdapter(getActivity(),
+                    (((ConfigurationActivity) getActivity()).getInputAlphabetList().get(0)),
+                    stackSpinnerAdapter);
+            pushSymbolAdapter.setAddItemListener(new ConfigurationStackListAdapter.AddItemListener() {
+                @Override
+                public void onAddItem(int index) {
+                    newElementView = pushSymbolRecyclerView;
+                    ((ConfigurationActivity) getActivity()).showStackSupportConfigurationDialog(index);
+                }
+            });
+            pushSymbolRecyclerView.setAdapter(pushSymbolAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         LinearLayout directionLinearLayout = view.findViewById(R.id.linearLayout_popup_configuration_transition_direction);
         radioButtonLeft = view.findViewById(R.id.radioButton_popup_configuration_transition_direction_left);

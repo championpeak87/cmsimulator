@@ -36,7 +36,7 @@ import java.util.List;
 
 public class BrowseAutomataTasksActivity extends FragmentActivity {
     private List<Task> listOfTasks;
-    private int user_id;
+    public static int user_id;
     private String authkey;
 
     @Override

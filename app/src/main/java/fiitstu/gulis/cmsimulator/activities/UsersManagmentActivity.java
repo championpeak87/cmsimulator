@@ -63,7 +63,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
                 infiniteScrollListener.setLoaded();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -243,7 +243,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
         new getUsersAsync().execute(0);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

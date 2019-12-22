@@ -45,6 +45,8 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private boolean autologin = false;
 
+    public static User loggedUser = null;
+
     public static final String SETTINGS_KEY = "SETTINGS";
     public static final String AUTOLOGIN_SETTING = "AUTOLOGIN";
     public static final String AUTOLOGIN_USERNAME = "AUTOLOGIN_USERNAME";
@@ -281,7 +283,6 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private User returnLoggedUser(String json) {
         UserParser userParser = new UserParser();
-        User loggedUser;
         try {
             loggedUser = userParser.getUserFromJson(json);
         } catch (JSONException e) {
