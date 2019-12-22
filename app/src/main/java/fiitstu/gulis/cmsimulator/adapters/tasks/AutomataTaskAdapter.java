@@ -67,7 +67,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CardViewBuilder holder, final int position) {
         final Task currentTask = listOfTasks.get(position);
         holder.task_name.setText(currentTask.getTitle());
         final String automataType;
@@ -133,6 +133,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             }
         });
 
+        final AutomataTaskAdapter thisAdapter = this;
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +168,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         }
 
                         TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
+                        taskDialog.setAdapter(thisAdapter);
                         taskDialog.show(mContext.getSupportFragmentManager(), TASK_DIALOG);
                     }
                 }
@@ -277,6 +279,15 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         } finally {
 
         }
+    }
+
+    public List<Task> getListOfTasks() {
+        return listOfTasks;
+    }
+
+    public void notifyChange(int position)
+    {
+        notifyItemChanged(position);
     }
 
 }

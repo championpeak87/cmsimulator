@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 
-import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
-import fiitstu.gulis.cmsimulator.activities.ConfigurationActivity;
-import fiitstu.gulis.cmsimulator.activities.MainActivity;
-import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.activities.*;
+import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 
 import fiitstu.gulis.cmsimulator.database.FileHandler;
@@ -81,6 +80,11 @@ public class TaskDialog extends DialogFragment {
     private LinearLayout timeLayout;
 
     private Timer timer;
+    private AutomataTaskAdapter adapter;
+
+    public void setAdapter(AutomataTaskAdapter adapter) {
+        this.adapter = adapter;
+    }
 
     /**
      * Ugly global variable.
@@ -299,6 +303,9 @@ public class TaskDialog extends DialogFragment {
                     outputBundle.putSerializable(MainActivity.TASK, task);
 
                     markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id() );
+                    task.setStatus(Task.TASK_STATUS.IN_PROGRESS);
+                    int position = adapter.getListOfTasks().indexOf(task);
+                    adapter.notifyItemChanged(position);
 
                     intent.putExtras(outputBundle);
 

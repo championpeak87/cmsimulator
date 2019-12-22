@@ -278,13 +278,16 @@ app.get('/api/tasks/delete', (req, res, next) => {
       });
     }
   })
-  pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+  pool.query('DELETE FROM automata_task_results WHERE task_id = $1;', [task_id], (err, result) => {
     if (err) { throw err }
     if (result.rowCount > 0) {
-      console.log([task_id], "Task has been deleted!");
-      res.status(HTTP_OK).send({
-        task_id: task_id,
-        deleted: true
+      pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (error, result2) => {
+        if (error) { throw error }
+        console.log([task_id], "Task has been deleted!");
+        res.status(HTTP_OK).send({
+          task_id: task_id,
+          deleted: true
+        });
       })
     }
     else {
@@ -355,7 +358,7 @@ app.get('/api/tasks/getTasks', (req, res) => {
   const auth_key = req.query.auth_key;
 
   //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
-    pool.query('SELECT automata_tasks.*, automata_task_results.task_status FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
+  pool.query('SELECT automata_tasks.*, automata_task_results.task_status FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {
