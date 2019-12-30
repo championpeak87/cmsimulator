@@ -193,6 +193,17 @@ public class ConfigurationActivity extends FragmentActivity
             GameShowcase gameShowcase = new GameShowcase();
             gameShowcase.showTutorial(gameNumber, this);
         }
+        if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE) {
+            setFilename(machineType);
+            FileHandler.Format format = inputBundle.getBoolean(MainActivity.DEFAULT_FORMAT)
+                    ? FileHandler.Format.CMS
+                    : FileHandler.Format.JFF;
+
+            loadMachine(filename, format);
+
+            filename = filename.substring(filename.lastIndexOf("/") + 1, filename.lastIndexOf("."));
+        }
+
 
         ////tabHost initialization
         tabHost = findViewById(R.id.tabHost_configuration);
@@ -343,6 +354,28 @@ public class ConfigurationActivity extends FragmentActivity
         menuInflater.inflate(R.menu.menu_configuration, menu);
 
         return true;
+    }
+
+    private void setFilename(int machineType) {
+        String filename = getIntent().getExtras().getString(MainActivity.FILE_NAME);
+        if (filename == null) {
+            switch (machineType) {
+                case MainActivity.FINITE_STATE_AUTOMATON:
+                    this.filename = "FSA";
+                    break;
+                case MainActivity.PUSHDOWN_AUTOMATON:
+                    this.filename = "PDA";
+                    break;
+                case MainActivity.LINEAR_BOUNDED_AUTOMATON:
+                    this.filename = "LBA";
+                    break;
+                case MainActivity.TURING_MACHINE:
+                    this.filename = "TM";
+                    break;
+            }
+        } else {
+            this.filename = filename;
+        }
     }
 
     @Override
@@ -732,6 +765,7 @@ public class ConfigurationActivity extends FragmentActivity
             State state = (State) object;
             dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
         }
+        dataSource.globalDrop();
         dataSource.close();
         finish();
         super.onBackPressed();
@@ -1602,6 +1636,25 @@ public class ConfigurationActivity extends FragmentActivity
             nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(nextActivityIntent);
             taskDialog.dismiss();
+        }
+    }
+
+    private void loadMachine(String filename, FileHandler.Format format) {
+        try {
+            FileHandler fileHandler = new FileHandler(format);
+            fileHandler.loadFile(filename);
+            machineType = fileHandler.getMachineType();
+            fileHandler.getData(dataSource);
+            emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
+            if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
+                startStackSymbolId = fileHandler.getStartStackSymbolId();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "File was not loaded", e);
+            Toast.makeText(this, getResources().getString(R.string.file_not_loaded), Toast.LENGTH_SHORT).show();
+            dataSource.globalDrop();
+            dataSource.close();
+            finish();
         }
     }
 }

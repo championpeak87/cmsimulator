@@ -295,8 +295,10 @@ public class TaskDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), ConfigurationActivity.class);
+
                     Bundle outputBundle = new Bundle();
                     outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
+                    outputBundle.putBoolean(MainActivity.DEFAULT_FORMAT, true);
                     outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
                     outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
@@ -310,6 +312,7 @@ public class TaskDialog extends DialogFragment {
                     intent.putExtras(outputBundle);
 
                     startActivity(intent);
+                    TaskDialog.super.dismiss();
                 }
             });
 

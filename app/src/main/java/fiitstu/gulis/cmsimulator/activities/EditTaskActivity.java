@@ -271,7 +271,9 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
     private void uploadFinished()
     {
+        resetConfiguration();
         finish();
+        EditTaskActivity.super.onBackPressed();
         Toast.makeText(this, R.string.upload_task_complete, Toast.LENGTH_SHORT).show();
     }
 
@@ -287,6 +289,13 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         super.onResume();
     }
 
+    private void resetConfiguration()
+    {
+        DataSource.getInstance().open();
+        DataSource.getInstance().globalDrop();
+        DataSource.getInstance().close();
+    }
+
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
@@ -297,7 +306,6 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         DataSource.getInstance().open();
-                        ;
                         DataSource.getInstance().globalDrop();
                         DataSource.getInstance().close();
                         finish();
