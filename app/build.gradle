@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "fiit.stu.cmsimulator"
         minSdkVersion 23
@@ -21,7 +20,7 @@ android {
     }
     sourceSets {
         androidTest {
-            assets.srcDirs = ['src/androidTest/assets']
+            assets.srcDirs = ['src/main/assets']
         }
     }
 }
