@@ -5,6 +5,7 @@ Android simulator of formal grammar
 
 - When changing user's password, there's not response when old password is wrong
 - Example grammars wont show after rotating the device
+- When creating task, no empty symbols are added to file
 
 # TODO
 
