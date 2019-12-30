@@ -784,7 +784,9 @@ public class ConfigurationActivity extends FragmentActivity
             State state = (State) object;
             dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
         }
-        dataSource.globalDrop();
+        /*int config = inputBundle.getInt(MainActivity.CONFIGURATION_TYPE);
+        if (config != MainActivity.EDIT_TASK)
+            dataSource.globalDrop();*/
         dataSource.close();
         finish();
         super.onBackPressed();

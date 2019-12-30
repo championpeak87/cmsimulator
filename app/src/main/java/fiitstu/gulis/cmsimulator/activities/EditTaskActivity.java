@@ -27,9 +27,8 @@ import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
-import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.elements.TaskResult;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
@@ -39,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.URL;
+import java.util.List;
 
 /**
  * Activity for editing tasks.
@@ -185,17 +185,29 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                 } else if (titleEditText.getText().toString().isEmpty()) {
                     Toast.makeText(EditTaskActivity.this, R.string.no_task_title, Toast.LENGTH_SHORT).show();
                 } else {
-                    Bundle outputBundle = new Bundle();
+
+                    String output = null;
                     FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+                    try {
+                        if (machineType != MainActivity.UNDEFINED) {
+                            DataSource dataSource = DataSource.getInstance();
+                            dataSource.open();
+                            fileHandler.setData(dataSource, machineType);
+                            dataSource.close();
+                        }
+                        updateTask();
+                        fileHandler.writeTask(task);
+                        output = fileHandler.writeToString();
+                    } catch (ParserConfigurationException | TransformerException e) {
+                        e.printStackTrace();
+                    }
+
+                    Bundle outputBundle = new Bundle();
                     DataSource dataSource = DataSource.getInstance();
                     dataSource.open();
                     try {
-                        fileHandler.setData(dataSource, machineType);
-                        updateTask();
                         task.setResultVersion(TaskResult.CURRENT_VERSION);
-                        fileHandler.writeTask(task);
-
-                        String taskDoc = fileHandler.writeToString();
+                        String taskDoc = output;
 
                         final File file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
                         final String[] filename = new String[1];
@@ -255,8 +267,6 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
                         new addTaskToDatabaseAsync().execute(task);
 
-                    } catch (ParserConfigurationException | TransformerException e) {
-                        Log.e(TAG, "Error happened when serializing task", e);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {

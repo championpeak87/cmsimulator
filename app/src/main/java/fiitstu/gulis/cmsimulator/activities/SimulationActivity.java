@@ -128,7 +128,7 @@ public class SimulationActivity extends FragmentActivity
      *
      * @param machineType the type of the machine
      */
-    private void initMachine(int machineType) {
+    public void initMachine(int machineType) {
         switch (machineType) {
             case MainActivity.PUSHDOWN_AUTOMATON:
                 startStackSymbolId = dataSource.addStackSymbol("Z", Symbol.STACK_BOTTOM).getId();
