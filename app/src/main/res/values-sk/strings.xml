@@ -922,4 +922,6 @@
     <string name="unlimited_time">Neobmedzený čas</string>
     <string name="submit_task">Odovzdať úlohu</string>
     <string name="save_complete">Úloha bola úspešne uložená</string>
+    <string name="task_leave_message">Naozaj chceš skončiť s riešením úlohy? Neuložená práca nebude zachovaná!</string>
+    <string name="task_leave_title">Opustiť úlohu</string>
 </resources>

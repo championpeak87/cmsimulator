@@ -1283,5 +1283,8 @@
 	<string name="unlimited_time">Unlimited time</string>
 	<string name="submit_task">Submit task</string>
 	<string name="save_complete">Task was successfully saved!</string>
+	<string name="task_leave_message">Do you really want to quit solving this task? Unsaved work won\'t be saved!
+	</string>
+	<string name="task_leave_title">Leave task</string>
 
 </resources>

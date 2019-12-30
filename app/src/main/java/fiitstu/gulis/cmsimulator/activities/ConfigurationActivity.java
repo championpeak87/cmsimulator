@@ -761,6 +761,25 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
+        if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE && inputBundle.getInt(TASK_CONFIGURATION) == MainActivity.SOLVE_TASK)
+        {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setMessage(R.string.task_leave_message)
+                    .setTitle(R.string.task_leave_title)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dataSource.globalDrop();
+                            dataSource.close();
+                            ConfigurationActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .create();
+
+            dialog.show();
+            return;
+        }
         for (Object object : stateAdapter.getItems()) {
             State state = (State) object;
             dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
