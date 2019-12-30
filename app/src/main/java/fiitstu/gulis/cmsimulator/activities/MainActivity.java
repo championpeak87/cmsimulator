@@ -1,10 +1,19 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
-import android.content.Intent;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -13,11 +22,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 
+import com.aditya.filebrowser.Constants;
+import com.aditya.filebrowser.FileChooser;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExampleGrammarDialog;
@@ -25,17 +33,21 @@ import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import fiitstu.gulis.cmsimulator.network.ServerController;
 import io.blushine.android.ui.showcase.MaterialShowcase;
 import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
 import io.blushine.android.ui.showcase.MaterialShowcaseView;
 import io.blushine.android.ui.showcase.ShowcaseConfig;
+
+import java.io.File;
+import java.io.IOException;
 
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 
 /**
  * Activity that displays the main menu
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class MainActivity extends FragmentActivity
@@ -44,6 +56,9 @@ public class MainActivity extends FragmentActivity
 
     //log tag
     private static final String TAG = MainActivity.class.getName();
+
+    // FILE BROWSER
+    private static final int READ_REQUEST_CODE = 42;
 
     //bundle values
     public static final String MACHINE_TYPE = "MACHINE_TYPE";
@@ -71,6 +86,7 @@ public class MainActivity extends FragmentActivity
     public static final int EDIT_TASK = 5;
     public static final int SOLVE_TASK = 6;
     public static final int RESUME_MACHINE = 7;
+    public static final int GAME_MACHINE = 9;
 
     //grammar examples
     public static final int EXAMPLE_GRAMMAR1 = 0;
@@ -101,18 +117,19 @@ public class MainActivity extends FragmentActivity
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_main_landscape);
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_main_portrait);
         }
 
         ImageView image = findViewById(R.id.imageView_main_logo);
 
+        final int textColor = getColor(R.color.introContentText);
 
         MaterialShowcaseSequence firstLaunchSequence = new MaterialShowcaseSequence(this);
         MaterialShowcaseView firstLaunchMessage = new MaterialShowcaseView.Builder(this)
                 .renderOverNavigationBar()
                 .setTitleText(getString(R.string.welcome))
+                .setContentTextColor(textColor)
                 .setContentText(getString(R.string.welcome_message))
                 .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
                 .setDismissText(R.string.understood)
@@ -120,12 +137,13 @@ public class MainActivity extends FragmentActivity
                 .build();
 
         Button newAutomata = findViewById(R.id.button_main_new),
-               newGrammar = findViewById(R.id.button_main_grammar),
-               tasks = findViewById(R.id.button_main_tasks);
+                newGrammar = findViewById(R.id.button_main_grammar),
+                tasks = findViewById(R.id.button_main_tasks);
 
         MaterialShowcaseView newAutomataMessage = new MaterialShowcaseView.Builder(this)
                 .renderOverNavigationBar()
                 .setTarget(newAutomata)
+                .setContentTextColor(textColor)
                 .setTitleText(getString(R.string.automatas))
                 .setContentText(getString(R.string.automata_message))
                 .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
@@ -137,6 +155,7 @@ public class MainActivity extends FragmentActivity
                 .renderOverNavigationBar()
                 .setTarget(newGrammar)
                 .setTitleText(getString(R.string.grammar))
+                .setContentTextColor(textColor)
                 .setContentText(getString(R.string.grammar_message))
                 .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
                 .setDismissText(R.string.understood)
@@ -147,6 +166,7 @@ public class MainActivity extends FragmentActivity
                 .renderOverNavigationBar()
                 .setTarget(tasks)
                 .setTitleText(getString(R.string.tasks))
+                .setContentTextColor(textColor)
                 .setContentText(getString(R.string.tasks_message))
                 .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
                 .setDismissText(R.string.understood)
@@ -182,6 +202,7 @@ public class MainActivity extends FragmentActivity
         dataSource.open();
         dataSource.globalDrop();
         dataSource.close();
+
 
         //main window buttons initializations
         //new machine
@@ -235,9 +256,25 @@ public class MainActivity extends FragmentActivity
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_main_landscape);
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_main_portrait);
+        }
+
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+        ImageView logo = findViewById(R.id.imageView_main_logo);
+        switch (nightModeFlags) {
+
+            case Configuration.UI_MODE_NIGHT_YES:
+
+                logo.setImageResource(R.drawable.logo_v1_dark);
+                break;
+
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                logo.setImageResource(R.drawable.logo_v1_light);
+                break;
         }
 
         Button newMachineButton = findViewById(R.id.button_main_new);
@@ -265,37 +302,66 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri uri = data.getData();
+                String path = uri.getPath();
+                String[] temp = path.split("\\.");
+                if (temp[temp.length - 1].equals("cms") || temp[temp.length - 1].equals("cmst")) {
+                    Bundle outputBundle = new Bundle();
+                    outputBundle.putInt(CONFIGURATION_TYPE, LOAD_MACHINE);
+                    outputBundle.putBoolean(DEFAULT_FORMAT, true);
+                    outputBundle.putString(FILE_NAME, path);
+                    Log.v(TAG, "outputBundle initialized");
+
+                    Intent nextActivityIntent = new Intent(MainActivity.this, SimulationActivity.class);
+                    nextActivityIntent.putExtras(outputBundle);
+                    startActivity(nextActivityIntent);
+                    Log.i(TAG, "simulation activity intent executed");
+                } else {
+                    Toast.makeText(this, R.string.file_not_loaded, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             //new machine
-            case R.id.button_main_new:FragmentManager fm = getSupportFragmentManager();
-                NewMachineDialog newMachineDialog = NewMachineDialog.newInstance();
+            case R.id.button_main_new:
+                FragmentManager fm = getSupportFragmentManager();
+                NewMachineDialog newMachineDialog = new NewMachineDialog();
                 newMachineDialog.show(fm, NEW_MACHINE_DIALOG);
+
+
                 Log.v(TAG, "new machine button click noted");
                 break;
             //example machine
             case R.id.button_main_example:
+                Intent newIntent = new Intent(this, ExampleAutomatas.class);
+
+                startActivity(newIntent);
                 Log.v(TAG, "example machine button click noted");
-                fm = getSupportFragmentManager();
+                /*fm = getSupportFragmentManager();
                 ExampleMachineDialog exampleMachineDialog = ExampleMachineDialog.newInstance();
-                exampleMachineDialog.show(fm, EXAMPLE_MACHINE_DIALOG);
+                exampleMachineDialog.show(fm, EXAMPLE_MACHINE_DIALOG);*/
                 break;
             //load machine
             case R.id.button_main_load:
                 Log.v(TAG, "load machine click noted");
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQUEST_READ_STORAGE);
-                } else {
-                    loadMachine();
-                }
+
+                Intent i2 = new Intent(getApplicationContext(), FileChooser.class);
+                i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
+                i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "cms;cmst");
+                startActivityForResult(i2, READ_REQUEST_CODE);
+
                 break;
             //tasks
             case R.id.button_main_tasks:
                 Log.v(TAG, "tasks click noted");
-                Intent nextActivityIntent = new Intent(this, TasksActivity.class);
+                Intent nextActivityIntent = new Intent(this, TaskLoginActivity.class);
                 startActivity(nextActivityIntent);
                 Log.i(TAG, "tasksActivity intent executed");
                 break;

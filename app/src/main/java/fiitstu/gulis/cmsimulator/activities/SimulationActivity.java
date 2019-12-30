@@ -566,11 +566,26 @@ public class SimulationActivity extends FragmentActivity
             Log.v(TAG, "outputBundle initialized");
 
             Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
-            nextActivityIntent.putExtras(outputBundle);
+            Bundle gameBundle = new Bundle();
+            if (inputBundle.containsKey(TasksActivity.TASK_CONFIGURATION)) {
+                int temp = inputBundle.getInt(TasksActivity.TASK_CONFIGURATION);
+                gameBundle.putInt(TasksActivity.TASK_CONFIGURATION, temp);
+
+                temp = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
+                gameBundle.putInt(TasksActivity.GAME_EXAMPLE_NUMBER, temp);
+
+                gameBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+
+                nextActivityIntent.putExtras(gameBundle);
+            } else {
+                nextActivityIntent.putExtras(outputBundle);
+            }
             startActivity(nextActivityIntent);
             Log.i(TAG, "configuration activity intent executed");
         }
     }
+
+
 
     @Override
     public void onResume() {
@@ -944,8 +959,8 @@ public class SimulationActivity extends FragmentActivity
                             }
                         }
                     })
-                    .setNegativeButton(R.string.cancel, null)
-                    .setNeutralButton(R.string.no, new DialogInterface.OnClickListener() {
+                    .setNeutralButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dataSource.globalDrop();

@@ -1,5 +1,7 @@
 package fiitstu.gulis.cmsimulator.adapters.grammar;
 
+import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +9,12 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import android.widget.ImageView;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.elements.GrammarItemViewHolder;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
+
+import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 public class GrammarSimulationAdapter extends RecyclerView.Adapter<GrammarItemViewHolder> {
 

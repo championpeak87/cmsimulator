@@ -84,16 +84,16 @@
     <string name="turing_machine">Turingov stroj</string>
 
     <!--Popup Main Activity examples-->
-    <string name="finite_state_automaton_example1">DKA - 3k+1</string>
-    <string name="finite_state_automaton_example2">NKA - končiace 01 alebo 10</string>
-    <string name="finite_state_automaton_example3">DKA - a<sup><small>N</small></sup></string>
-    <string name="pushdown_automaton_example1">DZA - wcw<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example2">NZA - ww<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example3">DZA - a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example1">DLOA - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example2">NLOA - 1<sup><small>N</small></sup>, kde N nie je prvočíslo</string>
-    <string name="turing_machine_example1">DTS - násobenie dvoch čísel v unárnej sústave</string>
-    <string name="turing_machine_example2">NTS - w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
+    <string name="finite_state_automaton_example1">3k+1</string>
+    <string name="finite_state_automaton_example2">končiace 01 alebo 10</string>
+    <string name="finite_state_automaton_example3">a<sup><small>N</small></sup></string>
+    <string name="pushdown_automaton_example1">wcw<sup><small>R</small></sup></string>
+    <string name="pushdown_automaton_example2">ww<sup><small>R</small></sup></string>
+    <string name="pushdown_automaton_example3">a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
+    <string name="linear_bounded_automaton_example1">a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
+    <string name="linear_bounded_automaton_example2">1<sup><small>N</small></sup>, kde N nie je prvočíslo</string>
+    <string name="turing_machine_example1">násobenie dvoch čísel v unárnej sústave</string>
+    <string name="turing_machine_example2">w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
 
     <!--Popup Main Activity grammar examples-->
     <string name="example_grammar1">Greg - a<sup><small>N</small></sup></string>
@@ -819,4 +819,107 @@
     <string name="tasks_message">Tu môžeš nájsť úlohy, ktoré môžeš vyriešiť</string>
 	<string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
 	<string name="select_task">Vyber úlohu</string>
+	<string name="generic_error">Niečo sa pokazilo</string>
+	<string name="game_create_state">Teraz si vytvoríme nový stav</string>
+    <string name="gotit">Rozumiem</string>
+    <string name="game_new_state_title">Vytvor nový stav</string>
+    <string name="game_welcome1">Táto hra ti pomôže sa naučiť základy tvorby konečných automatov</string>
+	<string name="username">Prihlasovacie meno</string>
+	<string name="password">Heslo</string>
+	<string name="sign_in">Prihlásiť sa</string>
+	<string name="sign_up">Registrovať sa</string>
+	<string name="log_in_header">Prihlásenie</string>
+	<string name="remember_future_logins">Zapamätať si</string>
+	<string name="username_empty">Používateľské meno nie je vyplnené</string>
+    <string name="password_empty">Heslo nebolo zadané</string>
+	<string name="login_incorrect">Prihlasovacie meno alebo heslo je nesprávne</string>
+	<string name="logged_user">Prihlásený používateľ</string>
+    <string name="find_task">Nájsť úlohy</string>
+    <string name="create_task">Vytvoriť úlohu</string>
+    <string name="games">Hry</string>
+    <string name="change_password">Zmeniť heslo</string>
+	<string name="sign_out">Odhlásiť sa</string>
+	<string name="old_password">Staré heslo</string>
+    <string name="new_password">Nové heslo</string>
+	<string name="new_password_confirm">Potvrď nové heslo</string>
+	<string name="passwords_dont_match">Heslá sa nezhodujú</string>
+	<string name="first_name">Meno</string>
+    <string name="last_name">Priezvisko</string>
+	<string name="first_name_empty">Meno je prázdne</string>
+    <string name="last_name_empty">Priezvisko je prázdne</string>
+    <string name="username_length_small">Používateľské meno musí mať 5 alebo viac znakov</string>
+    <string name="password_length_error">Heslo musí mať 6 alebo viac znakov</string>
+    <string name="username_exists_error">Toto používateľské meno sa už používa</string>
+	<string name="sign_up_header">Registrácia</string>
+    <string name="successful_signup_toast_message">Používateľ {0} bol úspešne zaregistrovaný.</string>
+	<string name="deterministic_FA">Deterministický konečný automat</string>
+    <string name="nondeterministic_fa">Nedeterministický konečný automat</string>
+    <string name="deterministic_pushdown">Deterministický zásobníkový automat</string>
+    <string name="nondeterministic_pushdown">Nedeterministický zásobníkový automat</string>
+    <string name="deterministic_loa">Deterministický lineárne ohraničený automat</string>
+    <string name="nondeterministic_loa">Nedeterministický lineárne ohraničený automat</string>
+    <string name="deterministic_tm">Deterministický Turingov stroj</string>
+    <string name="nondeterministic_tm">Nedeterministický turingov stroj</string>
+	<string name="available_tasks">Dostupné úlohy</string>
+	<string name="example_automata_description1">"Počet písmen a alebo b v slove musí byť 3k + 1. "</string>
+	<string name="start_task">Spustiť</string>
+    <string name="task_hint">Nápoveda</string>
+	<string name="deterministic">Deterministický</string>
+    <string name="nondeterministic">Nedeterministický</string>
+	<string name="unknown_machine">Neznámy automat</string>
+	<string name="example_automata_description2">Slovo sa musí končiť na 01 alebo 10.</string>
+    <string name="example_automata_description3">Písmeno \'a\' sa musí opakovať N-krát.</string>
+    <string name="example_automata_description4">Slovo pozostávajúce z písmen a alebo b nasledované písmenom c je
+        nasledované obráteným počiatočným slovom.
+    </string>
+    <string name="example_automata_description5">Po slove nasleduje jeho obrátený tvar.</string>
+    <string name="example_automata_description7">Písmeno a sa musí opakovať N-krát, nasledované písmenom b, ktoré sa
+        musí opakovať N-krát, nasledované písmenom C, ktoré sa musí opakovať N-krát.
+    </string>
+    <string name="example_automata_description6">Písmeno a sa musí opakovať N-krát, nasledované písmenom b, ktoré sa
+        musí opakovať N-krát.
+    </string>
+    <string name="example_automata_description8">Číslo 1, za ktorým bezprostredne nasleduje prvočíslo.</string>
+    <string name="example_automata_description10">Dané sú dve slová w1 a w2 oddelené znakom $. Slovo w2 je podreťazec
+        slova w1.
+    </string>
+    <string name="example_automata_description9">Pri násobení číslic môžeš použiť len jednu algebraickú operáciu.
+    </string>
+	<string name="view_results">Prehliadať výsledky</string>
+	<string name="manage_users">Spravovať používateľov</string>
+	<string name="upload_task">Upload task</string>
+	<string name="user_management">Správa používateľov</string>
+	<string name="reload">Znovu načítať</string>
+	<string name="details">Detaily</string>
+	<string name="ascending">Vzostupne</string>
+    <string name="descending">Zostupne</string>
+    <string name="position">Poradie</string>
+    <string name="order_by">Zoradiť podľa</string>
+    <string name="by_first_name">Podľa mena</string>
+    <string name="by_last_name">Podľa priezviska</string>
+    <string name="by_username">Podľa prihlasovacieho mena</string>
+	<string name="search_by">Vyhľadať podľa</string>
+    <string name="search">Vyhľadať</string>
+	<string name="student">Študent</string>
+    <string name="lector">Lektor</string>
+    <string name="admin">Administrátor</string>
+	<string name="user_details">Podrobnosti o používateľovi</string>
+	<string name="achieved_results">Dosiahnuté výsledky</string>
+	<string name="account_management">Správa účtu</string>
+	<string name="automata_type">Druh automatu</string>
+	<string name="delete_user">Naozaj chcete vymazať používateľa {0}?</string>
+	<string name="delete_user_title">Vymazať používateľa</string>
+	<string name="no_tasks_available">Žiadne dostupné úlohy.</string>
+	<string name="user_deleted">Používateľ bol vymazaný.</string>
+	<string name="cant_delete_logged_user">Nemôžem vymazať práve prihláseného používateľa!</string>
+	<string name="user_type">Druh používateľa</string>
+	<string name="user_updated">Používateľ bol aktualizovaný!</string>
+    <string name="upload_task_complete">Úloha bola úspešne nahraná!</string>
+    <string name="task_delete_message">Ste si istý, že chcete odstrániť túto úlohu?</string>
+    <string name="delete_task">Vymazať úlohu</string>
+    <string name="task_deleted">Úloha bola úspešne odstránená</string>
+    <string name="task_not_found">Vybraná úloha nebola nájdená!</string>
+    <string name="unlimited_time">Neobmedzený čas</string>
+    <string name="submit_task">Odovzdať úlohu</string>
+    <string name="save_complete">Úloha bola úspešne uložená</string>
 </resources>

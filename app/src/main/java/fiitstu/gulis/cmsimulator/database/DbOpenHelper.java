@@ -75,6 +75,11 @@ class DbOpenHelper extends SQLiteOpenHelper {
     static final String COLUMN_RIGHT_RULE = "RIGHT_RULE";
     static final String COLUMN_LEFT_RULE = "LEFT_RULE";
     static final String COLUMN_GRAMMAR_RULE_ID = "ID";
+    //tasks
+    static final String AUTOLOGIN = "AUTOLOGIN";
+    static final String AUTOLOGIN_USERNAME = "USERNAME";
+    static final String AUTOLOGIN_AUTHKEY = "AUTHKEY";
+    static final String AUTOLOGIN_VALUES = "AUTOLOGIN_VALUES";
 
     //create table input alphabet sqlite query
     private static final String TABLE_INPUT_ALPHABET_CREATE =

@@ -1,25 +1,21 @@
 package fiitstu.gulis.cmsimulator.activities;
 
-import android.Manifest;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.PopupMenu;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
@@ -29,8 +25,15 @@ import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.dialogs.TasksGameDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import fiitstu.gulis.cmsimulator.models.users.Admin;
+import fiitstu.gulis.cmsimulator.models.users.Lector;
+import fiitstu.gulis.cmsimulator.models.users.Student;
+import fiitstu.gulis.cmsimulator.models.users.User;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * A main-ish menu for task-related activities.
@@ -44,6 +47,12 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
 
     private static final String EXAMPLE_DIALOG = "EXAMPLE_DIALOG";
     private static final String GAME_DIALOG = "GAME_DIALOG";
+    public static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
+    public static final String GAME_EXAMPLE_NUMBER = "GAME_EXAMPLE_NUMBER";
+
+    public static final int GAME_EXAMPLE_PREVIEW = 0;
+
+    public static User loggedUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +60,50 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         setContentView(R.layout.activity_tasks);
         Log.v(TAG, "onCreate initialization started");
 
+        Bundle bundle;
+        bundle = getIntent().getExtras();
+
+        String username = bundle.getString(User.USERNAME_KEY),
+                first_name = bundle.getString(User.FIRST_NAME_KEY),
+                last_name = bundle.getString(User.LAST_NAME_KEY),
+                authkey = bundle.getString(User.AUTHKEY_KEY),
+                user_type = bundle.getString(User.USER_TYPE_KEY);
+
+        int user_id = bundle.getInt(User.USER_ID_KEY);
+
+        final String Lector_tag = Lector.class.getName();
+        final String Student_tag = Student.class.getName();
+        final String Admin_tag = Admin.class.getName();
+
+        if (user_type.equals(Lector_tag))
+            loggedUser = new Lector(username, first_name, last_name, user_id, authkey);
+        else if (user_type.equals(Student_tag))
+            loggedUser = new Admin(username, first_name, last_name, user_id, authkey);
+        else if (user_type.equals(Admin_tag))
+            loggedUser = new Student(username, first_name, last_name, user_id, authkey);
+
+        TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
+        fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());
+
+        TextView usernameTextView = findViewById(R.id.textview_tasks_username);
+        usernameTextView.setText(loggedUser.getUsername());
+
         //menu
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle(R.string.tasks);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Button findTasksButton = findViewById(R.id.button_tasks_find);
+        Button example = findViewById(R.id.button_tasks_find_automata);
+        example.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivityIntent = new Intent(TasksActivity.this, EditTaskActivity.class);
+                nextActivityIntent.putExtras(new Bundle());
+                startActivity(nextActivityIntent);
+            }
+        });
+
+        /*Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +156,7 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 TasksGameDialog dialog = TasksGameDialog.newInstance();
                 dialog.show(fm, GAME_DIALOG);
             }
-        });
+        });*/
 
         Log.i(TAG, "onCreate initialized");
     }
@@ -122,6 +169,23 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
         return true;
     }
 
+    public void signOut(View view) {
+        Intent signInActivity = new Intent(this, TaskLoginActivity.class);
+        startActivity(signInActivity);
+
+        Context context = this.getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                TaskLoginActivity.SETTINGS_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(TaskLoginActivity.AUTOLOGIN_SETTING, false);
+        editor.putString(TaskLoginActivity.AUTOLOGIN_USERNAME, "");
+        editor.putString(TaskLoginActivity.AUTOLOGIN_AUTHKEY, "");
+        editor.commit();
+
+        finish();
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -133,9 +197,19 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.TASKS);
                 guideFragment.show(fm, "HELP_DIALOG");
                 return true;
+            case R.id.menu_tasks_change_password:
+                changePassword(null);
+                return true;
+            case R.id.menu_tasks_sign_out:
+                signOut(null);
+                return true;
         }
 
         return false;
+    }
+
+    public void findAutomataTasks(View view) {
+
     }
 
     @Override
@@ -156,6 +230,81 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
                 }
             }
         }
+    }
+
+    public void changePassword(View view) {
+
+
+        final AlertDialog changePasswordDialog = new AlertDialog.Builder(this)
+                .setView(R.layout.dialog_password_change)
+                .setTitle(R.string.change_password)
+                .setCancelable(true)
+                .setPositiveButton(R.string.change_password, null)
+                .setNeutralButton(R.string.cancel, null)
+                .create();
+
+        changePasswordDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(final DialogInterface dialog) {
+
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        TextInputEditText oldPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_old_password);
+                        TextInputEditText newPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password);
+                        TextInputEditText newPasswordCheck = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password_check);
+
+                        String oldPassword_passwd = oldPassword.getText().toString();
+                        String newPassword_passwd = newPassword.getText().toString();
+                        String newPasswordCheck_passwd = newPasswordCheck.getText().toString();
+
+                        boolean oldPasswordEmpty = oldPassword_passwd.isEmpty();
+                        boolean newPasswordEmpty = newPassword_passwd.isEmpty();
+                        boolean passwordsMatch = newPassword_passwd.equals(newPasswordCheck_passwd);
+
+                        if (oldPasswordEmpty) {
+                            oldPassword.setError(getString(R.string.password_empty));
+                        }
+                        if (newPasswordEmpty) {
+                            newPassword.setError(getString(R.string.password_empty));
+                        }
+                        if (!passwordsMatch) {
+                            newPasswordCheck.setError(getString(R.string.passwords_dont_match));
+                        }
+
+                        if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch) {
+                            final ServerController serverController = new ServerController();
+                            UrlManager urlManager = new UrlManager();
+                            int user_id = loggedUser.getUser_id();
+
+                            final URL passwordChangeURL = urlManager.getChangePasswordUrl(user_id, oldPassword_passwd, newPassword_passwd);
+
+                            class ChangePasswordAsync extends AsyncTask<URL, Void, Boolean> {
+                                @Override
+                                protected Boolean doInBackground(URL... urls) {
+                                    try {
+                                        serverController.getResponseFromServer(urls[0]);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        return false;
+                                    }
+
+                                    return true;
+                                }
+                            }
+
+                            new ChangePasswordAsync().execute(passwordChangeURL);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+
+        changePasswordDialog.show();
     }
 
     private void loadTask() {
@@ -200,6 +349,17 @@ public class TasksActivity extends FragmentActivity implements ExampleTaskDialog
     @Override
     public void tasksGameDialogClick(String assetName) {
         Toast.makeText(getApplicationContext(), "TOTO JE TOAST", Toast.LENGTH_LONG).show();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+        bundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.NEW_MACHINE);
+        bundle.putInt(TASK_CONFIGURATION, MainActivity.GAME_MACHINE);
+        bundle.putInt(GAME_EXAMPLE_NUMBER, GAME_EXAMPLE_PREVIEW);
+
+        Intent automata = new Intent(TasksActivity.this, SimulationActivity.class);
+        automata.putExtras(bundle);
+        startActivity(automata);
+        Log.i(TAG, "game started");
     }
 
     @Override

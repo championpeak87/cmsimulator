@@ -88,24 +88,24 @@
 	<string name="turing_machine">Turing Machine</string>
 
 	<!--Popup Main Activity examples-->
-	<string name="finite_state_automaton_example1">DFSA - 3k+1</string>
-	<string name="finite_state_automaton_example2">NFSA - ends with 01 or 10</string>
-	<string name="finite_state_automaton_example3">DFSA - a
+	<string name="finite_state_automaton_example1">3k+1</string>
+	<string name="finite_state_automaton_example2">ends with 01 or 10</string>
+	<string name="finite_state_automaton_example3">a
 		<sup>
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example1">DPDA - wcw
+	<string name="pushdown_automaton_example1">wcw
 		<sup>
 			<small>R</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example2">NPDA - ww
+	<string name="pushdown_automaton_example2">ww
 		<sup>
 			<small>R</small>
 		</sup>
 	</string>
-	<string name="pushdown_automaton_example3">DPDA - a
+	<string name="pushdown_automaton_example3">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -114,7 +114,7 @@
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="linear_bounded_automaton_example1">DLBA - a
+	<string name="linear_bounded_automaton_example1">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -127,14 +127,14 @@
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="linear_bounded_automaton_example2">NLBA - 1
+	<string name="linear_bounded_automaton_example2">1
 		<sup>
 			<small>N</small>
 		</sup>
 		, where N is not a prime
 	</string>
-	<string name="turing_machine_example1">DTM - multiply two unary numbers</string>
-	<string name="turing_machine_example2">NTM - w
+	<string name="turing_machine_example1">multiply two unary numbers</string>
+	<string name="turing_machine_example2">w
 		<sub>
 			<small>1</small>
 		</sub>
@@ -1172,5 +1172,116 @@
 	<string name="tasks_message">Over here you can find tasks you have been assigned</string>
 	<string name="tasks_game">Game (EXPERIMENTAL)</string>
 	<string name="select_task">Select task</string>
+	<string name="generic_error">Something went wrong</string>
+	<string name="game_create_state">Now we will create a new state</string>
+	<string name="gotit">Got it</string>
+	<string name="game_new_state_title">Create new state</string>
+	<string name="game_welcome1">This will help you learn basic finite automata construction</string>
+	<string name="username">Username</string>
+	<string name="password">Password</string>
+	<string name="sign_in">Sign in</string>
+	<string name="sign_up">Sign up</string>
+	<string name="log_in_header">Log in</string>
+	<string name="remember_future_logins">Remember future logins</string>
+	<string name="username_empty">Username field cannot be blank</string>
+	<string name="password_empty">Password cannot be blank</string>
+	<string name="login_incorrect">Username or password is incorrect</string>
+	<string name="logged_user">Logged user</string>
+	<string name="find_task">Find tasks</string>
+	<string name="create_task">Create task</string>
+	<string name="games">Games</string>
+	<string name="change_password">Change password</string>
+	<string name="sign_out">Sign out</string>
+	<string name="old_password">Old password</string>
+	<string name="new_password">New password</string>
+	<string name="new_password_confirm">Confirm new password</string>
+	<string name="passwords_dont_match">Passwords don\'t match</string>
+	<string name="first_name">First name</string>
+	<string name="last_name">Last name</string>
+	<string name="first_name_empty">First name is empty</string>
+	<string name="last_name_empty">Last name is empty</string>
+	<string name="username_length_small">Username must have 5 or more characters</string>
+	<string name="password_length_error">Password must have 6 or more characters</string>
+	<string name="username_exists_error">This username is already in use</string>
+	<string name="sign_up_header">Sign up</string>
+	<string name="successful_signup_toast_message">User {0} was successfully signed up.</string>
+	<string name="deterministic_FA">Deterministic finite automata</string>
+	<string name="nondeterministic_fa">Nondeterministic finite automata</string>
+	<string name="deterministic_pushdown">Deterministic pushdown automata</string>
+	<string name="nondeterministic_pushdown">Nondeterministic pushdown automata</string>
+	<string name="deterministic_loa">Deterministic linear bouded automata</string>
+	<string name="nondeterministic_loa">Nondeterministic linear bounded automata</string>
+	<string name="deterministic_tm">Deterministic Turing machine</string>
+	<string name="nondeterministic_tm">Nondeterministic Turing machine</string>
+	<string name="available_tasks">Available tasks</string>
+	<string name="example_automata_description1">Number of letters a or b has to be of 3k + 1</string>
+	<string name="start_task">Start</string>
+	<string name="task_hint">Hint</string>
+	<string name="deterministic">Deterministic</string>
+	<string name="nondeterministic">Nondeterministic</string>
+	<string name="unknown_machine">Unknown machine</string>
+	<string name="example_automata_description2">The word has to end with 01 or 10.</string>
+	<string name="example_automata_description3">The letter a has to repeat N times.</string>
+	<string name="example_automata_description4">The word consisting of a or b is followed by c, then the initial word
+		is reversed.
+	</string>
+	<string name="example_automata_description5">The word is followed by its reversed form.</string>
+	<string name="example_automata_description6">The letter a has to repeat N times followed by letter b repeated N
+		times.
+	</string>
+	<string name="example_automata_description7">The letter a has to be repeated N times followed by letter b which has
+		to repeat N times followed by letter c repeated N times.
+	</string>
+	<string name="example_automata_description8">1 followed by prime number.</string>
+	<string name="example_automata_description10">There are two words w1 and w2 splited by $ sign. W2 is substring of
+		w1.
+	</string>
+	<string name="example_automata_description9">Number multiplication by using only one algebraic operation
+		exclusively.
+	</string>
+	<string name="view_results">View results</string>
+	<string name="manage_users">Manage users</string>
+	<string name="upload_task">Upload task</string>
+	<string name="user_management">Users management</string>
+	<string name="reload">Reload</string>
+	<string name="details">Details</string>
+	<string name="OK" translatable="false">OK</string>
+	<string name="ascending">Ascending</string>
+	<string name="descending">Descending</string>
+	<string name="position">Position</string>
+	<string name="order_by">Order by</string>
+	<string name="by_first_name">By first name</string>
+	<string name="by_last_name">By last name</string>
+	<string name="by_username">By username</string>
+	<string name="search_by">Search by</string>
+	<string name="search">Search</string>
+	<string name="student">Student</string>
+	<string name="lector">Lector</string>
+	<string name="admin">Admin</string>
+	<string name="user_details">User details</string>
+	<string name="achieved_results">Achieved results</string>
+	<string name="account_management">Account management</string>
+	<string name="automata_type">Automata type</string>
+	<string name="delete_user">Do you really want to delete user {0}?</string>
+	<string name="delete_user_title">Delete user</string>
+	<string name="no_tasks_available">No tasks are available</string>
+	<string name="user_deleted">User has been deleted.</string>
+	<string name="cant_delete_logged_user">Cannot delete currently logged user!</string>
+	<string name="user_type">User type</string>
+
+	<string-array name="usertype_spinner">
+		<item>@string/student</item>
+		<item>@string/lector</item>
+		<item>@string/admin</item>
+	</string-array>
+	<string name="user_updated">User was updated!</string>
+	<string name="upload_task_complete">Task has been uploaded successfully!</string>
+	<string name="task_delete_message">Are you sure you want to delete this task?</string>
+	<string name="delete_task">Delete task</string>
+	<string name="task_deleted">Task was successfully deleted!</string>
+	<string name="task_not_found">Selected task could not be found!</string>
+	<string name="unlimited_time">Unlimited time</string>
+	<string name="submit_task">Submit task</string>
+	<string name="save_complete">Task was successfully saved!</string>
 
 </resources>

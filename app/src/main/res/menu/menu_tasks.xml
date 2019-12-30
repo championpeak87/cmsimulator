@@ -2,6 +2,18 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="fiitstu.gulis.cmsimulator.activities.TasksActivity">
+    <item android:id="@+id/menu_tasks_change_password"
+          android:title="@string/change_password"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/baseline_lock_open_24"
+          android:iconTint="@color/md_white_1000" tools:ignore="AppCompatResource"/>
+
+    <item android:id="@+id/menu_tasks_sign_out"
+          android:title="@string/sign_out"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/baseline_no_meeting_room_24"
+          android:iconTint="@color/md_white_1000" tools:ignore="AppCompatResource"/>
+
     <item
             android:id="@+id/menu_tasks_help"
             android:title="@string/help"

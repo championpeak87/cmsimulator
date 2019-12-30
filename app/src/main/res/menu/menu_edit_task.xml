@@ -3,6 +3,13 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="fiitstu.gulis.cmsimulator.activities.EditTaskActivity">
+    <item android:id="@+id/menu_edit_task_upload_task"
+          android:title="@string/upload_task"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/baseline_cloud_upload_24"
+          android:iconTint="@color/md_white_1000"
+          style="@style/dropDownMenuItemStyle"
+          tools:ignore="AppCompatResource"/>
     <item
             android:id="@+id/menu_edit_task_save_task"
             android:title="@string/save_task"

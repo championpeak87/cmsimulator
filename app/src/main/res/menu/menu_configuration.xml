@@ -3,8 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fiitstu.gulis.cmsimulator.activities.ConfigurationActivity">
     <item
-            android:id="@+id/menu_configuration_task_info"
-            android:title="Task info"
+            android:id="@+id/menu_save_task"
+            android:title="@string/save_machine"
+            android:showAsAction="always"
+            android:icon="@drawable/baseline_save_24"
+            android:iconTint="@color/md_white_1000"
+            android:visible="false"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_submit_task"
+            android:title="@string/submit_task"
+            android:icon="@drawable/baseline_assignment_turned_in_24"
+            android:iconTint="@color/md_white_1000"
             android:showAsAction="always"
             android:visible="false"
             style="@style/dropDownMenuItemStyle" />

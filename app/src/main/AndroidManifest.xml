@@ -26,9 +26,37 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+		<activity android:name=".activities.AutomataTaskDetailsActivity"
+				  android:configChanges="orientation|screenSize"/>
+		<activity android:name=".activities.UsersManagementEditActivity"
+		          android:configChanges="orientation|screenSize"/>
+		<activity android:name=".activities.UserDetailActivity"
+		          android:configChanges="orientation|screenSize"/>
+		<activity android:name=".activities.ExampleTaskDetailsActivity"
+		          android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.BrowseAutomataTasksActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.ExampleAutomatas"
+				android:configChanges="orientation|screenSize"/>
 		<activity
 				android:name=".activities.OptionsActivity"
 				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.TasksAdminActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.UsersManagmentActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
+				android:name=".activities.TaskLoginActivity"
+				android:theme="@style/LoginTheme"
+				android:fitsSystemWindows="true"/>
+		<activity
+				android:name=".activities.TaskSignUpActivity"
+				android:theme="@style/LoginTheme"
+				android:fitsSystemWindows="true"/>
 		<activity
 				android:name=".activities.HelpActivity"
 				android:configChanges="orientation|screenSize"/>
