@@ -272,7 +272,7 @@ app.get('/api/tasks/delete', (req, res, next) => {
   pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
     if (err) { throw err }
     if (result.rowCount > 0) {
-      const filename = "./uploads/automataTasks/" + result.rows[0].file_name;
+      const filename = "./uploads/automataTasks/" + result.rows[0].task_id + ".cmst";
       filesystem.unlink(filename, (error) => {
         if (error) { throw error }
       });
@@ -291,9 +291,13 @@ app.get('/api/tasks/delete', (req, res, next) => {
       })
     }
     else {
-      res.status(HTTP_OK).send({
-        task_id: task_id,
-        deleted: false
+      pool.query('DELETE FROM automata_tasks WHERE task_id = $1;', [task_id], (error, result2) => {
+        if (error) { throw error }
+        console.log([task_id], "Task has been deleted!");
+        res.status(HTTP_OK).send({
+          task_id: task_id,
+          deleted: true
+        });
       })
     }
   })
@@ -311,7 +315,7 @@ app.post('/api/tasks/upload', (req, res, next) => {
     console.log("FILE NOT SAVED!");
   }
   else {
-    file.mv("./uploads/automataTasks/" + file.name, function (err, results) {
+    file.mv("./uploads/automataTasks/" + file_name + ".cmst", function (err, results) {
       if (err) throw err;
       res.send({
         success: true,
@@ -329,25 +333,26 @@ app.get('/api/tasks/add', (req, res) => {
   const time = req.query.time;
   const assigner = req.query.assigner;
   const public_input = req.query.public_input;
-  const file_name = req.query.file_name;
   const automata_type = req.query.automata_type;
 
 
-  pool.query('INSERT INTO automata_tasks(assigner_id, file_name, public_input, automata_type, task_description, task_name, time) VALUES ($1, $2, $3, $4, $5, $6, $7);',
-    [assigner, file_name, public_input, automata_type, task_description, task_name, time], (err, results) => {
-      if (err) { throw err };
+  pool.query('INSERT INTO automata_tasks(assigner_id, public_input, automata_type, task_description, task_name, time) VALUES ($1, $2, $3, $4, $5, $6);',
+    [assigner, public_input, automata_type, task_description, task_name, time], (err, results) => {
+      if (err) { throw err; }
 
       if (results.rowCount > 0) {
-        res.status(HTTP_OK).send(
-          {
-            task_name: task_name,
-            task_description: task_description,
-            time: time,
-            public_input: public_input,
-            file_name: file_name,
-            automata_type: automata_type
-          }
-        )
+        pool.query('SELECT * FROM automata_tasks WHERE assigner_id = $1 AND task_name = $2 AND task_description = $3;', [assigner, task_name, task_description], (error, result) => {
+          res.status(HTTP_OK).send(
+            {
+              task_id: result.rows[0].task_id,
+              task_name: task_name,
+              task_description: task_description,
+              time: time,
+              public_input: public_input,
+              automata_type: automata_type
+            }
+          )
+        })
       }
     });
 
@@ -464,11 +469,11 @@ app.get('/api/tasks/download', (req, res) => {
   const user_id = req.query.user_id;
 
   if (!user_id) {
-    pool.query('SELECT file_name FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
       if (err) { throw err }
       {
         if (result.rowCount > 0) {
-          const filePath = "./uploads/automataTasks/" + result.rows[0].file_name;
+          const filePath = "./uploads/automataTasks/" + task_id + ".cmst";
           res.status(HTTP_OK).download(filePath);
         }
         else {

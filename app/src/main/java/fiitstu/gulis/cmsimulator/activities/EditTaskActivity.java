@@ -32,6 +32,8 @@ import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
 import fiitstu.gulis.cmsimulator.elements.TaskResult;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -195,7 +197,8 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
                         String taskDoc = fileHandler.writeToString();
 
-                        File file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
+                        final File file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
+                        final String[] filename = new String[1];
                         FileOutputStream outputStream;
 
                         outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
@@ -207,7 +210,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                             protected File doInBackground(File... files) {
                                 UrlManager urlManager = new UrlManager();
                                 ServerController serverController = new ServerController();
-                                URL uploadTaskUrl = urlManager.getPublishAutomataTaskURL(files[0].getName());
+                                URL uploadTaskUrl = urlManager.getPublishAutomataTaskURL(filename[0]);
                                 serverController.doPostRequest(uploadTaskUrl, files[0]);
 
                                 return files[0];
@@ -238,13 +241,20 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
                             @Override
                             protected void onPostExecute(String s) {
                                 //Toast.makeText(EditTaskActivity.this, s, Toast.LENGTH_SHORT).show();
+                                try {
+                                    JSONObject object = new JSONObject(s);
+                                    filename[0] = Integer.toString(object.getInt("task_id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                new uploadTaskAsync().execute(file);
                                 uploadFinished();
                             }
                         }
 
 
-                        new uploadTaskAsync().execute(file);
                         new addTaskToDatabaseAsync().execute(task);
+
                     } catch (ParserConfigurationException | TransformerException e) {
                         Log.e(TAG, "Error happened when serializing task", e);
                     } catch (IOException e) {
