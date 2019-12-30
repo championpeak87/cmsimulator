@@ -130,10 +130,11 @@ public class UrlManager {
         }
     }
 
-    public URL getAutomataTaskDownloadURL(int task_id)
+    public URL getAutomataTaskDownloadURL(int task_id, int user_id)
     {
         Uri uri = Uri.parse(URI + DOWNLOAD_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .build();
 
         URL url = null;

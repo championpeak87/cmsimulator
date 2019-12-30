@@ -491,11 +491,11 @@ app.get('/api/tasks/download', (req, res) => {
     pool.query('SELECT * FROM automata_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (error, results) => {
       if (error) { throw error }
       if (results.rowCount > 0) {
-        pool.query('SELECT file_name FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+        pool.query('SELECT task_id FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
           if (err) { throw err }
           {
             if (result.rowCount > 0) {
-              const filePath = "./uploads/" + user_id + "/automataTask.cmst";
+              const filePath = "./uploads/" + user_id + "/" + task_id + ".cmst";
               res.status(HTTP_OK).download(filePath);
             }
             else {

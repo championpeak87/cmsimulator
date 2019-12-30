@@ -141,7 +141,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
-                        URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id());
+                        URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id(), BrowseAutomataTasksActivity.user_id);
                         ServerController serverController = new ServerController();
                         String output = null;
                         try {
