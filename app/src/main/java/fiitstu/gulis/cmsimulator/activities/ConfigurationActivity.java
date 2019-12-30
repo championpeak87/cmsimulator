@@ -395,8 +395,7 @@ public class ConfigurationActivity extends FragmentActivity
                 return true;
             case R.id.menu_save_task:
                 // TODO: SAVE TASK TO CLOUD
-                File inputFile = new File(filename);
-                final String file_name = inputFile.getName();
+                final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
                 final int user_id = BrowseAutomataTasksActivity.user_id;
                 class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
                     @Override
