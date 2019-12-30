@@ -1,14 +1,18 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -155,7 +159,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                     @Override
                     protected void onPostExecute(String s) {
-                        saveDownloadedFile(s);
+                        if (!saveDownloadedFile(s))
+                        {
+                            Toast.makeText(mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         int machineType;
                         if (currentTask instanceof FiniteAutomataTask) {
                             machineType = MainActivity.FINITE_STATE_AUTOMATON;
@@ -267,26 +275,35 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         notifyItemRangeChanged(position, listOfTasks.size());
     }
 
-    private void saveDownloadedFile(String input) {
+    private boolean saveDownloadedFile(String input) {
         File file = new File(FileHandler.PATH + "/automataTask.cmst");
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
-            writer.write(input);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mContext,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},0);
+            return false;
+        } else {
+            BufferedWriter writer = null;
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                writer = new BufferedWriter(fileWriter);
+                writer.write(input);
+                writer.close();
 
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        return false;
     }
 
     public List<Task> getListOfTasks() {
         return listOfTasks;
     }
 
-    public void notifyChange(int position)
-    {
+    public void notifyChange(int position) {
         notifyItemChanged(position);
     }
 

@@ -422,6 +422,12 @@ app.get('/api/tasks/changeFlag', (req, res) => {
       });
     }
     else {
+      var mkdirp = require('mkdirp');
+      mkdirp("./uploads/" + user_id + "/");
+      filesystem.copyFile("./uploads/automataTasks/" + task_id + ".cmst", "./uploads/" + user_id + "/" + task_id + ".cmst", (error) => {
+        if (error) {throw error;}
+      }
+      );
       pool.query("INSERT INTO automata_task_results(task_id, time_elapsed, task_status, user_id) VALUES ($1, $2, $3, $4);", [task_id, '00:00:00', task_status, user_id], (error, result2) => {
         if (error) { throw error }
         res.status(HTTP_OK).send(
@@ -510,11 +516,11 @@ app.get('/api/tasks/download', (req, res) => {
         })
       }
       else {
-        pool.query('SELECT file_name FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+        pool.query('SELECT task_id FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
           if (err) { throw err }
           {
             if (result.rowCount > 0) {
-              const filePath = "./uploads/automataTasks/" + result.rows[0].file_name;
+              const filePath = "./uploads/automataTasks/" + task_id + ".cmst";
               res.status(HTTP_OK).download(filePath);
             }
             else {
