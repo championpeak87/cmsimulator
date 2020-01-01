@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-android:layout_gravity="center">
+              android:layout_gravity="center">
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -13,13 +13,24 @@ android:layout_gravity="center">
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ImageView
-                android:id="@+id/imageView_main_logo"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.52"
-                android:contentDescription="@string/logo"
-                android:src="@drawable/logo_v1_light"/>
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="0.52">
+
+            <ImageView
+                    android:id="@+id/imageView_main_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/logo"
+                    android:src="@drawable/logo_v1_light"/>
+
+            <TextView android:id="@+id/beta_banner" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:textAllCaps="true" android:text="BETA" android:visibility="gone"
+                      android:layout_gravity="bottom" android:textSize="25sp" android:layout_margin="25dp"
+                      android:background="@drawable/banner" android:gravity="center"
+                      android:textColor="@color/primary_color_light" android:textStyle="bold"
+                      android:textAlignment="center"/>
+        </FrameLayout>
+
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -27,7 +38,7 @@ android:layout_gravity="center">
                   android:theme="@style/text_subheader"/>
 
         <LinearLayout android:id="@+id/automatas_linear_layout"
-                android:layout_width="match_parent"
+                      android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal"
                       android:layout_marginLeft="10dp"

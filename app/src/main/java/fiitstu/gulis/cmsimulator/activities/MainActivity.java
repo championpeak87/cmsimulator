@@ -26,6 +26,7 @@ import android.widget.*;
 
 import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.FileChooser;
+import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExampleGrammarDialog;
@@ -122,6 +123,12 @@ public class MainActivity extends FragmentActivity
         }
 
         ImageView image = findViewById(R.id.imageView_main_logo);
+        TextView betaBanner = findViewById(R.id.beta_banner);
+        String buildtype = BuildConfig.FLAVOR.toString();
+        Log.d("BUILDTYPE", buildtype);
+        if (buildtype == "beta") {
+            betaBanner.setVisibility(View.VISIBLE);
+        }
 
         final int textColor = getColor(R.color.introContentText);
 
