@@ -17,7 +17,7 @@ public class UserParser {
     private final static String LAST_NAME_KEY = "last_name";
     private final static String AUTHKEY_KEY = "password_hash";
     private final static String USER_ID_KEY = "user_id";
-    private final static String USER_TYPE_KEY = "type";
+    private final static String USER_TYPE_KEY = "user_type";
     private final static String SALT_KEY = "salt";
 
     private final static String USER_TYPE_LECTOR = "lector";

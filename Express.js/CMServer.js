@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const filesystem = require('fs');
 const app = express();
 var fileuploader = require('express-fileupload');
@@ -29,12 +28,6 @@ const pool = new Pool({
 })
 
 app.use(express.json());
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-)
 
 
 // REGISTRACIA POUZIVATELA
@@ -58,8 +51,9 @@ app.get('/api/user/signup', (req, res) => {
       console.log(Date() + ' ', [username], 'already exists!');
     }
     else {
-      pool.query('INSERT INTO users(username, type, password_hash, first_name, last_name, salt) VALUES ($1,$2,$3,$4,$5,$6);',
+      pool.query('INSERT INTO users(username, user_type, password_hash, first_name, last_name, salt) VALUES ($1,$2,$3,$4,$5,$6);',
         [username, user_type, auth_key, first_name, last_name, salt], (err, result) => {
+          if (err) {throw err;}
           res.status(HTTP_OK).send('USER WAS ADDED!');
           console.log(Date() + ' ', [username], 'was successfully added to database');
         });
@@ -108,6 +102,8 @@ app.get('/api/login', (req, res) => {
   const username = req.query.username;
   const password = req.query.auth_key;
 
+  console.log("USERNAME: ", [username]);
+  console.log("PASSWORD_HASH: ", [password]);
   pool.query('SELECT * FROM users WHERE username = $1;', [username], (error, results) => {
     if (error) { throw error }
 

@@ -1286,5 +1286,7 @@
 	<string name="task_leave_message">Do you really want to quit solving this task? Unsaved work won\'t be saved!
 	</string>
 	<string name="task_leave_title">Leave task</string>
+	<string name="sign_up_admin">Admin sign up available!</string>
+	<string name="sign_up_admin_header">Create admin</string>
 
 </resources>

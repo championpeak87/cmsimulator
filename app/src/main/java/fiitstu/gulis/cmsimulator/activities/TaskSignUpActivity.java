@@ -10,9 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
@@ -30,6 +28,12 @@ public class TaskSignUpActivity extends FragmentActivity {
 
     private Button signUpButton, cancelButton;
 
+    private ImageView image;
+
+    private int adminSwitchCounter = 0;
+
+    private boolean signUpAdmin = false;
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -46,12 +50,29 @@ public class TaskSignUpActivity extends FragmentActivity {
         firstNameEditText = findViewById(R.id.edittext_firstname);
         lastNameEditText = findViewById(R.id.edittext_lastname);
         passwordConfirmEditText = findViewById(R.id.edittext_password_confirm);
+        image = findViewById(R.id.imageView_main_logo);
 
         signUpButton = findViewById(R.id.button_sign_up);
+
         cancelButton = findViewById(R.id.button_sign_up_cancel);
 
         signUpProgressBar = findViewById(R.id.progressbar_signup);
+
+
     }
+
+    public void adminOverride(View view) {
+        if (adminSwitchCounter < 5 && !signUpAdmin)
+            adminSwitchCounter++;
+    }
+
+    public void resetAdmin(View view) {
+        if (!signUpAdmin) {
+            adminSwitchCounter = 0;
+            signUpAdmin = false;
+        }
+    }
+
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -65,6 +86,12 @@ public class TaskSignUpActivity extends FragmentActivity {
         passwordEditText.setText(savedInstanceState.getString("password"));
         firstNameEditText.setText(savedInstanceState.getString("first_name"));
         lastNameEditText.setText(savedInstanceState.getString("last_name"));
+        signUpAdmin = savedInstanceState.getBoolean("signup_admin");
+        RadioGroup userTypeGroup = findViewById(R.id.radiogroup_usertype);
+        userTypeGroup.setVisibility(View.VISIBLE);
+        image.setVisibility(View.GONE);
+
+        adminSwitchCounter = signUpAdmin ? 6 : 0;
     }
 
     @Override
@@ -78,6 +105,7 @@ public class TaskSignUpActivity extends FragmentActivity {
         savedInstanceState.putString("password", passwordEditText.getText().toString());
         savedInstanceState.putString("first_name", firstNameEditText.getText().toString());
         savedInstanceState.putString("last_name", lastNameEditText.getText().toString());
+        savedInstanceState.putBoolean("signup_admin", signUpAdmin);
 
         // etc.
 
@@ -105,11 +133,28 @@ public class TaskSignUpActivity extends FragmentActivity {
         firstNameEditText = findViewById(R.id.edittext_firstname);
         lastNameEditText = findViewById(R.id.edittext_lastname);
         passwordConfirmEditText = findViewById(R.id.edittext_password_confirm);
+        image = findViewById(R.id.imageView_main_logo);
 
         signUpButton = findViewById(R.id.button_sign_up);
         cancelButton = findViewById(R.id.button_sign_up_cancel);
 
         signUpProgressBar = findViewById(R.id.progressbar_signup);
+
+        signUpButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (adminSwitchCounter == 6) {
+                    image.setVisibility(View.GONE);
+                    RadioGroup usertypeGroup = findViewById(R.id.radiogroup_usertype);
+                    usertypeGroup.setVisibility(View.VISIBLE);
+                    Toast.makeText(TaskSignUpActivity.this, R.string.sign_up_admin, Toast.LENGTH_LONG).show();
+                    signUpAdmin = true;
+                } else {
+                    resetAdmin(null);
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -126,6 +171,17 @@ public class TaskSignUpActivity extends FragmentActivity {
             PasswordManager passwordManager = new PasswordManager();
             String generatedSalt = passwordManager.saltPassword();
             User newUser = new Student(username, firstname, lastname, -1, password, generatedSalt);
+
+            RadioButton adminButton = findViewById(R.id.radiobutton_usertype_admin);
+            RadioButton lectorButton = findViewById(R.id.radiobutton_usertype_lector);
+            RadioButton studentButton = findViewById(R.id.radiobutton_usertype_student);
+
+            final User.user_type userType;
+            if (adminButton.isChecked())
+                userType = User.user_type.admin;
+            else if (lectorButton.isChecked())
+                userType = User.user_type.lector;
+            else userType = User.user_type.student;
 
             // IMPLEMENT SIGN UP API CALL
             class addUserAsync extends AsyncTask<User, Void, String> {
@@ -148,7 +204,7 @@ public class TaskSignUpActivity extends FragmentActivity {
                             users[0].getFirst_name(),
                             users[0].getLast_name(),
                             users[0].getAuth_key(),
-                            User.user_type.student,
+                            userType,
                             users[0].getSalt()
                     );
 
@@ -165,19 +221,13 @@ public class TaskSignUpActivity extends FragmentActivity {
 
                 @Override
                 protected void onPostExecute(String s) {
-                    if (s == null)
-                    {
+                    if (s == null) {
                         Toast.makeText(TaskSignUpActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
-                    }
-                    else if (s.equals("USER EXISTS!"))
-                    {
+                    } else if (s.equals("USER EXISTS!")) {
                         setUserExistsError(true);
-                    }
-                    else if (s.equals("USER WAS ADDED!"))
-                    {
+                    } else if (s.equals("USER WAS ADDED!")) {
                         setSuccessfulSigningUp(addedUser.getUsername());
                     }
-
                     setSignUpProgressBarVisibility(false);
                 }
             }
@@ -192,7 +242,11 @@ public class TaskSignUpActivity extends FragmentActivity {
     }
 
     public void cancel(View view) {
-        onBackPressed();
+        if (adminSwitchCounter == 5 && !signUpAdmin) {
+            adminSwitchCounter = 6;
+        } else {
+            onBackPressed();
+        }
     }
 
     private boolean verifyFields() {
@@ -222,8 +276,7 @@ public class TaskSignUpActivity extends FragmentActivity {
         if (passwordEmpty) {
             passwordEditText.setError(getString(R.string.password_empty));
         }
-        if (!passwordMatch)
-        {
+        if (!passwordMatch) {
             passwordEditText.setError(getString(R.string.passwords_dont_match));
         }
         if (!passwordLength) {
@@ -265,8 +318,7 @@ public class TaskSignUpActivity extends FragmentActivity {
             usernameEditText.setError(null);
     }
 
-    private void setSuccessfulSigningUp(String username)
-    {
+    private void setSuccessfulSigningUp(String username) {
         Intent returnIntent = new Intent();
 
         returnIntent.putExtra("username", username);
@@ -277,8 +329,7 @@ public class TaskSignUpActivity extends FragmentActivity {
         finish();
     }
 
-    private void quitSignUp()
-    {
+    private void quitSignUp() {
         Intent returnIntent = new Intent();
         setResult(1, returnIntent);
 
