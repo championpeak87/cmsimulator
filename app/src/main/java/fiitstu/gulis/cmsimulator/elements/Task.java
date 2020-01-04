@@ -29,7 +29,8 @@ public class Task implements Serializable {
         IN_PROGRESS("in_progress"),
         CORRECT("correct"),
         WRONG("wrong"),
-        NEW("new");
+        NEW("new"),
+        TOO_LATE("too_late");
 
         private String query;
 

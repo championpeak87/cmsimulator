@@ -38,6 +38,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     private List<Task> listOfTasks;
     public static int user_id;
     private String authkey;
+    public static AutomataTaskAdapter adapter = null;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -134,7 +135,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     {
         // set recyclerview
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
-        AutomataTaskAdapter adapter = new AutomataTaskAdapter(listOfTasks, this);
+        if (adapter == null)
+            adapter = new AutomataTaskAdapter(listOfTasks, this);
         if (listOfTasks.size() == 0)
         {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
@@ -162,6 +164,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
 
         recyclerViewTasks.setAnimation(showUpAnimation);
     }
+
+
 
     private void showLoadScreen(boolean value)
     {

@@ -108,6 +108,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 light_primary = mContext.getColor(R.color.correct_answer_bottom_bar);
                 break;
 
+            case TOO_LATE:
+                primary = mContext.getColor(R.color.md_black_1000);
+                light_primary = mContext.getColor(R.color.bootstrap_gray);
+                break;
+
             case NEW:
             default:
                 primary = mContext.getColor(R.color.primary_color);
@@ -159,8 +164,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                     @Override
                     protected void onPostExecute(String s) {
-                        if (!saveDownloadedFile(s))
-                        {
+                        if (!saveDownloadedFile(s)) {
                             Toast.makeText(mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -280,7 +284,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mContext,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},0);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             return false;
         } else {
             BufferedWriter writer = null;
@@ -305,6 +309,17 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
     public void notifyChange(int position) {
         notifyItemChanged(position);
+    }
+
+    public void notifyStatusChange(int task_id, Task.TASK_STATUS status) {
+        for (int i = 0; i < listOfTasks.size(); i++) {
+            Task currentTask = listOfTasks.get(i);
+            if (currentTask.getTask_id() == task_id) {
+                currentTask.setStatus(status);
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
 }

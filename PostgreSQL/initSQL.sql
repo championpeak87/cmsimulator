@@ -2,7 +2,7 @@ CREATE TYPE automata_type AS ENUM
     ('finite_automata', 'pushdown_automata', 'linear_bounded_automata', 'turing_machine');
 
 CREATE TYPE task_status AS ENUM
-    ('new', 'correct', 'wrong', 'in_progress');
+    ('new', 'correct', 'wrong', 'in_progress', 'too_late');
 
 CREATE TYPE user_type AS ENUM
     ('admin', 'lector', 'student');
@@ -36,5 +36,6 @@ CREATE TABLE automata_task_results
     user_id serial not null references users(user_id),
     task_id serial not null references automata_tasks(task_id),
     task_status task_status not null default('new'),
-    time_elapsed interval not null default('00:00:00')
+    time_elapsed interval not null default('00:00:00'),
+    submitted boolean not null default(false)
 );

@@ -35,6 +35,7 @@ public class UrlManager {
     private final static String SAVE_AUTOMATA_TASK_PATH = "/api/tasks/save";
     private final static String CHANGE_TASK_FLAG_PATH = "/api/tasks/changeFlag";
     private final static String GET_TASK_FLAG_PATH = "/api/tasks/getFlag";
+    private final static String SUBMIT_AUTOMATA_TASK_PATH = "/api/tasks/submit";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -81,6 +82,25 @@ public class UrlManager {
         Uri uri = Uri.parse(URI + GET_TASK_FLAG_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getSubmitAutomataTaskUrl(int user_id, int task_id, Task.TASK_STATUS status)
+    {
+        Uri uri = Uri.parse(URI + SUBMIT_AUTOMATA_TASK_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(TASK_STATUS_KEY, status.toString())
                 .build();
 
         URL url = null;

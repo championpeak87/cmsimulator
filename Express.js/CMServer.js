@@ -152,6 +152,8 @@ app.get('/api/tasks/automata', (req, res) => {
   })
 })
 
+
+
 app.get('/api/user/update', (req, res) => {
   const logged_user_id = req.query.logged_user_id;
   const auth_key = req.query.auth_key;
@@ -295,6 +297,33 @@ app.get('/api/tasks/delete', (req, res, next) => {
           deleted: true
         });
       })
+    }
+  })
+})
+
+app.get('/api/tasks/submit', (req,res) =>
+{
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+  const task_status = req.query.task_status;
+
+  pool.query('SELECT * FROM automata_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) =>
+  {
+    if (err) {throw err}
+    if (results.rowCount > 0)
+    {
+      pool.query('UPDATE automata_task_results SET submitted=\'true\', task_status = $1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result) =>
+      {
+        if (error) {throw error}
+        if (result.rowCount > 0)
+        {
+          res.status(HTTP_OK).send({
+            task_id: task_id,
+            user_id: user_id,
+            submitted: true
+          });
+        }
+      });
     }
   })
 })

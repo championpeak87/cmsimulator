@@ -71,6 +71,9 @@ public class AutomataTaskParser {
                 case "correct":
                     status = Task.TASK_STATUS.CORRECT;
                     break;
+                case "too_late":
+                    status = Task.TASK_STATUS.TOO_LATE;
+                    break;
             }
 
         String automataType = object.getString(AUTOMATA_TYPE_KEY);

@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
+import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.*;
@@ -553,11 +554,121 @@ public class ConfigurationActivity extends FragmentActivity
                 int negativeTestCount = tests.size();
                 int negativeTestSuccessful = runTests(true);
 
+                final Task.TASK_STATUS submittedStatus;
+                if (positiveTestCount == positiveTestSuccessful && negativeTestCount == negativeTestSuccessful)
+                    submittedStatus = Task.TASK_STATUS.CORRECT;
+                else
+                    submittedStatus = Task.TASK_STATUS.WRONG;
+
+                final File filesDir = this.getFilesDir();
+
                 SubmitTaskDialog submitTaskDialog = new SubmitTaskDialog(positiveTestCount, positiveTestSuccessful, negativeTestCount, negativeTestSuccessful);
                 submitTaskDialog.setOnClickListener(new SubmitTaskDialog.SubmitTaskDialogListener() {
                     @Override
                     public void submitTaskDialogClick() {
-                        Toast.makeText(ConfigurationActivity.this, "PUBLISHED", Toast.LENGTH_SHORT).show();
+
+                        final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
+                        final int user_id = BrowseAutomataTasksActivity.user_id;
+                        class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
+                            @Override
+                            protected String doInBackground(File... files) {
+                                UrlManager urlManager = new UrlManager();
+                                ServerController serverController = new ServerController();
+                                URL pushToCloudURL = urlManager.getSaveTaskURL(file_name, user_id);
+
+                                String output = null;
+                                try {
+                                    output = serverController.doPostRequest(pushToCloudURL, files[0]);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s.equalsIgnoreCase("OK"))
+                                    Toast.makeText(ConfigurationActivity.this, R.string.save_complete, Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+
+                        File file = null;
+                        try {
+                            DataSource dataSource = DataSource.getInstance();
+                            dataSource.open();
+                            fileHandler.setData(dataSource, machineType);
+                            task.setResultVersion(TaskResult.CURRENT_VERSION);
+                            fileHandler.writeTask(task);
+
+                            String taskDoc = fileHandler.writeToString();
+
+                            file = new File(filesDir, task.getTitle() + ".cmst");
+                            FileOutputStream outputStream;
+
+                            outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
+                            outputStream.write(taskDoc.getBytes());
+                            outputStream.close();
+                        } catch (ParserConfigurationException e) {
+                            e.printStackTrace();
+                        } catch (TransformerException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        new SaveTaskToCloudAsync().execute(file);
+
+                        final int task_id = task.getTask_id();
+
+                        class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
+                            @Override
+                            protected String doInBackground(Void... voids) {
+                                UrlManager urlManager = new UrlManager();
+                                ServerController serverController = new ServerController();
+                                URL url = urlManager.getSubmitAutomataTaskUrl(user_id, task_id, submittedStatus);
+
+                                String output = null;
+                                try {
+                                    output = serverController.getResponseFromServer(url);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                super.onPostExecute(s);
+
+                                AutomataTaskAdapter adapter = BrowseAutomataTasksActivity.adapter;
+                                adapter.notifyStatusChange(task_id, submittedStatus);
+
+                                if (s == null || s.isEmpty()) {
+                                    Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                } else {
+                                    try {
+                                        JSONObject object = new JSONObject(s);
+                                        if (object.getBoolean("submitted")) {
+                                            Toast.makeText(ConfigurationActivity.this, R.string.submit_successful, Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                ConfigurationActivity.this.finish();;
+                            }
+                        }
+
+                        new SubmitTaskAsync().execute();
                     }
                 });
                 submitTaskDialog.show(this.getSupportFragmentManager(), "HELLO");
@@ -839,8 +950,7 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
-        if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE && inputBundle.getInt(TASK_CONFIGURATION) == MainActivity.SOLVE_TASK)
-        {
+        if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE && inputBundle.getInt(TASK_CONFIGURATION) == MainActivity.SOLVE_TASK) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(R.string.task_leave_message)
                     .setTitle(R.string.task_leave_title)
