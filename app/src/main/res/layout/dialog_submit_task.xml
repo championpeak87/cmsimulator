@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:layout_marginHorizontal="25dp">
+
+    <LinearLayout android:id="@+id/linearlayout_submit_warning_message" android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:orientation="vertical">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="@string/warning" style="@style/text_subheader" android:layout_marginHorizontal="15dp"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content" android:layout_marginVertical="5dp"
+                  android:layout_marginHorizontal="35dp" android:text="@string/submit_task_warning_message"
+                  android:textSize="18sp" android:textColor="@color/md_red_500"/>
+    </LinearLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/test_results" style="@style/text_subheader" android:layout_marginHorizontal="15dp"/>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent"
+                  android:orientation="horizontal" android:layout_marginHorizontal="25dp">
+        <TextView android:text="@string/positive_test_results" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="0.75"/>
+        <EditText android:id="@+id/edittext_positive_test_results" android:enabled="false" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="0.25" android:textAlignment="center" android:textStyle="bold"/>
+    </LinearLayout>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent"
+                  android:orientation="horizontal" android:layout_marginHorizontal="25dp"
+                  android:layout_marginVertical="5dp">
+        <TextView android:text="@string/negative_test_results" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="0.75"/>
+        <EditText android:id="@+id/edittext_negative_test_results" android:enabled="false" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="0.25" android:textAlignment="center"
+                  android:textStyle="bold"/>
+    </LinearLayout>
+
+
+</LinearLayout>

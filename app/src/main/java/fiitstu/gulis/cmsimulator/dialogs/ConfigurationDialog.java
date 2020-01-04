@@ -15,6 +15,7 @@ import android.widget.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.adapters.configuration.ConfigurationSpinnerAdapter;
 import fiitstu.gulis.cmsimulator.adapters.configuration.ConfigurationStackSpinnerAdapter;
 import fiitstu.gulis.cmsimulator.elements.PdaTransition;

@@ -498,7 +498,7 @@
 
 	<!--Credits-->
 	<string name="guide_title_credits">Credits</string>
-	<string name="application_version" translatable="false">CMSimulator v5.0.0 ©2019</string>
+	<string name="application_version" translatable="false">CMSimulator v5.0.0 ©2020</string>
 	<string name="authors">written by:</string>
 	<string name="author2015" translatable="false">Jakub Trizna (2015)</string>
 	<string name="author2017" translatable="false">Martin Gulis (2017)</string>
@@ -1288,5 +1288,9 @@
 	<string name="task_leave_title">Leave task</string>
 	<string name="sign_up_admin">Admin sign up available!</string>
 	<string name="sign_up_admin_header">Create admin</string>
+	<string name="test_results">Tests results</string>
+	<string name="positive_test_results">Positive tests</string>
+	<string name="negative_test_results">Negative test results</string>
+	<string name="submit_task_warning_message">Some tests have failed! Do you still wish to submit this task?</string>
 
 </resources>

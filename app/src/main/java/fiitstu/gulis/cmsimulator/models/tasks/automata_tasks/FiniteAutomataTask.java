@@ -18,6 +18,7 @@ public class FiniteAutomataTask extends Task {
         super(title, text, minutes, assigner, task_id);
         this.setPublicInputs(public_inputs);
         this.setStatus(status);
+        this.setMaxSteps(100);
     }
 
     public FiniteAutomataTask() {

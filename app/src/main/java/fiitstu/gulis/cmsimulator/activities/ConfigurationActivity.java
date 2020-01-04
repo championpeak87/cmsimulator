@@ -34,6 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.*;
@@ -42,6 +43,7 @@ import fiitstu.gulis.cmsimulator.adapters.configuration.ConfigurationListAdapter
 import fiitstu.gulis.cmsimulator.diagram.DiagramView;
 import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.FiniteStateAutomatonStep;
+import fiitstu.gulis.cmsimulator.machines.MachineStep;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -150,6 +152,58 @@ public class ConfigurationActivity extends FragmentActivity
 
     //initial state (can be only one)
     private State initialState = null;
+
+    private TestScenarioListAdapter testScenarioListAdapter;
+
+    private int runTests(boolean negative) {
+        Log.v(TAG, "run tests method started");
+
+        int successfulTests = 0;
+        for (int i = 0; i < testScenarioListAdapter.getItemCount(); i++) {
+            final TestScenario testScenario = testScenarioListAdapter.getItem(i);
+            final MachineStep machine = task == null
+                    ? testScenario.prepareMachine(machineType, DataSource.getInstance())
+                    : testScenario.prepareMachine(machineType, DataSource.getInstance(), task.getMaxSteps());
+            machine.simulateFull();
+            final int index = i;
+            final TestScenarioListAdapter.Status status;
+            switch (machine.getNondeterministicMachineStatus()) {
+                case MachineStep.STUCK:
+                    if (testScenario.getOutputWord() != null && machine.getTape().matches(testScenario.getOutputWord())) {
+                        status = TestScenarioListAdapter.Status.CORRECT_OUTPUT_REJECTED;
+                        if (negative)
+                            successfulTests++;
+                    } else {
+                        status = TestScenarioListAdapter.Status.REJECT;
+                        if (negative)
+                            successfulTests++;
+                    }
+                    break;
+                case MachineStep.PROGRESS:
+                    status = TestScenarioListAdapter.Status.TOOK_TOO_LONG;
+                    if (negative)
+                        successfulTests++;
+                    break;
+                case MachineStep.DONE:
+                    if (testScenario.getOutputWord() == null
+                            || machine.matchTapeNondeterministic(testScenario.getOutputWord())) {
+                        status = TestScenarioListAdapter.Status.ACCEPT;
+                        if (!negative)
+                            successfulTests++;
+                    } else {
+                        status = TestScenarioListAdapter.Status.INCORRECT_OUTPUT;
+                        if (negative)
+                            successfulTests++;
+                    }
+                    break;
+                default:
+                    status = null;
+                    break;
+            }
+        }
+
+        return successfulTests;
+    }
 
     //onCreate method
     @Override
@@ -427,7 +481,7 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 return true;
             case R.id.menu_save_task:
-                // TODO: SAVE TASK TO CLOUD
+                // COMPLETED: SAVE TASK TO CLOUD
                 final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
                 final int user_id = BrowseAutomataTasksActivity.user_id;
                 class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
@@ -483,6 +537,30 @@ public class ConfigurationActivity extends FragmentActivity
                 }
 
                 new SaveTaskToCloudAsync().execute(file);
+                return true;
+            case R.id.menu_submit_task:
+
+                testScenarioListAdapter = new TestScenarioListAdapter(this, false);
+                List<TestScenario> tests = dataSource.getTestFullExtract(false, DataSource.getInstance().getInputAlphabetFullExtract());
+                testScenarioListAdapter.setItems(tests);
+
+                int positiveTestCount = tests.size();
+                int positiveTestSuccessful = runTests(false);
+
+                tests = dataSource.getTestFullExtract(true, DataSource.getInstance().getInputAlphabetFullExtract());
+                testScenarioListAdapter.setItems(tests);
+
+                int negativeTestCount = tests.size();
+                int negativeTestSuccessful = runTests(true);
+
+                SubmitTaskDialog submitTaskDialog = new SubmitTaskDialog(positiveTestCount, positiveTestSuccessful, negativeTestCount, negativeTestSuccessful);
+                submitTaskDialog.setOnClickListener(new SubmitTaskDialog.SubmitTaskDialogListener() {
+                    @Override
+                    public void submitTaskDialogClick() {
+                        Toast.makeText(ConfigurationActivity.this, "PUBLISHED", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                submitTaskDialog.show(this.getSupportFragmentManager(), "HELLO");
                 return true;
             case R.id.menu_configuration_convert:
                 if (initialState == null) {

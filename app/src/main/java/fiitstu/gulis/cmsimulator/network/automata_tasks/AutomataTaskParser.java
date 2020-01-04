@@ -54,6 +54,7 @@ public class AutomataTaskParser {
         assigner_id = object.getInt(ASSIGNER_ID_KEY);
         task_id = object.getInt(TASK_ID_KEY);
         public_input = object.getBoolean(PUBLIC_INPUT_KEY);
+
         if (object.isNull(TASK_STATUS_KEY))
             status = Task.TASK_STATUS.NEW;
         else

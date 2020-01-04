@@ -926,4 +926,8 @@
     <string name="task_leave_title">Opustiť úlohu</string>
     <string name="sign_up_admin">Administrátorská registrácia odomknutá!</string>
     <string name="sign_up_admin_header">Pridanie administrátora</string>
+    <string name="test_results">Výsledky testov</string>
+    <string name="positive_test_results">Testy platného slova</string>
+    <string name="negative_test_results">Testy neplatného slova</string>
+    <string name="submit_task_warning_message">Niektoré testy zlyhali! Naozaj chceš odovzdať túto úlohu?</string>
 </resources>
