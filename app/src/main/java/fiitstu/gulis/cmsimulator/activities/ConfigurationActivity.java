@@ -1666,7 +1666,7 @@ public class ConfigurationActivity extends FragmentActivity
             fileHandler.loadFile(filename);
             machineType = fileHandler.getMachineType();
             fileHandler.getData(dataSource);
-            //emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
+            emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
             if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
                 startStackSymbolId = fileHandler.getStartStackSymbolId();
             }
