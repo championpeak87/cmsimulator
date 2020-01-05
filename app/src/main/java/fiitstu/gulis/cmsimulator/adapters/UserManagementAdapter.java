@@ -81,12 +81,6 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
 
     @Override
     public void onBindViewHolder(@NonNull CardViewBuilder holder, final int position) {
-
-//        if (position == listOfUsers.size() - 1) {
-//
-//            onBottomReachedListener.onBottomReached(position);
-//        }
-
         if (holder instanceof CardViewBuilder && listOfUsers.get(position) != null) {
             final User currentUser = listOfUsers.get(position);
             final String username = currentUser.getUsername();
@@ -132,7 +126,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                 public void onClick(View v) {
                     final String contentMessage = mContext.getString(R.string.delete_user).replace("{0}", fullname);
 
-                    // TODO: wire positive button, add api to delete user
+                    // COMPLETED: wire positive button, add api to delete user
                     AlertDialog deleteUser = new AlertDialog.Builder(mContext)
                             .setTitle(R.string.delete_user_title)
                             .setMessage(contentMessage)
@@ -223,14 +217,12 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         }
     }
 
-    public void addNullData()
-    {
-        this.listOfUsers.add(null);
-        notifyItemInserted(this.listOfUsers.size() - 1);
+    public void addNullData() {
+            this.listOfUsers.add(null);
+            notifyItemInserted(this.listOfUsers.size() - 1);
     }
 
-    public void removeNullData()
-    {
+    public void removeNullData() {
         this.listOfUsers.remove(this.listOfUsers.size() - 1);
         notifyItemRemoved(this.listOfUsers.size());
     }

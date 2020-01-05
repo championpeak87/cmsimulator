@@ -36,6 +36,7 @@ import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.users.UserParser;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,6 +53,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     public static RecyclerView.LayoutManager layout;
     private static List<User> userList;
     public static Context mContext;
+    private int userCount;
     InfiniteScrollListener infiniteScrollListener;
 
     @Override
@@ -66,11 +68,44 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         }, 500);
     }
 
+    class FetchUsersCountAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            UrlManager urlManager = new UrlManager();
+            ServerController serverController = new ServerController();
+            URL url = urlManager.getUsersCountURL();
+            String output = null;
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null || !s.isEmpty()) {
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    userCount = jsonObject.getInt("count");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_users_management);
         mContext = this;
+
+        new FetchUsersCountAsync().execute();
 
         authkey = this.getIntent().getStringExtra("LOGGED_USER_AUTHKEY");
         logged_user_id = this.getIntent().getIntExtra("LOGGED_USER_ID", 0);
@@ -193,7 +228,8 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         protected void onPostExecute(List<User> users) {
             adapter.removeNullData();
             adapter.addUsers(users);
-            adapter.addNullData();
+            if (userList.size() != userCount)
+                adapter.addNullData();
         }
     }
 
@@ -233,9 +269,11 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
             showLoadScreen(false);
             adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
-            adapter.addNullData();
+            if (users.size() != userCount)
+                adapter.addNullData();
             setAdapter(adapter);
             setUserList(users);
+
         }
     }
 

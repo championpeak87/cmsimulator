@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -38,6 +39,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     private List<Task> listOfTasks;
     public static int user_id;
     private String authkey;
+    public static Context mContext;
+    public static BrowseAutomataTasksActivity context;
     public static AutomataTaskAdapter adapter = null;
 
     @Override
@@ -51,14 +54,16 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_browse_automata_tasks);
 
+        mContext = this;
+        context = this;
         // menu
         ActionBar actionbar = this.getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setTitle(getString(R.string.available_tasks));
 
         // fetch intent extras
-        user_id = this.getIntent().getIntExtra("USER_ID", 0);
-        authkey = this.getIntent().getStringExtra("AUTHKEY");
+        user_id = TaskLoginActivity.loggedUser.getUser_id();
+        authkey = TaskLoginActivity.loggedUser.getAuth_key();
 
         getListOfTasks();
     }

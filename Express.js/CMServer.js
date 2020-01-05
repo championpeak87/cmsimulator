@@ -89,6 +89,22 @@ app.get('/api/user/changePassword', (req, res) => {
   })
 })
 
+app.get('/api/user/getCount', (req, res) =>
+{
+  pool.query('SELECT count(*) FROM users;', (err, results) =>
+  {
+    if (err) {throw err}
+    if (results.rowCount > 0)
+    {
+      res.status(HTTP_OK).send(
+        {
+          count: results.rows[0].count
+        }
+      );
+    }
+  });
+});
+
 
 // PRIHLASENIE
 app.get('/api/login', (req, res) => {

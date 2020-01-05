@@ -53,18 +53,16 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     private static final String TASK_DIALOG = "TASK_DIALOG";
 
     private List<Task> listOfTasks = null;
-    private BrowseAutomataTasksActivity mContext;
 
     public AutomataTaskAdapter(List<Task> listOfTasks, BrowseAutomataTasksActivity mContext) {
         this.listOfTasks = listOfTasks;
-        this.mContext = mContext;
     }
 
     @NonNull
     @Override
     public CardViewBuilder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(BrowseAutomataTasksActivity.mContext);
         view = inflater.inflate(R.layout.list_view_automata_task_item, parent, false);
 
         return new AutomataTaskAdapter.CardViewBuilder(view);
@@ -94,29 +92,29 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         switch (currentStatus) {
 
             case WRONG:
-                primary = mContext.getColor(R.color.wrong_answer_top_bar);
-                light_primary = mContext.getColor(R.color.wrong_answer_bottom_bar);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.wrong_answer_top_bar);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.wrong_answer_bottom_bar);
                 break;
 
             case IN_PROGRESS:
-                primary = mContext.getColor(R.color.in_progress_top_bar);
-                light_primary = mContext.getColor(R.color.in_progress_bottom_bar);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.in_progress_top_bar);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.in_progress_bottom_bar);
                 break;
 
             case CORRECT:
-                primary = mContext.getColor(R.color.correct_answer_top_bar);
-                light_primary = mContext.getColor(R.color.correct_answer_bottom_bar);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.correct_answer_top_bar);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.correct_answer_bottom_bar);
                 break;
 
             case TOO_LATE:
-                primary = mContext.getColor(R.color.md_black_1000);
-                light_primary = mContext.getColor(R.color.bootstrap_gray);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.md_black_1000);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.bootstrap_gray);
                 break;
 
             case NEW:
             default:
-                primary = mContext.getColor(R.color.primary_color);
-                light_primary = mContext.getColor(R.color.primary_color_light);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.primary_color);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.primary_color_light);
                 break;
         }
 
@@ -127,9 +125,9 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         holder.help_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent detailsIntent = new Intent(mContext, AutomataTaskDetailsActivity.class);
+                Intent detailsIntent = new Intent(BrowseAutomataTasksActivity.mContext, AutomataTaskDetailsActivity.class);
 
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) BrowseAutomataTasksActivity.mContext, cardView, ViewCompat.getTransitionName(cardView));
                 detailsIntent.putExtra("TASK_TYPE", automataType);
                 detailsIntent.putExtra("TASK_NAME", currentTask.getTitle());
                 detailsIntent.putExtra("TASK_DESCRIPTION", currentTask.getText());
@@ -138,7 +136,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("LIGHT_PRIMARY", light_primary);
                 detailsIntent.putExtra("TIME", currentTask.getMinutes());
 
-                mContext.startActivity(detailsIntent, options.toBundle());
+                BrowseAutomataTasksActivity.mContext.startActivity(detailsIntent, options.toBundle());
             }
         });
 
@@ -165,7 +163,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                     @Override
                     protected void onPostExecute(String s) {
                         if (!saveDownloadedFile(s)) {
-                            Toast.makeText(mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         int machineType;
@@ -181,7 +179,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                         TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
                         taskDialog.setAdapter(thisAdapter);
-                        taskDialog.show(mContext.getSupportFragmentManager(), TASK_DIALOG);
+                        taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
                     }
                 }
 
@@ -192,7 +190,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         holder.delete_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(mContext)
+                new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
                         .setTitle(R.string.delete_task)
                         .setMessage(R.string.task_delete_message)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -215,15 +213,15 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                                     @Override
                                     protected void onPostExecute(String s) {
                                         if (s == null) {
-                                            Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
                                         } else {
                                             try {
                                                 JSONObject reader = new JSONObject(s);
                                                 if (reader.getBoolean("deleted")) {
-                                                    Toast.makeText(mContext, R.string.task_deleted, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.task_deleted, Toast.LENGTH_SHORT).show();
                                                     removeTask(position);
                                                 } else
-                                                    Toast.makeText(mContext, R.string.task_not_found, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.task_not_found, Toast.LENGTH_SHORT).show();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -281,9 +279,9 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
     private boolean saveDownloadedFile(String input) {
         File file = new File(FileHandler.PATH + "/automataTask.cmst");
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(BrowseAutomataTasksActivity.mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mContext,
+            ActivityCompat.requestPermissions((Activity)BrowseAutomataTasksActivity.mContext,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             return false;
         } else {
