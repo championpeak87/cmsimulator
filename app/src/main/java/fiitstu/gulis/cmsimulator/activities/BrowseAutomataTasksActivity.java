@@ -82,6 +82,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_help:
+                Toast.makeText(mContext, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
         }
 
         return false;
