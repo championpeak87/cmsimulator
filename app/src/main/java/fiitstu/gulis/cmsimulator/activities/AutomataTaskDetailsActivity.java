@@ -2,25 +2,48 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.elements.Task;
+
+import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 public class AutomataTaskDetailsActivity extends FragmentActivity {
     private TextView type;
     private TextView name;
     private TextView determinismText;
+    private TextView subheader;
     private EditText description;
     private EditText publicInputs;
     private EditText minutes;
     private LinearLayout bottomBar;
+
+    private void setWindowColor(int color, int color2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getColor(color2));
+            window.setNavigationBarColor(getColor(color2));
+
+            ActionBar actionBar = this.getActionBar();
+            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(color)));
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,9 +63,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
         final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
         final int time = intent.getIntExtra("TIME", 0);
-        final int primary = intent.getIntExtra("PRIMARY_COLOR", 0);
-        final int light_primary = intent.getIntExtra("LIGHT_PRIMARY", 0);
-
+        final Task.TASK_STATUS status = (Task.TASK_STATUS)intent.getSerializableExtra("TASK_STATUS");
 
         type = findViewById(R.id.textview_automata_type);
         name = findViewById(R.id.textview_task_name);
@@ -50,10 +71,55 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         publicInputs = findViewById(R.id.edittext_task_test_inputs);
         minutes = findViewById(R.id.edittext_task_solution_time);
         bottomBar = findViewById(R.id.task_bottom_bar);
+        subheader = findViewById(R.id.textview_task_details);
 
-        if (primary != 0 && light_primary != 0) {
-            type.setBackgroundColor(primary);
-            bottomBar.setBackgroundColor(light_primary);
+        switch (status)
+        {
+            case IN_PROGRESS:
+                type.setBackgroundColor(getColor(R.color.in_progress_top_bar));
+                bottomBar.setBackgroundColor(getColor(R.color.in_progress_bottom_bar));
+                setWindowColor(R.color.in_progress_top_bar, R.color.in_progress_dark);
+                subheader.setTextColor(getColor(R.color.in_progress_top_bar));
+                break;
+            case CORRECT:
+                type.setBackgroundColor(getColor(R.color.correct_answer_top_bar));
+                bottomBar.setBackgroundColor(getColor(R.color.correct_answer_bottom_bar));
+                setWindowColor(R.color.correct_answer_top_bar, R.color.correct_answer_dark);
+                subheader.setTextColor(getColor(R.color.correct_answer_top_bar));
+                break;
+            case NEW:
+                type.setBackgroundColor(getColor(R.color.primary_color));
+                bottomBar.setBackgroundColor(getColor(R.color.primary_color_light));
+                setWindowColor(R.color.primary_color, R.color.primary_color_dark);
+                subheader.setTextColor(getColor(R.color.primary_color));
+                break;
+            case TOO_LATE:
+                type.setBackgroundColor(getColor(R.color.too_late_answer_top_bar));
+                bottomBar.setBackgroundColor(getColor(R.color.too_late_answer_bottom_bar));
+                setWindowColor(R.color.too_late_answer_top_bar, R.color.too_late_answer_dark);
+                int nightModeFlags =
+                        getContext().getResources().getConfiguration().uiMode &
+                                Configuration.UI_MODE_NIGHT_MASK;
+                ImageView logo = findViewById(R.id.imageView_main_logo);
+                switch (nightModeFlags) {
+
+                    case Configuration.UI_MODE_NIGHT_YES:
+
+                        subheader.setTextColor(getColor(R.color.md_white_1000));
+                        break;
+
+                    case Configuration.UI_MODE_NIGHT_NO:
+                    case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                        subheader.setTextColor(getColor(R.color.too_late_answer_top_bar));
+                        break;
+                }
+                break;
+            case WRONG:
+                type.setBackgroundColor(getColor(R.color.wrong_answer_top_bar));
+                bottomBar.setBackgroundColor(getColor(R.color.wrong_answer_bottom_bar));
+                setWindowColor(R.color.wrong_answer_top_bar, R.color.wrong_answer_dark);
+                subheader.setTextColor(getColor(R.color.wrong_answer_top_bar));
+                break;
         }
 
         type.setText(task_type);
@@ -83,9 +149,6 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
     private void setConnectedTransition() {
         Fade fade = new Fade();
         View decor = getWindow().getDecorView();
-        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
-        fade.excludeTarget(android.R.id.statusBarBackground, true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
 
         getWindow().setEnterTransition(fade);
         getWindow().setExitTransition(fade);

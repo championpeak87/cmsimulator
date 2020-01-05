@@ -107,8 +107,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 break;
 
             case TOO_LATE:
-                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.md_black_1000);
-                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.bootstrap_gray);
+                primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.too_late_answer_top_bar);
+                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.too_late_answer_bottom_bar);
                 break;
 
             case NEW:
@@ -132,8 +132,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("TASK_NAME", currentTask.getTitle());
                 detailsIntent.putExtra("TASK_DESCRIPTION", currentTask.getText());
                 detailsIntent.putExtra("PUBLIC_INPUT", currentTask.getPublicInputs());
-                detailsIntent.putExtra("PRIMARY_COLOR", primary);
-                detailsIntent.putExtra("LIGHT_PRIMARY", light_primary);
+                detailsIntent.putExtra("TASK_STATUS", currentTask.getStatus());
                 detailsIntent.putExtra("TIME", currentTask.getMinutes());
 
                 BrowseAutomataTasksActivity.mContext.startActivity(detailsIntent, options.toBundle());

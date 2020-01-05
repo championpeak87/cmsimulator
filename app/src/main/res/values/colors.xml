@@ -91,13 +91,20 @@
     <color name="transparent_transition_color">@color/md_grey_600</color>
 
     <!--tasks colors-->
+    <color name="wrong_answer_dark">#7f0000</color>
     <color name="wrong_answer_top_bar">#b71c1c</color>
     <color name="wrong_answer_bottom_bar">#f05545</color>
 
+    <color name="in_progress_dark">#c66900</color>
     <color name="in_progress_top_bar">#ff9800</color>
     <color name="in_progress_bottom_bar">#ffc947</color>
 
+    <color name="correct_answer_dark">#005005</color>
     <color name="correct_answer_top_bar">#2e7d32</color>
     <color name="correct_answer_bottom_bar">#60ad5e</color>
+
+    <color name="too_late_answer_dark">#000000</color>
+    <color name="too_late_answer_top_bar">#212121</color>
+    <color name="too_late_answer_bottom_bar">#484848</color>
 
 </resources>

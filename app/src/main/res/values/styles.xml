@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_color_dark</item>
         <item name="colorAccent">@color/primary_color</item>
-        <item name="android:navigationBarColor">@color/primary_color</item>
+        <item name="android:navigationBarColor">@color/primary_color_dark</item>
         <item name="android:colorButtonNormal">@color/primary_color</item>
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowActionBar">true</item>

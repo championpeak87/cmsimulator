@@ -42,7 +42,7 @@ import java.util.TimerTask;
 /**
  * A dialog that displays details about a task and offers various options
  * what to do with it, depending on the mode
- *
+ * <p>
  * Created by Jakub Sedlář on 09.01.2018.
  */
 public class TaskDialog extends DialogFragment {
@@ -88,6 +88,7 @@ public class TaskDialog extends DialogFragment {
 
     /**
      * Ugly global variable.
+     *
      * @param statusText the displayed status text
      */
     public static void setStatusText(CharSequence statusText) {
@@ -96,8 +97,9 @@ public class TaskDialog extends DialogFragment {
 
     /**
      * Creates a new instance of the TaskDialog with the given arguments set
-     * @param task the relevant task
-     * @param mode affects the offered options, {@link #ENTERING}, {@link #SOLVING}, {@link #EDITING}, or {@link #SOLVED}
+     *
+     * @param task        the relevant task
+     * @param mode        affects the offered options, {@link #ENTERING}, {@link #SOLVING}, {@link #EDITING}, or {@link #SOLVED}
      * @param machineType the type of the machine (one of MainActivity's static members)
      * @return the created instance
      */
@@ -113,6 +115,7 @@ public class TaskDialog extends DialogFragment {
 
     /**
      * Disables all buttons, makes the dialog uncancellable and shows a progress bar.
+     *
      * @see #unfreeze() unfreeze
      */
     public void freeze() {
@@ -127,6 +130,7 @@ public class TaskDialog extends DialogFragment {
 
     /**
      * Hides progress bar, makes the dialog cancellable, enables all buttons that should be enabled
+     *
      * @see #freeze() freeze
      */
     public void unfreeze() {
@@ -141,10 +145,8 @@ public class TaskDialog extends DialogFragment {
         }
     }
 
-    public void markAsStarted(final Task.TASK_STATUS status, final int task_id, final int user_id)
-    {
-        class ChangeTaskFlagAsync extends AsyncTask<Void, Void, String>
-        {
+    public void markAsStarted(final Task.TASK_STATUS status, final int task_id, final int user_id) {
+        class ChangeTaskFlagAsync extends AsyncTask<Void, Void, String> {
             @Override
             protected String doInBackground(Void... voids) {
                 UrlManager urlManager = new UrlManager();
@@ -177,8 +179,10 @@ public class TaskDialog extends DialogFragment {
         Task.TASK_STATUS currentStatus = task.getStatus();
         if (currentStatus == Task.TASK_STATUS.WRONG || currentStatus == Task.TASK_STATUS.CORRECT)
             return;
-        else
+        else {
             new ChangeTaskFlagAsync().execute();
+            task.setStatus(Task.TASK_STATUS.IN_PROGRESS);
+        }
     }
 
 
@@ -246,8 +250,7 @@ public class TaskDialog extends DialogFragment {
                     }
                 }
             }, 0, 1000);
-        }
-        else if (mode == ENTERING || mode == EDITING) {
+        } else if (mode == ENTERING || mode == EDITING) {
             timeLabel.setText(R.string.available_time);
             timeRemainingTextView.setText(task.getMinutes() + "min");
         }
@@ -259,11 +262,9 @@ public class TaskDialog extends DialogFragment {
         alertDialogBuilder.setInverseBackgroundForced(true);
         if (mode == SOLVING) {
             alertDialogBuilder.setPositiveButton(getResources().getString(R.string.turn_in), null);
-        }
-        else if (mode == ENTERING) {
+        } else if (mode == ENTERING) {
             alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
-        }
-        else if (mode == EDITING) {
+        } else if (mode == EDITING) {
             alertDialogBuilder.setPositiveButton(R.string.back_to_task_edit, null);
         }
         alertDialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -280,7 +281,7 @@ public class TaskDialog extends DialogFragment {
 
             if (mode == SOLVING && task.getMinutes() != 0
                     && (SystemClock.elapsedRealtime() - task.getStarted()) >= task.getMinutes() * 60 * 1000) {
-                ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                ((AlertDialog) getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
             }
         }
     }
@@ -305,9 +306,8 @@ public class TaskDialog extends DialogFragment {
                     outputBundle.putSerializable(MainActivity.TASK, task);
 
                     final Task.TASK_STATUS currentStatus = task.getStatus();
-                    if (currentStatus == Task.TASK_STATUS.NEW)
-                    {
-                        markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id() );
+                    if (currentStatus == Task.TASK_STATUS.NEW) {
+                        markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
                         int position = adapter.getListOfTasks().indexOf(task);
                         adapter.notifyItemChanged(position);
                     }
@@ -335,6 +335,7 @@ public class TaskDialog extends DialogFragment {
 
     /**
      * Changes the contents of the displayed timer
+     *
      * @param seconds the displayed time, in seconds
      */
     private void setRemainingSeconds(int seconds) {
