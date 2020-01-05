@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.network;
 
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
@@ -77,8 +78,7 @@ public class UrlManager {
     // CHANGE FLAG QUERIES
     private final static String TASK_STATUS_KEY = "task_status";
 
-    public URL getTaskFlagURL(int user_id, int task_id)
-    {
+    public URL getTaskFlagURL(int user_id, int task_id) {
         Uri uri = Uri.parse(URI + GET_TASK_FLAG_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
@@ -95,8 +95,7 @@ public class UrlManager {
         }
     }
 
-    public URL getSubmitAutomataTaskUrl(int user_id, int task_id, Task.TASK_STATUS status)
-    {
+    public URL getSubmitAutomataTaskUrl(int user_id, int task_id, Task.TASK_STATUS status) {
         Uri uri = Uri.parse(URI + SUBMIT_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
@@ -114,8 +113,7 @@ public class UrlManager {
         }
     }
 
-    public URL getChangeFlagUrl(Task.TASK_STATUS status, int user_id, int task_id)
-    {
+    public URL getChangeFlagUrl(Task.TASK_STATUS status, int user_id, int task_id) {
         Uri uri = Uri.parse(URI + CHANGE_TASK_FLAG_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
@@ -125,7 +123,7 @@ public class UrlManager {
         URL url = null;
 
         try {
-            url = new  URL(uri.toString());
+            url = new URL(uri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } finally {
@@ -133,8 +131,7 @@ public class UrlManager {
         }
     }
 
-    public URL getDeleteAutomataTaskURL(int task_id)
-    {
+    public URL getDeleteAutomataTaskURL(int task_id) {
         Uri uri = Uri.parse(URI + DELETE_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .build();
@@ -150,8 +147,7 @@ public class UrlManager {
         }
     }
 
-    public URL getAutomataTaskDownloadURL(int task_id, int user_id)
-    {
+    public URL getAutomataTaskDownloadURL(int task_id, int user_id) {
         Uri uri = Uri.parse(URI + DOWNLOAD_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
@@ -168,11 +164,10 @@ public class UrlManager {
         }
     }
 
-    public URL getLoginSaltUrl(String username)
-    {
+    public URL getLoginSaltUrl(String username) {
         Uri builtUri = Uri.parse(URI + GET_USER_SALT_PATH).buildUpon()
-            .appendQueryParameter(USERNAME_QUERY_KEY, username)
-            .build();
+                .appendQueryParameter(USERNAME_QUERY_KEY, username)
+                .build();
 
         URL url = null;
 
@@ -181,14 +176,12 @@ public class UrlManager {
             url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } finally
-        {
+        } finally {
             return url;
         }
     }
 
-    public URL getLoginUrl(String username, String authkey)
-    {
+    public URL getLoginUrl(String username, String authkey) {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
@@ -196,20 +189,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getLoginUrlWithAuthkey(String username, String authkey)
-    {
+    public URL getLoginUrlWithAuthkey(String username, String authkey) {
         Uri builtUri = Uri.parse(URI + LOGIN_PATH).buildUpon()
                 .appendQueryParameter(USERNAME_QUERY_KEY, username)
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
@@ -217,20 +206,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getUpdateUserUrl(String auth_key, int logged_user_id, int user_id, String first_name, String last_name, String password_hash, String type, String username)
-    {
+    public URL getUpdateUserUrl(String auth_key, int logged_user_id, int user_id, String first_name, String last_name, String password_hash, String type, String username) {
         Uri builtUri = Uri.parse(URI + UPDATE_USER_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
                 .appendQueryParameter(LOGGED_USER_ID_KEY, Integer.toString(logged_user_id))
@@ -244,20 +229,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getAllUsersUrl(String authkey, int offset)
-    {
+    public URL getAllUsersUrl(String authkey, int offset) {
         Uri builtUri = Uri.parse(URI + GET_ALL_USERS_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
                 .appendQueryParameter(OFFSET_QUERY_KEY, Integer.toString(offset))
@@ -265,20 +246,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getSearchedUser(String authkey, String searchedUserLastName)
-    {
+    public URL getSearchedUser(String authkey, String searchedUserLastName) {
         Uri builtUri = Uri.parse(URI + SEARCH_USER_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
                 .appendQueryParameter(LAST_NAME_KEY, searchedUserLastName)
@@ -286,46 +263,36 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getChangePasswordUrl(int user_id, String old_password, String new_password)
-    {
+    public URL getChangePasswordUrl(int user_id, String new_password, String salt) {
         PasswordManager passwordManager = new PasswordManager();
-        //String old_auth = passwordManager.getAuthkey(old_password);
-        //String new_auth = passwordManager.getAuthkey(new_password);
+        String new_auth = passwordManager.getAuthkey(new_password, salt);
 
         Uri builtUri = Uri.parse(URI + CHANGE_PASSWORD_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
-//                .appendQueryParameter(NEW_AUTH_KEY, new_auth)
-//                .appendQueryParameter(OLD_AUTH_KEY, old_auth)
+                .appendQueryParameter(NEW_AUTH_KEY, new_auth)
                 .build();
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getPublishAutomataTaskURL(String file_name)
-    {
+    public URL getPublishAutomataTaskURL(String file_name) {
 
         Uri builtUri = Uri.parse(URI + PUBLISH_TASK_PATH).buildUpon()
                 .appendQueryParameter(FILE_NAME_KEY, file_name)
@@ -333,20 +300,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getDeleteUserUrl(int loggedUserID, int user_id, String auth_key)
-    {
+    public URL getDeleteUserUrl(int loggedUserID, int user_id, String auth_key) {
 
         Uri builtUri = Uri.parse(URI + DELETE_USER_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
@@ -356,20 +319,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getFetchAllAutomataTasksUrl(int user_id, String auth_key)
-    {
+    public URL getFetchAllAutomataTasksUrl(int user_id, String auth_key) {
 
         Uri builtUri = Uri.parse(URI + GET_ALL_AUTOMATA_TASKS_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
@@ -378,23 +337,18 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getPushAutomataTaskToTable(Task task, int user_id, int machine_id)
-    {
+    public URL getPushAutomataTaskToTable(Task task, int user_id, int machine_id) {
         String type = null;
-        switch (machine_id)
-        {
+        switch (machine_id) {
             case MainActivity
                     .FINITE_STATE_AUTOMATON:
                 type = automata_type.FINITE_AUTOMATA.getApiKey();
@@ -421,20 +375,16 @@ public class UrlManager {
 
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(builtUri.toString());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         return url;
     }
 
-    public URL getSaveTaskURL(String file_name, int user_id)
-    {
+    public URL getSaveTaskURL(String file_name, int user_id) {
         Uri uri = Uri.parse(URI + SAVE_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(FILE_NAME_KEY, file_name)
@@ -452,14 +402,12 @@ public class UrlManager {
     }
 
 
-    public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type, String salt)
-    {
+    public URL getAddUserUrl(String username, String first_name, String last_name, String authkey, User.user_type user_type, String salt) {
         PasswordManager passwordManager = new PasswordManager();
 
         String user_type_string = "";
 
-        switch (user_type)
-        {
+        switch (user_type) {
             case admin:
                 user_type_string = "admin";
                 break;
@@ -482,18 +430,14 @@ public class UrlManager {
 
         URL builtURL = null;
 
-        try
-        {
+        try {
             builtURL = new URL(builtUri.toString());
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return builtURL;
     }
-
 
 
 }

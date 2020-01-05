@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -143,11 +144,22 @@ public class TaskLoginActivity extends FragmentActivity {
 
     }
 
+    public boolean isConnected()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        boolean isConnected = connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+        return isConnected;
+    }
 
     public void signIn(View view) throws IOException {
         boolean canSignIn = verifyFields();
 
         if (canSignIn) {
+            if (!isConnected())
+            {
+                Toast.makeText(this, R.string.device_not_connected_internet, Toast.LENGTH_LONG).show();
+                return;
+            }
             final String username = usernameEditText.getText().toString().trim();
             final String password = passwordEditText.getText().toString();
 

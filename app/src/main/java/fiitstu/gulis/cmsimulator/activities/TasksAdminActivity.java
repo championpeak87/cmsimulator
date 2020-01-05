@@ -25,10 +25,7 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
-import fiitstu.gulis.cmsimulator.dialogs.ExampleTaskDialog;
-import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
-import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.dialogs.TasksGameDialog;
+import fiitstu.gulis.cmsimulator.dialogs.*;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.Lector;
@@ -39,6 +36,8 @@ import fiitstu.gulis.cmsimulator.network.UrlManager;
 
 import java.io.IOException;
 import java.net.URL;
+
+import static fiitstu.gulis.cmsimulator.activities.TaskLoginActivity.loggedUser;
 
 /**
  * A main-ish menu for task-related activities.
@@ -57,7 +56,7 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
 
     public static final int GAME_EXAMPLE_PREVIEW = 0;
 
-    public static User loggedUser;
+    public static User loggedUser = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,6 +188,8 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
         Intent signInActivity = new Intent(this, TaskLoginActivity.class);
         startActivity(signInActivity);
 
+        loggedUser = null;
+
         Context context = this.getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(
                 TaskLoginActivity.SETTINGS_KEY, Context.MODE_PRIVATE);
@@ -260,78 +261,8 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
     }
 
     public void changePassword(View view) {
-
-
-        final AlertDialog changePasswordDialog = new AlertDialog.Builder(this)
-                .setView(R.layout.dialog_password_change)
-                .setTitle(R.string.change_password)
-                .setCancelable(true)
-                .setPositiveButton(R.string.change_password, null)
-                .setNeutralButton(R.string.cancel, null)
-                .create();
-
-        changePasswordDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(final DialogInterface dialog) {
-
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        TextInputEditText oldPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_old_password);
-                        TextInputEditText newPassword = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password);
-                        TextInputEditText newPasswordCheck = ((AlertDialog) dialog).findViewById(R.id.edittext_new_password_check);
-
-                        String oldPassword_passwd = oldPassword.getText().toString();
-                        String newPassword_passwd = newPassword.getText().toString();
-                        String newPasswordCheck_passwd = newPasswordCheck.getText().toString();
-
-                        boolean oldPasswordEmpty = oldPassword_passwd.isEmpty();
-                        boolean newPasswordEmpty = newPassword_passwd.isEmpty();
-                        boolean passwordsMatch = newPassword_passwd.equals(newPasswordCheck_passwd);
-
-                        if (oldPasswordEmpty) {
-                            oldPassword.setError(getString(R.string.password_empty));
-                        }
-                        if (newPasswordEmpty) {
-                            newPassword.setError(getString(R.string.password_empty));
-                        }
-                        if (!passwordsMatch) {
-                            newPasswordCheck.setError(getString(R.string.passwords_dont_match));
-                        }
-
-                        if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch) {
-                            final ServerController serverController = new ServerController();
-                            UrlManager urlManager = new UrlManager();
-                            int user_id = loggedUser.getUser_id();
-
-                            final URL passwordChangeURL = urlManager.getChangePasswordUrl(user_id, oldPassword_passwd, newPassword_passwd);
-
-                            class ChangePasswordAsync extends AsyncTask<URL, Void, Boolean> {
-                                @Override
-                                protected Boolean doInBackground(URL... urls) {
-                                    try {
-                                        serverController.getResponseFromServer(urls[0]);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        return false;
-                                    }
-
-                                    return true;
-                                }
-                            }
-
-                            new ChangePasswordAsync().execute(passwordChangeURL);
-                            dialog.dismiss();
-                        }
-                    }
-                });
-            }
-        });
-
-        changePasswordDialog.show();
+        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog();
+        changePasswordDialog.show(this.getSupportFragmentManager(), "Change_password");
     }
 
     private void loadTask() {

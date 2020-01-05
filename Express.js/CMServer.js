@@ -53,7 +53,7 @@ app.get('/api/user/signup', (req, res) => {
     else {
       pool.query('INSERT INTO users(username, user_type, password_hash, first_name, last_name, salt) VALUES ($1,$2,$3,$4,$5,$6);',
         [username, user_type, auth_key, first_name, last_name, salt], (err, result) => {
-          if (err) {throw err;}
+          if (err) { throw err; }
           res.status(HTTP_OK).send('USER WAS ADDED!');
           console.log(Date() + ' ', [username], 'was successfully added to database');
         });
@@ -73,21 +73,14 @@ app.get('/api/user/changePassword', (req, res) => {
     if (error) { throw error }
 
     if (results.rowCount > 0) {
-      if (results.rows[0].password_hash == auth_key) {
-        console.log(Date() + ' ', [results.rows[0].username], 'has changed password.');
+      console.log(Date() + ' ', [results.rows[0].username], 'has changed password.');
 
-        pool.query('UPDATE public.users SET password_hash=$1 WHERE user_id=$2;', [new_auth_key, user_id], (err, result) => {
-          if (error) {
-            throw error;
-          }
-          res.status(HTTP_OK).send('Password changed');
-        })
-
-      }
-      else {
-        console.log(Date() + ' ', [results.rows[0].username], 'Unable to authentificate user!');
-        res.status(HTTP_FORBIDDEN).send('Unable to authentificate user!');
-      }
+      pool.query('UPDATE public.users SET password_hash=$1 WHERE user_id=$2;', [new_auth_key, user_id], (err, result) => {
+        if (error) {
+          throw error;
+        }
+        res.status(HTTP_OK).send('Password changed');
+      })
     }
     else {
       console.log(Date() + 'Unable to perform requested operation!');
@@ -301,22 +294,17 @@ app.get('/api/tasks/delete', (req, res, next) => {
   })
 })
 
-app.get('/api/tasks/submit', (req,res) =>
-{
+app.get('/api/tasks/submit', (req, res) => {
   const task_id = req.query.task_id;
   const user_id = req.query.user_id;
   const task_status = req.query.task_status;
 
-  pool.query('SELECT * FROM automata_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) =>
-  {
-    if (err) {throw err}
-    if (results.rowCount > 0)
-    {
-      pool.query('UPDATE automata_task_results SET submitted=\'true\', task_status = $1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result) =>
-      {
-        if (error) {throw error}
-        if (result.rowCount > 0)
-        {
+  pool.query('SELECT * FROM automata_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      pool.query('UPDATE automata_task_results SET submitted=\'true\', task_status = $1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
           res.status(HTTP_OK).send({
             task_id: task_id,
             user_id: user_id,
@@ -450,7 +438,7 @@ app.get('/api/tasks/changeFlag', (req, res) => {
       var mkdirp = require('mkdirp');
       mkdirp("./uploads/" + user_id + "/");
       filesystem.copyFile("./uploads/automataTasks/" + task_id + ".cmst", "./uploads/" + user_id + "/" + task_id + ".cmst", (error) => {
-        if (error) {throw error;}
+        if (error) { throw error; }
       }
       );
       pool.query("INSERT INTO automata_task_results(task_id, time_elapsed, task_status, user_id) VALUES ($1, $2, $3, $4);", [task_id, '00:00:00', task_status, user_id], (error, result2) => {

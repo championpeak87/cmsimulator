@@ -1293,5 +1293,8 @@
 	<string name="negative_test_results">Negative test results</string>
 	<string name="submit_task_warning_message">Some tests have failed! Do you still wish to submit this task?</string>
 	<string name="submit_successful">Your task has been successfully submitted!</string>
+    <string name="device_not_connected_internet">This device is not connected to the internet!</string>
+	<string name="wrong_password">Wrong password</string>
+	<string name="password_changed_successfully">Password was changed successfully</string>
 
 </resources>

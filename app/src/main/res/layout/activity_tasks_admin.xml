@@ -130,6 +130,7 @@
 						android:lines="2"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_view_list_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 			</LinearLayout>
 
@@ -152,6 +153,7 @@
 						android:text="@string/create_task"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_add_box_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
@@ -159,6 +161,7 @@
 						android:text="@string/find_tasks"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_slideshow_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
@@ -166,6 +169,7 @@
 						android:text="@string/view_results"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_view_list_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 			</LinearLayout>
 
@@ -188,6 +192,7 @@
 						android:text="@string/automatas"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_videogame_asset_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
@@ -195,6 +200,7 @@
 						android:text="@string/grammars"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_videogame_asset_24"
+						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 
 			</LinearLayout>

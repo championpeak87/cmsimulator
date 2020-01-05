@@ -585,14 +585,6 @@ public class ConfigurationActivity extends FragmentActivity
                                     return output;
                                 }
                             }
-
-                            @Override
-                            protected void onPostExecute(String s) {
-                                if (s.equalsIgnoreCase("OK"))
-                                    Toast.makeText(ConfigurationActivity.this, R.string.save_complete, Toast.LENGTH_SHORT).show();
-                                else
-                                    Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
-                            }
                         }
 
                         FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
