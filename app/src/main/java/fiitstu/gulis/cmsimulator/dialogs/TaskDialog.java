@@ -304,10 +304,13 @@ public class TaskDialog extends DialogFragment {
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);
 
-                    markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id() );
-                    task.setStatus(Task.TASK_STATUS.IN_PROGRESS);
-                    int position = adapter.getListOfTasks().indexOf(task);
-                    adapter.notifyItemChanged(position);
+                    final Task.TASK_STATUS currentStatus = task.getStatus();
+                    if (currentStatus == Task.TASK_STATUS.NEW)
+                    {
+                        markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id() );
+                        int position = adapter.getListOfTasks().indexOf(task);
+                        adapter.notifyItemChanged(position);
+                    }
 
                     intent.putExtras(outputBundle);
 
