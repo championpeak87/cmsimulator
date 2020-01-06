@@ -274,6 +274,17 @@ public class ConfigurationActivity extends FragmentActivity
         }
     }
 
+    private boolean hasTimeSet(Task task) {
+        final Time availableTime = task.getAvailable_time();
+        final int hours = availableTime.getHours();
+        final int minutes = availableTime.getMinutes();
+        final int seconds = availableTime.getSeconds();
+        if (hours == 0 && minutes == 0 && seconds == 0)
+            return false;
+        else return true;
+    }
+
+
     //onCreate method
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -465,52 +476,55 @@ public class ConfigurationActivity extends FragmentActivity
         if (taskConfiguration == MainActivity.SOLVE_TASK) {
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             Time time = task.getRemaining_time();
-            timer = new Timer(time);
-            timer.setOnTickListener(new Timer.OnTickListener() {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    int hours = (int) (millisUntilFinished / 3600000);
-                    int minutes = (int) ((millisUntilFinished - (hours * 3600000)) / 60000);
-                    int seconds = (int) ((millisUntilFinished - (hours * 3600000) - (minutes * 60000)) / 1000);
+            if (hasTimeSet(task)) {
+                timer = new Timer(time);
+                timer.setOnTickListener(new Timer.OnTickListener() {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        int hours = (int) (millisUntilFinished / 3600000);
+                        int minutes = (int) ((millisUntilFinished - (hours * 3600000)) / 60000);
+                        int seconds = (int) ((millisUntilFinished - (hours * 3600000) - (minutes * 60000)) / 1000);
 
-                    if (hours == 0 && minutes <= 4 && !timerRunOut) {
-                        timerRunOut = true;
+                        if (hours == 0 && minutes <= 4 && !timerRunOut) {
+                            timerRunOut = true;
 
-                        final int s_dark = getColor(R.color.primary_color_dark);
-                        final int s_normal = getColor(R.color.primary_color);
-                        final int s_light = getColor(R.color.primary_color_light);
+                            final int s_dark = getColor(R.color.primary_color_dark);
+                            final int s_normal = getColor(R.color.primary_color);
+                            final int s_light = getColor(R.color.primary_color_light);
 
-                        final int t_dark = getColor(R.color.in_progress_dark);
-                        final int t_normal = getColor(R.color.in_progress_top_bar);
-                        final int t_light = getColor(R.color.in_progress_bottom_bar);
+                            final int t_dark = getColor(R.color.in_progress_dark);
+                            final int t_normal = getColor(R.color.in_progress_top_bar);
+                            final int t_light = getColor(R.color.in_progress_bottom_bar);
 
-                        changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                            changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                        }
+
+
+                        String timerText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                        actionBar.setTitle(timerText);
                     }
+                });
+                timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
+                    @Override
+                    public void onTimeRunOut() {
+                        ConfigurationActivity.this.finish();
+                        SimulationActivity.mContext.finish();
+                        new MarkAsTimeRunOutAsync().execute();
+                        BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                        AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                                .setTitle(R.string.time_ran_out_title)
+                                .setMessage(R.string.time_ran_out_message)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .create();
+
+                        timeRunOutAlert.show();
+                    }
+                });
 
 
-                    String timerText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-
-                    actionBar.setTitle(timerText);
-                }
-            });
-            timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
-                @Override
-                public void onTimeRunOut() {
-                    ConfigurationActivity.this.finish();
-                    SimulationActivity.mContext.finish();
-                    new MarkAsTimeRunOutAsync().execute();
-                    BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
-                    AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
-                            .setTitle(R.string.time_ran_out_title)
-                            .setMessage(R.string.time_ran_out_message)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .create();
-
-                    timeRunOutAlert.show();
-                }
-            });
-
-            timer.startTimer();
+                timer.startTimer();
+            }
         }
 
         dataSource.close();
@@ -655,7 +669,7 @@ public class ConfigurationActivity extends FragmentActivity
 
     @Override
     public void finish() {
-        if (taskConfiguration == MainActivity.SOLVE_TASK) {
+        if (taskConfiguration == MainActivity.SOLVE_TASK && hasTimeSet(task)) {
             final Task currentTask = task;
 
             final Time remainingTime = timer.getCurrentTime();
