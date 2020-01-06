@@ -225,17 +225,6 @@ public class SimulationActivity extends FragmentActivity
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_simulation_task_info:
-                if (configurationType == MainActivity.EDIT_TASK) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
-                    taskDialog.show(fm, "TASK_DIALOG");
-                } else if (configurationType == MainActivity.SOLVE_TASK) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                    taskDialog.show(fm, "TASK_DIALOG");
-                }
-                return true;
             case R.id.menu_simulation_configure:
                 if (simulating) {
                     stopSimulation();
@@ -392,8 +381,6 @@ public class SimulationActivity extends FragmentActivity
         machineTapeRecyclerView.setMaxCount(3.4f);
         machineTapeRecyclerView.setVisibility(View.GONE);
 
-        MenuItem taskButton = findViewById(R.id.menu_simulation_task_info);
-
         //get configuration type (defines if we work with empty activity or fields will be filled already
         configurationType = savedInstanceState == null
                 ? inputBundle.getInt(MainActivity.CONFIGURATION_TYPE)
@@ -441,9 +428,14 @@ public class SimulationActivity extends FragmentActivity
                 break;
             case MainActivity.SOLVE_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-                //taskButton.setIcon(getDrawable(R.drawable.excl_red));
-                //taskButton.setVisible(true);
-                filename = task.getTitle();
+                setFilename(machineType);
+                FileHandler.Format formatx = inputBundle.getBoolean(MainActivity.DEFAULT_FORMAT)
+                        ? FileHandler.Format.CMS
+                        : FileHandler.Format.JFF;
+
+                loadMachine(filename, formatx);
+
+                filename = filename.substring(filename.lastIndexOf("/") + 1, filename.lastIndexOf("."));
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
                 if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
@@ -566,26 +558,49 @@ public class SimulationActivity extends FragmentActivity
             Log.v(TAG, "outputBundle initialized");
 
             Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
-            Bundle gameBundle = new Bundle();
-            if (inputBundle.containsKey(TasksActivity.TASK_CONFIGURATION)) {
-                int temp = inputBundle.getInt(TasksActivity.TASK_CONFIGURATION);
-                gameBundle.putInt(TasksActivity.TASK_CONFIGURATION, temp);
-
-                temp = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
-                gameBundle.putInt(TasksActivity.GAME_EXAMPLE_NUMBER, temp);
-
-                gameBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
-
-                nextActivityIntent.putExtras(gameBundle);
-            } else {
+//            Bundle gameBundle = new Bundle();
+//            if (inputBundle.containsKey(TasksActivity.TASK_CONFIGURATION)) {
+//                int temp = inputBundle.getInt(TasksActivity.TASK_CONFIGURATION);
+//                gameBundle.putInt(TasksActivity.TASK_CONFIGURATION, temp);
+//
+//                temp = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
+//                gameBundle.putInt(TasksActivity.GAME_EXAMPLE_NUMBER, temp);
+//
+//                gameBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+//
+//                nextActivityIntent.putExtras(gameBundle);
+//            } else {
                 nextActivityIntent.putExtras(outputBundle);
-            }
+//            }
             startActivity(nextActivityIntent);
             Log.i(TAG, "configuration activity intent executed");
         }
     }
 
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (configurationType != 0) {
+            Bundle inputBundle = this.getIntent().getExtras();
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
+            MenuItem saveButton = menu.getItem(0);
+            MenuItem submitTaskButton = menu.getItem(1);
+            //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
 
+            if (configurationType == MainActivity.SOLVE_TASK) {
+                saveButton.setVisible(true);
+                submitTaskButton.setVisible(true);
+            }
+            if (configurationType == MainActivity.EDIT_TASK || task.getPublicInputs()) {
+                menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
+                menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
+            }
+        }
+        if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {
+            menu.findItem(R.id.menu_configuration_convert).setVisible(false);
+        }
+
+        return true;
+    }
 
     @Override
     public void onResume() {

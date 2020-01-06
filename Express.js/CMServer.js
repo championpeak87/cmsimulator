@@ -173,7 +173,7 @@ app.get('/api/user/update', (req, res) => {
   const type = req.query.type;
   const username = req.query.username;
 
-  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
+  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND user_type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
       pool.query('UPDATE users SET username=$1, user_type=$2, password_hash=$3, first_name=$4, last_name=$5 WHERE user_id=$6;', [username, type, password_hash, first_name, last_name, user_id], (error, result) => {

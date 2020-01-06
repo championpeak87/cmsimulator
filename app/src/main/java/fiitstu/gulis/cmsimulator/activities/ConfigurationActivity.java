@@ -45,6 +45,9 @@ import fiitstu.gulis.cmsimulator.diagram.DiagramView;
 import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.FiniteStateAutomatonStep;
 import fiitstu.gulis.cmsimulator.machines.MachineStep;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -213,6 +216,7 @@ public class ConfigurationActivity extends FragmentActivity
         setContentView(R.layout.activity_configuration);
         Log.v(TAG, "onCreate initialization started");
         activity = this;
+
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -467,6 +471,15 @@ public class ConfigurationActivity extends FragmentActivity
                 return true;
             case R.id.menu_configuration_simulate:
                 Intent nextActivityIntent = new Intent(this, SimulationActivity.class);
+                nextActivityIntent.putExtra(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
+                if (task instanceof FiniteAutomataTask)
+                    nextActivityIntent.putExtra(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
+                else if (task instanceof PushdownAutomataTask)
+                    nextActivityIntent.putExtra(MainActivity.MACHINE_TYPE, MainActivity.PUSHDOWN_AUTOMATON);
+                else if (task instanceof LinearBoundedAutomataTask)
+                    nextActivityIntent.putExtra(MainActivity.MACHINE_TYPE, MainActivity.LINEAR_BOUNDED_AUTOMATON);
+                else nextActivityIntent.putExtra(MainActivity.MACHINE_TYPE, MainActivity.TURING_MACHINE);
+                nextActivityIntent.putExtra(MainActivity.TASK, task);
                 nextActivityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(nextActivityIntent);
                 Log.i(TAG, "simulation activity intent executed");
@@ -656,7 +669,8 @@ public class ConfigurationActivity extends FragmentActivity
                                     }
                                 }
 
-                                ConfigurationActivity.this.finish();;
+                                ConfigurationActivity.this.finish();
+                                ;
                             }
                         }
 

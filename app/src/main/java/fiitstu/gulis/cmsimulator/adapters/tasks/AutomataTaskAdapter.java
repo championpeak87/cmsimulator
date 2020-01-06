@@ -58,6 +58,10 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         this.listOfTasks = listOfTasks;
     }
 
+    public void setListOfTasks(List<Task> listOfTasks) {
+        this.listOfTasks = listOfTasks;
+    }
+
     @NonNull
     @Override
     public CardViewBuilder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

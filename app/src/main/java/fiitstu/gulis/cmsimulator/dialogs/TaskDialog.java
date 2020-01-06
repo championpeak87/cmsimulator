@@ -295,13 +295,13 @@ public class TaskDialog extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), ConfigurationActivity.class);
+                    Intent intent = new Intent(getContext(), SimulationActivity.class);
 
                     Bundle outputBundle = new Bundle();
-                    outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
+                    outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
                     outputBundle.putBoolean(MainActivity.DEFAULT_FORMAT, true);
                     outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
-                    outputBundle.putInt(ConfigurationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putInt(SimulationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);
 

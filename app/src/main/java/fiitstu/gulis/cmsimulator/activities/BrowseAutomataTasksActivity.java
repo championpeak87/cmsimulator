@@ -83,6 +83,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
                 onBackPressed();
                 return true;
             case R.id.menu_help:
+                // TODO: IMPLEMENT HELP DIALOG
                 Toast.makeText(mContext, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
         }
 
@@ -144,6 +145,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
         if (adapter == null)
             adapter = new AutomataTaskAdapter(listOfTasks, this);
+        else adapter.setListOfTasks(listOfTasks);
         if (listOfTasks.size() == 0)
         {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);

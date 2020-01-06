@@ -9,7 +9,7 @@
             android:icon="@drawable/baseline_save_24"
             android:iconTint="@color/md_white_1000"
             android:visible="false"
-            style="@style/dropDownMenuItemStyle" />
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
     <item
             android:id="@+id/menu_submit_task"
             android:title="@string/submit_task"
@@ -17,7 +17,7 @@
             android:iconTint="@color/md_white_1000"
             android:showAsAction="always"
             android:visible="false"
-            style="@style/dropDownMenuItemStyle" />
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/menu_configuration_simulate"
         android:title="@string/simulate"
