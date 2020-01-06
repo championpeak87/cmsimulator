@@ -431,7 +431,7 @@ public class ConfigurationActivity extends FragmentActivity
         Log.v(TAG, "configuration buttons initialized");
 
         if (taskConfiguration == MainActivity.SOLVE_TASK) {
-            Time time = Time.valueOf("00:05:03");
+            Time time = (Time)inputBundle.getSerializable("TIME");
             timer = new Timer(time);
             timer.setOnTickListener(new Timer.OnTickListener() {
                 @Override
@@ -2023,6 +2023,7 @@ public class ConfigurationActivity extends FragmentActivity
             FileHandler fileHandler = new FileHandler(format);
             fileHandler.loadFile(filename);
             machineType = fileHandler.getMachineType();
+            task = fileHandler.getTask();
             fileHandler.getData(dataSource);
             emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
             if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {

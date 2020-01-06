@@ -25,7 +25,7 @@ CREATE TABLE automata_tasks
     assigner_id serial NOT NULL references users(user_id),
     task_name text not null,
     task_description text,
-    time int not null default(0),
+    time interval not null default('00:00:00'),
     public_input boolean not null default(true),
     automata_type automata_type not null,
     PRIMARY KEY (task_id)
