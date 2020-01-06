@@ -274,11 +274,6 @@ public class ConfigurationActivity extends FragmentActivity
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
 
-        if (taskConfiguration == MainActivity.GAME_MACHINE) {
-            gameNumber = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
-            GameShowcase gameShowcase = new GameShowcase();
-            gameShowcase.showTutorial(gameNumber, this);
-        }
         if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE) {
             setFilename(machineType);
             FileHandler.Format format = inputBundle.getBoolean(MainActivity.DEFAULT_FORMAT)
