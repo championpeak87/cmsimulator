@@ -34,6 +34,7 @@ import fiitstu.gulis.cmsimulator.dialogs.ExampleMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
+import fiitstu.gulis.cmsimulator.elements.Timer;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import io.blushine.android.ui.showcase.MaterialShowcase;
 import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
@@ -42,6 +43,7 @@ import io.blushine.android.ui.showcase.ShowcaseConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
 
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
@@ -110,6 +112,8 @@ public class MainActivity extends FragmentActivity
 
     //variables
     private boolean loadPermissions = false;
+
+    private Timer timer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
