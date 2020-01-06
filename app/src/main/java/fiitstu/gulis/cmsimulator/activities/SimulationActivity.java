@@ -584,8 +584,10 @@ public class SimulationActivity extends FragmentActivity
                 submitTaskButton.setVisible(true);
             }
             if (configurationType == MainActivity.EDIT_TASK || task.getPublicInputs()) {
-                menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
-                menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
+                menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
+                menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
+                menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);
+                menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
             }
         }
         if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {

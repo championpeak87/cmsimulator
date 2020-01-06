@@ -86,6 +86,8 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         task = (Task) inputBundle.getSerializable(TASK);
         if (task == null) {
             task = new Task();
+            task.setMinutes(0);
+            task.setPublicInputs(true);
         }
 
         titleEditText = findViewById(R.id.editText_task_title);
