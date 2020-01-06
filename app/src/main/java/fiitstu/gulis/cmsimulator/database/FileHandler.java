@@ -19,6 +19,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.*;
+import java.sql.Time;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -296,7 +297,7 @@ public class FileHandler {
 
             String title = taskElement.getAttribute(TITLE);
             String text = taskElement.getAttribute(TEXT);
-            int time = Integer.parseInt(taskElement.getAttribute(TIME));
+            int minutes = Integer.parseInt(taskElement.getAttribute(TIME));
             boolean publicInputs = Boolean.parseBoolean(taskElement.getAttribute(PUBLIC_INPUTS));
             int maxSteps = Integer.parseInt(taskElement.getAttribute(MAX_STEPS));
 
@@ -309,6 +310,8 @@ public class FileHandler {
                 resultVersion = Integer.parseInt(taskElement.getAttribute(TASK_RESULT_VERSION));
             }
 
+            final String sTime = String.format("00:%02d:00", minutes);
+            final Time time = Time.valueOf(sTime);
             return new Task(title, text, time, publicInputs, maxSteps, resultVersion);
         }
     }
@@ -333,7 +336,7 @@ public class FileHandler {
         Element taskElement = document.createElement(TASK);
         taskElement.setAttribute(TITLE, task.getTitle());
         taskElement.setAttribute(TEXT, task.getText());
-        taskElement.setAttribute(TIME, String.valueOf(task.getMinutes()));
+        taskElement.setAttribute(TIME, String.valueOf(task.getAvailable_time().getMinutes()));
         taskElement.setAttribute(PUBLIC_INPUTS, String.valueOf(task.getPublicInputs()));
         taskElement.setAttribute(MAX_STEPS, String.valueOf(task.getMaxSteps()));
         taskElement.setAttribute(TASK_RESULT_VERSION, String.valueOf(task.getResultVersion()));

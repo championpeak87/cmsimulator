@@ -14,6 +14,7 @@ import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Time;
 
 public class UrlManager {
 
@@ -378,10 +379,14 @@ public class UrlManager {
                 type = automata_type.TURING_MACHINE.getApiKey();
                 break;
         }
+
+        final int minutes = task.getAvailable_time().getMinutes();
+        final String sTime = String.format("00:%02d:00", minutes);
+
         Uri builtUri = Uri.parse(URI + ADD_TASK_TO_TABLE).buildUpon()
                 .appendQueryParameter(TASK_NAME_KEY, task.getTitle())
                 .appendQueryParameter(TASK_DESCRIPTION_KEY, task.getText())
-                .appendQueryParameter(TIME_KEY, Integer.toString(task.getMinutes()))
+                .appendQueryParameter(TIME_KEY, sTime)
                 .appendQueryParameter(PUBLIC_INPUT_KEY, Boolean.toString(task.getPublicInputs()))
                 .appendQueryParameter(ASSIGNER_KEY, Integer.toString(user_id))
                 .appendQueryParameter(FILE_NAME_KEY, task.getTitle() + ".cmst")

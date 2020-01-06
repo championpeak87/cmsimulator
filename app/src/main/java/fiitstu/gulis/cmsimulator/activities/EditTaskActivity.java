@@ -38,6 +38,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.URL;
+import java.sql.Time;
 import java.util.List;
 
 /**
@@ -67,6 +68,13 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
 
     private int logged_user_id;
 
+    private boolean isTimeSet(Time time)
+    {
+        if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0)
+            return false;
+        else return true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +94,7 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         task = (Task) inputBundle.getSerializable(TASK);
         if (task == null) {
             task = new Task();
-            task.setMinutes(0);
+            task.setAvailable_time(Time.valueOf("00:00:00"));
             task.setPublicInputs(true);
         }
 
@@ -106,10 +114,10 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
             textEditText.setText(task.getText());
         }
 
-        if (task.getMinutes() != 0) {
+        if (isTimeSet(task.getAvailable_time())) {
             timeLimitCheckbox.setChecked(true);
             minutesEditText.setEnabled(true);
-            minutesEditText.setText(String.valueOf(task.getMinutes()));
+            minutesEditText.setText(String.valueOf(task.getAvailable_time().getMinutes()));
         }
 
         if (timeLimitCheckbox.isChecked()) {
@@ -374,12 +382,15 @@ public class EditTaskActivity extends FragmentActivity implements SaveMachineDia
         task.setPublicInputs(publishInputsCheckbox.isChecked());
         if (timeLimitCheckbox.isChecked()) {
             if (minutesEditText.getText().toString().isEmpty()) {
-                task.setMinutes(0);
+                task.setAvailable_time(Time.valueOf("00:00:00"));
             } else {
-                task.setMinutes(Integer.parseInt(minutesEditText.getText().toString()));
+                final int minutes = Integer.parseInt(minutesEditText.getText().toString().trim());
+                final String sTime = String.format("00:%02d:00", minutes);
+                final Time time = Time.valueOf(sTime);
+                task.setAvailable_time(time);
             }
         } else {
-            task.setMinutes(0);
+            task.setAvailable_time(Time.valueOf("00:00:00"));
         }
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();

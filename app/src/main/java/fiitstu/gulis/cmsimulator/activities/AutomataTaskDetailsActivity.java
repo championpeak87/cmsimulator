@@ -21,6 +21,8 @@ import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.elements.Task;
 
+import java.sql.Time;
+
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 public class AutomataTaskDetailsActivity extends FragmentActivity {
@@ -62,7 +64,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         final String task_type = intent.getStringExtra("TASK_TYPE");
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
         final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
-        final int time = intent.getIntExtra("TIME", 0);
+        final Time time = (Time)intent.getSerializableExtra("TIME");
         final Task.TASK_STATUS status = (Task.TASK_STATUS)intent.getSerializableExtra("TASK_STATUS");
 
         type = findViewById(R.id.textview_automata_type);
@@ -125,8 +127,8 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         type.setText(task_type);
         name.setText(task_name);
         description.setText(hint);
-        if (time > 0)
-            minutes.setText(Integer.toString(time) + " min");
+        if (time.getHours() > 0 || time.getMinutes() > 0 || time.getSeconds() > 0)
+            minutes.setText(time.toString());
         else
             minutes.setText(R.string.unlimited_time);
 

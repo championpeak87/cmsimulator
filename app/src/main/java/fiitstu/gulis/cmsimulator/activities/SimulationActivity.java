@@ -590,9 +590,6 @@ public class SimulationActivity extends FragmentActivity
                 menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
             }
         }
-        if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {
-            menu.findItem(R.id.menu_configuration_convert).setVisible(false);
-        }
 
         return true;
     }
