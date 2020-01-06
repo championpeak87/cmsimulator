@@ -89,13 +89,10 @@ app.get('/api/user/changePassword', (req, res) => {
   })
 })
 
-app.get('/api/user/getCount', (req, res) =>
-{
-  pool.query('SELECT count(*) FROM users;', (err, results) =>
-  {
-    if (err) {throw err}
-    if (results.rowCount > 0)
-    {
+app.get('/api/user/getCount', (req, res) => {
+  pool.query('SELECT count(*) FROM users;', (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
       res.status(HTTP_OK).send(
         {
           count: results.rows[0].count
@@ -356,6 +353,50 @@ app.post('/api/tasks/upload', (req, res, next) => {
 
 });
 
+app.get('/api/tasks/updateTimer', (req, res) => {
+  const user_id = req.query.user_id;
+  const task_id = req.query.task_id;
+  const time_elapsed = req.query.user_id;
+
+  pool.query('SELECT count(*) from automata_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rows[0].count > 0) {
+      pool.query('UPDATE automata_task_results SET time_elapsed=$1 WHERE user_id = $2 AND task_id = $3;', [time_elapsed, user_id, task_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: true
+            }
+          );
+        } else {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: false
+            }
+          );
+        }
+      })
+    }
+    else {
+      res.status(HTTP_OK).send(
+        {
+          task_id: task_id,
+          user_id: user_id,
+          time_elapsed: time_elapsed,
+          updated: true
+        }
+      );
+    }
+  })
+})
+
 app.get('/api/tasks/add', (req, res) => {
   const task_name = req.query.task_name;
   const task_description = req.query.task_description;
@@ -392,7 +433,7 @@ app.get('/api/tasks/getTasks', (req, res) => {
   const auth_key = req.query.auth_key;
 
   //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
-  pool.query('SELECT automata_tasks.*, automata_task_results.task_status FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
+  pool.query('SELECT automata_tasks.*, automata_task_results.task_status, automata_tasks.time - automata_task_results.time_elapsed as remaining_time FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {

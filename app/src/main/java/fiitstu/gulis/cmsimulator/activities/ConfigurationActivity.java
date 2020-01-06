@@ -426,7 +426,8 @@ public class ConfigurationActivity extends FragmentActivity
         Log.v(TAG, "configuration buttons initialized");
 
         if (taskConfiguration == MainActivity.SOLVE_TASK) {
-            Time time = (Time)inputBundle.getSerializable("TIME");
+            task = (Task)inputBundle.getSerializable(MainActivity.TASK);
+            Time time = task.getRemaining_time();
             timer = new Timer(time);
             timer.setOnTickListener(new Timer.OnTickListener() {
                 @Override
@@ -444,7 +445,7 @@ public class ConfigurationActivity extends FragmentActivity
 
                         final int t_dark = getColor(R.color.in_progress_dark);
                         final int t_normal = getColor(R.color.in_progress_top_bar);
-                        final int t_light= getColor(R.color.in_progress_bottom_bar);
+                        final int t_light = getColor(R.color.in_progress_bottom_bar);
 
                         changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
                     }
@@ -462,48 +463,44 @@ public class ConfigurationActivity extends FragmentActivity
         Log.i(TAG, "onCreate initialized");
     }
 
-    private void updateStatusBarColor(int s_dark, int t_dark)
-    {
+    private void updateStatusBarColor(int s_dark, int t_dark) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
         animator.setDuration(BACKGROUND_CHANGE_LENGTH);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                ConfigurationActivity.this.getWindow().setStatusBarColor((int)animation.getAnimatedValue());
+                ConfigurationActivity.this.getWindow().setStatusBarColor((int) animation.getAnimatedValue());
             }
         });
         animator.start();
     }
 
-    private void updateNavigationBarColor(int s_dark, int t_dark)
-    {
+    private void updateNavigationBarColor(int s_dark, int t_dark) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
         animator.setDuration(BACKGROUND_CHANGE_LENGTH);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                ConfigurationActivity.this.getWindow().setNavigationBarColor((int)animation.getAnimatedValue());
+                ConfigurationActivity.this.getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
             }
         });
         animator.start();
     }
 
 
-    private void updateActionBarColor(int s_normal, int t_normal)
-    {
+    private void updateActionBarColor(int s_normal, int t_normal) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_normal, t_normal);
         animator.setDuration(BACKGROUND_CHANGE_LENGTH);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                ConfigurationActivity.this.getActionBar().setBackgroundDrawable(new ColorDrawable((int)animation.getAnimatedValue()));
+                ConfigurationActivity.this.getActionBar().setBackgroundDrawable(new ColorDrawable((int) animation.getAnimatedValue()));
             }
         });
         animator.start();
     }
 
-    private void updateInnerViewsColor(int s_light, int t_light)
-    {
+    private void updateInnerViewsColor(int s_light, int t_light) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
         animator.setDuration(BACKGROUND_CHANGE_LENGTH);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -511,21 +508,21 @@ public class ConfigurationActivity extends FragmentActivity
             public void onAnimationUpdate(ValueAnimator animation) {
                 HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
                 List<ImageButton> imageButtonList = new ArrayList<>();
-                imageButtonList.add((ImageButton)findViewById(R.id.imageButton_configuration_diagram_move));
-                imageButtonList.add((ImageButton)findViewById(R.id.imageButton_configuration_diagram_state));
-                imageButtonList.add((ImageButton)findViewById(R.id.imageButton_configuration_diagram_transition));
-                imageButtonList.add((ImageButton)findViewById(R.id.imageButton_configuration_diagram_edit));
-                imageButtonList.add((ImageButton)findViewById(R.id.imageButton_configuration_diagram_remove));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
 
-                final int currentColorValue = (int)animation.getAnimatedValue();
+                final int currentColorValue = (int) animation.getAnimatedValue();
                 tabs.setBackgroundColor(currentColorValue);
-                for (ImageButton btn:
-                     imageButtonList) {
-                    int[][] states = new int[][] {
-                            new int[] { 0 }
+                for (ImageButton btn :
+                        imageButtonList) {
+                    int[][] states = new int[][]{
+                            new int[]{0}
                     };
 
-                    int[] color = new int[] {
+                    int[] color = new int[]{
                             currentColorValue
                     };
                     ColorStateList list = new ColorStateList(states, color);
@@ -539,9 +536,7 @@ public class ConfigurationActivity extends FragmentActivity
     }
 
 
-
-    private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light)
-    {
+    private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light) {
         updateStatusBarColor(s_dark, t_dark);
         updateActionBarColor(s_normal, t_normal);
         updateNavigationBarColor(s_dark, t_dark);
@@ -602,6 +597,70 @@ public class ConfigurationActivity extends FragmentActivity
         }
 
         return true;
+    }
+
+    @Override
+    public void finish() {
+        if (taskConfiguration == MainActivity.SOLVE_TASK) {
+            final Task currentTask = task;
+
+            final Time remainingTime = timer.getCurrentTime();
+            final Time availableTime = task.getAvailable_time();
+
+            long elapsed = (availableTime.getTime() - remainingTime.getTime());
+
+            int elapsedHours = (int) (elapsed / 3600000);
+            int elapsedMinutes = (int) ((elapsed - (elapsedHours * 3600000)) / 60000);
+            int elapsedSeconds = (int) ((elapsed - (elapsedHours * 3600000) - (elapsedMinutes * 60000)) / 1000);
+
+
+            final String sTime = String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+            final Time elapsedTime = Time.valueOf(sTime);
+
+
+            class UpdateTimerAsync extends AsyncTask<Void, Void, String> {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    UrlManager urlManager = new UrlManager();
+                    ServerController serverController = new ServerController();
+                    URL updateTimeURL = urlManager.getUpdateTimerURL(elapsedTime, TaskLoginActivity.loggedUser.getUser_id(), currentTask.getTask_id());
+
+                    String output = null;
+                    try {
+                        output = serverController.getResponseFromServer(updateTimeURL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        return output;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+
+                    if (s != null || !s.isEmpty()) {
+                        try {
+                            JSONObject object = new JSONObject(s);
+                            if (!object.getBoolean("updated")) {
+                                Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                BrowseAutomataTasksActivity.adapter.notifyTimeChange(currentTask.getTask_id(), remainingTime);
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            new UpdateTimerAsync().execute();
+        }
+
+        super.finish();
     }
 
     @Override
@@ -997,14 +1056,14 @@ public class ConfigurationActivity extends FragmentActivity
 
     @Override
     public void onClick(View view) {
-            int[][] states = new int[][] {
-                    new int[] { 0 }
-            };
+        int[][] states = new int[][]{
+                new int[]{0}
+        };
 
-            int[] color = new int[] {
-                    getColor(R.color.in_progress_bottom_bar)
-            };
-            ColorStateList list = new ColorStateList(states, color);
+        int[] color = new int[]{
+                getColor(R.color.in_progress_bottom_bar)
+        };
+        ColorStateList list = new ColorStateList(states, color);
         switch (view.getId()) {
             //add input alphabet symbol
             case R.id.button_configuration_form_input_symbol:

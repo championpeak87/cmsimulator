@@ -246,7 +246,7 @@ public class TaskDialog extends DialogFragment {
 
         } else if (mode == ENTERING || mode == EDITING) {
             timeLabel.setText(R.string.available_time);
-            timeRemainingTextView.setText(time.toString());
+            timeRemainingTextView.setText(task.getRemaining_time().toString());
         }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());

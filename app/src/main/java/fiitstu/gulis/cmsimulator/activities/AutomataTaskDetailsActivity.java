@@ -65,6 +65,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
         final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
         final Time time = (Time)intent.getSerializableExtra("TIME");
+        final Time remainingTime = (Time)intent.getSerializableExtra("REMAINING_TIME");
         final Task.TASK_STATUS status = (Task.TASK_STATUS)intent.getSerializableExtra("TASK_STATUS");
 
         type = findViewById(R.id.textview_automata_type);

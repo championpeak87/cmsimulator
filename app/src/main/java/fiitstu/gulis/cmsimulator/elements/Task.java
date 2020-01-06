@@ -12,6 +12,7 @@ public class Task implements Serializable {
     private String title;
     private String text;
     private Time available_time;
+    private Time remaining_time;
     private long started;
     private String assigner;
     private boolean publicInputs;
@@ -24,6 +25,14 @@ public class Task implements Serializable {
     public Task() {
         publicInputs = true;
         resultVersion = TaskResult.CURRENT_VERSION;
+    }
+
+    public Time getRemaining_time() {
+        return remaining_time;
+    }
+
+    public void setRemaining_time(Time remaining_time) {
+        this.remaining_time = remaining_time;
     }
 
     public enum TASK_STATUS {
@@ -53,6 +62,19 @@ public class Task implements Serializable {
         this.assigner = assigner;
         this.task_id = task_id;
         this.status = TASK_STATUS.NEW;
+        this.remaining_time = available_time;
+        this.maxSteps = 100;
+    }
+
+    public Task(String title, String text, Time available_time, Time remaining_time, String assigner, int task_id) {
+        this.title = title;
+        this.text = text;
+        this.available_time = available_time;
+        this.assigner = assigner;
+        this.task_id = task_id;
+        this.status = TASK_STATUS.NEW;
+        this.remaining_time = remaining_time;
+        this.maxSteps = 100;
     }
 
     public Task(String title, String text, Time available_time, boolean publicInputs, int maxSteps, int resultVersion) {

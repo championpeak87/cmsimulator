@@ -14,6 +14,12 @@ public class LinearBoundedAutomataTask extends Task {
         this.setStatus(status);
     }
 
+    public LinearBoundedAutomataTask(String title, String text, Time available_time, Time remaining_time, String assigner, int task_id, boolean public_inputs, Task.TASK_STATUS status) {
+        super(title, text, available_time, remaining_time, assigner, task_id);
+        this.setPublicInputs(public_inputs);
+        this.setStatus(status);
+    }
+
     public LinearBoundedAutomataTask() {
     }
 }

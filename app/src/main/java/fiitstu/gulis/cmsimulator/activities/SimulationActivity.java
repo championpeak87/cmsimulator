@@ -246,6 +246,7 @@ public class SimulationActivity extends FragmentActivity
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 } else if (configurationType == MainActivity.SOLVE_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putSerializable("TIME", task.getAvailable_time());
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 }
                 Log.v(TAG, "outputBundle initialized");

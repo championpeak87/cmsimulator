@@ -35,6 +35,7 @@ public class AutomataTaskParser {
     private static final String TASK_ID_KEY = "task_id";
     private static final String FILE_NAME_KEY = "file_name";
     private static final String TASK_STATUS_KEY = "task_status";
+    private static final String REMAINING_TIME_KEY = "remaining_time";
 
     // TIME KEYS
     private static final String HOURS_KEY = "hours";
@@ -56,6 +57,7 @@ public class AutomataTaskParser {
         Time available_time;
 
         final JSONObject timeObject = object.getJSONObject(TIME_KEY);
+        final JSONObject remainingTimeObject = object.getJSONObject(REMAINING_TIME_KEY);
         final int hours, minutes, seconds;
 
         if (timeObject.has(HOURS_KEY)) {
@@ -72,6 +74,21 @@ public class AutomataTaskParser {
                 hours,
                 minutes,
                 seconds);
+
+        final int remainingHours, remainingMinutes, remainingSeconds;
+
+        if (remainingTimeObject.has(HOURS_KEY)) {
+            remainingHours = remainingTimeObject.getInt(HOURS_KEY);
+        } else remainingHours = 0;
+        if (remainingTimeObject.has(MINUTES_KEY)) {
+            remainingMinutes = remainingTimeObject.getInt(MINUTES_KEY);
+        } else remainingMinutes = 0;
+        if (remainingTimeObject.has(SECONDS_KEY)) {
+            remainingSeconds = remainingTimeObject.getInt(SECONDS_KEY);
+        } else remainingSeconds = 0;
+
+        final String sRemainingTime = String.format("%02d:%02d:%02d", remainingHours, remainingMinutes, remainingSeconds);
+        final Time remainingTime = Time.valueOf(sRemainingTime);
 
         task_name = object.getString(TASK_NAME_KEY);
         task_description = object.getString(TASK_DESCRIPTION_KEY);
@@ -109,6 +126,7 @@ public class AutomataTaskParser {
                         task_name,
                         task_description,
                         available_time,
+                        remainingTime,
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
@@ -119,6 +137,7 @@ public class AutomataTaskParser {
                         task_name,
                         task_description,
                         available_time,
+                        remainingTime,
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
@@ -129,6 +148,7 @@ public class AutomataTaskParser {
                         task_name,
                         task_description,
                         available_time,
+                        remainingTime,
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
@@ -139,6 +159,7 @@ public class AutomataTaskParser {
                         task_name,
                         task_description,
                         available_time,
+                        remainingTime,
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,

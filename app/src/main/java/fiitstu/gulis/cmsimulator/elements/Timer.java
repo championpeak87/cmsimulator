@@ -72,6 +72,19 @@ public class Timer {
         }
     }
 
+    public Time getCurrentTime()
+    {
+        int hours = (int) (milisLeft / 3600000);
+        int minutes = (int) ((milisLeft - (hours * 3600000)) / 60000);
+        int seconds = (int) ((milisLeft - (hours * 3600000) - (minutes * 60000)) / 1000);
+
+        final String sTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        final Time time = Time.valueOf(sTime);
+
+        return time;
+    }
+
+
     public void resetTimer() {
         milisLeft = 0;
     }
