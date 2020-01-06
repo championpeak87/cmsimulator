@@ -934,4 +934,6 @@
     <string name="device_not_connected_internet">Toto zariadenie nie je pripojené k internetu!</string>
     <string name="wrong_password">Zlé heslo</string>
     <string name="password_changed_successfully">Heslo bolo úspešne zmenené</string>
+    <string name="time_ran_out_title">Čas vypršal</string>
+    <string name="time_ran_out_message">Tvoj čas na riešenie tejto úlohy práve vypršal!</string>
 </resources>

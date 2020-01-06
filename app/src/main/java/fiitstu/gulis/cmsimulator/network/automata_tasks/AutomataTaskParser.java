@@ -57,7 +57,6 @@ public class AutomataTaskParser {
         Time available_time;
 
         final JSONObject timeObject = object.getJSONObject(TIME_KEY);
-        final JSONObject remainingTimeObject = object.getJSONObject(REMAINING_TIME_KEY);
         final int hours, minutes, seconds;
 
         if (timeObject.has(HOURS_KEY)) {
@@ -77,18 +76,26 @@ public class AutomataTaskParser {
 
         final int remainingHours, remainingMinutes, remainingSeconds;
 
-        if (remainingTimeObject.has(HOURS_KEY)) {
-            remainingHours = remainingTimeObject.getInt(HOURS_KEY);
-        } else remainingHours = 0;
-        if (remainingTimeObject.has(MINUTES_KEY)) {
-            remainingMinutes = remainingTimeObject.getInt(MINUTES_KEY);
-        } else remainingMinutes = 0;
-        if (remainingTimeObject.has(SECONDS_KEY)) {
-            remainingSeconds = remainingTimeObject.getInt(SECONDS_KEY);
-        } else remainingSeconds = 0;
+        final Time remainingTime;
+        if (!object.isNull(REMAINING_TIME_KEY)) {
+            final JSONObject remainingTimeObject = object.getJSONObject(REMAINING_TIME_KEY);
+            if (remainingTimeObject.has(HOURS_KEY)) {
+                remainingHours = remainingTimeObject.getInt(HOURS_KEY);
+            } else remainingHours = 0;
+            if (remainingTimeObject.has(MINUTES_KEY)) {
+                remainingMinutes = remainingTimeObject.getInt(MINUTES_KEY);
+            } else remainingMinutes = 0;
+            if (remainingTimeObject.has(SECONDS_KEY)) {
+                remainingSeconds = remainingTimeObject.getInt(SECONDS_KEY);
+            } else remainingSeconds = 0;
 
-        final String sRemainingTime = String.format("%02d:%02d:%02d", remainingHours, remainingMinutes, remainingSeconds);
-        final Time remainingTime = Time.valueOf(sRemainingTime);
+            final String sRemainingTime = String.format("%02d:%02d:%02d", remainingHours, remainingMinutes, remainingSeconds);
+            remainingTime = Time.valueOf(sRemainingTime);
+        }
+        else
+        {
+            remainingTime = Time.valueOf(sTime);
+        }
 
         task_name = object.getString(TASK_NAME_KEY);
         task_description = object.getString(TASK_DESCRIPTION_KEY);

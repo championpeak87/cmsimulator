@@ -237,6 +237,43 @@ public class ConfigurationActivity extends FragmentActivity
         }
     }
 
+    private class MarkAsTimeRunOutAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            UrlManager urlManager = new UrlManager();
+            ServerController serverController = new ServerController();
+            URL url = urlManager.getChangeFlagUrl(Task.TASK_STATUS.TOO_LATE, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
+
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null || !s.isEmpty()) {
+                try {
+                    JSONObject object = new JSONObject(s);
+                    if (!object.getBoolean("updated")) {
+                        Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     //onCreate method
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -426,7 +463,7 @@ public class ConfigurationActivity extends FragmentActivity
         Log.v(TAG, "configuration buttons initialized");
 
         if (taskConfiguration == MainActivity.SOLVE_TASK) {
-            task = (Task)inputBundle.getSerializable(MainActivity.TASK);
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             Time time = task.getRemaining_time();
             timer = new Timer(time);
             timer.setOnTickListener(new Timer.OnTickListener() {
@@ -456,6 +493,23 @@ public class ConfigurationActivity extends FragmentActivity
                     actionBar.setTitle(timerText);
                 }
             });
+            timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
+                @Override
+                public void onTimeRunOut() {
+                    ConfigurationActivity.this.finish();
+                    SimulationActivity.mContext.finish();
+                    new MarkAsTimeRunOutAsync().execute();
+                    BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                    AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                            .setTitle(R.string.time_ran_out_title)
+                            .setMessage(R.string.time_ran_out_message)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .create();
+
+                    timeRunOutAlert.show();
+                }
+            });
+
             timer.startTimer();
         }
 
@@ -644,8 +698,7 @@ public class ConfigurationActivity extends FragmentActivity
                             JSONObject object = new JSONObject(s);
                             if (!object.getBoolean("updated")) {
                                 Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 BrowseAutomataTasksActivity.adapter.notifyTimeChange(currentTask.getTask_id(), remainingTime);
                             }
                         } catch (JSONException e) {

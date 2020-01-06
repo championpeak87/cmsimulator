@@ -8,13 +8,22 @@ public class Timer {
     private CountDownTimer timer;
     private long milisLeft;
     private OnTickListener listener;
+    private OnTimeRunOutListener listener2;
 
     public interface OnTickListener {
         void onTick(long millisUntilFinished);
     }
 
+    public interface OnTimeRunOutListener {
+        void onTimeRunOut();
+    }
+
     public void setOnTickListener(OnTickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnTimeRunOutListener(OnTimeRunOutListener listener2) {
+        this.listener2 = listener2;
     }
 
     private static final long tickLengthInMilis = 1000;
@@ -31,6 +40,7 @@ public class Timer {
             @Override
             public void onFinish() {
                 milisLeft = 0;
+                listener2.onTimeRunOut();
             }
         };
     }
