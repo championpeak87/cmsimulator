@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteConstraintException;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
+import fiitstu.gulis.cmsimulator.app.CMSimulator;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.*;
@@ -216,7 +219,6 @@ public class ConfigurationActivity extends FragmentActivity
         setContentView(R.layout.activity_configuration);
         Log.v(TAG, "onCreate initialization started");
         activity = this;
-
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -670,7 +672,7 @@ public class ConfigurationActivity extends FragmentActivity
                                 }
 
                                 ConfigurationActivity.this.finish();
-                                ;
+                                SimulationActivity.mContext.finish();
                             }
                         }
 

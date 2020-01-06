@@ -3,6 +3,7 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -121,6 +122,9 @@ public class SimulationActivity extends FragmentActivity
     private DefaultTapeListAdapter defaultTapeAdapter; //default tape and initial position
     private LongSparseArray<List<Transition>> transitionMap;
     private MachineColorsGenerator machineColorsGenerator;
+
+    public static SimulationActivity mContext;
+
 
     /**
      * Initializes the machine, adding special symbols to its alphabet and creates the tape.
@@ -329,6 +333,8 @@ public class SimulationActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation);
         Log.v(TAG, "onCreate initialization started");
+
+        mContext = this;
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -558,20 +564,8 @@ public class SimulationActivity extends FragmentActivity
             Log.v(TAG, "outputBundle initialized");
 
             Intent nextActivityIntent = new Intent(this, ConfigurationActivity.class);
-//            Bundle gameBundle = new Bundle();
-//            if (inputBundle.containsKey(TasksActivity.TASK_CONFIGURATION)) {
-//                int temp = inputBundle.getInt(TasksActivity.TASK_CONFIGURATION);
-//                gameBundle.putInt(TasksActivity.TASK_CONFIGURATION, temp);
-//
-//                temp = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
-//                gameBundle.putInt(TasksActivity.GAME_EXAMPLE_NUMBER, temp);
-//
-//                gameBundle.putInt(MainActivity.MACHINE_TYPE, MainActivity.FINITE_STATE_AUTOMATON);
-//
-//                nextActivityIntent.putExtras(gameBundle);
-//            } else {
-                nextActivityIntent.putExtras(outputBundle);
-//            }
+            nextActivityIntent.putExtras(outputBundle);
+
             startActivity(nextActivityIntent);
             Log.i(TAG, "configuration activity intent executed");
         }
@@ -584,7 +578,6 @@ public class SimulationActivity extends FragmentActivity
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             MenuItem saveButton = menu.getItem(0);
             MenuItem submitTaskButton = menu.getItem(1);
-            //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
 
             if (configurationType == MainActivity.SOLVE_TASK) {
                 saveButton.setVisible(true);
