@@ -5,17 +5,17 @@ import fiitstu.gulis.cmsimulator.models.tasks.deterministic;
 import fiitstu.gulis.cmsimulator.models.tasks.task_solved_state;
 import fiitstu.gulis.cmsimulator.models.users.User;
 
+import java.sql.Time;
+
 public class LinearBoundedAutomataTask extends Task {
-    public LinearBoundedAutomataTask(String title, String text, int minutes, String assigner) {
-        super(title, text, minutes, assigner);
+    public LinearBoundedAutomataTask(String title, String text, Time available_time, String assigner, int task_id, boolean public_inputs, Task.TASK_STATUS status) {
+        super(title, text, available_time, assigner, task_id);
+        this.setPublicInputs(public_inputs);
+        this.setStatus(status);
     }
 
-    public LinearBoundedAutomataTask(String title, String text, int minutes, String assigner, int task_id) {
-        super(title, text, minutes, assigner, task_id);
-    }
-
-    public LinearBoundedAutomataTask(String title, String text, int minutes, String assigner, int task_id, boolean public_inputs, Task.TASK_STATUS status) {
-        super(title, text, minutes, assigner, task_id);
+    public LinearBoundedAutomataTask(String title, String text, Time available_time, Time remaining_time, String assigner, int task_id, boolean public_inputs, Task.TASK_STATUS status) {
+        super(title, text, available_time, remaining_time, assigner, task_id);
         this.setPublicInputs(public_inputs);
         this.setStatus(status);
     }

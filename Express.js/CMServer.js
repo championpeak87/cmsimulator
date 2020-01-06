@@ -89,13 +89,10 @@ app.get('/api/user/changePassword', (req, res) => {
   })
 })
 
-app.get('/api/user/getCount', (req, res) =>
-{
-  pool.query('SELECT count(*) FROM users;', (err, results) =>
-  {
-    if (err) {throw err}
-    if (results.rowCount > 0)
-    {
+app.get('/api/user/getCount', (req, res) => {
+  pool.query('SELECT count(*) FROM users;', (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
       res.status(HTTP_OK).send(
         {
           count: results.rows[0].count
@@ -356,6 +353,50 @@ app.post('/api/tasks/upload', (req, res, next) => {
 
 });
 
+app.get('/api/tasks/updateTimer', (req, res) => {
+  const user_id = req.query.user_id;
+  const task_id = req.query.task_id;
+  const time_elapsed = req.query.time_elapsed;
+
+  pool.query('SELECT count(*) from automata_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rows[0].count > 0) {
+      pool.query('UPDATE automata_task_results SET time_elapsed=$1 WHERE user_id = $2 AND task_id = $3;', [time_elapsed, user_id, task_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: true
+            }
+          );
+        } else {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: false
+            }
+          );
+        }
+      })
+    }
+    else {
+      res.status(HTTP_OK).send(
+        {
+          task_id: task_id,
+          user_id: user_id,
+          time_elapsed: time_elapsed,
+          updated: true
+        }
+      );
+    }
+  })
+})
+
 app.get('/api/tasks/add', (req, res) => {
   const task_name = req.query.task_name;
   const task_description = req.query.task_description;
@@ -392,7 +433,7 @@ app.get('/api/tasks/getTasks', (req, res) => {
   const auth_key = req.query.auth_key;
 
   //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
-  pool.query('SELECT automata_tasks.*, automata_task_results.task_status FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
+  pool.query('SELECT automata_tasks.*, automata_task_results.task_status, automata_tasks.time - automata_task_results.time_elapsed as remaining_time FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {
@@ -438,17 +479,68 @@ app.get('/api/tasks/changeFlag', (req, res) => {
   pool.query('SELECT * FROM automata_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (err, result) => {
     if (err) { throw err; }
     if (result.rowCount > 0) {
-      pool.query('UPDATE automata_task_results SET task_status=$1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result2) => {
-        if (error) { throw error }
-        res.status(HTTP_OK).send(
-          {
-            task_id: task_id,
-            user_id: user_id,
-            task_status: task_status,
-            updated: true
+      if (task_status == "too_late") {
+        pool.query('SELECT time FROM automata_tasks where task_id = $1;', [task_id], (er, rs) => {
+          if (er) { throw er }
+          if (rs.rowCount > 0) {
+            const available_time = rs.rows[0].time;
+            var interval = "";
+            if (available_time.hours) {
+              interval += available_time.hours + ":";
+            }
+            else {
+              interval += "00:";
+            }
+
+            if (available_time.minutes) {
+              interval += available_time.minutes + ":";
+            }
+            else {
+              interval += "00:";
+            }
+
+            if (available_time.seconds) {
+              interval += available_time.seconds;
+            }
+            else {
+              interval += "00";
+            }
+
+            pool.query('UPDATE automata_task_results SET task_status=\'too_late\', time_elapsed = $1 WHERE task_id = $2 AND user_id = $3;', [interval, task_id, user_id], (e, r) => {
+              if (e) { throw e }
+              if (r.rowCount > 0) {
+                res.status(HTTP_OK).send({
+                  task_id: task_id,
+                  user_id: user_id,
+                  task_status: task_status,
+                  updated: true
+                });
+              }
+              else {
+                res.status(HTTP_OK).send({
+                  task_id: task_id,
+                  user_id: user_id,
+                  task_status: task_status,
+                  updated: true
+                });
+              }
+            })
           }
-        );
-      });
+        });
+      }
+      else {
+        pool.query('UPDATE automata_task_results SET task_status=$1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result2) => {
+          if (error) { throw error }
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              task_status: task_status,
+              updated: true
+            }
+          );
+        });
+      }
     }
     else {
       var mkdirp = require('mkdirp');

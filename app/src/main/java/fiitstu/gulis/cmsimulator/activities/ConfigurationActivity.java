@@ -1,6 +1,9 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,13 +11,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +31,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -33,11 +40,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
+import fiitstu.gulis.cmsimulator.animation.AnimatedColor;
 import fiitstu.gulis.cmsimulator.app.CMSimulator;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
@@ -82,6 +91,10 @@ public class ConfigurationActivity extends FragmentActivity
         DiagramView.ItemClickCallback,
         ConfigurationDialog.ConfigurationDialogListener, SaveMachineDialog.SaveDialogListener,
         TaskDialog.TaskDialogListener {
+
+    private Timer timer;
+    private boolean timerRunOut = false;
+    private static final int BACKGROUND_CHANGE_LENGTH = 1000;
 
     //log tag
     private static final String TAG = ConfigurationActivity.class.getName();
@@ -212,6 +225,66 @@ public class ConfigurationActivity extends FragmentActivity
         return successfulTests;
     }
 
+    private void setWindowColor(int color, int color2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getColor(color2));
+            window.setNavigationBarColor(getColor(color2));
+
+            ActionBar actionBar = this.getActionBar();
+            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(color)));
+        }
+    }
+
+    private class MarkAsTimeRunOutAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            UrlManager urlManager = new UrlManager();
+            ServerController serverController = new ServerController();
+            URL url = urlManager.getChangeFlagUrl(Task.TASK_STATUS.TOO_LATE, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
+
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null || !s.isEmpty()) {
+                try {
+                    JSONObject object = new JSONObject(s);
+                    if (!object.getBoolean("updated")) {
+                        Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean hasTimeSet(Task task) {
+        final Time availableTime = task.getAvailable_time();
+        final int hours = availableTime.getHours();
+        final int minutes = availableTime.getMinutes();
+        final int seconds = availableTime.getSeconds();
+        if (hours == 0 && minutes == 0 && seconds == 0)
+            return false;
+        else return true;
+    }
+
+
     //onCreate method
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,7 +294,7 @@ public class ConfigurationActivity extends FragmentActivity
         activity = this;
 
         //menu
-        ActionBar actionBar = this.getActionBar();
+        final ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //DataSource initialization
@@ -249,11 +322,6 @@ public class ConfigurationActivity extends FragmentActivity
 
         taskConfiguration = inputBundle.getInt(TASK_CONFIGURATION);
 
-        if (taskConfiguration == MainActivity.GAME_MACHINE) {
-            gameNumber = inputBundle.getInt(TasksActivity.GAME_EXAMPLE_NUMBER);
-            GameShowcase gameShowcase = new GameShowcase();
-            gameShowcase.showTutorial(gameNumber, this);
-        }
         if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE) {
             setFilename(machineType);
             FileHandler.Format format = inputBundle.getBoolean(MainActivity.DEFAULT_FORMAT)
@@ -405,8 +473,142 @@ public class ConfigurationActivity extends FragmentActivity
         removeImageButton.setOnClickListener(this);
         Log.v(TAG, "configuration buttons initialized");
 
+        if (taskConfiguration == MainActivity.SOLVE_TASK) {
+            task = (Task) inputBundle.getSerializable(MainActivity.TASK);
+            Time time = task.getRemaining_time();
+            if (hasTimeSet(task)) {
+                timer = new Timer(time);
+                timer.setOnTickListener(new Timer.OnTickListener() {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        int hours = (int) (millisUntilFinished / 3600000);
+                        int minutes = (int) ((millisUntilFinished - (hours * 3600000)) / 60000);
+                        int seconds = (int) ((millisUntilFinished - (hours * 3600000) - (minutes * 60000)) / 1000);
+
+                        if (hours == 0 && minutes <= 4 && !timerRunOut) {
+                            timerRunOut = true;
+
+                            final int s_dark = getColor(R.color.primary_color_dark);
+                            final int s_normal = getColor(R.color.primary_color);
+                            final int s_light = getColor(R.color.primary_color_light);
+
+                            final int t_dark = getColor(R.color.in_progress_dark);
+                            final int t_normal = getColor(R.color.in_progress_top_bar);
+                            final int t_light = getColor(R.color.in_progress_bottom_bar);
+
+                            changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                        }
+
+
+                        String timerText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                        actionBar.setTitle(timerText);
+                    }
+                });
+                timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
+                    @Override
+                    public void onTimeRunOut() {
+                        ConfigurationActivity.this.finish();
+                        SimulationActivity.mContext.finish();
+                        new MarkAsTimeRunOutAsync().execute();
+                        BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                        AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                                .setTitle(R.string.time_ran_out_title)
+                                .setMessage(R.string.time_ran_out_message)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .create();
+
+                        timeRunOutAlert.show();
+                    }
+                });
+
+
+                timer.startTimer();
+            }
+        }
+
         dataSource.close();
         Log.i(TAG, "onCreate initialized");
+    }
+
+    private void updateStatusBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ConfigurationActivity.this.getWindow().setStatusBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+    private void updateNavigationBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ConfigurationActivity.this.getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+
+    private void updateActionBarColor(int s_normal, int t_normal) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_normal, t_normal);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                ConfigurationActivity.this.getActionBar().setBackgroundDrawable(new ColorDrawable((int) animation.getAnimatedValue()));
+            }
+        });
+        animator.start();
+    }
+
+    private void updateInnerViewsColor(int s_light, int t_light) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
+                List<ImageButton> imageButtonList = new ArrayList<>();
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
+
+                final int currentColorValue = (int) animation.getAnimatedValue();
+                tabs.setBackgroundColor(currentColorValue);
+                for (ImageButton btn :
+                        imageButtonList) {
+                    int[][] states = new int[][]{
+                            new int[]{0}
+                    };
+
+                    int[] color = new int[]{
+                            currentColorValue
+                    };
+                    ColorStateList list = new ColorStateList(states, color);
+                    if (lastPressedImageButton != btn)
+                        btn.setBackgroundTintList(list);
+
+                }
+            }
+        });
+        animator.start();
+    }
+
+
+    private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light) {
+        updateStatusBarColor(s_dark, t_dark);
+        updateActionBarColor(s_normal, t_normal);
+        updateNavigationBarColor(s_dark, t_dark);
+        updateInnerViewsColor(s_light, t_light);
     }
 
     @Override
@@ -463,6 +665,69 @@ public class ConfigurationActivity extends FragmentActivity
         }
 
         return true;
+    }
+
+    @Override
+    public void finish() {
+        if (taskConfiguration == MainActivity.SOLVE_TASK && hasTimeSet(task)) {
+            final Task currentTask = task;
+
+            final Time remainingTime = timer.getCurrentTime();
+            final Time availableTime = task.getAvailable_time();
+
+            long elapsed = (availableTime.getTime() - remainingTime.getTime());
+
+            int elapsedHours = (int) (elapsed / 3600000);
+            int elapsedMinutes = (int) ((elapsed - (elapsedHours * 3600000)) / 60000);
+            int elapsedSeconds = (int) ((elapsed - (elapsedHours * 3600000) - (elapsedMinutes * 60000)) / 1000);
+
+
+            final String sTime = String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+            final Time elapsedTime = Time.valueOf(sTime);
+
+
+            class UpdateTimerAsync extends AsyncTask<Void, Void, String> {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    UrlManager urlManager = new UrlManager();
+                    ServerController serverController = new ServerController();
+                    URL updateTimeURL = urlManager.getUpdateTimerURL(elapsedTime, TaskLoginActivity.loggedUser.getUser_id(), currentTask.getTask_id());
+
+                    String output = null;
+                    try {
+                        output = serverController.getResponseFromServer(updateTimeURL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        return output;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+
+                    if (s != null || !s.isEmpty()) {
+                        try {
+                            JSONObject object = new JSONObject(s);
+                            if (!object.getBoolean("updated")) {
+                                Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                BrowseAutomataTasksActivity.adapter.notifyTimeChange(currentTask.getTask_id(), remainingTime);
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            new UpdateTimerAsync().execute();
+        }
+
+        super.finish();
     }
 
     @Override
@@ -858,6 +1123,14 @@ public class ConfigurationActivity extends FragmentActivity
 
     @Override
     public void onClick(View view) {
+        int[][] states = new int[][]{
+                new int[]{0}
+        };
+
+        int[] color = new int[]{
+                getColor(R.color.in_progress_bottom_bar)
+        };
+        ColorStateList list = new ColorStateList(states, color);
         switch (view.getId()) {
             //add input alphabet symbol
             case R.id.button_configuration_form_input_symbol:
@@ -912,6 +1185,8 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 lastPressedImageButton = moveImageButton;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+                if (timerRunOut)
+                    moveImageButton.setBackgroundTintList(list);
                 diagramView.setAction(DiagramView.MOVE);
                 break;
             //add state
@@ -921,6 +1196,8 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 lastPressedImageButton = addStateImageButton;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+                if (timerRunOut)
+                    moveImageButton.setBackgroundTintList(list);
                 diagramView.setAction(DiagramView.ADD_STATE);
                 break;
             //add transition
@@ -930,6 +1207,8 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 lastPressedImageButton = addTransitionImageButton;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+                if (timerRunOut)
+                    moveImageButton.setBackgroundTintList(list);
                 diagramView.setAction(DiagramView.ADD_TRANSITION);
                 break;
             //edit state or transition
@@ -939,6 +1218,8 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 lastPressedImageButton = editImageButton;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+                if (timerRunOut)
+                    moveImageButton.setBackgroundTintList(list);
                 diagramView.setAction(DiagramView.EDIT);
                 break;
             //remove state or transition
@@ -948,6 +1229,8 @@ public class ConfigurationActivity extends FragmentActivity
                 }
                 lastPressedImageButton = removeImageButton;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+                if (timerRunOut)
+                    moveImageButton.setBackgroundTintList(list);
                 diagramView.setAction(DiagramView.REMOVE);
                 break;
         }
@@ -1861,6 +2144,7 @@ public class ConfigurationActivity extends FragmentActivity
             FileHandler fileHandler = new FileHandler(format);
             fileHandler.loadFile(filename);
             machineType = fileHandler.getMachineType();
+            task = fileHandler.getTask();
             fileHandler.getData(dataSource);
             emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
             if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {

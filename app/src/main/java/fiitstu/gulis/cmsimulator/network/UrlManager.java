@@ -14,6 +14,7 @@ import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Time;
 
 public class UrlManager {
 
@@ -38,6 +39,7 @@ public class UrlManager {
     private final static String GET_TASK_FLAG_PATH = "/api/tasks/getFlag";
     private final static String SUBMIT_AUTOMATA_TASK_PATH = "/api/tasks/submit";
     private final static String GET_USERS_COUNT_PATH = "/api/user/getCount";
+    private final static String UPDATE_TIMER_PATH = "/api/tasks/updateTimer";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -78,6 +80,27 @@ public class UrlManager {
 
     // CHANGE FLAG QUERIES
     private final static String TASK_STATUS_KEY = "task_status";
+
+    // UPDATE TIMER QUERIES
+    private final static String ELAPSED_TIME_KEY = "time_elapsed";
+
+    public URL getUpdateTimerURL(Time elapsed_time, int user_id, int task_id)
+    {
+        Uri uri = Uri.parse(URI + UPDATE_TIMER_PATH).buildUpon()
+                .appendQueryParameter(ELAPSED_TIME_KEY, elapsed_time.toString())
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
 
     public URL getUsersCountURL()
     {
@@ -378,10 +401,14 @@ public class UrlManager {
                 type = automata_type.TURING_MACHINE.getApiKey();
                 break;
         }
+
+        final int minutes = task.getAvailable_time().getMinutes();
+        final String sTime = String.format("00:%02d:00", minutes);
+
         Uri builtUri = Uri.parse(URI + ADD_TASK_TO_TABLE).buildUpon()
                 .appendQueryParameter(TASK_NAME_KEY, task.getTitle())
                 .appendQueryParameter(TASK_DESCRIPTION_KEY, task.getText())
-                .appendQueryParameter(TIME_KEY, Integer.toString(task.getMinutes()))
+                .appendQueryParameter(TIME_KEY, sTime)
                 .appendQueryParameter(PUBLIC_INPUT_KEY, Boolean.toString(task.getPublicInputs()))
                 .appendQueryParameter(ASSIGNER_KEY, Integer.toString(user_id))
                 .appendQueryParameter(FILE_NAME_KEY, task.getTitle() + ".cmst")

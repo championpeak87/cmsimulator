@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.elements;
 
 import java.io.Serializable;
+import java.sql.Time;
 
 /**
  * Metadata about a task
@@ -10,7 +11,8 @@ import java.io.Serializable;
 public class Task implements Serializable {
     private String title;
     private String text;
-    private int minutes;
+    private Time available_time;
+    private Time remaining_time;
     private long started;
     private String assigner;
     private boolean publicInputs;
@@ -23,6 +25,14 @@ public class Task implements Serializable {
     public Task() {
         publicInputs = true;
         resultVersion = TaskResult.CURRENT_VERSION;
+    }
+
+    public Time getRemaining_time() {
+        return remaining_time;
+    }
+
+    public void setRemaining_time(Time remaining_time) {
+        this.remaining_time = remaining_time;
     }
 
     public enum TASK_STATUS {
@@ -45,29 +55,42 @@ public class Task implements Serializable {
         }
     }
 
-    public Task(String title, String text, int minutes, String assigner, int task_id) {
+    public Task(String title, String text, Time available_time, String assigner, int task_id) {
         this.title = title;
         this.text = text;
-        this.minutes = minutes;
+        this.available_time = available_time;
         this.assigner = assigner;
         this.task_id = task_id;
         this.status = TASK_STATUS.NEW;
+        this.remaining_time = available_time;
+        this.maxSteps = 100;
     }
 
-    public Task(String title, String text, int minutes, boolean publicInputs, int maxSteps, int resultVersion) {
+    public Task(String title, String text, Time available_time, Time remaining_time, String assigner, int task_id) {
         this.title = title;
         this.text = text;
-        this.minutes = minutes;
+        this.available_time = available_time;
+        this.assigner = assigner;
+        this.task_id = task_id;
+        this.status = TASK_STATUS.NEW;
+        this.remaining_time = remaining_time;
+        this.maxSteps = 100;
+    }
+
+    public Task(String title, String text, Time available_time, boolean publicInputs, int maxSteps, int resultVersion) {
+        this.title = title;
+        this.text = text;
+        this.available_time = available_time;
         this.publicInputs = publicInputs;
         this.maxSteps = maxSteps;
         this.resultVersion = resultVersion;
         this.status = TASK_STATUS.NEW;
     }
 
-    public Task(String title, String text, int minutes, String assigner) {
+    public Task(String title, String text, Time available_time, String assigner) {
         this.title = title;
         this.text = text;
-        this.minutes = minutes;
+        this.available_time = available_time;
         this.assigner = assigner;
         this.status = TASK_STATUS.NEW;
     }
@@ -108,20 +131,12 @@ public class Task implements Serializable {
         this.text = text;
     }
 
-    /**
-     * Returns the time, in minutes, to solve the task. 0 means there is no time limit
-     * @return the time, in minutes, to solve the task, or 0 if there is no time limit
-     */
-    public int getMinutes() {
-        return minutes;
+    public Time getAvailable_time() {
+        return available_time;
     }
 
-    /**
-     * Sets the time, in minutes, to solve the task. 0 means there is no time limit
-     * @param minutes the time, in minutes, to solve the task, or 0 to set no time limit
-     */
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
+    public void setAvailable_time(Time available_time) {
+        this.available_time = available_time;
     }
 
     public String getAssigner() {

@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -201,6 +202,14 @@ public class TaskDialog extends DialogFragment {
         }
     }
 
+    private boolean isTimeSet(Time time)
+    {
+        if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0)
+            return false;
+        else return true;
+    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -225,34 +234,19 @@ public class TaskDialog extends DialogFragment {
         timeRemainingTextView = view.findViewById(R.id.textView_dialog_task_remaining_time);
         timeLayout = view.findViewById(R.id.linearLayout_dialog_task_remaining_time);
 
-        if (task.getMinutes() == 0) {
+        Time time = task.getAvailable_time();
+        if (!isTimeSet(time)) {
             timeLayout.setVisibility(View.GONE);
         }
 
         taskTextView.setText(task.getText());
 
-        if (mode == SOLVING && task.getMinutes() != 0) {
+        if (mode == SOLVING && isTimeSet(time)) {
             timeLabel.setText(R.string.remaining_time);
 
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    final int elapsedSeconds = (int) ((SystemClock.elapsedRealtime() - task.getStarted()) / 1000);
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                setRemainingSeconds(Math.max(task.getMinutes() * 60 - elapsedSeconds, 0));
-                            }
-                        });
-                    }
-                }
-            }, 0, 1000);
         } else if (mode == ENTERING || mode == EDITING) {
             timeLabel.setText(R.string.available_time);
-            timeRemainingTextView.setText(task.getMinutes() + "min");
+            timeRemainingTextView.setText(task.getRemaining_time().toString());
         }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -279,8 +273,9 @@ public class TaskDialog extends DialogFragment {
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            if (mode == SOLVING && task.getMinutes() != 0
-                    && (SystemClock.elapsedRealtime() - task.getStarted()) >= task.getMinutes() * 60 * 1000) {
+            final Time time = task.getAvailable_time();
+            if (mode == SOLVING && isTimeSet(time)
+                    && (SystemClock.elapsedRealtime() - task.getStarted()) >= time.getMinutes() * 60 * 1000) {
                 ((AlertDialog) getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
             }
         }

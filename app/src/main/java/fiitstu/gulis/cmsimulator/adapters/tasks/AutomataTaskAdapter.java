@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URL;
+import java.sql.Time;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -60,6 +61,33 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
     public void setListOfTasks(List<Task> listOfTasks) {
         this.listOfTasks = listOfTasks;
+    }
+
+    public void setTaskStatus(int task_id, Task.TASK_STATUS status)
+    {
+        for (int i = 0; i < listOfTasks.size(); i++)
+        {
+            final Task currentTask = listOfTasks.get(i);
+            if (currentTask.getTask_id() == task_id)
+            {
+                currentTask.setStatus(status);
+                notifyItemChanged(i);
+            }
+        }
+    }
+
+
+    public void notifyTimeChange(int task_id, Time remaining_time)
+    {
+        for (int i = 0; i < listOfTasks.size(); i++) {
+            Task currentTask = listOfTasks.get(i);
+            if (currentTask.getTask_id() == task_id)
+            {
+                currentTask.setRemaining_time(remaining_time);
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     @NonNull
@@ -137,7 +165,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("TASK_DESCRIPTION", currentTask.getText());
                 detailsIntent.putExtra("PUBLIC_INPUT", currentTask.getPublicInputs());
                 detailsIntent.putExtra("TASK_STATUS", currentTask.getStatus());
-                detailsIntent.putExtra("TIME", currentTask.getMinutes());
+                detailsIntent.putExtra("TIME", currentTask.getAvailable_time());
+                detailsIntent.putExtra("REMAINING_TIME", currentTask.getRemaining_time());
 
                 BrowseAutomataTasksActivity.mContext.startActivity(detailsIntent, options.toBundle());
             }

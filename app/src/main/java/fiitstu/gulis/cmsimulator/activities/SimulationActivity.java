@@ -246,6 +246,7 @@ public class SimulationActivity extends FragmentActivity
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 } else if (configurationType == MainActivity.SOLVE_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putSerializable("TIME", task.getAvailable_time());
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 }
                 Log.v(TAG, "outputBundle initialized");
@@ -559,6 +560,7 @@ public class SimulationActivity extends FragmentActivity
                 outputBundle.putSerializable(MainActivity.TASK, task);
             } else if (configurationType == MainActivity.SOLVE_TASK) {
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                outputBundle.putSerializable("TIME", task.getAvailable_time());
                 outputBundle.putSerializable(MainActivity.TASK, task);
             }
             Log.v(TAG, "outputBundle initialized");
@@ -583,13 +585,12 @@ public class SimulationActivity extends FragmentActivity
                 saveButton.setVisible(true);
                 submitTaskButton.setVisible(true);
             }
-            if (configurationType == MainActivity.EDIT_TASK || task.getPublicInputs()) {
-                menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
-                menu.findItem(R.id.menu_configuration_negative_test).setVisible(true);
+            if (configurationType == MainActivity.EDIT_TASK || (configurationType == MainActivity.SOLVE_TASK && task.getPublicInputs())) {
+                menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
+                menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
+                menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);
+                menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
             }
-        }
-        if (machineType != MainActivity.FINITE_STATE_AUTOMATON) {
-            menu.findItem(R.id.menu_configuration_convert).setVisible(false);
         }
 
         return true;
