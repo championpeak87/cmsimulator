@@ -1241,10 +1241,6 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
-        if (taskConfiguration == MainActivity.SOLVE_TASK && hasTimeSet(task))
-        {
-            //timer.pauseTimer();
-        }
         if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE && inputBundle.getInt(TASK_CONFIGURATION) == MainActivity.SOLVE_TASK) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(R.string.task_leave_message)

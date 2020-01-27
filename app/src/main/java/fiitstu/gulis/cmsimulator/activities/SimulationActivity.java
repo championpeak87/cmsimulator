@@ -1,13 +1,18 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,13 +28,10 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.*;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +50,12 @@ import fiitstu.gulis.cmsimulator.diagram.SimulationFlowView;
 import fiitstu.gulis.cmsimulator.diagram.VerticalSeekBar;
 import fiitstu.gulis.cmsimulator.dialogs.FormalSpecDialog;
 import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
+import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.views.AdaptiveRecyclerView;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * The activity for simulating machines.
@@ -68,6 +74,7 @@ public class SimulationActivity extends FragmentActivity
         TaskDialog.TaskDialogListener {
 
     private boolean timerRunOut = false;
+    private static final int BACKGROUND_CHANGE_LENGTH = 1000;
 
     //log tag
     private static final String TAG = SimulationActivity.class.getName();
@@ -640,7 +647,7 @@ public class SimulationActivity extends FragmentActivity
                         final int t_normal = getColor(R.color.in_progress_top_bar);
                         final int t_light = getColor(R.color.in_progress_bottom_bar);
 
-                        //changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                        changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
                     }
 
 
@@ -737,6 +744,144 @@ public class SimulationActivity extends FragmentActivity
 
         //to initialize the transition diagram
         createFirstMachine();
+    }
+
+    private void updateStatusBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                SimulationActivity.this.getWindow().setStatusBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+    private void updateNavigationBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                SimulationActivity.this.getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+
+    private void updateActionBarColor(int s_normal, int t_normal) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_normal, t_normal);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                SimulationActivity.this.getActionBar().setBackgroundDrawable(new ColorDrawable((int) animation.getAnimatedValue()));
+            }
+        });
+        animator.start();
+    }
+
+    /*private void updateInnerViewsColor(int s_light, int t_light) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
+                List<ImageButton> imageButtonList = new ArrayList<>();
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
+
+                final int currentColorValue = (int) animation.getAnimatedValue();
+                tabs.setBackgroundColor(currentColorValue);
+                for (ImageButton btn :
+                        imageButtonList) {
+                    int[][] states = new int[][]{
+                            new int[]{0}
+                    };
+
+                    int[] color = new int[]{
+                            currentColorValue
+                    };
+                    ColorStateList list = new ColorStateList(states, color);
+                    if (lastPressedImageButton != btn)
+                        btn.setBackgroundTintList(list);
+
+                }
+            }
+        });
+        animator.start();
+    }*/
+
+    private void publishRemainingTime(final Time remainingTime)
+    {
+        if (configurationType == MainActivity.SOLVE_TASK && hasTimeSet(task)) {
+            final Task currentTask = task;
+            final Time availableTime = task.getAvailable_time();
+
+            long elapsed = (availableTime.getTime() - remainingTime.getTime());
+
+            int elapsedHours = (int) (elapsed / 3600000);
+            int elapsedMinutes = (int) ((elapsed - (elapsedHours * 3600000)) / 60000);
+            int elapsedSeconds = (int) ((elapsed - (elapsedHours * 3600000) - (elapsedMinutes * 60000)) / 1000);
+
+
+            final String sTime = String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+            final Time elapsedTime = Time.valueOf(sTime);
+
+
+            class UpdateTimerAsync extends AsyncTask<Void, Void, String> {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    UrlManager urlManager = new UrlManager();
+                    ServerController serverController = new ServerController();
+                    URL updateTimeURL = urlManager.getUpdateTimerURL(elapsedTime, TaskLoginActivity.loggedUser.getUser_id(), currentTask.getTask_id());
+
+                    String output = null;
+                    try {
+                        output = serverController.getResponseFromServer(updateTimeURL);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        return output;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+
+                    if (s != null || !s.isEmpty()) {
+                        try {
+                            JSONObject object = new JSONObject(s);
+                            if (!object.getBoolean("updated")) {
+                                Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                BrowseAutomataTasksActivity.adapter.notifyTimeChange(currentTask.getTask_id(), remainingTime);
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            new UpdateTimerAsync().execute();
+        }
+    }
+
+    private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light) {
+        updateStatusBarColor(s_dark, t_dark);
+        updateActionBarColor(s_normal, t_normal);
+        updateNavigationBarColor(s_dark, t_dark);
+        //updateInnerViewsColor(s_light, t_light);
     }
 
     @Override
@@ -997,6 +1142,7 @@ public class SimulationActivity extends FragmentActivity
         } else if (configurationType == MainActivity.SOLVE_TASK) {
             if (hasTimeSet(task))
             {
+                publishRemainingTime(timer.getCurrentTime());
                 timer.pauseTimer();
                 Timer.deleteTimer();
             }
