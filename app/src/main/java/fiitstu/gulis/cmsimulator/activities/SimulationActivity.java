@@ -661,7 +661,16 @@ public class SimulationActivity extends FragmentActivity
             timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener(){
                 @Override
                 public void onTimeRunOut() {
-                    // TODO: SET AS TIME RAN OUT!
+                    new MarkAsTimeRunOutAsync().execute();
+                    finish();
+                    BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                    AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                            .setTitle(R.string.time_ran_out_title)
+                            .setMessage(R.string.time_ran_out_message)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .create();
+
+                    timeRunOutAlert.show();
                 }
             });
         }
@@ -882,6 +891,43 @@ public class SimulationActivity extends FragmentActivity
         updateActionBarColor(s_normal, t_normal);
         updateNavigationBarColor(s_dark, t_dark);
         //updateInnerViewsColor(s_light, t_light);
+    }
+
+    private class MarkAsTimeRunOutAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            UrlManager urlManager = new UrlManager();
+            ServerController serverController = new ServerController();
+            URL url = urlManager.getChangeFlagUrl(Task.TASK_STATUS.TOO_LATE, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
+
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null || !s.isEmpty()) {
+                try {
+                    JSONObject object = new JSONObject(s);
+                    if (!object.getBoolean("updated")) {
+                        Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
