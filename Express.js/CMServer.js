@@ -270,6 +270,27 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
   })
 })
 
+app.get('/api/tasks/updateTaskTimer', (req, res) =>
+{
+  const user_id = req.query.user_id;
+  const task_id = req.query.task_id;
+  const elapsed_time = req.query.elapsed_time;
+
+  pool.query('UPDATE automata_task_results SET time_elapsed=\'$1\' WHERE user_id = $2 AND task_id = $3;', [elpased_time, user_id, task_id], (err, result) =>
+  {
+    if (error) { throw error}
+    if (result.rowCount > 0)
+    {
+      res.status(HTTP_OK).send({
+        user_id: user_id,
+        task_id: task_id,
+        elapsed_time: elapsed_time,
+        updated: true
+      });
+    }
+  })
+})
+
 app.get('/api/tasks/delete', (req, res) => {
   const task_id = req.query.task_id;
 

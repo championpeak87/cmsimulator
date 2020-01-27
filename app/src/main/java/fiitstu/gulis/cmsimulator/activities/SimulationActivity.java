@@ -30,6 +30,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,8 @@ public class SimulationActivity extends FragmentActivity
         PopupMenu.OnMenuItemClickListener, SaveMachineDialog.SaveDialogListener,
         TaskDialog.TaskDialogListener {
 
+    private boolean timerRunOut = false;
+
     //log tag
     private static final String TAG = SimulationActivity.class.getName();
 
@@ -100,8 +103,9 @@ public class SimulationActivity extends FragmentActivity
     private int tapeDimension;
     private State initialState;
     private State finalState;
-    private Task task;
+    public static Task task;
     private int configurationType;
+    private Timer timer;
 
     //tapes
     private RecyclerView defaultTapeRecyclerView;
@@ -246,7 +250,7 @@ public class SimulationActivity extends FragmentActivity
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 } else if (configurationType == MainActivity.SOLVE_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
-                    outputBundle.putSerializable("TIME", task.getAvailable_time());
+                    outputBundle.putSerializable("TIME", task.getRemaining_time());
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 }
                 Log.v(TAG, "outputBundle initialized");
@@ -559,6 +563,10 @@ public class SimulationActivity extends FragmentActivity
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.EDIT_TASK);
                 outputBundle.putSerializable(MainActivity.TASK, task);
             } else if (configurationType == MainActivity.SOLVE_TASK) {
+                if (hasTimeSet(task)) {
+                    timer = Timer.getInstance(task.getRemaining_time());
+                    //timer.pauseTimer();
+                }
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                 outputBundle.putSerializable("TIME", task.getAvailable_time());
                 outputBundle.putSerializable(MainActivity.TASK, task);
@@ -571,6 +579,16 @@ public class SimulationActivity extends FragmentActivity
             startActivity(nextActivityIntent);
             Log.i(TAG, "configuration activity intent executed");
         }
+    }
+
+    private boolean hasTimeSet(Task task) {
+        final Time availableTime = task.getAvailable_time();
+        final int hours = availableTime.getHours();
+        final int minutes = availableTime.getMinutes();
+        final int seconds = availableTime.getSeconds();
+        if (hours == 0 && minutes == 0 && seconds == 0)
+            return false;
+        else return true;
     }
 
     @Override
@@ -600,6 +618,46 @@ public class SimulationActivity extends FragmentActivity
     public void onResume() {
         super.onResume();
         Log.v(TAG, "onResume method started");
+
+        if (configurationType == MainActivity.SOLVE_TASK && hasTimeSet(task))
+        {
+            timer = Timer.getInstance(null);
+            timer.setOnTickListener(new Timer.OnTickListener(){
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    int hours = (int) (millisUntilFinished / 3600000);
+                    int minutes = (int) ((millisUntilFinished - (hours * 3600000)) / 60000);
+                    int seconds = (int) ((millisUntilFinished - (hours * 3600000) - (minutes * 60000)) / 1000);
+
+                    if (hours == 0 && minutes <= 4 && !timerRunOut) {
+                        timerRunOut = true;
+
+                        final int s_dark = getColor(R.color.primary_color_dark);
+                        final int s_normal = getColor(R.color.primary_color);
+                        final int s_light = getColor(R.color.primary_color_light);
+
+                        final int t_dark = getColor(R.color.in_progress_dark);
+                        final int t_normal = getColor(R.color.in_progress_top_bar);
+                        final int t_light = getColor(R.color.in_progress_bottom_bar);
+
+                        //changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                    }
+
+
+                    String timerText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                    ActionBar actionBar = SimulationActivity.this.getActionBar();
+                    actionBar.setTitle(timerText);
+                }
+            });
+
+            timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener(){
+                @Override
+                public void onTimeRunOut() {
+                    // TODO: SET AS TIME RAN OUT!
+                }
+            });
+        }
 
         simulating = false;
         leaving = false;
@@ -937,6 +995,11 @@ public class SimulationActivity extends FragmentActivity
             SimulationActivity.this.finish();
             SimulationActivity.super.onBackPressed();
         } else if (configurationType == MainActivity.SOLVE_TASK) {
+            if (hasTimeSet(task))
+            {
+                timer.pauseTimer();
+                Timer.deleteTimer();
+            }
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
                     .setMessage(R.string.task_leave_warning)

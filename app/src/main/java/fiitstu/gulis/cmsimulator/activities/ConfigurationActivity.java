@@ -92,7 +92,7 @@ public class ConfigurationActivity extends FragmentActivity
         ConfigurationDialog.ConfigurationDialogListener, SaveMachineDialog.SaveDialogListener,
         TaskDialog.TaskDialogListener {
 
-    private Timer timer;
+    private Timer timer = null;
     private boolean timerRunOut = false;
     private static final int BACKGROUND_CHANGE_LENGTH = 1000;
 
@@ -477,7 +477,7 @@ public class ConfigurationActivity extends FragmentActivity
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             Time time = task.getRemaining_time();
             if (hasTimeSet(task)) {
-                timer = new Timer(time);
+                timer = Timer.getInstance(time);
                 timer.setOnTickListener(new Timer.OnTickListener() {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -521,9 +521,8 @@ public class ConfigurationActivity extends FragmentActivity
                         timeRunOutAlert.show();
                     }
                 });
-
-
-                timer.startTimer();
+                if (!Timer.isSet())
+                    timer.startTimer();
             }
         }
 
@@ -737,6 +736,7 @@ public class ConfigurationActivity extends FragmentActivity
                 onBackPressed();
                 return true;
             case R.id.menu_configuration_simulate:
+
                 Intent nextActivityIntent = new Intent(this, SimulationActivity.class);
                 nextActivityIntent.putExtra(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
                 if (task instanceof FiniteAutomataTask)
@@ -1241,6 +1241,10 @@ public class ConfigurationActivity extends FragmentActivity
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
+        if (taskConfiguration == MainActivity.SOLVE_TASK && hasTimeSet(task))
+        {
+            //timer.pauseTimer();
+        }
         if (inputBundle.getInt(MainActivity.CONFIGURATION_TYPE) == MainActivity.LOAD_MACHINE && inputBundle.getInt(TASK_CONFIGURATION) == MainActivity.SOLVE_TASK) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage(R.string.task_leave_message)
