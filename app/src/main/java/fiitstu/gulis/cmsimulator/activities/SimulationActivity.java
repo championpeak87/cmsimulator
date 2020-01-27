@@ -663,7 +663,7 @@ public class SimulationActivity extends FragmentActivity
                 public void onTimeRunOut() {
                     new MarkAsTimeRunOutAsync().execute();
                     finish();
-                    BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                    BrowseAutomataTasksActivity.adapter.setTaskAsTooLate(task);
                     AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
                             .setTitle(R.string.time_ran_out_title)
                             .setMessage(R.string.time_ran_out_message)

@@ -70,6 +70,19 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             final Task currentTask = listOfTasks.get(i);
             if (currentTask.getTask_id() == task_id) {
                 currentTask.setStatus(status);
+                /*if (status == Task.TASK_STATUS.TOO_LATE)
+                    currentTask.setRemaining_time(Time.valueOf("00:00:00"));*/
+                notifyItemChanged(i);
+            }
+        }
+    }
+
+    public void setTaskAsTooLate(Task task) {
+        for (int i = 0; i < listOfTasks.size(); i++) {
+            final Task currentTask = listOfTasks.get(i);
+            if (currentTask.getTask_id() == task.getTask_id()) {
+                currentTask.setStatus(Task.TASK_STATUS.TOO_LATE);
+                currentTask.setRemaining_time(Time.valueOf("00:00:00"));
                 notifyItemChanged(i);
             }
         }
