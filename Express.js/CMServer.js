@@ -270,15 +270,24 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
   })
 })
 
-app.get('/api/tasks/delete', (req, res, next) => {
+app.get('/api/tasks/delete', (req, res) => {
   const task_id = req.query.task_id;
 
   pool.query('SELECT * FROM automata_tasks WHERE task_id = $1;', [task_id], (err, result) => {
     if (err) { throw err }
     if (result.rowCount > 0) {
       const filename = "./uploads/automataTasks/" + result.rows[0].task_id + ".cmst";
-      filesystem.unlink(filename, (error) => {
-        if (error) { throw error }
+      filesystem.exists(filename, (exists) => {
+        if (exists) {
+          filesystem.unlink(filename, (error) => {
+            if (error) {
+              throw error;
+            }
+          });
+        }
+        else {
+          console.log("TASK COULD NOT BE DELETED! FILE DOES NOT EXIST!");
+        }
       });
     }
   })

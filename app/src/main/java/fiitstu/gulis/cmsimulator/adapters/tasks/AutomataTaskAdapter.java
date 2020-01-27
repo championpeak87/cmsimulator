@@ -7,6 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,10 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.*;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
@@ -63,13 +65,10 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         this.listOfTasks = listOfTasks;
     }
 
-    public void setTaskStatus(int task_id, Task.TASK_STATUS status)
-    {
-        for (int i = 0; i < listOfTasks.size(); i++)
-        {
+    public void setTaskStatus(int task_id, Task.TASK_STATUS status) {
+        for (int i = 0; i < listOfTasks.size(); i++) {
             final Task currentTask = listOfTasks.get(i);
-            if (currentTask.getTask_id() == task_id)
-            {
+            if (currentTask.getTask_id() == task_id) {
                 currentTask.setStatus(status);
                 notifyItemChanged(i);
             }
@@ -77,12 +76,10 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     }
 
 
-    public void notifyTimeChange(int task_id, Time remaining_time)
-    {
+    public void notifyTimeChange(int task_id, Time remaining_time) {
         for (int i = 0; i < listOfTasks.size(); i++) {
             Task currentTask = listOfTasks.get(i);
-            if (currentTask.getTask_id() == task_id)
-            {
+            if (currentTask.getTask_id() == task_id) {
                 currentTask.setRemaining_time(remaining_time);
                 notifyItemChanged(i);
                 break;
@@ -175,8 +172,13 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         final AutomataTaskAdapter thisAdapter = this;
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 class DownloadTaskAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected void onPreExecute() {
+                        holder.setLoadingVisibility(true, currentTask.getStatus());
+                    }
+
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
@@ -194,6 +196,12 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                     @Override
                     protected void onPostExecute(String s) {
+                        holder.setLoadingVisibility(false, currentTask.getStatus());
+                        if (s == null || s.isEmpty()) {
+                            Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.task_not_found, Toast.LENGTH_LONG).show();
+                            removeTask(position);
+                            return;
+                        }
                         if (!saveDownloadedFile(s)) {
                             Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
                             return;
@@ -229,6 +237,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 class DeleteTaskAsync extends AsyncTask<URL, Void, String> {
+
+
                                     @Override
                                     protected String doInBackground(URL... urls) {
                                         ServerController serverController = new ServerController();
@@ -244,7 +254,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
                                     @Override
                                     protected void onPostExecute(String s) {
-                                        if (s == null) {
+                                        if (s == null || s.isEmpty()) {
                                             Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
                                         } else {
                                             try {
@@ -290,6 +300,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         private CardView cardView;
         private LinearLayout bottomBar;
         private TextView topBar;
+        private ProgressBar loadingBar;
+        private FrameLayout contextLayout;
 
         public CardViewBuilder(View itemView) {
             super(itemView);
@@ -300,6 +312,45 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.cardView = itemView.findViewById(R.id.cardview_task);
             this.bottomBar = itemView.findViewById(R.id.task_bottom_bar);
             this.topBar = itemView.findViewById(R.id.textview_automata_type);
+            this.loadingBar = itemView.findViewById(R.id.progressbar_task_loading);
+            this.contextLayout = itemView.findViewById(R.id.framelayout_context);
+        }
+
+        private void setLoadingVisibility(boolean value, Task.TASK_STATUS status) {
+            final int alphaValue = value ? 255 / 4 : 255;
+
+            ColorDrawable myColor = new ColorDrawable();
+            myColor.setColor(BrowseAutomataTasksActivity.mContext.getColor(R.color.bootstrap_gray_light));
+            if (value) {
+                contextLayout.setForeground(myColor);
+                contextLayout.getForeground().setAlpha(alphaValue);
+            } else {
+                contextLayout.getForeground().setAlpha(0);
+            }
+            cardView.setEnabled(!value);
+            delete_task.setEnabled(!value);
+            help_task.setEnabled(!value);
+
+            loadingBar.setVisibility(value ? View.VISIBLE : View.GONE);
+            switch (status) {
+                case IN_PROGRESS:
+                    loadingBar.getIndeterminateDrawable().setColorFilter(BrowseAutomataTasksActivity.mContext.getColor(R.color.in_progress_top_bar), PorterDuff.Mode.MULTIPLY);
+                    break;
+                case CORRECT:
+                    loadingBar.getIndeterminateDrawable().setColorFilter(BrowseAutomataTasksActivity.mContext.getColor(R.color.correct_answer_top_bar), PorterDuff.Mode.MULTIPLY);
+                    break;
+                case WRONG:
+                    loadingBar.getIndeterminateDrawable().setColorFilter(BrowseAutomataTasksActivity.mContext.getColor(R.color.wrong_answer_top_bar), PorterDuff.Mode.MULTIPLY);
+                    break;
+                default:
+                case NEW:
+                    loadingBar.getIndeterminateDrawable().setColorFilter(BrowseAutomataTasksActivity.mContext.getColor(R.color.primary_color), PorterDuff.Mode.MULTIPLY);
+                    break;
+                case TOO_LATE:
+                    loadingBar.getIndeterminateDrawable().setColorFilter(BrowseAutomataTasksActivity.mContext.getColor(R.color.too_late_answer_top_bar), PorterDuff.Mode.MULTIPLY);
+                    break;
+            }
+
         }
     }
 
@@ -313,7 +364,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         File file = new File(FileHandler.PATH + "/automataTask.cmst");
         if (ContextCompat.checkSelfPermission(BrowseAutomataTasksActivity.mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity)BrowseAutomataTasksActivity.mContext,
+            ActivityCompat.requestPermissions((Activity) BrowseAutomataTasksActivity.mContext,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             return false;
         } else {

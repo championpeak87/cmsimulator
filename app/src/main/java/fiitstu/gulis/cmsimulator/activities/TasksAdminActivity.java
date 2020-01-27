@@ -101,9 +101,14 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
         example.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivityIntent = new Intent(TasksAdminActivity.this, EditTaskActivity.class);
-                nextActivityIntent.putExtra("LOGGED_USER_ID", loggedUser.getUser_id());
-                startActivity(nextActivityIntent);
+                if (loggedUser == null) {
+                    Toast.makeText(TasksAdminActivity.this, R.string.logged_out, Toast.LENGTH_LONG).show();
+                    TasksAdminActivity.this.finish();
+                } else {
+                    Intent nextActivityIntent = new Intent(TasksAdminActivity.this, EditTaskActivity.class);
+                    nextActivityIntent.putExtra("LOGGED_USER_ID", loggedUser.getUser_id());
+                    startActivity(nextActivityIntent);
+                }
             }
         });
 
@@ -111,10 +116,17 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
         findAutomataTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TasksAdminActivity.this, BrowseAutomataTasksActivity.class);
-                intent.putExtra("USER_ID", loggedUser.getUser_id());
-                intent.putExtra("AUTHKEY", loggedUser.getAuth_key());
-                startActivity(intent);
+                if (loggedUser == null)
+                {
+                    Toast.makeText(TasksAdminActivity.this, R.string.logged_out, Toast.LENGTH_LONG).show();
+                    TasksAdminActivity.this.finish();
+                }
+                else {
+                    Intent intent = new Intent(TasksAdminActivity.this, BrowseAutomataTasksActivity.class);
+                    intent.putExtra("USER_ID", loggedUser.getUser_id());
+                    intent.putExtra("AUTHKEY", loggedUser.getAuth_key());
+                    startActivity(intent);
+                }
             }
         });
 
