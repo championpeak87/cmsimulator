@@ -230,7 +230,7 @@ public class TaskDialog extends DialogFragment {
 
         progressBar = view.findViewById(R.id.progressBar_dialog_task);
         doneTextView = view.findViewById(R.id.textView_dialog_task_done);
-
+        ((TextView)view.findViewById(R.id.textView_dialog_task_name)).setText(task.getTitle());
         timeRemainingTextView = view.findViewById(R.id.textView_dialog_task_remaining_time);
         timeLayout = view.findViewById(R.id.linearLayout_dialog_task_remaining_time);
 
@@ -250,7 +250,7 @@ public class TaskDialog extends DialogFragment {
         }
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(task.getTitle());
+        alertDialogBuilder.setTitle(R.string.start_task);
         alertDialogBuilder.setView(view);
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setInverseBackgroundForced(true);
