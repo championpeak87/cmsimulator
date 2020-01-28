@@ -1,0 +1,6 @@
+user_type,Set,From Fixed List,0,0,admin|lector|student
+username,Text,Random-length String,6|10|True|True|False|True
+first_name,Human,First Name,True|True
+last_name,Human,Last Name,True|True
+password_hash,Text,Fixed-length String,64|64|True|True|False|False
+salt,Text,Fixed-length String,64|64|True|True|False|False

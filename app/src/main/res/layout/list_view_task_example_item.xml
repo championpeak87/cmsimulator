@@ -7,8 +7,8 @@
                                     android:layout_margin="5dp"
                                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                                     android:transitionName="card_transition"
-                                    card_view:cardCornerRadius="20dp"
-                                    card_view:cardElevation="20dp"
+                                    card_view:cardCornerRadius="10dp"
+                                    card_view:cardElevation="5dp"
                                     android:foreground="?android:attr/selectableItemBackground"
                                     android:clickable="true">
 
