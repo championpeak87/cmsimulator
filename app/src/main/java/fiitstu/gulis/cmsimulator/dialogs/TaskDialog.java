@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -202,8 +203,7 @@ public class TaskDialog extends DialogFragment {
         }
     }
 
-    private boolean isTimeSet(Time time)
-    {
+    private boolean isTimeSet(Time time) {
         if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0)
             return false;
         else return true;
@@ -230,7 +230,7 @@ public class TaskDialog extends DialogFragment {
 
         progressBar = view.findViewById(R.id.progressBar_dialog_task);
         doneTextView = view.findViewById(R.id.textView_dialog_task_done);
-        ((TextView)view.findViewById(R.id.textView_dialog_task_name)).setText(task.getTitle());
+        ((TextView) view.findViewById(R.id.textView_dialog_task_name)).setText(task.getTitle());
         timeRemainingTextView = view.findViewById(R.id.textView_dialog_task_remaining_time);
         timeLayout = view.findViewById(R.id.linearLayout_dialog_task_remaining_time);
 
@@ -257,7 +257,10 @@ public class TaskDialog extends DialogFragment {
         if (mode == SOLVING) {
             alertDialogBuilder.setPositiveButton(getResources().getString(R.string.turn_in), null);
         } else if (mode == ENTERING) {
-            alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
+            Time remainingTime = task.getRemaining_time();
+            Time outOfTime = Time.valueOf("00:00:00");
+            if (remainingTime.compareTo(outOfTime) > 0)
+                alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
         } else if (mode == EDITING) {
             alertDialogBuilder.setPositiveButton(R.string.back_to_task_edit, null);
         }
