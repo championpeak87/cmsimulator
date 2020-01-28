@@ -1,12 +1,8 @@
 package fiitstu.gulis.cmsimulator.network;
 
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
@@ -25,7 +21,7 @@ public class UrlManager {
     private final static String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
     private final static String ADD_NEW_USER_PATH = "/api/user/signup";
     private final static String GET_ALL_USERS_PATH = "/api/user/getUsers";
-    private final static String SEARCH_USER_PATH = "/api/user/getUsersFiltered";
+    private final static String SEARCH_USER_PATH = "/api/user/findUsers";
     private final static String PUBLISH_TASK_PATH = "/api/tasks/upload";
     private final static String ADD_TASK_TO_TABLE = "/api/tasks/add";
     private final static String GET_ALL_AUTOMATA_TASKS_PATH = "/api/tasks/getTasks";
@@ -40,6 +36,7 @@ public class UrlManager {
     private final static String SUBMIT_AUTOMATA_TASK_PATH = "/api/tasks/submit";
     private final static String GET_USERS_COUNT_PATH = "/api/user/getCount";
     private final static String UPDATE_TIMER_PATH = "/api/tasks/updateTimer";
+    private final static String ORDER_USERS_URL = "/api/user/filterUsers";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -83,6 +80,14 @@ public class UrlManager {
 
     // UPDATE TIMER QUERIES
     private final static String ELAPSED_TIME_KEY = "time_elapsed";
+
+    // SEARCH QUERIES
+    private final static String QUERY_SEARCH_STRING_KEY = "string";
+    private final static String SEARCH_BY_KEY = "find_by";
+
+    // FILTER QUERIES
+    private final static String ORDER_BY_KEY = "order_by";
+    private final static String ASCENDING_KEY = "ascending";
 
     public URL getUpdateTimerURL(Time elapsed_time, int user_id, int task_id)
     {
@@ -293,10 +298,16 @@ public class UrlManager {
         return url;
     }
 
-    public URL getSearchedUser(String authkey, String searchedUserLastName) {
+    public enum USER_ATTRIBUTE {
+        FIRST_NAME,
+        LAST_NAME,
+        USERNAME
+    }
+
+    public URL getSearchedUser(String query, USER_ATTRIBUTE USERATTRIBUTE) {
         Uri builtUri = Uri.parse(URI + SEARCH_USER_PATH).buildUpon()
-                .appendQueryParameter(AUTHKEY_QUERY_KEY, authkey)
-                .appendQueryParameter(LAST_NAME_KEY, searchedUserLastName)
+                .appendQueryParameter(QUERY_SEARCH_STRING_KEY, query)
+                .appendQueryParameter(SEARCH_BY_KEY, USERATTRIBUTE.toString().toLowerCase())
                 .build();
 
         URL url = null;
@@ -328,6 +339,24 @@ public class UrlManager {
         }
 
         return url;
+    }
+
+    public URL getOrderUserURL(USER_ATTRIBUTE user_attribute, boolean ascending)
+    {
+        Uri uri = Uri.parse(URI + ORDER_USERS_URL).buildUpon()
+                .appendQueryParameter(ORDER_BY_KEY, user_attribute.toString().toLowerCase())
+                .appendQueryParameter(ASCENDING_KEY, Boolean.toString(ascending).toLowerCase())
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
     }
 
     public URL getPublishAutomataTaskURL(String file_name) {

@@ -898,7 +898,7 @@
     <string name="by_first_name">Podľa mena</string>
     <string name="by_last_name">Podľa priezviska</string>
     <string name="by_username">Podľa prihlasovacieho mena</string>
-	<string name="search_by">Vyhľadať podľa</string>
+	<string name="USERATTRIBUTE">Vyhľadať podľa</string>
     <string name="search">Vyhľadať</string>
 	<string name="student">Študent</string>
     <string name="lector">Lektor</string>

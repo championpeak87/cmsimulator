@@ -93,7 +93,7 @@ public class Timer {
         isRunning = false;
     }
 
-    public Time getCurrentTime() {
+    public static Time getCurrentTime() {
         int hours = (int) (milisLeft / 3600000);
         int minutes = (int) ((milisLeft - (hours * 3600000)) / 60000);
         int seconds = (int) ((milisLeft - (hours * 3600000) - (minutes * 60000)) / 1000);
@@ -105,7 +105,7 @@ public class Timer {
     }
 
 
-    public void resetTimer() {
+    public static void resetTimer() {
         milisLeft = 0;
         isRunning = false;
     }

@@ -6,13 +6,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +23,6 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.InfiniteScrollListener;
 import fiitstu.gulis.cmsimulator.adapters.SortController;
 import fiitstu.gulis.cmsimulator.adapters.UserManagementAdapter;
-import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.Lector;
 import fiitstu.gulis.cmsimulator.models.users.Student;
@@ -39,7 +35,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -149,6 +144,13 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                         if (orderby.getCheckedRadioButtonId() == -1 || inputString.getText().toString().isEmpty()) {
                             Toast.makeText(UsersManagmentActivity.this, "WRONG INPUT", Toast.LENGTH_SHORT).show();
                         } else {
+                            final UrlManager.USER_ATTRIBUTE USERATTRIBUTE;
+                            if (byFirstName.isChecked())
+                                USERATTRIBUTE = UrlManager.USER_ATTRIBUTE.FIRST_NAME;
+                            else if (byLastName.isChecked())
+                                USERATTRIBUTE = UrlManager.USER_ATTRIBUTE.LAST_NAME;
+                            else USERATTRIBUTE = UrlManager.USER_ATTRIBUTE.USERNAME;
+
                             class getSearchUsersAsync extends AsyncTask<String, Void, List<User>> {
                                 @Override
                                 protected void onPreExecute() {
@@ -160,7 +162,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                 @Override
                                 protected List<User> doInBackground(String... strings) {
                                     UrlManager urlManager = new UrlManager();
-                                    URL getUsersURL = urlManager.getSearchedUser(authkey, strings[0]);
+                                    URL getUsersURL = urlManager.getSearchedUser(strings[0], USERATTRIBUTE);
 
                                     ServerController serverController = new ServerController();
                                     String output;
@@ -335,29 +337,70 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
                         String test = ascending.getText().toString();
 
+                        final UrlManager.USER_ATTRIBUTE user_attribute;
+                        final boolean ascending_bool;
+
                         // CHECK IF PICKED
                         if (order.getCheckedRadioButtonId() == -1 || orderby.getCheckedRadioButtonId() == -1) {
                             Toast.makeText(UsersManagmentActivity.this, "RADIOBUTTON NOT PICKED", Toast.LENGTH_SHORT).show();
                             return;
                         } else {
                             if (byFirstName.isChecked()) {
-                                selectedComparator = new SortController.SortByFirstName();
+                                user_attribute = UrlManager.USER_ATTRIBUTE.FIRST_NAME;
                             } else if (byLastName.isChecked()) {
-                                selectedComparator = new SortController.SortByLastName();
-                            } else if (byUserName.isChecked()) {
-                                selectedComparator = new SortController.SortByUsername();
+                                user_attribute = UrlManager.USER_ATTRIBUTE.LAST_NAME;
+                            } else {
+                                user_attribute = UrlManager.USER_ATTRIBUTE.USERNAME;
                             }
 
-                            orderPosition = ascending.isChecked() ? ASCENDING : DESCENDING;
+                            ascending_bool = ascending.isChecked() ? true : false;
                         }
 
-                        if (orderPosition == DESCENDING) {
-                            Collections.sort(userList, Collections.reverseOrder(selectedComparator));
-                        } else
-                            Collections.sort(userList, selectedComparator);
+                        class GetOrderedUsersAsync extends AsyncTask<URL, Void, String>
+                        {
+                            @Override
+                            protected void onPreExecute() {
+                                showLoadScreen(true);
+                            }
 
-                        UserManagementAdapter adapter = new UserManagementAdapter(mContext, userList);
-                        setAdapter(adapter);
+                            @Override
+                            protected String doInBackground(URL... urls) {
+                                ServerController serverController = new ServerController();
+                                String output = null;
+                                try {
+                                    output = serverController.getResponseFromServer(urls[0]);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s == null || s.isEmpty())
+                                {
+                                    Toast.makeText(UsersManagmentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    UserParser userParser = new UserParser();
+                                    try {
+                                        List<User> orderedUsers = userParser.getListOfUsers(s);
+                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers);
+                                        setAdapter(adapter);
+                                        showLoadScreen(false);
+                                        setUserList(orderedUsers);
+                                    } catch (JSONException e) {
+                                        Toast.makeText(UsersManagmentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }
+                        }
+
+                        URL url = new UrlManager().getOrderUserURL(user_attribute, ascending_bool);
+                        new GetOrderedUsersAsync().execute(url);
                     }
                 })
                 .setNeutralButton(R.string.cancel, null)

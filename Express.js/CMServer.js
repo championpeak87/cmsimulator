@@ -248,6 +248,133 @@ app.get('/api/user/getUsers', (req, res) => {
   })
 })
 
+app.get('/api/user/filterUsers', (req, res) => {
+  const order_by = req.query.order_by;
+  const ascending = req.query.ascending;
+
+  if (order_by == 'username') {
+    if (ascending == 'true') {
+      pool.query('SELECT * FROM users ORDER BY username ASC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    } else 
+    {
+      pool.query('SELECT * FROM users ORDER BY username DESC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    }
+  } else if (order_by == 'last_name') {
+    if (ascending == 'true') {
+      pool.query('SELECT * FROM users ORDER BY last_name ASC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    } else 
+    {
+      pool.query('SELECT * FROM users ORDER BY last_name DESC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    }
+  } else if (order_by == 'first_name') {
+    if (ascending == 'true') {
+      pool.query('SELECT * FROM users ORDER BY first_name ASC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    } else 
+    {
+      pool.query('SELECT * FROM users ORDER BY first_name DESC;', (err, results) => {
+        if (err) { throw err }
+        if (results.rowCount > 0) {
+          res.status(HTTP_OK).send(results.rows);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send({
+            not_found: true
+          });
+        }
+      })
+    }
+  }
+})
+
+app.get('/api/user/findUsers', (req, res) => {
+  const string = req.query.string;
+  const find_by = req.query.find_by;
+
+  var search_string = '%' + string + '%';
+  if (find_by == 'first_name') {
+    pool.query('SELECT * FROM users WHERE first_name LIKE $1;', [search_string], (err, results) => {
+      if (err) { throw err }
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(results.rows);
+      }
+      else res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
+    });
+  } else if (find_by == 'last_name') {
+    pool.query('SELECT * FROM users WHERE last_name LIKE $1;', [search_string], (err, results) => {
+      if (err) { throw err }
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(results.rows);
+      }
+      else res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
+    });
+  } else if (find_by == 'username') {
+    pool.query('SELECT * FROM users WHERE username LIKE $1;', [search_string], (err, results) => {
+      if (err) { throw err }
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(results.rows);
+      }
+      else res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
+    });
+  }
+
+});
+
 app.get('/api/user/getUsersFiltered', (req, res) => {
   const auth_key = req.query.auth_key;
   const last_name = req.query.last_name;
@@ -270,17 +397,14 @@ app.get('/api/user/getUsersFiltered', (req, res) => {
   })
 })
 
-app.get('/api/tasks/updateTaskTimer', (req, res) =>
-{
+app.get('/api/tasks/updateTaskTimer', (req, res) => {
   const user_id = req.query.user_id;
   const task_id = req.query.task_id;
   const elapsed_time = req.query.elapsed_time;
 
-  pool.query('UPDATE automata_task_results SET time_elapsed=\'$1\' WHERE user_id = $2 AND task_id = $3;', [elpased_time, user_id, task_id], (err, result) =>
-  {
-    if (error) { throw error}
-    if (result.rowCount > 0)
-    {
+  pool.query('UPDATE automata_task_results SET time_elapsed=\'$1\' WHERE user_id = $2 AND task_id = $3;', [elpased_time, user_id, task_id], (err, result) => {
+    if (error) { throw error }
+    if (result.rowCount > 0) {
       res.status(HTTP_OK).send({
         user_id: user_id,
         task_id: task_id,

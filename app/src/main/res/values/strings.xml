@@ -1253,7 +1253,7 @@
 	<string name="by_first_name">By first name</string>
 	<string name="by_last_name">By last name</string>
 	<string name="by_username">By username</string>
-	<string name="search_by">Search by</string>
+	<string name="USERATTRIBUTE">Search by</string>
 	<string name="search">Search</string>
 	<string name="student">Student</string>
 	<string name="lector">Lector</string>
