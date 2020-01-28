@@ -937,6 +937,9 @@ public class ConfigurationActivity extends FragmentActivity
                                 }
 
                                 ConfigurationActivity.this.finish();
+                                ConfigurationActivity.this.dataSource.globalDrop();
+                                ConfigurationActivity.this.dataSource.close();
+                                Timer.deleteTimer();
                                 SimulationActivity.mContext.finish();
                             }
                         }

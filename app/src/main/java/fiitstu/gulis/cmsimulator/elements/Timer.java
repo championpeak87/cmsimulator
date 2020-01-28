@@ -111,6 +111,9 @@ public class Timer {
     }
 
     public static void deleteTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
         milisLeft = 0;
         timer = null;
         listener = null;
