@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.BulkTestActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.adapters.simulation.DefaultTapeListAdapter;
 import fiitstu.gulis.cmsimulator.adapters.simulation.MachineTapeSpinnerAdapter;
@@ -26,7 +27,7 @@ import java.util.List;
 
 /**
  * The dialog for creating and editing test scenarios for bulk testing
- *
+ * <p>
  * Created by Jakub Sedlář on 15.10.2017.
  */
 public class EditTestDialog extends DialogFragment {
@@ -57,9 +58,10 @@ public class EditTestDialog extends DialogFragment {
 
     /**
      * Creates a new instance of the dialog with the given arguments set
+     *
      * @param offerOutput if true, user will be allowed to set the expected output word
-     * @param editTest the scenario to be edited
-     * @param isNew true if new scenario is being added (affects the title of the dialog)
+     * @param editTest    the scenario to be edited
+     * @param isNew       true if new scenario is being added (affects the title of the dialog)
      * @return the created new instance
      */
     public static EditTestDialog newInstance(boolean offerOutput, TestScenario editTest, boolean isNew) {
@@ -119,8 +121,7 @@ public class EditTestDialog extends DialogFragment {
                 if (isChecked) {
                     outputWordTextView.setVisibility(View.VISIBLE);
                     outputTapeRecyclerView.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     outputWordTextView.setVisibility(View.GONE);
                     outputTapeRecyclerView.setVisibility(View.GONE);
                 }
@@ -171,9 +172,16 @@ public class EditTestDialog extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ((EditTestDialogListener)getActivity()).onSaveTestClick(Symbol.extractFromTape(inputTapeAdapter.getItems()),
+                    ((EditTestDialogListener) getActivity()).onSaveTestClick(Symbol.extractFromTape(inputTapeAdapter.getItems()),
                             setOutputWordCheckBox.isChecked() ? Symbol.extractFromTape(outputTapeAdapter.getItems()) : null,
                             isNew);
+
+                    RecyclerView recycler = getActivity().findViewById(R.id.recyclerView_bulk_test_scenarios);
+                    recycler.setVisibility(View.VISIBLE);
+
+                    LinearLayout emptyLayout = getActivity().findViewById(R.id.linearLayout_empty_tests);
+                    emptyLayout.setVisibility(View.GONE);
+
                 }
             });
         }

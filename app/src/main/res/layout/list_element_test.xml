@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/linearLayout_list_test_background"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="center_vertical"
               android:orientation="horizontal"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="10dp">
+              android:layout_marginLeft="10dp"
+              android:layout_marginRight="10dp">
 
-    <TextView
-            android:id="@+id/textView_list_test_position"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    <android.support.v7.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                                        android:elevation="10dp" app:cardCornerRadius="10dp"
+                                        android:layout_margin="10dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                      android:orientation="horizontal">
+            <TextView
+                    android:id="@+id/textView_list_test_position"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
 
-    <TextView
-            android:id="@+id/textView_list_test_word"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TextView
+                    android:id="@+id/textView_list_test_word"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-    <TextView
-            android:id="@+id/textView_list_test_status"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            <TextView
+                    android:id="@+id/textView_list_test_status"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-    <ImageButton
-            android:id="@+id/imageButton_list_test_edit"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginLeft="-3dp"
-            android:layout_marginRight="-3dp"
-            android:layout_weight="0.2"
-            android:contentDescription="@string/edit"
-            android:padding="2dp"
-            android:src="@drawable/edit_s"
+            <ImageButton
+                    android:id="@+id/imageButton_list_test_edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/edit"
+                    android:layout_marginHorizontal="5dp"
+                    android:src="@drawable/baseline_edit_24" style="?android:buttonBarButtonStyle"
             />
 
-    <ImageButton
-            android:id="@+id/imageButton_list_test_remove"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginLeft="-3dp"
-            android:layout_marginRight="-3dp"
-            android:layout_weight="0.2"
-            android:contentDescription="@string/remove"
-            android:paddingBottom="7dp"
-            android:paddingTop="2dp"
-            android:src="@drawable/remove_s" />
+            <ImageButton
+                    android:id="@+id/imageButton_list_test_remove"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/remove"
+                    android:layout_marginHorizontal="5dp"
+                    android:src="@drawable/baseline_delete_24" style="?android:buttonBarButtonStyle"/>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 
 </LinearLayout>

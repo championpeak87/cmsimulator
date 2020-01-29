@@ -101,41 +101,6 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             actionBar.setTitle(R.string.test_inputs);
         }
 
-        Button newTestButton = findViewById(R.id.button_bulk_test_add_test);
-        newTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onNewTestClick();
-            }
-        });
-        Button runTestsButton = findViewById(R.id.button_bulk_test_run);
-        runTestsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_bulktest_working),
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                runTests();
-                            }
-                        });
-                worker.setPostAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            }
-                        });
-                    }
-                });
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                worker.execute();
-            }
-        });
-
         scenariosListAdapter = new TestScenarioListAdapter(this,
                 taskConfiguration != MainActivity.SOLVE_TASK);
         scenariosListAdapter.setItemClickCallback(new TestScenarioListAdapter.ItemClickCallback() {
@@ -191,6 +156,14 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         });
 
 
+        boolean containsTests = scenariosListAdapter.getItemCount() > 0;
+        RecyclerView recycler = findViewById(R.id.recyclerView_bulk_test_scenarios);
+        recycler.setVisibility(containsTests ? View.VISIBLE : View.GONE);
+
+        LinearLayout emptyTests = findViewById(R.id.linearLayout_empty_tests);
+        emptyTests.setVisibility(containsTests ? View.GONE : View.VISIBLE);
+
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView_bulk_test_scenarios);
         recyclerView.setAdapter(scenariosListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -214,7 +187,6 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         menuInflater.inflate(R.menu.menu_bulk_test, menu);
 
         Bundle inputBundle = getIntent().getExtras();
-        Button newTestButton = findViewById(R.id.button_bulk_test_add_test);
 
         if (taskConfiguration != 0) {
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
@@ -239,17 +211,43 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_bulk_test_info:
-                if (taskConfiguration == MainActivity.SOLVE_TASK) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
-                    taskDialog.show(fm, TASK_DIALOG);
-                } else {
-                    FragmentManager fm = getSupportFragmentManager();
-                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
-                    taskDialog.show(fm, TASK_DIALOG);
-                }
+            case R.id.menu_add_test:
+                onNewTestClick();
                 return true;
+            case R.id.menu_run_test:
+                ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_bulktest_working),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                runTests();
+                            }
+                        });
+                worker.setPostAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                        });
+                    }
+                });
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                worker.execute();
+                return true;
+//            case R.id.menu_bulk_test_info:
+//                if (taskConfiguration == MainActivity.SOLVE_TASK) {
+//                    FragmentManager fm = getSupportFragmentManager();
+//                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.SOLVING, machineType);
+//                    taskDialog.show(fm, TASK_DIALOG);
+//                } else {
+//                    FragmentManager fm = getSupportFragmentManager();
+//                    TaskDialog taskDialog = TaskDialog.newInstance(task, TaskDialog.EDITING, machineType);
+//                    taskDialog.show(fm, TASK_DIALOG);
+//                }
+//                return true;
             case R.id.menu_bulk_test_save_machine:
                 if (Build.VERSION.SDK_INT > 15
                         && ContextCompat.checkSelfPermission(BulkTestActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -323,6 +321,8 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         EditTestDialog editTestDialog = EditTestDialog.newInstance(machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON
                 || machineType == MainActivity.TURING_MACHINE, editTest, true);
         editTestDialog.show(fm, EDIT_TEST_DIALOG);
+
+
     }
 
     private void runTests() {

@@ -937,4 +937,5 @@
     <string name="time_ran_out_title">Čas vypršal</string>
     <string name="time_ran_out_message">Tvoj čas na riešenie tejto úlohy práve vypršal!</string>
     <string name="logged_out">Boli ste odhlásený! Prihláste sa prosím znovu!</string>
+    <string name="no_tests_available">Nie sú dostupné žiadne testy!</string>
 </resources>
