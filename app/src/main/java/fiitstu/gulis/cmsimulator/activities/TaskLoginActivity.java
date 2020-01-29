@@ -210,6 +210,7 @@ public class TaskLoginActivity extends FragmentActivity {
                         loginUnsuccessful();
                     } else {
                         User loggedUser = returnLoggedUser(s);
+                        loggedUser = returnLoggedUser(s);
                         showMainTaskActivity(loggedUser);
 
                     }
@@ -337,7 +338,7 @@ public class TaskLoginActivity extends FragmentActivity {
             showMainTaskActivity = new Intent(this, TasksActivity.class);
             Toast.makeText(this, "LECTOR", Toast.LENGTH_SHORT).show();
         } else if (user instanceof Student) {
-            showMainTaskActivity = new Intent(this, TasksActivity.class);
+            showMainTaskActivity = new Intent(this, TasksStudentActivity.class);
             Toast.makeText(this, "STUDENT", Toast.LENGTH_SHORT).show();
         }
         showMainTaskActivity.putExtra(User.USER_TYPE_KEY, user.getClass().getName());

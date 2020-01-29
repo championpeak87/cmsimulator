@@ -101,8 +101,8 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
         new FetchUsersCountAsync().execute();
 
-        authkey = this.getIntent().getStringExtra("LOGGED_USER_AUTHKEY");
-        logged_user_id = this.getIntent().getIntExtra("LOGGED_USER_ID", 0);
+        authkey = TaskLoginActivity.loggedUser.getAuth_key();
+        logged_user_id = TaskLoginActivity.loggedUser.getUser_id();
         // menu
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

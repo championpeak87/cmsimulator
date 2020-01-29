@@ -107,14 +107,14 @@
 			              android:layout_marginLeft="10dp"
 			              android:layout_marginTop="10dp"
 			              android:layout_marginBottom="10dp">
-				<Button
-						android:id="@+id/button_tasks_find_automata"
-						android:text="@string/create_task"
-						android:lines="2"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_add_box_24"
-						android:onClick="createAutomataTasks"
-						style="@style/mainMenuButtonStyle"/>
+<!--				<Button-->
+<!--						android:id="@+id/button_tasks_find_automata"-->
+<!--						android:text="@string/create_task"-->
+<!--						android:lines="2"-->
+<!--						android:layout_gravity="center_vertical"-->
+<!--						android:drawableTop="@drawable/baseline_add_box_24"-->
+<!--						android:onClick="createAutomataTasks"-->
+<!--						style="@style/mainMenuButtonStyle"/>-->
 
 				<Button
 						android:id="@+id/button_tasks_create_automata"
@@ -148,13 +148,13 @@
 			              android:layout_marginLeft="10dp"
 			              android:layout_marginTop="10dp"
 			              android:layout_marginBottom="10dp">
-				<Button
-						android:id="@+id/button_tasks_create_grammar"
-						android:text="@string/create_task"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_add_box_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
+<!--				<Button-->
+<!--						android:id="@+id/button_tasks_create_grammar"-->
+<!--						android:text="@string/create_task"-->
+<!--						android:layout_gravity="center_vertical"-->
+<!--						android:drawableTop="@drawable/baseline_add_box_24"-->
+<!--						android:enabled="false"-->
+<!--						style="@style/mainMenuButtonStyle"/>-->
 
 				<Button
 						android:id="@+id/button_tasks_find_grammar"

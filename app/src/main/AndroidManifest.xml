@@ -30,6 +30,8 @@
 			<meta-data android:name="android.app.shortcuts"
 					   android:resource="@xml/shortcuts" />
 		</activity>
+		<activity android:name=".activities.TasksStudentActivity"
+				  android:configChanges="orientation|screenSize"/>
 		<activity android:name=".activities.AutomataTaskDetailsActivity"
 				  android:configChanges="orientation|screenSize"/>
 		<activity android:name=".activities.UsersManagementEditActivity"

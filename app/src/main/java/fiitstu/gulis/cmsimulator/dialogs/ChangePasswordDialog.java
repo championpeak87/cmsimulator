@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.activities.TasksAdminActivity;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.network.ServerController;
@@ -118,6 +119,7 @@ public class ChangePasswordDialog extends DialogFragment {
                                                 String newAuthkey = pm.getAuthkey(newPassword_passwd, salt);
                                                 URL passwordChangeURL = urlManager.getChangePasswordUrl(user_id, newPassword_passwd, salt);
                                                 serverController.getResponseFromServer(passwordChangeURL);
+                                                TaskLoginActivity.loggedUser.setAuth_key(newAuthkey);
                                                 loggedUser.setAuth_key(newAuthkey);
                                             } else {
                                                 return false;
