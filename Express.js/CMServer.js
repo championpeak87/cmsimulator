@@ -265,8 +265,7 @@ app.get('/api/user/filterUsers', (req, res) => {
           });
         }
       })
-    } else 
-    {
+    } else {
       pool.query('SELECT * FROM users ORDER BY username DESC;', (err, results) => {
         if (err) { throw err }
         if (results.rowCount > 0) {
@@ -292,8 +291,7 @@ app.get('/api/user/filterUsers', (req, res) => {
           });
         }
       })
-    } else 
-    {
+    } else {
       pool.query('SELECT * FROM users ORDER BY last_name DESC;', (err, results) => {
         if (err) { throw err }
         if (results.rowCount > 0) {
@@ -319,8 +317,7 @@ app.get('/api/user/filterUsers', (req, res) => {
           });
         }
       })
-    } else 
-    {
+    } else {
       pool.query('SELECT * FROM users ORDER BY first_name DESC;', (err, results) => {
         if (err) { throw err }
         if (results.rowCount > 0) {
@@ -587,7 +584,7 @@ app.get('/api/tasks/getTasks', (req, res) => {
   const auth_key = req.query.auth_key;
 
   //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
-  pool.query('SELECT automata_tasks.*, automata_task_results.task_status, automata_tasks.time - automata_task_results.time_elapsed as remaining_time FROM automata_tasks LEFT JOIN automata_task_results ON automata_tasks.task_id = automata_task_results.task_id;', (err, results) => {
+  pool.query('select at.*, atr.task_status, at.time - atr.time_elapsed as remaining_time from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id;', [user_id], (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {
@@ -595,7 +592,9 @@ app.get('/api/tasks/getTasks', (req, res) => {
       console.log(Date(), [user_id], 'has fetched tasks!');
     }
     else {
-      res.status(HTTP_FORBIDDEN).send("FORBIDDEN!");
+      res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
     }
   })
 })

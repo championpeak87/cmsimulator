@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.activities.UserDetailActivity;
 import fiitstu.gulis.cmsimulator.activities.UsersManagementEditActivity;
 import fiitstu.gulis.cmsimulator.activities.UsersManagmentActivity;
@@ -121,6 +122,8 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                 }
             });
 
+            if (TaskLoginActivity.loggedUser instanceof Lector)
+                holder.removeButton.setVisibility(View.GONE);
             holder.removeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
