@@ -38,6 +38,7 @@ import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
+import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
@@ -125,6 +126,10 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             automataType = automata_type.TURING_MACHINE.toString();
         }
         holder.automata_type.setText(automataType);
+
+        if (TaskLoginActivity.loggedUser instanceof Student)
+            holder.delete_task.setVisibility(View.GONE);
+
 
         Task.TASK_STATUS currentStatus = currentTask.getStatus();
         final int primary;
@@ -371,6 +376,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         listOfTasks.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfTasks.size());
+        if (listOfTasks.size() == 0)
+            BrowseAutomataTasksActivity.context.showEmptyScreen(true);
     }
 
     private boolean saveDownloadedFile(String input) {

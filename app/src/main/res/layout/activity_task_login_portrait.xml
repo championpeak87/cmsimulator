@@ -53,7 +53,8 @@
 				android:textColorHighlight="@color/md_white_1000"
 				android:textColorLink="@color/md_white_1000"
 				android:hint="@string/password"
-				android:inputType="textPassword"/>
+				android:inputType="textPassword"
+				android:onClick="signIn"/>
 	</android.support.design.widget.TextInputLayout>
 
 	<CheckBox android:id="@+id/checkbox_remember_password"

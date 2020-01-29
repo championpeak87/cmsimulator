@@ -25,6 +25,7 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.automata_tasks.AutomataTaskParser;
@@ -152,6 +153,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
             emptyTasks.setVisibility(View.VISIBLE);
             showLoadScreen(false);
+            LinearLayout emptyRecycler = findViewById(R.id.linearLayout_empty_tasks);
+            emptyRecycler.setVisibility(View.VISIBLE);
             recyclerViewTasks.setVisibility(View.GONE);
         }
         else
@@ -159,6 +162,8 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
             emptyTasks.setVisibility(View.GONE);
             showLoadScreen(false);
+            LinearLayout emptyRecycler = findViewById(R.id.linearLayout_empty_tasks);
+            emptyRecycler.setVisibility(View.GONE);
             recyclerViewTasks.setVisibility(View.VISIBLE);
         }
 
@@ -175,13 +180,16 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         recyclerViewTasks.setAnimation(showUpAnimation);
     }
 
-
+    public void showEmptyScreen(boolean value)
+    {
+        LinearLayout emptyRecycler = this.findViewById(R.id.linearLayout_empty_tasks);
+        emptyRecycler.setVisibility(View.VISIBLE);
+    }
 
     private void showLoadScreen(boolean value)
     {
         ProgressBar progressBar = findViewById(R.id.progressbar_users);
         RecyclerView recyclerView = findViewById(R.id.recyclerview_tasks);
-
         progressBar.setVisibility(value ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(value ? View.GONE : View.VISIBLE);
     }
