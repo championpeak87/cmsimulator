@@ -1,5 +1,5 @@
 
-# ![CMSimulator ICON](app\src\main\res\mipmap-mdpi\ic_launcher.png) CMSimulator
+# ![CMSimulator ICON](doc\ic_launcher.png) CMSimulator
 
 CMSimulator app helps you better understand four of the most well-known abstract machines - finite state automaton, push-down automaton, linear-bounded automaton and Turing machine, You can create new or load existing solutions from files. The application also contains eight examples (one deterministic and one nondeterministic for each type of the machine).
 
@@ -29,7 +29,7 @@ After launching the IDE, you'll be welcomed with this screen. If not close your 
 After clicking the button, you'll be welcomed with this dialog window. According to your repo, add appropriate url. For this repo it's (http://www.github.com/klihan/cmsimualtor.git).
 ![Intellij IDEA Clone repository](doc/idea-clone.png)
 
-That's it! If you are using default setting, then everything should be up and running. Please make sure that Gradle build has finished successfully. It may be that it has to download additional libraries to make everything work! **GOOD LUCK!**
+That's it! If you are using default settings, then everything should be up and running. Please make sure that Gradle build has finished successfully. It may be that it has to download additional libraries to make everything work! **GOOD LUCK!**
 
 # Screenshots
 
