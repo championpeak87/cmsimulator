@@ -1,5 +1,5 @@
 
-# ![CMSimulator ICON](doc\ic_launcher.png) CMSimulator
+# ![CMSimulator ICON](doc/ic_launcher.png) CMSimulator
 
 CMSimulator app helps you better understand four of the most well-known abstract machines - finite state automaton, push-down automaton, linear-bounded automaton and Turing machine, You can create new or load existing solutions from files. The application also contains eight examples (one deterministic and one nondeterministic for each type of the machine).
 
@@ -58,7 +58,7 @@ That's it! If you are using default settings, then everything should be up and r
 
 # Credits
 
-![CMSimulator logo](app\src\main\res\drawable\logo_v1.png)
+![CMSimulator logo](app/src/main/res/drawable/logo_v1.png)
 
 ## Logo designed by Adam Trizna
 
