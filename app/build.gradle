@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "fiit.stu.cmsimulator"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 27
         versionName '5.0.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

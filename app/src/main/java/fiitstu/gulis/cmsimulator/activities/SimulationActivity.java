@@ -792,7 +792,7 @@ public class SimulationActivity extends FragmentActivity
         animator.start();
     }
 
-    /*private void updateInnerViewsColor(int s_light, int t_light) {
+    private void updateInnerViewsColor(int s_light, int t_light) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
         animator.setDuration(BACKGROUND_CHANGE_LENGTH);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -800,14 +800,13 @@ public class SimulationActivity extends FragmentActivity
             public void onAnimationUpdate(ValueAnimator animation) {
                 HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
                 List<ImageButton> imageButtonList = new ArrayList<>();
-                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
-                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
-                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
-                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
-                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_simulation_step_b));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_simulation_step_f));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_simulation_full));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_simulation_stop));
+                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_simulation_remove));
 
                 final int currentColorValue = (int) animation.getAnimatedValue();
-                tabs.setBackgroundColor(currentColorValue);
                 for (ImageButton btn :
                         imageButtonList) {
                     int[][] states = new int[][]{
@@ -818,14 +817,13 @@ public class SimulationActivity extends FragmentActivity
                             currentColorValue
                     };
                     ColorStateList list = new ColorStateList(states, color);
-                    if (lastPressedImageButton != btn)
                         btn.setBackgroundTintList(list);
 
                 }
             }
         });
         animator.start();
-    }*/
+    }
 
     private void publishRemainingTime(final Time remainingTime)
     {
@@ -890,7 +888,7 @@ public class SimulationActivity extends FragmentActivity
         updateStatusBarColor(s_dark, t_dark);
         updateActionBarColor(s_normal, t_normal);
         updateNavigationBarColor(s_dark, t_dark);
-        //updateInnerViewsColor(s_light, t_light);
+        updateInnerViewsColor(s_light, t_light);
     }
 
     private class MarkAsTimeRunOutAsync extends AsyncTask<Void, Void, String> {

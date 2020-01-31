@@ -142,6 +142,8 @@ public class ConfigurationActivity extends FragmentActivity
     private boolean markNondeterminism;
     public static int gameNumber;
 
+    private Button addInputSymbolButton, addStackSymbolButton, addStateButton, addTransitionButton;
+
     private boolean saveAsDeterministic;
 
     /**
@@ -441,7 +443,7 @@ public class ConfigurationActivity extends FragmentActivity
         }
 
         //add input alphabet symbol
-        Button addInputSymbolButton = findViewById(R.id.button_configuration_form_input_symbol);
+        addInputSymbolButton = findViewById(R.id.button_configuration_form_input_symbol);
         //only pushdown automaton has two alphabets
         if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
             addInputSymbolButton.setText(getString(R.string.add_input_symbol));
@@ -449,15 +451,15 @@ public class ConfigurationActivity extends FragmentActivity
         addInputSymbolButton.setOnClickListener(this);
 
         //add stack alphabet symbol
-        Button addStackSymbolButton = findViewById(R.id.button_configuration_form_stack_symbol);
+        addStackSymbolButton = findViewById(R.id.button_configuration_form_stack_symbol);
         addStackSymbolButton.setOnClickListener(this);
 
         //add state form
-        Button addStateButton = findViewById(R.id.button_configuration_form_state);
+        addStateButton = findViewById(R.id.button_configuration_form_state);
         addStateButton.setOnClickListener(this);
 
         //add transition form
-        Button addTransitionButton = findViewById(R.id.button_configuration_form_transition);
+        addTransitionButton = findViewById(R.id.button_configuration_form_transition);
         addTransitionButton.setOnClickListener(this);
 
         //state diagram
@@ -597,6 +599,10 @@ public class ConfigurationActivity extends FragmentActivity
                         btn.setBackgroundTintList(list);
 
                 }
+                addInputSymbolButton.setBackgroundColor(currentColorValue);
+                addStackSymbolButton.setBackgroundColor(currentColorValue);
+                addStateButton.setBackgroundColor(currentColorValue);
+                addTransitionButton.setBackgroundColor(currentColorValue);
             }
         });
         animator.start();
