@@ -24,7 +24,7 @@ import java.net.URL;
 public class TaskSignUpActivity extends FragmentActivity {
     private ProgressBar signUpProgressBar;
 
-    private TextInputEditText usernameEditText, passwordEditText, firstNameEditText, lastNameEditText, passwordConfirmEditText;
+    private EditText usernameEditText, passwordEditText, firstNameEditText, lastNameEditText, passwordConfirmEditText;
 
     private Button signUpButton, cancelButton;
 

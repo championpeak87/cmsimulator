@@ -321,8 +321,6 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         EditTestDialog editTestDialog = EditTestDialog.newInstance(machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON
                 || machineType == MainActivity.TURING_MACHINE, editTest, true);
         editTestDialog.show(fm, EDIT_TEST_DIALOG);
-
-
     }
 
     private void runTests() {

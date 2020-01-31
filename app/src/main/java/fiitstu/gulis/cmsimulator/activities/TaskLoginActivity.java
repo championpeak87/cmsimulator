@@ -14,10 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
@@ -38,7 +35,7 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private ProgressBar loginProgressBar;
 
-    private TextInputEditText usernameEditText, passwordEditText;
+    private EditText usernameEditText, passwordEditText;
 
     private Button signInButton, signUpButton;
 
@@ -210,7 +207,6 @@ public class TaskLoginActivity extends FragmentActivity {
                         loginUnsuccessful();
                     } else {
                         User loggedUser = returnLoggedUser(s);
-                        loggedUser = returnLoggedUser(s);
                         showMainTaskActivity(loggedUser);
 
                     }

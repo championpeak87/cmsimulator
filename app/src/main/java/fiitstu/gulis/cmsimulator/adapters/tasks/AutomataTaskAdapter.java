@@ -381,7 +381,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
     }
 
     private boolean saveDownloadedFile(String input) {
-        File file = new File(FileHandler.PATH + "/automataTask.cmst");
+        String path = BrowseAutomataTasksActivity.context.getApplicationInfo().dataDir;
+        File file = new File(path + "/automataTask.cmst");
         if (ContextCompat.checkSelfPermission(BrowseAutomataTasksActivity.mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) BrowseAutomataTasksActivity.mContext,

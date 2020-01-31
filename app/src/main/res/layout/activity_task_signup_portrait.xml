@@ -31,9 +31,9 @@
 	                                               style="@style/LoginTextFields"
 	                                               android:textColorHint="@color/md_white_1000"
 	                                               app:errorEnabled="true"
-												   android:onClick="resetAdmin">
+												   app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-		<android.support.design.widget.TextInputEditText
+		<EditText
 				android:id="@+id/edittext_username"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -49,9 +49,9 @@
 		                                               style="@style/LoginTextFields"
 		                                               android:textColorHint="@color/md_white_1000"
 		                                               app:errorEnabled="true"
-													   android:onClick="resetAdmin">
+													   app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-			<android.support.design.widget.TextInputEditText
+			<EditText
 					android:id="@+id/edittext_firstname"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -65,9 +65,9 @@
 		                                               style="@style/LoginTextFields"
 		                                               android:textColorHint="@color/md_white_1000"
 		                                               app:errorEnabled="true"
-													   android:onClick="resetAdmin">
+													   app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
-			<android.support.design.widget.TextInputEditText
+			<EditText
 					android:id="@+id/edittext_lastname"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -81,8 +81,9 @@
 	                                               style="@style/LoginTextFields"
 	                                               app:errorEnabled="true"
 	                                               app:passwordToggleEnabled="true"
-												   android:onClick="resetAdmin">
-		<android.support.design.widget.TextInputEditText
+
+												   app:hintTextAppearance="@android:style/TextAppearance.Medium">
+		<EditText
 				android:id="@+id/edittext_password"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -96,8 +97,9 @@
 	                                               style="@style/LoginTextFields"
 	                                               app:errorEnabled="true"
 	                                               app:passwordToggleEnabled="true"
-													android:onClick="resetAdmin">
-		<android.support.design.widget.TextInputEditText
+													android:onClick="resetAdmin"
+												   app:hintTextAppearance="@android:style/TextAppearance.Medium">
+		<EditText
 				android:id="@+id/edittext_password_confirm"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

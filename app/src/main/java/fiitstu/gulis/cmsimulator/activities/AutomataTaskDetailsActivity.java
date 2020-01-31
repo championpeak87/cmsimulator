@@ -153,7 +153,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         Fade fade = new Fade();
         View decor = getWindow().getDecorView();
 
-        getWindow().setEnterTransition(fade);
-        getWindow().setExitTransition(fade);
+        this.getWindow().setEnterTransition(fade);
+        this.getWindow().setExitTransition(fade);
     }
 }

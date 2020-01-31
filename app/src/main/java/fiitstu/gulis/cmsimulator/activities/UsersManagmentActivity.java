@@ -453,9 +453,16 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         RecyclerView users = this.findViewById(R.id.recyclerview_user_management);
 
         // fix recyclerview layout
+
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int noOfColumns = (int) (dpWidth / 180) / 2;
+
+        int noOfColumns;
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            noOfColumns = 2;
+        } else {
+            noOfColumns = 1;
+        }
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, noOfColumns);
         users.setLayoutManager(layoutManager);

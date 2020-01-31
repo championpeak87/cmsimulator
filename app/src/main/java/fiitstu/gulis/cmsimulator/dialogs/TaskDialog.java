@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -298,7 +299,7 @@ public class TaskDialog extends DialogFragment {
                     Bundle outputBundle = new Bundle();
                     outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
                     outputBundle.putBoolean(MainActivity.DEFAULT_FORMAT, true);
-                    outputBundle.putString(MainActivity.FILE_NAME, FileHandler.PATH + "/automataTask.cmst");
+                    outputBundle.putString(MainActivity.FILE_NAME, getActivity().getApplicationInfo().dataDir + "/automataTask.cmst");
                     outputBundle.putInt(SimulationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);

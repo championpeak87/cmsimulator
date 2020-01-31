@@ -124,15 +124,16 @@ public class MainActivity extends FragmentActivity
             setContentView(R.layout.activity_main_landscape);
         } else {
             setContentView(R.layout.activity_main_portrait);
+            ImageView image = findViewById(R.id.imageView_main_logo);
+            TextView betaBanner = findViewById(R.id.beta_banner);
+            String buildtype = BuildConfig.FLAVOR.toString();
+            Log.d("BUILDTYPE", buildtype);
+            if (buildtype == "beta") {
+                betaBanner.setVisibility(View.VISIBLE);
+            }
         }
 
-        ImageView image = findViewById(R.id.imageView_main_logo);
-        TextView betaBanner = findViewById(R.id.beta_banner);
-        String buildtype = BuildConfig.FLAVOR.toString();
-        Log.d("BUILDTYPE", buildtype);
-        if (buildtype == "beta") {
-            betaBanner.setVisibility(View.VISIBLE);
-        }
+
 
         final int textColor = getColor(R.color.introContentText);
 

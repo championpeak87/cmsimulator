@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-			android:id="@+id/menu_reload_users"
-			android:title="@string/reload"
-			android:iconTint="@color/md_white_1000"
-			android:icon="@drawable/baseline_autorenew_24"
-			android:showAsAction="ifRoom"
-			style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
-	<item
-			android:id="@+id/menu_find_users"
-			android:title="@string/search"
-			android:iconTint="@color/md_white_1000"
-			android:icon="@drawable/ic_search_black_24dp"
-			android:showAsAction="ifRoom"
-			style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
-	<item
-			android:id="@+id/menu_filter_users"
-			android:title="@string/filter"
-			android:iconTint="@color/md_white_1000"
-			android:icon="@drawable/baseline_filter_list_24"
-			android:showAsAction="ifRoom"
-			style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
-	<item
-			android:id="@+id/menu_users_help"
-			android:title="@string/help"
-			android:iconTint="@color/md_white_1000"
-			android:icon="@drawable/baseline_help_24"
-			android:showAsAction="ifRoom"
-			style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+<menu xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/menu_reload_users"
+            android:title="@string/reload"
+            app:iconTint="@color/md_white_1000"
+            android:iconTint="@color/md_white_1000"
+			app:iconTintMode="add"
+            android:iconTintMode="add"
+            android:icon="@drawable/baseline_autorenew_24"
+            android:showAsAction="ifRoom"
+            tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_find_users"
+            android:title="@string/search"
+            app:iconTint="@color/md_white_1000"
+			app:iconTintMode="add"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:showAsAction="ifRoom"
+            tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_filter_users"
+            android:title="@string/filter"
+            app:iconTint="@color/md_white_1000"
+			app:iconTintMode="add"
+            android:icon="@drawable/baseline_filter_list_24"
+            android:showAsAction="ifRoom"
+            tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_users_help"
+            android:title="@string/help"
+            app:iconTint="@color/md_white_1000"
+			app:iconTintMode="add"
+            android:icon="@drawable/baseline_help_24"
+            android:showAsAction="ifRoom"
+            tools:ignore="AppCompatResource"/>
 
 </menu>

@@ -452,8 +452,8 @@ public class SimulationActivity extends FragmentActivity
                         : FileHandler.Format.JFF;
 
                 loadMachine(filename, formatx);
-
                 filename = filename.substring(filename.lastIndexOf("/") + 1, filename.lastIndexOf("."));
+
                 emptyInputSymbolId = dataSource.getInputSymbolWithProperties(Symbol.EMPTY).getId();
                 machineType = inputBundle.getInt(MainActivity.MACHINE_TYPE);
                 if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {

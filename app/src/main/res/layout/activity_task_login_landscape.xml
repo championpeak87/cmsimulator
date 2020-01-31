@@ -24,29 +24,37 @@
 
 	<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 		<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"
-		                                               android:layout_width="match_parent"
-		                                               style="@style/LoginTextFields"
-		                                               android:textColorHint="@color/md_white_1000"
-		                                               app:errorEnabled="true">
+													   android:layout_width="match_parent"
+													   style="@style/LoginTextFields"
+													   android:textColorHint="@color/md_white_1000"
+													   app:errorEnabled="true"
+													   app:hintTextAppearance="@android:style/TextAppearance.Small">
 
-			<android.support.design.widget.TextInputEditText
+			<EditText
 					android:id="@+id/edittext_username"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:textColor="@color/md_white_1000"
+					android:textColorHighlight="@color/md_white_1000"
+					android:textColorLink="@color/md_white_1000"
 					android:hint="@string/username" android:inputType="text"/>
 		</android.support.design.widget.TextInputLayout>
 
 		<android.support.design.widget.TextInputLayout android:layout_width="match_parent"
-		                                               android:layout_height="wrap_content"
-		                                               style="@style/LoginTextFields"
-		                                               app:errorEnabled="true"
-		                                               app:passwordToggleEnabled="true">
-			<android.support.design.widget.TextInputEditText
+													   android:layout_height="wrap_content"
+													   style="@style/LoginTextFields"
+													   app:errorEnabled="true"
+													   app:hintTextAppearance="@android:style/TextAppearance.Small">
+			<EditText
 					android:id="@+id/edittext_password"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:textColor="@color/md_white_1000"
+					android:textColorHighlight="@color/md_white_1000"
+					android:textColorLink="@color/md_white_1000"
 					android:hint="@string/password"
-					android:inputType="textPassword"/>
+					android:inputType="textPassword"
+					android:onClick="signIn"/>
 		</android.support.design.widget.TextInputLayout>
 
 		<CheckBox android:id="@+id/checkbox_remember_password"
