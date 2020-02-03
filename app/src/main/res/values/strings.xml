@@ -1297,7 +1297,7 @@
 	<string name="wrong_password">Wrong password</string>
 	<string name="password_changed_successfully">Password was changed successfully</string>
     <string name="time_ran_out_title">Time ran out</string>
-	<string name="time_ran_out_message">Your time for this time has just ran out!</string>
+	<string name="time_ran_out_message">Your time for this task has just ran out!</string>
     <string name="logged_out">You were logged out! Please log in!</string>
     <string name="no_tests_available">No tests are available</string>
     <string name="submission_date">Submission date</string>
