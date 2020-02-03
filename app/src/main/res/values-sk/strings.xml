@@ -847,7 +847,7 @@
     <string name="last_name">Priezvisko</string>
 	<string name="first_name_empty">Meno je prázdne</string>
     <string name="last_name_empty">Priezvisko je prázdne</string>
-    <string name="username_length_small">Používateľské meno musí mať 5 alebo viac znakov</string>
+    <string name="username_length_small">Používateľské meno musí mať 6 alebo viac znakov</string>
     <string name="password_length_error">Heslo musí mať 6 alebo viac znakov</string>
     <string name="username_exists_error">Toto používateľské meno sa už používa</string>
 	<string name="sign_up_header">Registrácia</string>

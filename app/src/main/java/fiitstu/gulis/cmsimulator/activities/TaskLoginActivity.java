@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.FragmentActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,8 +37,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class TaskLoginActivity extends FragmentActivity {
-    private CheckBox rememberCheckBox;
-
     private ProgressBar loginProgressBar;
 
     private EditText usernameEditText, passwordEditText;
@@ -41,8 +45,6 @@ public class TaskLoginActivity extends FragmentActivity {
 
     private Bundle onPauseBundle;
 
-    private boolean autologin = false;
-
     public static User loggedUser = null;
 
     public static final String SETTINGS_KEY = "SETTINGS";
@@ -50,18 +52,14 @@ public class TaskLoginActivity extends FragmentActivity {
     public static final String AUTOLOGIN_USERNAME = "AUTOLOGIN_USERNAME";
     public static final String AUTOLOGIN_AUTHKEY = "AUTOLOGIN_AUTHKEY";
 
+    private boolean password_visible = false;
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_task_login_landscape);
-        } else {
-            setContentView(R.layout.activity_task_login_portrait);
-        }
+        setContentView(R.layout.activity_task_login_portrait);
 
         findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
-
-        rememberCheckBox = findViewById(R.id.checkbox_remember_password);
 
         usernameEditText = findViewById(R.id.edittext_username);
         passwordEditText = findViewById(R.id.edittext_password);
@@ -82,7 +80,6 @@ public class TaskLoginActivity extends FragmentActivity {
 
         usernameEditText.setText(savedInstanceState.getString("username"));
         passwordEditText.setText(savedInstanceState.getString("password"));
-        rememberCheckBox.setChecked(savedInstanceState.getBoolean("save_password"));
     }
 
     @Override
@@ -94,7 +91,6 @@ public class TaskLoginActivity extends FragmentActivity {
 
         savedInstanceState.putString("username", usernameEditText.getText().toString());
         savedInstanceState.putString("password", passwordEditText.getText().toString());
-        savedInstanceState.putBoolean("save_password", rememberCheckBox.isChecked());
 
         // etc.
 
@@ -104,14 +100,8 @@ public class TaskLoginActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_task_login_landscape);
-        } else {
-            setContentView(R.layout.activity_task_login_portrait);
-        }
+        setContentView(R.layout.activity_task_login_portrait);
         findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
-
-        rememberCheckBox = findViewById(R.id.checkbox_remember_password);
 
         usernameEditText = findViewById(R.id.edittext_username);
         passwordEditText = findViewById(R.id.edittext_password);
@@ -125,25 +115,19 @@ public class TaskLoginActivity extends FragmentActivity {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-
-        Context context = this.getApplicationContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                SETTINGS_KEY, Context.MODE_PRIVATE);
-        autologin = sharedPref.getBoolean(AUTOLOGIN_SETTING, false);
-        if (autologin)
-            try {
-                usernameEditText.setText(sharedPref.getString(AUTOLOGIN_USERNAME, ""));
-                rememberCheckBox.setChecked(true);
-                signIn(null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
     }
 
-    public boolean isConnected()
-    {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+    public void showPassword(View view) {
+        if (password_visible) {
+            passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
+        } else {
+            passwordEditText.setTransformationMethod(null);
+        }
+        password_visible = !password_visible;
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         boolean isConnected = connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
         return isConnected;
     }
@@ -152,8 +136,7 @@ public class TaskLoginActivity extends FragmentActivity {
         boolean canSignIn = verifyFields();
 
         if (canSignIn) {
-            if (!isConnected())
-            {
+            if (!isConnected()) {
                 Toast.makeText(this, R.string.device_not_connected_internet, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -239,8 +222,6 @@ public class TaskLoginActivity extends FragmentActivity {
     }
 
     private boolean verifyFields() {
-        if (autologin)
-            return true;
         String username = usernameEditText.getText().toString().trim();
         boolean isUsernameEmpty = username.isEmpty();
 
@@ -261,15 +242,6 @@ public class TaskLoginActivity extends FragmentActivity {
     private void loginUnsuccessful() {
         usernameEditText.setError(getString(R.string.login_incorrect));
         passwordEditText.setError(getString(R.string.login_incorrect));
-
-        Context context = this.getApplicationContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                SETTINGS_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(AUTOLOGIN_SETTING, false);
-        editor.putString(AUTOLOGIN_USERNAME, "");
-        editor.putString(AUTOLOGIN_AUTHKEY, "");
-        editor.commit();
     }
 
     private void setLoginProgressBarVisibility(boolean value) {
@@ -279,14 +251,12 @@ public class TaskLoginActivity extends FragmentActivity {
             passwordEditText.setEnabled(false);
             signUpButton.setEnabled(false);
             signInButton.setEnabled(false);
-            rememberCheckBox.setEnabled(false);
         } else {
             loginProgressBar.setVisibility(View.INVISIBLE);
             usernameEditText.setEnabled(true);
             passwordEditText.setEnabled(true);
             signUpButton.setEnabled(true);
             signInButton.setEnabled(true);
-            rememberCheckBox.setEnabled(true);
         }
     }
 
@@ -303,29 +273,6 @@ public class TaskLoginActivity extends FragmentActivity {
     }
 
     private void showMainTaskActivity(User user) {
-
-        if (rememberCheckBox.isChecked() || autologin) {
-            String username = user.getUsername();
-            String authkey = user.getAuth_key();
-            Context context = this.getApplicationContext();
-            SharedPreferences sharedPref = context.getSharedPreferences(
-                    SETTINGS_KEY, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(AUTOLOGIN_SETTING, true);
-            editor.putString(AUTOLOGIN_USERNAME, username);
-            editor.putString(AUTOLOGIN_AUTHKEY, authkey);
-            editor.commit();
-        } else {
-            Context context = this.getApplicationContext();
-            SharedPreferences sharedPref = context.getSharedPreferences(
-                    SETTINGS_KEY, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(AUTOLOGIN_SETTING, false);
-            editor.putString(AUTOLOGIN_USERNAME, "");
-            editor.putString(AUTOLOGIN_AUTHKEY, "");
-            editor.commit();
-        }
-
         Intent showMainTaskActivity = null;
 
         if (user instanceof Admin) {

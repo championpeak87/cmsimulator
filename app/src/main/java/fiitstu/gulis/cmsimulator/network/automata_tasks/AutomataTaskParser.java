@@ -115,6 +115,7 @@ public class AutomataTaskParser {
             submissionDateString = submissionDateString.replace('T', ' ');
             try {
                 submissionDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(submissionDateString);
+                submissionDate.setHours(submissionDate.getHours() + 1);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

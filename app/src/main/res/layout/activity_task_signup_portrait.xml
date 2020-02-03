@@ -76,35 +76,33 @@
 		</android.support.design.widget.TextInputLayout>
 	</LinearLayout>
 
-	<android.support.design.widget.TextInputLayout android:layout_width="match_parent"
-	                                               android:layout_height="wrap_content"
-	                                               style="@style/LoginTextFields"
-	                                               app:errorEnabled="true"
-	                                               app:passwordToggleEnabled="true"
-
+	<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"
+												   android:layout_width="match_parent"
+												   style="@style/LoginTextFields"
+												   android:textColorHint="@color/md_white_1000"
+												   app:errorEnabled="true"
 												   app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
 		<EditText
 				android:id="@+id/edittext_password"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:hint="@string/password"
-				android:inputType="textPassword"
+				android:hint="@string/password" android:inputType="textPassword"
 				android:onClick="resetAdmin"/>
 	</android.support.design.widget.TextInputLayout>
 
-	<android.support.design.widget.TextInputLayout android:layout_width="match_parent"
-	                                               android:layout_height="wrap_content"
-	                                               style="@style/LoginTextFields"
-	                                               app:errorEnabled="true"
-	                                               app:passwordToggleEnabled="true"
-													android:onClick="resetAdmin"
+	<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"
+												   android:layout_width="match_parent"
+												   style="@style/LoginTextFields"
+												   android:textColorHint="@color/md_white_1000"
+												   app:errorEnabled="true"
 												   app:hintTextAppearance="@android:style/TextAppearance.Medium">
+
 		<EditText
 				android:id="@+id/edittext_password_confirm"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:hint="@string/new_password_confirm"
-				android:inputType="textPassword"
+				android:hint="@string/new_password_confirm" android:inputType="textPassword"
 				android:onClick="resetAdmin"/>
 	</android.support.design.widget.TextInputLayout>
 

@@ -41,27 +41,30 @@
                 android:hint="@string/username" android:inputType="text"/>
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
-                                                   android:layout_height="wrap_content"
-                                                   style="@style/LoginTextFields"
-                                                   app:errorEnabled="true"
-                                                   app:hintTextAppearance="@android:style/TextAppearance.Small">
-        <EditText
-                android:id="@+id/edittext_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/md_white_1000"
-                android:textColorHighlight="@color/md_white_1000"
-                android:textColorLink="@color/md_white_1000"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:onClick="signIn"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <CheckBox android:id="@+id/checkbox_remember_password"
-              android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:text="@string/remember_future_logins" android:layout_gravity="center_horizontal"
-              android:layout_marginTop="5dp" android:textColor="@color/md_white_1000"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <android.support.design.widget.TextInputLayout android:layout_width="0dp"
+                                                       android:layout_weight="0.85"
+                                                       android:layout_height="wrap_content"
+                                                       style="@style/LoginTextFields"
+                                                       app:errorEnabled="true"
+                                                       app:hintTextAppearance="@android:style/TextAppearance.Small">
+            <EditText
+                    android:id="@+id/edittext_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_white_1000"
+                    android:textColorHighlight="@color/md_white_1000"
+                    android:textColorLink="@color/md_white_1000"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:onClick="signIn"/>
+        </android.support.design.widget.TextInputLayout>
+        <Button android:layout_width="0dp" android:layout_weight="0.15" android:layout_height="wrap_content"
+                android:drawableTint="@color/md_white_1000"
+                style="?android:buttonBarButtonStyle" android:drawableStart="@drawable/baseline_visibility_24"
+                android:onClick="showPassword"/>
+    </LinearLayout>
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:orientation="horizontal" android:gravity="center_horizontal" android:layout_marginTop="20dp">

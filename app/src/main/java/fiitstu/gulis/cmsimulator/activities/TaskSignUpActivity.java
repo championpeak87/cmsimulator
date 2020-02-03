@@ -37,11 +37,7 @@ public class TaskSignUpActivity extends FragmentActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_task_signup_landscape);
-        } else {
-            setContentView(R.layout.activity_task_signup_portrait);
-        }
+        setContentView(R.layout.activity_task_signup_portrait);
 
         findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
 
@@ -115,11 +111,7 @@ public class TaskSignUpActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_task_signup_landscape);
-        } else {
-            setContentView(R.layout.activity_task_signup_portrait);
-        }
+        setContentView(R.layout.activity_task_signup_portrait);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
@@ -261,7 +253,7 @@ public class TaskSignUpActivity extends FragmentActivity {
         boolean usernameEmpty = username.isEmpty();
         boolean passwordEmpty = password.isEmpty();
         boolean passwordLength = password.length() >= 6;
-        boolean usernameLength = username.length() >= 5;
+        boolean usernameLength = username.length() >= 6;
         boolean passwordMatch = password.equals(passwordCheck);
 
         if (firstNameEmpty) {

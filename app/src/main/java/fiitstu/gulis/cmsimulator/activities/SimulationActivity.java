@@ -1184,18 +1184,18 @@ public class SimulationActivity extends FragmentActivity
             SimulationActivity.this.finish();
             SimulationActivity.super.onBackPressed();
         } else if (configurationType == MainActivity.SOLVE_TASK) {
-            if (hasTimeSet(task))
-            {
-                publishRemainingTime(timer.getCurrentTime());
-                timer.pauseTimer();
-                Timer.deleteTimer();
-            }
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
                     .setMessage(R.string.task_leave_warning)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            if (hasTimeSet(task))
+                            {
+                                publishRemainingTime(timer.getCurrentTime());
+                                timer.pauseTimer();
+                                Timer.deleteTimer();
+                            }
                             dataSource.globalDrop();
                             SimulationActivity.this.finish();
                             SimulationActivity.super.onBackPressed();
@@ -1203,6 +1203,8 @@ public class SimulationActivity extends FragmentActivity
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
+
+
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
