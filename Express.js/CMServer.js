@@ -462,11 +462,12 @@ app.get('/api/tasks/submit', (req, res) => {
   const task_id = req.query.task_id;
   const user_id = req.query.user_id;
   const task_status = req.query.task_status;
+  const submission_time = req.query.submission_time;
 
   pool.query('SELECT * FROM automata_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('UPDATE automata_task_results SET submitted=\'true\', task_status = $1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result) => {
+      pool.query('UPDATE automata_task_results SET submitted=\'true\', submission_date=$1, task_status = $2 WHERE task_id = $3 AND user_id = $4;', [submission_time, task_status, task_id, user_id], (error, result) => {
         if (error) { throw error }
         if (result.rowCount > 0) {
           res.status(HTTP_OK).send({

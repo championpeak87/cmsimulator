@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class UrlManager {
 
@@ -89,6 +91,9 @@ public class UrlManager {
     private final static String ORDER_BY_KEY = "order_by";
     private final static String ASCENDING_KEY = "ascending";
 
+    // SUBMIT TASK
+    private final static String SUBMISSION_TIME = "submission_time";
+
     public URL getUpdateTimerURL(Time elapsed_time, int user_id, int task_id)
     {
         Uri uri = Uri.parse(URI + UPDATE_TIMER_PATH).buildUpon()
@@ -138,11 +143,12 @@ public class UrlManager {
         }
     }
 
-    public URL getSubmitAutomataTaskUrl(int user_id, int task_id, Task.TASK_STATUS status) {
+    public URL getSubmitAutomataTaskUrl(int user_id, int task_id, Task.TASK_STATUS status, Date submission_time) {
         Uri uri = Uri.parse(URI + SUBMIT_AUTOMATA_TASK_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .appendQueryParameter(TASK_STATUS_KEY, status.toString())
+                .appendQueryParameter(SUBMISSION_TIME, submission_time.toString())
                 .build();
 
         URL url = null;

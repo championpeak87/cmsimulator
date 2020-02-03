@@ -41,7 +41,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
@@ -650,8 +653,8 @@ public class ConfigurationActivity extends FragmentActivity
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (taskConfiguration != 0) {
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
-            MenuItem saveButton = menu.getItem(0);
-            MenuItem submitTaskButton = menu.getItem(1);
+            MenuItem saveButton = menu.findItem(R.id.menu_save_task);
+            MenuItem submitTaskButton = menu.findItem(R.id.menu_submit_task);
             //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
 
             if (taskConfiguration == MainActivity.SOLVE_TASK) {
@@ -852,7 +855,6 @@ public class ConfigurationActivity extends FragmentActivity
                 submitTaskDialog.setOnClickListener(new SubmitTaskDialog.SubmitTaskDialogListener() {
                     @Override
                     public void submitTaskDialogClick() {
-
                         final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
                         final int user_id = BrowseAutomataTasksActivity.user_id;
                         class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
@@ -906,9 +908,10 @@ public class ConfigurationActivity extends FragmentActivity
                         class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
                             @Override
                             protected String doInBackground(Void... voids) {
+                                final Date currentTime = Calendar.getInstance().getTime();
                                 UrlManager urlManager = new UrlManager();
                                 ServerController serverController = new ServerController();
-                                URL url = urlManager.getSubmitAutomataTaskUrl(user_id, task_id, submittedStatus);
+                                URL url = urlManager.getSubmitAutomataTaskUrl(user_id, task_id, submittedStatus, currentTime);
 
                                 String output = null;
                                 try {
