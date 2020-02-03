@@ -182,6 +182,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                 detailsIntent.putExtra("TASK_STATUS", currentTask.getStatus());
                 detailsIntent.putExtra("TIME", currentTask.getAvailable_time());
                 detailsIntent.putExtra("REMAINING_TIME", currentTask.getRemaining_time());
+                if (currentTask.getSubmission_date() != null)
+                    detailsIntent.putExtra("SUBMISSION_DATE", currentTask.getSubmission_date().toString());
 
                 BrowseAutomataTasksActivity.mContext.startActivity(detailsIntent, options.toBundle());
             }

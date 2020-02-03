@@ -583,9 +583,8 @@ app.get('/api/tasks/add', (req, res) => {
 app.get('/api/tasks/getTasks', (req, res) => {
   const user_id = req.query.user_id;
   const auth_key = req.query.auth_key;
-
-  //pool.query('SELECT * FROM automata_tasks;', (err, results) => {
-  pool.query('select at.*, atr.task_status, at.time - atr.time_elapsed as remaining_time from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id;', [user_id], (err, results) => {
+  
+  pool.query('select at.*, atr.task_status, at.time - atr.time_elapsed as remaining_time, atr.submitted, atr.submission_date from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id;', [user_id], (err, results) => {
 
     if (err) { throw err }
     if (results.rowCount > 0) {

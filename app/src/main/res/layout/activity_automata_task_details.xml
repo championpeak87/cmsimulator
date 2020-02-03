@@ -113,6 +113,22 @@
 			          android:layout_weight="2"
 			          android:enabled="false"/>
 		</LinearLayout>
+		<LinearLayout android:id="@+id/linearlayout_submission_time" android:visibility="gone"
+				android:orientation="horizontal"
+					  android:layout_height="wrap_content"
+					  android:layout_marginHorizontal="20dp"
+					  android:layout_marginVertical="5dp"
+					  android:layout_width="match_parent">
+			<TextView android:layout_width="0dp"
+					  android:layout_height="wrap_content"
+					  android:text="@string/submission_date"
+					  android:layout_weight="1"/>
+			<EditText android:id="@+id/edittext_task_submission_date"
+					  android:layout_width="0dp"
+					  android:layout_height="wrap_content"
+					  android:layout_weight="2"
+					  android:enabled="false"/>
+		</LinearLayout>
 	</LinearLayout>
 
 </ScrollView>

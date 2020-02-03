@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.network.automata_tasks;
 
 import android.util.JsonReader;
+import android.util.Log;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.*;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
@@ -21,7 +22,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AutomataTaskParser {
@@ -48,6 +52,9 @@ public class AutomataTaskParser {
     private static final String CORRECT_KEY = Task.TASK_STATUS.CORRECT.toString();
     private static final String NEW_KEY = Task.TASK_STATUS.NEW.toString();
 
+    private static final String SUBMITTED_KEY = "submitted";
+    private static final String SUBMISSION_TIME = "submission_date";
+
     public Task getTaskFromJson(JSONObject object) throws JSONException {
         Task parsedTask;
         String task_name, task_description;
@@ -55,6 +62,7 @@ public class AutomataTaskParser {
         boolean public_input;
         Task.TASK_STATUS status = Task.TASK_STATUS.NEW;
         Time available_time;
+        Date submissionDate = null;
 
         final JSONObject timeObject = object.getJSONObject(TIME_KEY);
         final int hours, minutes, seconds;
@@ -91,9 +99,7 @@ public class AutomataTaskParser {
 
             final String sRemainingTime = String.format("%02d:%02d:%02d", remainingHours, remainingMinutes, remainingSeconds);
             remainingTime = Time.valueOf(sRemainingTime);
-        }
-        else
-        {
+        } else {
             remainingTime = Time.valueOf(sTime);
         }
 
@@ -103,6 +109,16 @@ public class AutomataTaskParser {
         assigner_id = object.getInt(ASSIGNER_ID_KEY);
         task_id = object.getInt(TASK_ID_KEY);
         public_input = object.getBoolean(PUBLIC_INPUT_KEY);
+
+        if (!object.isNull(SUBMITTED_KEY) && object.getBoolean(SUBMITTED_KEY)) {
+            String submissionDateString = object.getString(SUBMISSION_TIME);
+            submissionDateString = submissionDateString.replace('T', ' ');
+            try {
+                submissionDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(submissionDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (object.isNull(TASK_STATUS_KEY))
             status = Task.TASK_STATUS.NEW;
@@ -137,7 +153,8 @@ public class AutomataTaskParser {
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
-                        status
+                        status,
+                        submissionDate
                 );
             case "pushdown_automata":
                 return new PushdownAutomataTask(
@@ -148,7 +165,8 @@ public class AutomataTaskParser {
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
-                        status
+                        status,
+                        submissionDate
                 );
             case "linear_bounded_automata":
                 return new LinearBoundedAutomataTask(
@@ -159,7 +177,8 @@ public class AutomataTaskParser {
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
-                        status
+                        status,
+                        submissionDate
                 );
             case "turing_machine":
                 return new TuringMachineTask(
@@ -170,7 +189,8 @@ public class AutomataTaskParser {
                         Integer.toString(assigner_id),
                         task_id,
                         public_input,
-                        status
+                        status,
+                        submissionDate
                 );
         }
 

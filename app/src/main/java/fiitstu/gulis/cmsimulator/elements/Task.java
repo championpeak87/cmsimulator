@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.elements;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.Date;
 
 /**
  * Metadata about a task
@@ -19,6 +20,24 @@ public class Task implements Serializable {
     private int maxSteps;
     private int task_id;
     private TASK_STATUS status;
+    private Date submission_date;
+    private boolean submitted;
+
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
+    }
+
+    public Date getSubmission_date() {
+        return submission_date;
+    }
+
+    public void setSubmission_date(Date submission_date) {
+        this.submission_date = submission_date;
+    }
 
     private int resultVersion;
 

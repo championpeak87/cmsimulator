@@ -22,6 +22,12 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.elements.Task;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
@@ -34,6 +40,7 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
     private EditText publicInputs;
     private EditText minutes;
     private LinearLayout bottomBar;
+    private EditText submissionDate;
 
     private void setWindowColor(int color, int color2) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -64,9 +71,11 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         final String task_type = intent.getStringExtra("TASK_TYPE");
         final String hint = intent.getStringExtra("TASK_DESCRIPTION");
         final boolean public_inputs = intent.getBooleanExtra("PUBLIC_INPUT", false);
-        final Time time = (Time)intent.getSerializableExtra("TIME");
-        final Time remainingTime = (Time)intent.getSerializableExtra("REMAINING_TIME");
-        final Task.TASK_STATUS status = (Task.TASK_STATUS)intent.getSerializableExtra("TASK_STATUS");
+        final Time time = (Time) intent.getSerializableExtra("TIME");
+        final Time remainingTime = (Time) intent.getSerializableExtra("REMAINING_TIME");
+        final Task.TASK_STATUS status = (Task.TASK_STATUS) intent.getSerializableExtra("TASK_STATUS");
+        final String submissionDateString;
+
 
         type = findViewById(R.id.textview_automata_type);
         name = findViewById(R.id.textview_task_name);
@@ -75,9 +84,34 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         minutes = findViewById(R.id.edittext_task_solution_time);
         bottomBar = findViewById(R.id.task_bottom_bar);
         subheader = findViewById(R.id.textview_task_details);
+        submissionDate = findViewById(R.id.edittext_task_submission_date);
 
-        switch (status)
-        {
+        if (intent.hasExtra("SUBMISSION_DATE")) {
+            LinearLayout layout = findViewById(R.id.linearlayout_submission_time);
+            layout.setVisibility(View.VISIBLE);
+            submissionDateString = intent.getStringExtra("SUBMISSION_DATE");
+            Date subDate = new Date(Date.parse(submissionDateString));
+            Calendar c = Calendar.getInstance();
+            c.setTime(subDate);
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            int hours = c.get(Calendar.HOUR_OF_DAY);
+            int minutes = c.get(Calendar.MINUTE);
+            int seconds = c.get(Calendar.SECOND);
+
+            String syear = Integer.toString(year);
+            String smonth = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+            String sday = Integer.toString(day);
+            String shours = Integer.toString(hours);
+            String sminutes = Integer.toString(minutes);
+            String sseconds = Integer.toString(seconds);
+
+            String date = sday + "." + smonth + " " + syear + " " + shours + ":" + sminutes + ":" + sseconds;
+            submissionDate.setText(date);
+        }
+
+        switch (status) {
             case IN_PROGRESS:
                 type.setBackgroundColor(getColor(R.color.in_progress_top_bar));
                 bottomBar.setBackgroundColor(getColor(R.color.in_progress_bottom_bar));

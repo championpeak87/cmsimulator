@@ -1300,5 +1300,6 @@
 	<string name="time_ran_out_message">Your time for this time has just ran out!</string>
     <string name="logged_out">You were logged out! Please log in!</string>
     <string name="no_tests_available">No tests are available</string>
+    <string name="submission_date">Submission date</string>
 
 </resources>
