@@ -904,11 +904,11 @@ public class ConfigurationActivity extends FragmentActivity
                         new SaveTaskToCloudAsync().execute(file);
 
                         final int task_id = task.getTask_id();
+                        final Date currentTime = Calendar.getInstance().getTime();
 
                         class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
                             @Override
                             protected String doInBackground(Void... voids) {
-                                final Date currentTime = Calendar.getInstance().getTime();
                                 UrlManager urlManager = new UrlManager();
                                 ServerController serverController = new ServerController();
                                 URL url = urlManager.getSubmitAutomataTaskUrl(user_id, task_id, submittedStatus, currentTime);
@@ -937,6 +937,7 @@ public class ConfigurationActivity extends FragmentActivity
                                         JSONObject object = new JSONObject(s);
                                         if (object.getBoolean("submitted")) {
                                             Toast.makeText(ConfigurationActivity.this, R.string.submit_successful, Toast.LENGTH_LONG).show();
+                                            BrowseAutomataTasksActivity.adapter.setSubmissionTime(task, currentTime);
                                         } else {
                                             Toast.makeText(ConfigurationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
                                         }

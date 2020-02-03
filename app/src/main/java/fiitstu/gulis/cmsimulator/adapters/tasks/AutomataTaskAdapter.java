@@ -48,6 +48,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.URL;
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -420,6 +421,18 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             Task currentTask = listOfTasks.get(i);
             if (currentTask.getTask_id() == task_id) {
                 currentTask.setStatus(status);
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
+    public void setSubmissionTime(Task task, Date submissionDate)
+    {
+        for (int i = 0; i < listOfTasks.size(); i++) {
+            Task currentTask = listOfTasks.get(i);
+            if (currentTask.getTask_id() == task.getTask_id()) {
+                currentTask.setSubmission_date(submissionDate);
                 notifyItemChanged(i);
                 break;
             }
