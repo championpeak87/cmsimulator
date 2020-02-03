@@ -939,4 +939,13 @@
     <string name="logged_out">Boli ste odhlásený! Prihláste sa prosím znovu!</string>
     <string name="no_tests_available">Nie sú dostupné žiadne testy!</string>
     <string name="submission_date">Dátum odovzdania</string>
+    <string name="mark_task_as">Označiť úlohu ako ...</string>
+    <string name="task_status_updated">Stav úlohy bol aktualizovaný!</string>
+    <string name="task_status">Stav úlohy</string>
+    <string name="change_task_status">Change task status</string>
+    <string name="task_in_progress">Riešená</string>
+    <string name="task_correct">Správne</string>
+    <string name="task_wrong">Nesprávne</string>
+    <string name="task_new">Nová</string>
+    <string name="task_too_late">Príliš neskoro</string>
 </resources>

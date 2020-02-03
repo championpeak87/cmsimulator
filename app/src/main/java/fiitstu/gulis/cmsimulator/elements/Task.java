@@ -1,12 +1,18 @@
 package fiitstu.gulis.cmsimulator.elements;
 
+import android.app.Application;
+import android.content.res.Resources;
+import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
+import fiitstu.gulis.cmsimulator.activities.MainActivity;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
 /**
  * Metadata about a task
- *
+ * <p>
  * Created by Jakub Sedlář on 05.01.2018.
  */
 public class Task implements Serializable {
@@ -61,12 +67,27 @@ public class Task implements Serializable {
         NEW("new"),
         TOO_LATE("too_late");
 
-        private String query;
-
         TASK_STATUS(String query) {
             this.query = query;
         }
 
+        private String query;
+
+        public String getLocalised_name() {
+            switch (this) {
+                default:
+                case IN_PROGRESS:
+                    return BrowseAutomataTasksActivity.context.getString(R.string.task_in_progress);
+                case CORRECT:
+                    return BrowseAutomataTasksActivity.context.getString(R.string.task_correct);
+                case WRONG:
+                    return BrowseAutomataTasksActivity.context.getString(R.string.task_wrong);
+                case NEW:
+                    return BrowseAutomataTasksActivity.context.getString(R.string.task_new);
+                case TOO_LATE:
+                    return BrowseAutomataTasksActivity.context.getString(R.string.task_too_late);
+            }
+        }
 
         @Override
         public String toString() {
@@ -168,6 +189,7 @@ public class Task implements Serializable {
 
     /**
      * Returns the time when the task was started
+     *
      * @return the time when the task was started
      */
     public long getStarted() {
@@ -176,6 +198,7 @@ public class Task implements Serializable {
 
     /**
      * Sets the time when the task was started
+     *
      * @param started the time when the task was started
      */
     public void setStarted(long started) {
@@ -184,6 +207,7 @@ public class Task implements Serializable {
 
     /**
      * Returns true if the inputs are public, false otherwise
+     *
      * @return true if the inputs are public, false otherwise
      */
     public boolean getPublicInputs() {
@@ -192,6 +216,7 @@ public class Task implements Serializable {
 
     /**
      * Set whether or not inputs should be public
+     *
      * @param publicInputs true if inputs should be public, false otherwise
      */
     public void setPublicInputs(boolean publicInputs) {
@@ -200,6 +225,7 @@ public class Task implements Serializable {
 
     /**
      * Returns the maximum number of steps the machine should be simulated for while solving the task
+     *
      * @return the maximum number of steps the machine should be simulated for while solving the task
      */
     public int getMaxSteps() {
@@ -208,6 +234,7 @@ public class Task implements Serializable {
 
     /**
      * Sets the maximum number of steps the machine should be simulated for while solving the task
+     *
      * @param maxSteps the maximum number of steps the machine should be simulated for while solving the task
      */
     public void setMaxSteps(int maxSteps) {

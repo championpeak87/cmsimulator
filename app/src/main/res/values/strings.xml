@@ -1301,5 +1301,14 @@
     <string name="logged_out">You were logged out! Please log in!</string>
     <string name="no_tests_available">No tests are available</string>
     <string name="submission_date">Submission date</string>
+	<string name="mark_task_as">Mark task as ...</string>
+	<string name="task_status_updated">Task status has been updated!</string>
+	<string name="task_status">Task status</string>
+	<string name="change_task_status">Change task status</string>
+	<string name="task_in_progress">In progress</string>
+	<string name="task_correct">Correct</string>
+	<string name="task_wrong">Wrong</string>
+	<string name="task_new">New</string>
+	<string name="task_too_late">Too late</string>
 
 </resources>

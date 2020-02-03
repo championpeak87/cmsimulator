@@ -52,6 +52,14 @@
                     android:background="@null"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/help"/>
+            <ImageButton
+                    android:id="@+id/button_flag_task"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_flag_24"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/mark_task_as"/>
         </LinearLayout>
     </FrameLayout>
     <ProgressBar android:id="@+id/progressbar_task_loading" android:layout_gravity="center"

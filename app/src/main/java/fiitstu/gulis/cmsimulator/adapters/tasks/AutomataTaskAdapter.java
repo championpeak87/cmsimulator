@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
@@ -33,6 +34,7 @@ import fiitstu.gulis.cmsimulator.activities.*;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
+import fiitstu.gulis.cmsimulator.dialogs.TaskStatusDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
@@ -128,8 +130,10 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         }
         holder.automata_type.setText(automataType);
 
-        if (TaskLoginActivity.loggedUser instanceof Student)
+        if (TaskLoginActivity.loggedUser instanceof Student) {
             holder.delete_task.setVisibility(View.GONE);
+            holder.flag_task.setVisibility(View.GONE);
+        }
 
 
         Task.TASK_STATUS currentStatus = currentTask.getStatus();
@@ -168,6 +172,54 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
         holder.topBar.setBackgroundColor(primary);
         holder.bottomBar.setBackgroundColor(light_primary);
+
+        holder.flag_task.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int task_id = currentTask.getTask_id();
+                final int user_id = TaskLoginActivity.loggedUser.getUser_id();
+
+                TaskStatusDialog taskStatusDialog = TaskStatusDialog.newInstance();
+                taskStatusDialog.setOnClickListener(new TaskStatusDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Bundle outputBundle) {
+                        final Task.TASK_STATUS status = (Task.TASK_STATUS) outputBundle.getSerializable("SELECTED_FLAG");
+
+                        class MarkTaskAsAsync extends AsyncTask<Void, Void, String> {
+                            @Override
+                            protected String doInBackground(Void... voids) {
+                                ServerController serverController = new ServerController();
+                                UrlManager urlManager = new UrlManager();
+                                URL markTaskStatusURL = urlManager.getChangeFlagUrl(status, user_id, task_id);
+                                String output = null;
+                                try {
+                                    output = serverController.getResponseFromServer(markTaskStatusURL);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s != null && !s.isEmpty()) {
+                                    Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.task_status_updated, Toast.LENGTH_SHORT).show();
+                                    setTaskStatus(task_id, status);
+                                } else {
+                                    Toast.makeText(BrowseAutomataTasksActivity.mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        new MarkTaskAsAsync().execute();
+                    }
+                });
+
+                FragmentManager fm = BrowseAutomataTasksActivity.context.getSupportFragmentManager();
+                taskStatusDialog.show(fm, "TASK_STATUS_DIALOG");
+            }
+        });
 
         final CardView cardView = holder.cardView;
         holder.help_task.setOnClickListener(new View.OnClickListener() {
@@ -323,6 +375,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         private TextView topBar;
         private ProgressBar loadingBar;
         private FrameLayout contextLayout;
+        private ImageButton flag_task;
 
         public CardViewBuilder(View itemView) {
             super(itemView);
@@ -335,6 +388,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             this.topBar = itemView.findViewById(R.id.textview_automata_type);
             this.loadingBar = itemView.findViewById(R.id.progressbar_task_loading);
             this.contextLayout = itemView.findViewById(R.id.framelayout_context);
+            this.flag_task = itemView.findViewById(R.id.button_flag_task);
         }
 
         private void setLoadingVisibility(boolean value, Task.TASK_STATUS status) {
@@ -427,8 +481,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         }
     }
 
-    public void setSubmissionTime(Task task, Date submissionDate)
-    {
+    public void setSubmissionTime(Task task, Date submissionDate) {
         for (int i = 0; i < listOfTasks.size(); i++) {
             Task currentTask = listOfTasks.get(i);
             if (currentTask.getTask_id() == task.getTask_id()) {

@@ -5,9 +5,7 @@
             android:id="@+id/menu_reload_users"
             android:title="@string/reload"
             app:iconTint="@color/md_white_1000"
-            android:iconTint="@color/md_white_1000"
-			app:iconTintMode="add"
-            android:iconTintMode="add"
+            app:iconTintMode="add"
             android:icon="@drawable/baseline_autorenew_24"
             android:showAsAction="ifRoom"
             tools:ignore="AppCompatResource"/>
@@ -35,5 +33,4 @@
             android:icon="@drawable/baseline_help_24"
             android:showAsAction="ifRoom"
             tools:ignore="AppCompatResource"/>
-
 </menu>
