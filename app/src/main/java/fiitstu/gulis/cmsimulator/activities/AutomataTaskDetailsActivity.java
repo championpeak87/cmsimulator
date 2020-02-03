@@ -94,20 +94,14 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
             Calendar c = Calendar.getInstance();
             c.setTime(subDate);
             int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
+            String smonth = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
             int day = c.get(Calendar.DAY_OF_MONTH);
             int hours = c.get(Calendar.HOUR_OF_DAY);
             int minutes = c.get(Calendar.MINUTE);
             int seconds = c.get(Calendar.SECOND);
 
-            String syear = Integer.toString(year);
-            String smonth = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-            String sday = Integer.toString(day);
-            String shours = Integer.toString(hours);
-            String sminutes = Integer.toString(minutes);
-            String sseconds = Integer.toString(seconds);
 
-            String date = sday + "." + smonth + " " + syear + " " + shours + ":" + sminutes + ":" + sseconds;
+            String date = String.format("%02d.%s %d %02d:%02d:%02d", day, smonth, year, hours, minutes, seconds);
             submissionDate.setText(date);
         }
 
