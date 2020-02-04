@@ -1310,5 +1310,8 @@
 	<string name="task_wrong">Wrong</string>
 	<string name="task_new">New</string>
 	<string name="task_too_late">Too late</string>
+    <string name="select_user">Select user</string>
+	<string name="users_tasks">{0}\'s tasks</string>
+    <string name="show_task">Show task</string>
 
 </resources>

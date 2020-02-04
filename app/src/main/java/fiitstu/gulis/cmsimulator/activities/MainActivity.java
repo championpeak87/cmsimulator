@@ -90,6 +90,7 @@ public class MainActivity extends FragmentActivity
     public static final int SOLVE_TASK = 6;
     public static final int RESUME_MACHINE = 7;
     public static final int GAME_MACHINE = 9;
+    public static final int PREVIEW_TASK = 8;
 
     //grammar examples
     public static final int EXAMPLE_GRAMMAR1 = 0;

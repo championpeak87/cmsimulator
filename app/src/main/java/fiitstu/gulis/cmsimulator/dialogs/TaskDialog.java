@@ -65,6 +65,8 @@ public class TaskDialog extends DialogFragment {
     public static final int EDITING = 2;
     //offers options to return to main menu
     public static final int SOLVED = 3;
+    //offers options to preview solution by other user
+    public static final int PREVIEW = 4;
 
     private static final String MODE = "MODE";
     private static final String TASK = "TASK";
@@ -245,7 +247,7 @@ public class TaskDialog extends DialogFragment {
         if (mode == SOLVING && isTimeSet(time)) {
             timeLabel.setText(R.string.remaining_time);
 
-        } else if (mode == ENTERING || mode == EDITING) {
+        } else if (mode == ENTERING || mode == EDITING || mode == MainActivity.PREVIEW_TASK) {
             timeLabel.setText(R.string.available_time);
             timeRemainingTextView.setText(task.getRemaining_time().toString());
         }
@@ -264,6 +266,8 @@ public class TaskDialog extends DialogFragment {
                 alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
         } else if (mode == EDITING) {
             alertDialogBuilder.setPositiveButton(R.string.back_to_task_edit, null);
+        } else if (mode == MainActivity.PREVIEW_TASK) {
+            alertDialogBuilder.setPositiveButton(R.string.show_task, null);
         }
         alertDialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), null);
 
@@ -297,15 +301,17 @@ public class TaskDialog extends DialogFragment {
                     Intent intent = new Intent(getContext(), SimulationActivity.class);
 
                     Bundle outputBundle = new Bundle();
-                    outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
                     outputBundle.putBoolean(MainActivity.DEFAULT_FORMAT, true);
                     outputBundle.putString(MainActivity.FILE_NAME, getActivity().getApplicationInfo().dataDir + "/automataTask.cmst");
-                    outputBundle.putInt(SimulationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    if (mode == MainActivity.PREVIEW_TASK) {
+                        outputBundle.putInt(SimulationActivity.TASK_CONFIGURATION, MainActivity.PREVIEW_TASK);
+                    } else
+                    {outputBundle.putInt(SimulationActivity.TASK_CONFIGURATION, MainActivity.SOLVE_TASK);}
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);
 
                     final Task.TASK_STATUS currentStatus = task.getStatus();
-                    if (currentStatus == Task.TASK_STATUS.NEW) {
+                    if (currentStatus == Task.TASK_STATUS.NEW && mode != MainActivity.PREVIEW_TASK) {
                         markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
                         int position = adapter.getListOfTasks().indexOf(task);
                         adapter.notifyItemChanged(position);

@@ -58,11 +58,13 @@ import static android.support.constraint.Constraints.TAG;
 public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapter.CardViewBuilder> {
 
     private static final String TASK_DIALOG = "TASK_DIALOG";
+    private boolean view_results;
 
     private List<Task> listOfTasks = null;
 
-    public AutomataTaskAdapter(List<Task> listOfTasks, BrowseAutomataTasksActivity mContext) {
+    public AutomataTaskAdapter(List<Task> listOfTasks, BrowseAutomataTasksActivity mContext, boolean view_results) {
         this.listOfTasks = listOfTasks;
+        this.view_results = view_results;
     }
 
     public void setListOfTasks(List<Task> listOfTasks) {
@@ -290,9 +292,17 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                             machineType = MainActivity.TURING_MACHINE;
                         }
 
-                        TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
-                        taskDialog.setAdapter(thisAdapter);
-                        taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
+                        if (AutomataTaskAdapter.this.view_results) {
+                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, MainActivity.PREVIEW_TASK, machineType);
+                            taskDialog.setAdapter(thisAdapter);
+                            taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
+                        }
+                        else
+                        {
+                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
+                            taskDialog.setAdapter(thisAdapter);
+                            taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
+                        }
                     }
                 }
 

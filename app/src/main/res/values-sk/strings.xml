@@ -948,4 +948,7 @@
     <string name="task_wrong">Nesprávne</string>
     <string name="task_new">Nová</string>
     <string name="task_too_late">Príliš neskoro</string>
+    <string name="select_user">Vyberte používateľa</string>
+    <string name="users_tasks">Úlohy používateľa {0}</string>
+    <string name="show_task">Zobraziť úlohu</string>
 </resources>

@@ -45,6 +45,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     public static Context mContext;
     public static BrowseAutomataTasksActivity context;
     public static AutomataTaskAdapter adapter = null;
+    private boolean view_results = false;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -65,9 +66,15 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         actionbar.setTitle(getString(R.string.available_tasks));
 
         if (getIntent().hasExtra("BUNDLE")) {
+            view_results = true;
             Bundle inputBundle = getIntent().getBundleExtra("BUNDLE");
             user_id = inputBundle.getInt("USER_ID");
             authkey = inputBundle.getString("AUTHKEY");
+            final String first_name = inputBundle.getString("USER_FIRST_NAME");
+            final String last_name = inputBundle.getString("USER_LAST_NAME");
+            String actionBarTitle = getString(R.string.users_tasks);
+            actionBarTitle = actionBarTitle.replace("{0}", last_name + ", " + first_name);
+            actionbar.setTitle(actionBarTitle);
         } else {
             user_id = TaskLoginActivity.loggedUser.getUser_id();
             authkey = TaskLoginActivity.loggedUser.getAuth_key();
@@ -151,7 +158,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         // set recyclerview
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
         if (adapter == null)
-            adapter = new AutomataTaskAdapter(listOfTasks, this);
+            adapter = new AutomataTaskAdapter(listOfTasks, this, view_results);
         else adapter.setListOfTasks(listOfTasks);
         if (listOfTasks.size() == 0) {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);

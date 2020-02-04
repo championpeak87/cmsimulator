@@ -280,6 +280,8 @@ public class ConfigurationActivity extends FragmentActivity
     }
 
     private boolean hasTimeSet(Task task) {
+        if (taskConfiguration == MainActivity.PREVIEW_TASK)
+            return false;
         final Time availableTime = task.getAvailable_time();
         final int hours = availableTime.getHours();
         final int minutes = availableTime.getMinutes();
@@ -302,8 +304,8 @@ public class ConfigurationActivity extends FragmentActivity
         final ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //DataSource initialization
-        dataSource = DataSource.getInstance();
+                //DataSource initialization
+                dataSource = DataSource.getInstance();
         dataSource.open();
 
         //diagram initialization

@@ -136,6 +136,8 @@ public class SimulationActivity extends FragmentActivity
 
     public static SimulationActivity mContext;
 
+    private boolean task_preview = false;
+
 
     /**
      * Initializes the machine, adding special symbols to its alphabet and creates the tape.
@@ -257,6 +259,10 @@ public class SimulationActivity extends FragmentActivity
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 } else if (configurationType == MainActivity.SOLVE_TASK) {
                     outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
+                    outputBundle.putSerializable("TIME", task.getRemaining_time());
+                    outputBundle.putSerializable(MainActivity.TASK, task);
+                } else if (configurationType == MainActivity.PREVIEW_TASK) {
+                    outputBundle.putInt(TASK_CONFIGURATION, MainActivity.PREVIEW_TASK);
                     outputBundle.putSerializable("TIME", task.getRemaining_time());
                     outputBundle.putSerializable(MainActivity.TASK, task);
                 }
@@ -558,7 +564,8 @@ public class SimulationActivity extends FragmentActivity
         if (configurationType == MainActivity.NEW_MACHINE
                 || configurationType == MainActivity.NEW_TASK
                 || configurationType == MainActivity.EDIT_TASK
-                || configurationType == MainActivity.SOLVE_TASK) {
+                || configurationType == MainActivity.SOLVE_TASK
+                || configurationType == MainActivity.PREVIEW_TASK) {
             Bundle outputBundle = new Bundle();
             outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
             outputBundle.putString(MainActivity.FILE_NAME, filename);
@@ -577,6 +584,10 @@ public class SimulationActivity extends FragmentActivity
                 outputBundle.putInt(TASK_CONFIGURATION, MainActivity.SOLVE_TASK);
                 outputBundle.putSerializable("TIME", task.getAvailable_time());
                 outputBundle.putSerializable(MainActivity.TASK, task);
+            } else if (configurationType == MainActivity.PREVIEW_TASK) {
+                outputBundle.putInt(TASK_CONFIGURATION, MainActivity.PREVIEW_TASK);
+                outputBundle.putSerializable("TIME", task.getAvailable_time());
+                outputBundle.putSerializable(MainActivity.TASK, task);
             }
             Log.v(TAG, "outputBundle initialized");
 
@@ -589,6 +600,8 @@ public class SimulationActivity extends FragmentActivity
     }
 
     private boolean hasTimeSet(Task task) {
+        if (configurationType == MainActivity.PREVIEW_TASK)
+            return false;
         final Time availableTime = task.getAvailable_time();
         final int hours = availableTime.getHours();
         final int minutes = availableTime.getMinutes();
@@ -610,7 +623,9 @@ public class SimulationActivity extends FragmentActivity
                 saveButton.setVisible(true);
                 submitTaskButton.setVisible(true);
             }
-            if (configurationType == MainActivity.EDIT_TASK || (configurationType == MainActivity.SOLVE_TASK && task.getPublicInputs())) {
+            if (configurationType == MainActivity.EDIT_TASK ||
+                    (configurationType == MainActivity.SOLVE_TASK && task.getPublicInputs()) ||
+                    (configurationType == MainActivity.PREVIEW_TASK && task.getPublicInputs())) {
                 menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
                 menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
                 menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);
@@ -626,10 +641,9 @@ public class SimulationActivity extends FragmentActivity
         super.onResume();
         Log.v(TAG, "onResume method started");
 
-        if (configurationType == MainActivity.SOLVE_TASK && hasTimeSet(task))
-        {
+        if (configurationType == MainActivity.SOLVE_TASK && hasTimeSet(task)) {
             timer = Timer.getInstance(null);
-            timer.setOnTickListener(new Timer.OnTickListener(){
+            timer.setOnTickListener(new Timer.OnTickListener() {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     int hours = (int) (millisUntilFinished / 3600000);
@@ -658,7 +672,7 @@ public class SimulationActivity extends FragmentActivity
                 }
             });
 
-            timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener(){
+            timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
                 @Override
                 public void onTimeRunOut() {
                     new MarkAsTimeRunOutAsync().execute();
@@ -817,7 +831,7 @@ public class SimulationActivity extends FragmentActivity
                             currentColorValue
                     };
                     ColorStateList list = new ColorStateList(states, color);
-                        btn.setBackgroundTintList(list);
+                    btn.setBackgroundTintList(list);
 
                 }
             }
@@ -825,8 +839,7 @@ public class SimulationActivity extends FragmentActivity
         animator.start();
     }
 
-    private void publishRemainingTime(final Time remainingTime)
-    {
+    private void publishRemainingTime(final Time remainingTime) {
         if (configurationType == MainActivity.SOLVE_TASK && hasTimeSet(task)) {
             final Task currentTask = task;
             final Time availableTime = task.getAvailable_time();
@@ -1190,8 +1203,7 @@ public class SimulationActivity extends FragmentActivity
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            if (hasTimeSet(task))
-                            {
+                            if (hasTimeSet(task)) {
                                 publishRemainingTime(timer.getCurrentTime());
                                 timer.pauseTimer();
                                 Timer.deleteTimer();

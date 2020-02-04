@@ -110,6 +110,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
             holder.usertype.setText(usertype);
 
             if (view_results) {
+                UsersManagmentActivity.context.setActionBarTitle();
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -117,6 +118,8 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                         Bundle outputBundle = new Bundle();
                         outputBundle.putString("AUTHKEY", currentUser.getAuth_key());
                         outputBundle.putInt("USER_ID", currentUser.getUser_id());
+                        outputBundle.putString("USER_LAST_NAME", currentUser.getLast_name());
+                        outputBundle.putString("USER_FIRST_NAME", currentUser.getFirst_name());
                         nextActivityIntent.putExtra("BUNDLE", outputBundle);
                         UserManagementAdapter.this.mContext.startActivity(nextActivityIntent);
                     }

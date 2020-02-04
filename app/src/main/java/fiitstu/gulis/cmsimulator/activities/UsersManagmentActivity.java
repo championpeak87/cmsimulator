@@ -48,6 +48,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     private static List<User> userList;
     public static Context mContext;
     private int userCount;
+    public static UsersManagmentActivity context;
     InfiniteScrollListener infiniteScrollListener;
     private boolean view_automata_task_results = false;
 
@@ -97,6 +98,8 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = this;
         this.setContentView(R.layout.activity_users_management);
         mContext = this;
 
@@ -113,6 +116,11 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
         reloadUsers();
         setConnectedTransition();
+    }
+
+    public void setActionBarTitle()
+    {
+        getActionBar().setTitle(R.string.select_user);
     }
 
     @Override
