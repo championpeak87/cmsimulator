@@ -23,10 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
-import fiitstu.gulis.cmsimulator.activities.UserDetailActivity;
-import fiitstu.gulis.cmsimulator.activities.UsersManagementEditActivity;
-import fiitstu.gulis.cmsimulator.activities.UsersManagmentActivity;
+import fiitstu.gulis.cmsimulator.activities.*;
 import fiitstu.gulis.cmsimulator.adapters.tasks.ExampleAutomataAdapter;
 import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.Lector;
@@ -38,12 +35,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 
 public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAdapter.CardViewBuilder> {
     private Context mContext;
     private List<User> listOfUsers;
+    private boolean view_results;
 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_LOADING = 1;
@@ -60,9 +59,10 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         this.onBottomReachedListener = onBottomReachedListener;
     }
 
-    public UserManagementAdapter(Context mContext, List<User> listOfUsers) {
+    public UserManagementAdapter(Context mContext, List<User> listOfUsers, boolean view_results) {
         this.mContext = mContext;
         this.listOfUsers = listOfUsers;
+        this.view_results = view_results;
     }
 
     @NonNull
@@ -109,18 +109,31 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
 
             holder.usertype.setText(usertype);
 
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, UserDetailActivity.class);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
-                    intent.putExtra("USERNAME", username);
-                    intent.putExtra("FULLNAME", fullname);
-                    intent.putExtra("USER_TYPE", usertype);
-                    mContext.startActivity(intent, options.toBundle());
-
-                }
-            });
+            if (view_results) {
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent nextActivityIntent = new Intent(UserManagementAdapter.this.mContext, BrowseAutomataTasksActivity.class);
+                        Bundle outputBundle = new Bundle();
+                        outputBundle.putString("AUTHKEY", currentUser.getAuth_key());
+                        outputBundle.putInt("USER_ID", currentUser.getUser_id());
+                        nextActivityIntent.putExtra("BUNDLE", outputBundle);
+                        UserManagementAdapter.this.mContext.startActivity(nextActivityIntent);
+                    }
+                });
+            } else {
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, UserDetailActivity.class);
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                        intent.putExtra("USERNAME", username);
+                        intent.putExtra("FULLNAME", fullname);
+                        intent.putExtra("USER_TYPE", usertype);
+                        mContext.startActivity(intent, options.toBundle());
+                    }
+                });
+            }
 
             if (TaskLoginActivity.loggedUser instanceof Lector)
                 holder.removeButton.setVisibility(View.GONE);
@@ -221,8 +234,8 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     }
 
     public void addNullData() {
-            this.listOfUsers.add(null);
-            notifyItemInserted(this.listOfUsers.size() - 1);
+        this.listOfUsers.add(null);
+        notifyItemInserted(this.listOfUsers.size() - 1);
     }
 
     public void removeNullData() {

@@ -26,6 +26,7 @@ import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
+import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.automata_tasks.AutomataTaskParser;
@@ -63,9 +64,14 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setTitle(getString(R.string.available_tasks));
 
-        // fetch intent extras
-        user_id = TaskLoginActivity.loggedUser.getUser_id();
-        authkey = TaskLoginActivity.loggedUser.getAuth_key();
+        if (getIntent().hasExtra("BUNDLE")) {
+            Bundle inputBundle = getIntent().getBundleExtra("BUNDLE");
+            user_id = inputBundle.getInt("USER_ID");
+            authkey = inputBundle.getString("AUTHKEY");
+        } else {
+            user_id = TaskLoginActivity.loggedUser.getUser_id();
+            authkey = TaskLoginActivity.loggedUser.getAuth_key();
+        }
 
         getListOfTasks();
     }
@@ -128,7 +134,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } finally{
+                } finally {
                     showLoadScreen(false);
                 }
             }
@@ -141,24 +147,20 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         this.listOfTasks = listOfTasks;
     }
 
-    private void setRecyclerView()
-    {
+    private void setRecyclerView() {
         // set recyclerview
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
         if (adapter == null)
             adapter = new AutomataTaskAdapter(listOfTasks, this);
         else adapter.setListOfTasks(listOfTasks);
-        if (listOfTasks.size() == 0)
-        {
+        if (listOfTasks.size() == 0) {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
             emptyTasks.setVisibility(View.VISIBLE);
             showLoadScreen(false);
             LinearLayout emptyRecycler = findViewById(R.id.linearLayout_empty_tasks);
             emptyRecycler.setVisibility(View.VISIBLE);
             recyclerViewTasks.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);
             emptyTasks.setVisibility(View.GONE);
             showLoadScreen(false);
@@ -180,14 +182,12 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         recyclerViewTasks.setAnimation(showUpAnimation);
     }
 
-    public void showEmptyScreen(boolean value)
-    {
+    public void showEmptyScreen(boolean value) {
         LinearLayout emptyRecycler = this.findViewById(R.id.linearLayout_empty_tasks);
         emptyRecycler.setVisibility(View.VISIBLE);
     }
 
-    private void showLoadScreen(boolean value)
-    {
+    private void showLoadScreen(boolean value) {
         ProgressBar progressBar = findViewById(R.id.progressbar_users);
         RecyclerView recyclerView = findViewById(R.id.recyclerview_tasks);
         progressBar.setVisibility(value ? View.VISIBLE : View.GONE);

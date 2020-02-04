@@ -49,6 +49,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     public static Context mContext;
     private int userCount;
     InfiniteScrollListener infiniteScrollListener;
+    private boolean view_automata_task_results = false;
 
     @Override
     public void onLoadMore() {
@@ -98,6 +99,8 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_users_management);
         mContext = this;
+
+        view_automata_task_results = getIntent().getBooleanExtra("VIEW_AUTOMATA_RESULTS", false);
 
         new FetchUsersCountAsync().execute();
 
@@ -185,7 +188,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                 protected void onPostExecute(List<User> users) {
                                     super.onPostExecute(users);
 
-                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
+                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results);
                                     setAdapter(adapter);
                                     showLoadScreen(false);
                                     setUserList(users);
@@ -269,7 +272,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             super.onPostExecute(users);
 
             showLoadScreen(false);
-            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users);
+            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results);
             if (users.size() != userCount)
                 adapter.addNullData();
             setAdapter(adapter);
@@ -387,7 +390,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                     UserParser userParser = new UserParser();
                                     try {
                                         List<User> orderedUsers = userParser.getListOfUsers(s);
-                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers);
+                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers, view_automata_task_results);
                                         setAdapter(adapter);
                                         showLoadScreen(false);
                                         setUserList(orderedUsers);

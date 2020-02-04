@@ -130,7 +130,6 @@
 						android:lines="2"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_view_list_24"
-						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 			</LinearLayout>
 
