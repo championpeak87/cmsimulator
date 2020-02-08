@@ -450,6 +450,7 @@ public class SimulationActivity extends FragmentActivity
                     startStackSymbolId = dataSource.getStackSymbolWithProperties(Symbol.STACK_BOTTOM).getId();
                 }
                 break;
+            case MainActivity.PREVIEW_TASK:
             case MainActivity.SOLVE_TASK:
                 task = (Task) inputBundle.getSerializable(MainActivity.TASK);
                 setFilename(machineType);

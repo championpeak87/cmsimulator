@@ -45,7 +45,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     public static Context mContext;
     public static BrowseAutomataTasksActivity context;
     public static AutomataTaskAdapter adapter = null;
-    private boolean view_results = false;
+    private boolean view_results;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -76,6 +76,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
             actionBarTitle = actionBarTitle.replace("{0}", last_name + ", " + first_name);
             actionbar.setTitle(actionBarTitle);
         } else {
+            view_results = false;
             user_id = TaskLoginActivity.loggedUser.getUser_id();
             authkey = TaskLoginActivity.loggedUser.getAuth_key();
         }
@@ -103,6 +104,12 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.adapter = null;
+        super.onBackPressed();
     }
 
     public void getListOfTasks() {

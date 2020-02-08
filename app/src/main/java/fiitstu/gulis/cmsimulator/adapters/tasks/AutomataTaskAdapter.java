@@ -67,6 +67,8 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         this.view_results = view_results;
     }
 
+
+
     public void setListOfTasks(List<Task> listOfTasks) {
         this.listOfTasks = listOfTasks;
     }
@@ -293,7 +295,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         }
 
                         if (AutomataTaskAdapter.this.view_results) {
-                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, MainActivity.PREVIEW_TASK, machineType);
+                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.PREVIEW, machineType);
                             taskDialog.setAdapter(thisAdapter);
                             taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
                         }

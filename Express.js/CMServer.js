@@ -23,7 +23,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'cmsimulator',
-  password: '123456',
+  password: '20572123',
   port: 5432,
 })
 
