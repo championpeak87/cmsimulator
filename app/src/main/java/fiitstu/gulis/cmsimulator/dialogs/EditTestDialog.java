@@ -34,6 +34,7 @@ public class EditTestDialog extends DialogFragment {
 
     public interface EditTestDialogListener {
         void onSaveTestClick(List<Symbol> input, List<Symbol> output, boolean isNew);
+        void onSaveRegexTestClick(List<Symbol> input, List<Symbol> output, boolean isNew);
     }
 
     //log tag
@@ -175,10 +176,6 @@ public class EditTestDialog extends DialogFragment {
                     ((EditTestDialogListener) getActivity()).onSaveTestClick(Symbol.extractFromTape(inputTapeAdapter.getItems()),
                             setOutputWordCheckBox.isChecked() ? Symbol.extractFromTape(outputTapeAdapter.getItems()) : null,
                             isNew);
-
-                    List<Symbol> symbol1 = Symbol.extractFromTape(inputTapeAdapter.getItems());
-                    List<Symbol> symbol2 = Symbol.extractFromTape(outputTapeAdapter.getItems());
-                    boolean hello = isNew;
 
                     RecyclerView recycler = getActivity().findViewById(R.id.recyclerView_bulk_test_scenarios);
                     recycler.setVisibility(View.VISIBLE);

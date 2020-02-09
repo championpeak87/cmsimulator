@@ -66,12 +66,37 @@ public class RegexTest {
     public List<String> getListOfParsedStrings(String input) {
         List<String> outputTests = new ArrayList<>();
         outputTests.add(input);
-        while (containsHandleNoneOrMore(outputTests))
+        while (containsNoneOrMore(outputTests))
             outputTests = handleNoneOrMore(outputTests);
-        return null;
+        while (containsNoneOrOne(outputTests))
+            outputTests = handleNoneOrOne(outputTests);
+        while (containsOneOrMore(outputTests))
+            outputTests = handleOneOrMore(outputTests);
+
+        return outputTests;
     }
 
-    private boolean containsHandleNoneOrMore(List<String> input) {
+    private boolean containsNoneOrOne(List<String> input) {
+
+        for (String string : input) {
+            if (string.contains(NONE_OR_ONE))
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean containsOneOrMore(List<String> input) {
+
+        for (String string : input) {
+            if (string.contains(ONE_OR_MORE))
+                return true;
+        }
+
+        return false;
+    }
+
+    private boolean containsNoneOrMore(List<String> input) {
 
         for (String string : input) {
             if (string.contains(NONE_OR_MORE))
@@ -80,7 +105,6 @@ public class RegexTest {
 
         return false;
     }
-
 
     private List<String> handleNoneOrMore(List<String> input) {
         final char CHAR_NONE_OR_MORE = NONE_OR_MORE.charAt(0);
@@ -106,6 +130,80 @@ public class RegexTest {
                         replacement_string = stringBuilder.toString();
 
                         for (int j = 0; j < QUANTIFIERS_DEPTH; j++) {
+                            String replacementString = repeatString(replication_pattern, j);
+                            regex_strings.add(_input.replaceFirst(Pattern.quote(replacement_string), replacementString));
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return regex_strings;
+    }
+
+    private List<String> handleOneOrMore(List<String> input) {
+        final char CHAR_ONE_OR_MORE = ONE_OR_MORE.charAt(0);
+        List<String> regex_strings = new ArrayList<String>();
+
+        for (String _input : input) {
+            char[] input_char = _input.toCharArray();
+            int input_char_size = _input.length();
+
+            for (int i = 0; i < input_char_size; i++) {
+                if (input_char[i] == CHAR_ONE_OR_MORE) {
+                    String replacement_string;
+                    String replication_pattern = null;
+                    if (i == 0) {
+                        replacement_string = ONE_OR_MORE;
+                        // TODO: return list of string without +
+                    } else {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(input_char[i - 1]);
+                        stringBuilder.append(ONE_OR_MORE);
+
+                        replication_pattern = String.valueOf(input_char[i - 1]);
+                        replacement_string = stringBuilder.toString();
+
+                        for (int j = 1; j < QUANTIFIERS_DEPTH; j++) {
+                            String replacementString = repeatString(replication_pattern, j);
+                            regex_strings.add(_input.replaceFirst(Pattern.quote(replacement_string), replacementString));
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return regex_strings;
+    }
+
+    private List<String> handleNoneOrOne(List<String> input) {
+        final char CHAR_NONE_OR_ONE = NONE_OR_ONE.charAt(0);
+        List<String> regex_strings = new ArrayList<String>();
+
+        for (String _input : input) {
+            char[] input_char = _input.toCharArray();
+            int input_char_size = _input.length();
+
+            for (int i = 0; i < input_char_size; i++) {
+                if (input_char[i] == CHAR_NONE_OR_ONE) {
+                    String replacement_string;
+                    String replication_pattern = null;
+                    if (i == 0) {
+                        replacement_string = NONE_OR_ONE;
+                        // TODO: return list of string without ?
+                    } else {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(input_char[i - 1]);
+                        stringBuilder.append(NONE_OR_ONE);
+
+                        replication_pattern = String.valueOf(input_char[i - 1]);
+                        replacement_string = stringBuilder.toString();
+
+                        for (int j = 0; j <= 1; j++) {
                             String replacementString = repeatString(replication_pattern, j);
                             regex_strings.add(_input.replaceFirst(Pattern.quote(replacement_string), replacementString));
                         }

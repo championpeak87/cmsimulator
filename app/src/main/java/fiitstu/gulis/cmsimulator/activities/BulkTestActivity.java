@@ -31,8 +31,7 @@ import fiitstu.gulis.cmsimulator.machines.*;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -211,6 +210,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 onNewTestClick();
                 return true;
             case R.id.menu_add_test_regex:
+                editTest = new TestScenario(new ArrayList<Symbol>(), null);
                 NewRegexTestDialog dialog = new NewRegexTestDialog();
                 dialog.show(getSupportFragmentManager(), null);
                 return true;
@@ -365,6 +365,41 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 }
             });
         }
+    }
+
+    @Override
+    public void onSaveRegexTestClick(List<Symbol> input, List<Symbol> output, boolean isNew) {
+        Log.v(TAG, "save test button click noted");
+
+        boolean emptyTapeError = false;
+        if ((machineType == MainActivity.FINITE_STATE_AUTOMATON || machineType == MainActivity.PUSHDOWN_AUTOMATON)
+                && !input.isEmpty()) {
+            for (Symbol symbol : input) {
+                if (symbol.isEmpty()) {
+                    emptyTapeError = true;
+                    break;
+                }
+            }
+        }
+
+        if (emptyTapeError) {
+            Toast.makeText(this, R.string.bulk_incomplete_tape_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        editTest = new TestScenario(new ArrayList<Symbol>(), null);
+        editTest.setInputWord(input);
+        editTest.setOutputWord(output);
+        editTest.persist(negative, DataSource.getInstance());
+        scenariosListAdapter.clearRowColors();
+        scenariosListAdapter.clearStatuses();
+        if (isNew) {
+            scenariosListAdapter.addItem(editTest);
+        } else {
+            scenariosListAdapter.notifyItemChanged(editTest);
+        }
+        Log.i(TAG, "TestScenario '" + editTest.getInputWord() + "' saved");
+        editTest = null;
     }
 
     @Override

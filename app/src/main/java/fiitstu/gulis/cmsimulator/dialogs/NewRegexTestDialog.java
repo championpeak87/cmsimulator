@@ -1,7 +1,9 @@
 package fiitstu.gulis.cmsimulator.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import fiitstu.gulis.cmsimulator.elements.RegexTest;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,19 +64,31 @@ public class NewRegexTestDialog extends DialogFragment {
                 //create maps from list
                 LongSparseArray<Symbol> inputAlphabetMap = new LongSparseArray<>();
                 for (Symbol symbol : list) {
-                    if (symbol.getValue() == "*")
-                        continue;
                     inputAlphabetMap.put(symbol.getId(), symbol);
                 }
 
                 RegexTest regexTest = RegexTest.getInstance();
-                if (!regexTest.containsWrongSymbols(regexTestInput.getText().toString()))
-                {
-                    regexTest.getListOfParsedStrings(regexTestInput.getText().toString());
+                List<String> regex_parsed_tests = new ArrayList<>();
+                if (!regexTest.containsWrongSymbols(regexTestInput.getText().toString())) {
+                    regex_parsed_tests = regexTest.getListOfParsedStrings(regexTestInput.getText().toString());
+                } else {
+                    regexInputLayout.setError(getActivity().getString(R.string.regex_contains_wrong_symbols));
                 }
 
-                String regex_input = regexTestInput.getText().toString();
-                List<Symbol> new_test = Symbol.deserializeList(regex_input, inputAlphabetMap);
+                List<List<Symbol>> listOfTest = new ArrayList<>();
+                for (String stringTest : regex_parsed_tests) {
+                    List<Symbol> new_symbol_list = Symbol.deserializeList(stringTest, inputAlphabetMap);
+                    listOfTest.add(new_symbol_list);
+                }
+
+                EditTestDialog.EditTestDialogListener testManagementActivity = ((EditTestDialog.EditTestDialogListener) getActivity());
+                for (List<Symbol> test : listOfTest) {
+                    testManagementActivity.onSaveRegexTestClick(test, null, true);
+                }
+
+                /* TODO: Recyclerview shows empty tests, they are hidden behind the empty tests screen! Implement proper show!
+
+                 */
             }
         });
 

@@ -14,7 +14,7 @@
             android:title="@string/new_test_regex"
             android:iconTint="@color/md_white_1000"
             android:icon="@drawable/baseline_offline_bolt_24"
-            android:showAsAction="ifRoom"
+            android:showAsAction="always"
             style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
     <item
             android:id="@+id/menu_run_test"

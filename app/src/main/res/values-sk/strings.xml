@@ -953,4 +953,5 @@
     <string name="show_task">Zobraziť úlohu</string>
     <string name="regex_input">Regulárny výraz</string>
     <string name="new_test_regex">Nový regex test</string>
+    <string name="regex_contains_wrong_symbols">Regex contains wrong symbols!</string>
 </resources>

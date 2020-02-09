@@ -1315,5 +1315,6 @@
     <string name="show_task">Show task</string>
     <string name="regex_input">regex_input</string>
 	<string name="new_test_regex">New regex test</string>
+    <string name="regex_contains_wrong_symbols">Regex contains wrong symbols!</string>
 
 </resources>

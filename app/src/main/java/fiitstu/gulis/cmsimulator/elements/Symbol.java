@@ -76,12 +76,24 @@ public class Symbol implements Serializable {
         }
 
         List<Symbol> result = new ArrayList<>();
-        String[] tokens = string.split("\\s+");
+        char[] tokens = string.toCharArray();
+
         for (int i = 0; i < tokens.length; i++) {
-            result.add(symbolMap.get(Long.parseLong(tokens[i])));
+            result.add(getSymbolFromMap(symbolMap, tokens[i]));
         }
 
         return result;
+    }
+
+    private static Symbol getSymbolFromMap(LongSparseArray<Symbol> symbolMap, char input)
+    {
+        for (int i = 0; i < symbolMap.size(); i++)
+        {
+            Symbol symbol = symbolMap.valueAt(i);
+            if (symbol.getValue().equals(String.valueOf(input)))
+                return symbol;
+        }
+        return null;
     }
 
     public static List<Symbol> extractFromTape(List<TapeElement> list) {
