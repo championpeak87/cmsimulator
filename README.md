@@ -31,7 +31,10 @@ After launching the IDE, you'll be welcomed with this screen. If not close your 
 After clicking the button, you'll be welcomed with this dialog window. According to your repo, add appropriate url. For this repo it's (http://www.github.com/klihan/cmsimualtor.git).
 ![Intellij IDEA Clone repository](doc/idea-clone.png)
 
+If you don't have SDK installed, IntelliJ can help you with that. Just create new Android project within IntelliJ IDEA and SDK installer will show up. Remember to install SDK version 27 to compile your app with. This can be done by clicking **Tools -> Android -> SDK Manager** and installing SDK version 27 while having an Android project opened!
+
 That's it! If you are using default settings, then everything should be up and running, it works automagically. Please make sure that Gradle build has finished successfully. It may be that it has to download additional libraries to make everything work! **GOOD LUCK!**
+
 
 # Screenshots
 
@@ -47,7 +50,9 @@ That's it! If you are using default settings, then everything should be up and r
 # KNOWN ISSUES
 
 - Example grammars wont show after rotating the device
-- Clicking back when in simulation and cancelling dialog resets timer
+- Publishing new task with tests crashes the application
+- BulkTestActivity shows no tasks warning despite having tests
+- Minimizing app while setting up tests deletes symboles map
 
 # TODO
 
