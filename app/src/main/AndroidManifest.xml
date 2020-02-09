@@ -66,8 +66,7 @@
 		<activity
 				android:name=".activities.TaskSignUpActivity"
 				android:theme="@style/LoginTheme"
-				android:screenOrientation="portrait"
-				android:fitsSystemWindows="true"/>
+				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activities.HelpActivity"
 				android:configChanges="orientation|screenSize"/>

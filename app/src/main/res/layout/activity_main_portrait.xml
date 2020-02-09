@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_gravity="center">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -22,13 +25,7 @@
                     android:contentDescription="@string/logo"
                     android:src="@drawable/logo_v1_light"/>
 
-            <TextView android:id="@+id/beta_banner" android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:textAllCaps="true" android:text="BETA" android:visibility="gone"
-                      android:layout_gravity="bottom" android:textSize="25sp" android:layout_margin="25dp"
-                      android:background="@drawable/banner" android:gravity="center"
-                      android:textColor="@color/primary_color_light" android:textStyle="bold"
-                      android:textAlignment="center"/>
+
         </FrameLayout>
 
 
@@ -121,4 +118,17 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+            android:translationX="-120dp"
+            android:translationY="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/beta_banner" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true" android:text="BETA" android:visibility="visible"
+            android:layout_gravity="right" android:textSize="25sp" android:layout_margin="25dp"
+            android:background="@drawable/banner" android:gravity="center"
+            android:textColor="@color/primary_color_light" android:textStyle="bold"
+            android:textAlignment="center" android:rotation="-45"/>
+
+</android.support.constraint.ConstraintLayout>

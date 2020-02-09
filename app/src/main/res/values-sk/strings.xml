@@ -951,4 +951,6 @@
     <string name="select_user">Vyberte používateľa</string>
     <string name="users_tasks">Úlohy používateľa {0}</string>
     <string name="show_task">Zobraziť úlohu</string>
+    <string name="regex_input">Regulárny výraz</string>
+    <string name="new_test_regex">Nový regex test</string>
 </resources>

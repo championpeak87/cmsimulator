@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,10 +25,7 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
-import fiitstu.gulis.cmsimulator.dialogs.EditTestDialog;
-import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
-import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
+import fiitstu.gulis.cmsimulator.dialogs.*;
 import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.*;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
@@ -213,6 +209,10 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 return true;
             case R.id.menu_add_test:
                 onNewTestClick();
+                return true;
+            case R.id.menu_add_test_regex:
+                NewRegexTestDialog dialog = new NewRegexTestDialog();
+                dialog.show(getSupportFragmentManager(), null);
                 return true;
             case R.id.menu_run_test:
                 ProgressWorker worker = new ProgressWorker(500, findViewById(R.id.relativeLayout_bulktest_working),

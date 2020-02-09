@@ -1313,5 +1313,7 @@
     <string name="select_user">Select user</string>
 	<string name="users_tasks">{0}\'s tasks</string>
     <string name="show_task">Show task</string>
+    <string name="regex_input">regex_input</string>
+	<string name="new_test_regex">New regex test</string>
 
 </resources>

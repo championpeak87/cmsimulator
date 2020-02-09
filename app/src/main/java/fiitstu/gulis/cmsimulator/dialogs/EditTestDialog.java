@@ -176,6 +176,10 @@ public class EditTestDialog extends DialogFragment {
                             setOutputWordCheckBox.isChecked() ? Symbol.extractFromTape(outputTapeAdapter.getItems()) : null,
                             isNew);
 
+                    List<Symbol> symbol1 = Symbol.extractFromTape(inputTapeAdapter.getItems());
+                    List<Symbol> symbol2 = Symbol.extractFromTape(outputTapeAdapter.getItems());
+                    boolean hello = isNew;
+
                     RecyclerView recycler = getActivity().findViewById(R.id.recyclerView_bulk_test_scenarios);
                     recycler.setVisibility(View.VISIBLE);
 

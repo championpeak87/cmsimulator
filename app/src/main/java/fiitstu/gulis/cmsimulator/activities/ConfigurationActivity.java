@@ -41,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -304,8 +303,8 @@ public class ConfigurationActivity extends FragmentActivity
         final ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-                //DataSource initialization
-                dataSource = DataSource.getInstance();
+        //DataSource initialization
+        dataSource = DataSource.getInstance();
         dataSource.open();
 
         //diagram initialization
