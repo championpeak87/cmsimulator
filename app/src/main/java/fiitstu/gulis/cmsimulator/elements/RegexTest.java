@@ -20,7 +20,7 @@ public class RegexTest {
     private static final String ONE_OR_MORE = "+";
     private static final String NONE_OR_ONE = "?";
 
-    private static final int QUANTIFIERS_DEPTH = 10;
+    private static int QUANTIFIERS_DEPTH;
 
     // groups
     private static final String GROUP_START = "(";
@@ -30,6 +30,9 @@ public class RegexTest {
     private static final String ESCAPE_CHARACTER = "\\";
 
     private RegexTest() {
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        QUANTIFIERS_DEPTH = dataSource.getRegexDepth();
     }
 
     public static RegexTest getInstance() {

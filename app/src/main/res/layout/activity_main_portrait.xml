@@ -125,7 +125,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:id="@+id/beta_banner" android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAllCaps="true" android:text="BETA" android:visibility="visible"
+            android:textAllCaps="true" android:text="BETA" android:visibility="gone"
             android:layout_gravity="right" android:textSize="25sp" android:layout_margin="25dp"
             android:background="@drawable/banner" android:gravity="center"
             android:textColor="@color/primary_color_light" android:textStyle="bold"

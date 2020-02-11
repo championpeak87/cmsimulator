@@ -1,162 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:focusableInTouchMode="true">
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:focusableInTouchMode="true">
 
-	<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:baselineAligned="false"
-			android:orientation="horizontal">
-
+	<ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
 		<LinearLayout
-				android:id="@+id/linearLayout_options_left"
-				android:layout_width="0dp"
-				android:layout_weight="0.5"
+				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:orientation="vertical">
+				android:baselineAligned="false"
+				android:orientation="horizontal">
 
-			<TextView android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/simulation_settings"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="20dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"/>
 			<LinearLayout
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:layout_marginBottom="@dimen/activity_vertical_margin"
-					android:layout_marginTop="@dimen/activity_vertical_margin"
-					android:paddingLeft="30dp"
-					android:paddingRight="@dimen/activity_horizontal_margin">
-				<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:textAppearance="?android:attr/textAppearanceMedium"
-						android:text="@string/maximum_steps"/>
-				<EditText
-						android:id="@+id/editText_options_max_steps"
-						android:layout_width="200dp"
-						android:layout_height="wrap_content"
-						android:focusedByDefault="false"
-						android:inputType="number"/>
+					android:id="@+id/linearLayout_options_left"
+					android:layout_width="0dp"
+					android:layout_weight="0.5"
+					android:layout_height="match_parent"
+					android:orientation="vertical">
 
-				<TextView
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:text="@string/simulation_settings"
+						  android:theme="@style/text_subheader"
+						  android:layout_marginTop="20dp"
+						  android:layout_marginLeft="20dp"
+						  android:layout_marginRight="10dp"/>
+				<LinearLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
+						android:orientation="vertical"
 						android:layout_marginBottom="@dimen/activity_vertical_margin"
 						android:layout_marginTop="@dimen/activity_vertical_margin"
-						android:text="@string/markNondeterminism"
-						android:textAppearance="?android:attr/textAppearanceMedium"/>
+						android:paddingLeft="30dp"
+						android:paddingRight="@dimen/activity_horizontal_margin">
+					<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textAppearance="?android:attr/textAppearanceMedium"
+							android:text="@string/maximum_steps"/>
+					<EditText
+							android:id="@+id/editText_options_max_steps"
+							android:layout_width="200dp"
+							android:layout_height="wrap_content"
+							android:focusedByDefault="false"
+							android:inputType="number"/>
 
-				<RadioGroup
+					<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginBottom="@dimen/activity_vertical_margin"
+							android:layout_marginTop="@dimen/activity_vertical_margin"
+							android:text="@string/markNondeterminism"
+							android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+					<RadioGroup
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:orientation="horizontal"
+							android:paddingLeft="@dimen/activity_horizontal_margin"
+							android:paddingRight="@dimen/activity_horizontal_margin">
+
+						<RadioButton
+								android:id="@+id/radioButton_options_nondeterminism_yes"
+								android:layout_width="0dp"
+								android:layout_height="wrap_content"
+								android:layout_weight="0.5"
+								android:checked="false"
+								android:text="@string/yes"
+								android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+						<RadioButton
+								android:id="@+id/radioButton_options_nondeterminism_no"
+								android:layout_width="0dp"
+								android:layout_height="wrap_content"
+								android:layout_weight="0.5"
+								android:checked="true"
+								android:text="@string/no"
+								android:textAppearance="?android:attr/textAppearanceSmall"/>
+					</RadioGroup>
+				</LinearLayout>
+
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:text="@string/testing_settings"
+						  android:theme="@style/text_subheader"
+						  android:layout_marginTop="20dp"
+						  android:layout_marginLeft="20dp"
+						  android:layout_marginRight="10dp"/>
+				<LinearLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:orientation="horizontal"
-						android:paddingLeft="@dimen/activity_horizontal_margin"
+						android:orientation="vertical"
+						android:layout_marginBottom="@dimen/activity_vertical_margin"
+						android:layout_marginTop="@dimen/activity_vertical_margin"
+						android:paddingLeft="30dp"
 						android:paddingRight="@dimen/activity_horizontal_margin">
-
-					<RadioButton
-							android:id="@+id/radioButton_options_nondeterminism_yes"
-							android:layout_width="0dp"
+					<TextView
+							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:layout_weight="0.5"
-							android:checked="false"
-							android:text="@string/yes"
-							android:textAppearance="?android:attr/textAppearanceSmall"/>
+							android:textAppearance="?android:attr/textAppearanceMedium"
+							android:text="@string/regex_depth"/>
+					<EditText android:id="@+id/edittext_regex_depth"
+							  android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal"/>
+				</LinearLayout>
 
-					<RadioButton
-							android:id="@+id/radioButton_options_nondeterminism_no"
-							android:layout_width="0dp"
-							android:layout_height="wrap_content"
-							android:layout_weight="0.5"
-							android:checked="true"
-							android:text="@string/no"
-							android:textAppearance="?android:attr/textAppearanceSmall"/>
-				</RadioGroup>
-			</LinearLayout>
-
-			<LinearLayout
-					android:id="@+id/linearLayout_options_left_bottom"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="vertical">
-			</LinearLayout>
-		</LinearLayout>
-
-
-		<LinearLayout
-				android:id="@+id/linearLayout_options_right"
-				android:layout_weight="0.5"
-				android:layout_width="0dp"
-				android:layout_height="match_parent"
-				android:orientation="vertical">
-
-			<TextView android:id="@+id/textView_options_colors_title"
-					android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/simulation_colors"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="20dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"
-			          android:layout_marginBottom="10dp"/>
-
-			<android.support.v7.widget.RecyclerView
-					android:id="@+id/recyclerView_options_colors"
-					android:layout_width="match_parent"
-					android:layout_height="0dp"
-					android:layout_weight="1"/>
-
-			<LinearLayout
-					android:id="@+id/linearLayout_options_colors_buttons"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:background="@color/md_black_1000"
-					android:orientation="horizontal">
-
-				<!--only to make parent the same height-->
-				<ImageButton
-						android:layout_width="1dp"
-						android:layout_height="match_parent"
-						android:layout_marginBottom="-5dp"
-						android:layout_marginLeft="-3dp"
-						android:layout_marginRight="-3dp"
-						android:contentDescription="@string/sim_step_b"
-						android:paddingBottom="7dp"
-						android:paddingTop="2dp"
-						android:src="@drawable/ic_sim_step_b"
-						android:visibility="invisible"/>
-
-				<Button
-						android:id="@+id/button_options_add_color"
+				<LinearLayout
+						android:id="@+id/linearLayout_options_left_bottom"
 						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:layout_marginBottom="-5dp"
-						android:layout_marginLeft="-3dp"
-						android:layout_marginRight="-3dp"
-						android:paddingBottom="@dimen/button_vertical_margin"
-						android:paddingTop="@dimen/button_vertical_margin"
-						android:text="@string/add_color"/>
-
-				<!--only to make parent the same height-->
-				<ImageButton
-						android:layout_width="1dp"
-						android:layout_height="match_parent"
-						android:layout_marginBottom="-5dp"
-						android:layout_marginLeft="-3dp"
-						android:layout_marginRight="-3dp"
-						android:contentDescription="@string/move"
-						android:paddingBottom="7dp"
-						android:paddingTop="2dp"
-						android:src="@drawable/ic_open_with_black_48dp"
-						android:visibility="invisible"/>
+						android:layout_height="wrap_content"
+						android:orientation="vertical">
+				</LinearLayout>
 			</LinearLayout>
-		</LinearLayout>
 
-	</LinearLayout>
+
+			<LinearLayout
+					android:id="@+id/linearLayout_options_right"
+					android:layout_weight="0.5"
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:orientation="vertical">
+
+				<TextView android:id="@+id/textView_options_colors_title"
+						  android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:text="@string/simulation_colors"
+						  android:theme="@style/text_subheader"
+						  android:layout_marginTop="20dp"
+						  android:layout_marginLeft="20dp"
+						  android:layout_marginRight="10dp"
+						  android:layout_marginBottom="10dp"/>
+
+				<android.support.v7.widget.RecyclerView
+						android:id="@+id/recyclerView_options_colors"
+						android:layout_width="match_parent"
+						android:layout_height="0dp"
+						android:layout_weight="1"/>
+
+				<LinearLayout
+						android:id="@+id/linearLayout_options_colors_buttons"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:background="@color/md_black_1000"
+						android:orientation="horizontal">
+
+					<!--only to make parent the same height-->
+					<ImageButton
+							android:layout_width="1dp"
+							android:layout_height="match_parent"
+							android:layout_marginBottom="-5dp"
+							android:layout_marginLeft="-3dp"
+							android:layout_marginRight="-3dp"
+							android:contentDescription="@string/sim_step_b"
+							android:paddingBottom="7dp"
+							android:paddingTop="2dp"
+							android:src="@drawable/ic_sim_step_b"
+							android:visibility="invisible"/>
+
+					<Button
+							android:id="@+id/button_options_add_color"
+							android:layout_width="match_parent"
+							android:layout_height="match_parent"
+							android:layout_marginBottom="-5dp"
+							android:layout_marginLeft="-3dp"
+							android:layout_marginRight="-3dp"
+							android:paddingBottom="@dimen/button_vertical_margin"
+							android:paddingTop="@dimen/button_vertical_margin"
+							android:text="@string/add_color"/>
+
+					<!--only to make parent the same height-->
+					<ImageButton
+							android:layout_width="1dp"
+							android:layout_height="match_parent"
+							android:layout_marginBottom="-5dp"
+							android:layout_marginLeft="-3dp"
+							android:layout_marginRight="-3dp"
+							android:contentDescription="@string/move"
+							android:paddingBottom="7dp"
+							android:paddingTop="2dp"
+							android:src="@drawable/ic_open_with_black_48dp"
+							android:visibility="invisible"/>
+				</LinearLayout>
+			</LinearLayout>
+
+		</LinearLayout>
+	</ScrollView>
+
 </LinearLayout>

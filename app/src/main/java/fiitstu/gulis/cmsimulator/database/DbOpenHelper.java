@@ -70,6 +70,7 @@ class DbOpenHelper extends SQLiteOpenHelper {
     static final String COLUMN_OPTIONS_USER_NAME = "USER_NAME";
     static final String COLUMN_OPTIONS_REQUEST_ID = "REQUEST_ID";
     static final String COLUMN_OPTIONS_MAX_STEPS = "MAX_STEPS";
+    static final String COLUMN_OPTIONS_REGEX_DEPTH = "REGEX_DEPTH";
     //table grammar rule
     static final String TABLE_GRAMMAR_RULE = "GRAMMAR_RULE";
     static final String COLUMN_RIGHT_RULE = "RIGHT_RULE";
@@ -166,7 +167,8 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     COLUMN_OPTIONS_USER_NAME + " TEXT, " +
                     COLUMN_OPTIONS_REQUEST_ID + " INTEGER " +
                         "CHECK(" + COLUMN_OPTIONS_REQUEST_ID + ">= -128 AND " + COLUMN_OPTIONS_REQUEST_ID + " <= 127)," +
-                    COLUMN_OPTIONS_MAX_STEPS + " INTEGER " +
+                    COLUMN_OPTIONS_MAX_STEPS + " INTEGER, " +
+                    COLUMN_OPTIONS_REGEX_DEPTH + " INTEGER " +
                     ")";
     //create table grammar rule query
     private static final String TABLE_GRAMMAR_RULE_CREATE =

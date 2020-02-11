@@ -954,4 +954,6 @@
     <string name="regex_input">Regulárny výraz</string>
     <string name="new_test_regex">Nový regex test</string>
     <string name="regex_contains_wrong_symbols">Regex contains wrong symbols!</string>
+    <string name="regex_depth">Depth of regex quantifiers</string>
+    <string name="testing_settings">Testing settings</string>
 </resources>

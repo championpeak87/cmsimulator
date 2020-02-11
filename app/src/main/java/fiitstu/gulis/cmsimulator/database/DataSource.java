@@ -1168,6 +1168,26 @@ public class DataSource {
         return result;
     }
 
+    public int getRegexDepth() {
+        Log.v(TAG, "getRegexDepth method started");
+
+        int result;
+        Cursor cursor = database.query(DbOpenHelper.TABLE_OPTIONS,
+                new String[]{DbOpenHelper.COLUMN_OPTIONS_REGEX_DEPTH},
+                null, null, null, null, null);
+        Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
+        if (cursor.getCount() > 0) {
+            cursor.moveToNext();
+            result = cursor.getInt(cursor.getColumnIndex(DbOpenHelper.COLUMN_OPTIONS_REGEX_DEPTH));
+        } else {
+            addOptions();
+            result = Options.REGEX_DEPTH_DEFAULT;
+        }
+        cursor.close();
+
+        return result;
+    }
+
     public void updateUserName(String userName) {
         Log.v(TAG, "updateUserName method started");
 
@@ -1210,6 +1230,19 @@ public class DataSource {
         Log.i(TAG, "user name option updated in database");
     }
 
+    public void updateRegexDepth(int regexDepth)
+    {
+        Log.v(TAG, "updateRegexDepth method started");
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.COLUMN_OPTIONS_REGEX_DEPTH, regexDepth);
+        Log.v(TAG, "contentValues prepared");
+
+        database.update(DbOpenHelper.TABLE_OPTIONS, contentValues, null, null);
+        Log.i("TAG", "regex depth updated in database");
+    }
+
+
 
     private void addOptions() {
         Log.v(TAG, "addOptions started");
@@ -1218,6 +1251,7 @@ public class DataSource {
         contentValues.put(DbOpenHelper.COLUMN_OPTIONS_USER_NAME, Options.USER_NAME_DEFAULT);
         contentValues.put(DbOpenHelper.COLUMN_OPTIONS_REQUEST_ID, Options.REQUEST_ID_DEFAULT);
         contentValues.put(DbOpenHelper.COLUMN_OPTIONS_MAX_STEPS, Options.MAX_STEPS_DEFAULT);
+        contentValues.put(DbOpenHelper.COLUMN_OPTIONS_REGEX_DEPTH, Options.REGEX_DEPTH_DEFAULT);
         Log.v(TAG, "contentValues prepared");
 
         database.insertOrThrow(DbOpenHelper.TABLE_OPTIONS, null, contentValues);

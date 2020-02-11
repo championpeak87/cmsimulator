@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.util.Pair;
@@ -46,6 +47,7 @@ public class    OptionsActivity extends FragmentActivity
     private RadioButton yesNondeterminism;
     private RadioButton noNondeterminism;
     private EditText maxStepsEditText;
+    private EditText regexDepthEditText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class    OptionsActivity extends FragmentActivity
         optionsColorsListAdapter = new OptionsColorsListAdapter(this, dataSource);
         optionsColorsRecyclerView.setAdapter(optionsColorsListAdapter);
         optionsColorsListAdapter.setItemClickCallback(this);
+        regexDepthEditText = findViewById(R.id.edittext_regex_depth);
 
         //menu
         ActionBar actionBar = this.getActionBar();
@@ -89,6 +92,7 @@ public class    OptionsActivity extends FragmentActivity
 
         maxStepsEditText = findViewById(R.id.editText_options_max_steps);
         maxStepsEditText.setText(String.valueOf(dataSource.getMaxSteps()));
+        regexDepthEditText.setText(String.valueOf(dataSource.getRegexDepth()));
 
         onConfigurationChanged(getResources().getConfiguration());
 
@@ -165,6 +169,9 @@ public class    OptionsActivity extends FragmentActivity
         dataSource.updateMarkNondeterminism(yesNondeterminism.isChecked());
         try {
             dataSource.updateMaxSteps(Integer.parseInt(maxStepsEditText.getText().toString()));
+            int regexDepth = Integer.parseInt(regexDepthEditText.getText().toString());
+            if (regexDepth > 5)
+                dataSource.updateRegexDepth(regexDepth);
         }
         catch (NumberFormatException e) {
             Log.e(TAG, "Invalid input: max steps");

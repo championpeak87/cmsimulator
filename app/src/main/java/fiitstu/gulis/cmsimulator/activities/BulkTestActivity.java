@@ -149,19 +149,26 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
                 DataSource.getInstance().deleteTest(test, negative);
             }
         });
+        scenariosListAdapter.setOnTestScenarioListChange(new TestScenarioListAdapter.OnTestScenarioListChange() {
+            @Override
+            public void OnListChange() {
+                showEmptyScreen();
+            }
+        });
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerView_bulk_test_scenarios);
+        recyclerView.setAdapter(scenariosListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    private void showEmptyScreen()
+    {
         boolean containsTests = scenariosListAdapter.getItemCount() > 0;
         RecyclerView recycler = findViewById(R.id.recyclerView_bulk_test_scenarios);
         recycler.setVisibility(containsTests ? View.VISIBLE : View.GONE);
 
         LinearLayout emptyTests = findViewById(R.id.linearLayout_empty_tests);
         emptyTests.setVisibility(containsTests ? View.GONE : View.VISIBLE);
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_bulk_test_scenarios);
-        recyclerView.setAdapter(scenariosListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

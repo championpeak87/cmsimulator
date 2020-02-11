@@ -38,10 +38,8 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         CORRECT_OUTPUT_REJECTED(R.string.correct_output_but_reject, Color.YELLOW),
         TOOK_TOO_LONG(R.string.not_halt, 0xFFFF8000); //orange
 
-        /**
-         * The displayed status text
-         */
         public final String text;
+
 
         /**
          * The highlight color of the row
@@ -70,6 +68,16 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         void onLongClick(TestScenario test);
         void onEditItemClick(TestScenario test);
         void onRemoveItemClick(TestScenario test);
+    }
+
+    private OnTestScenarioListChange onTestScenarioListChange;
+
+    public interface OnTestScenarioListChange {
+        void OnListChange();
+    }
+
+    public void setOnTestScenarioListChange(OnTestScenarioListChange onTestScenarioListChange) {
+        this.onTestScenarioListChange = onTestScenarioListChange;
     }
 
     public void setItemClickCallback(final ItemClickCallback itemClickCallback) {
@@ -109,6 +117,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
     public void notifyItemChanged(TestScenario testScenario) {
         notifyItemChanged(items.indexOf(testScenario));
+        this.onTestScenarioListChange.OnListChange();
     }
 
     /**
@@ -150,12 +159,14 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         this.items.clear();
         this.items.addAll(items);
         notifyDataSetChanged();
+        this.onTestScenarioListChange.OnListChange();
     }
 
     public void addItem(TestScenario item) {
         Log.v(TAG, "addItem item added");
         items.add(item);
         notifyItemInserted(items.size() - 1);
+        this.onTestScenarioListChange.OnListChange();
     }
 
     public void removeItem(TestScenario item) {
@@ -167,6 +178,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         notifyItemRemoved(position);
         //also change numbers of next elements
         notifyItemRangeChanged(position, items.size() - position);
+        this.onTestScenarioListChange.OnListChange();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
