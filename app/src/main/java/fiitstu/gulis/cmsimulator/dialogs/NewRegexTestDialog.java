@@ -77,7 +77,7 @@ public class NewRegexTestDialog extends DialogFragment {
 
                 List<List<Symbol>> listOfTest = new ArrayList<>();
                 for (String stringTest : regex_parsed_tests) {
-                    List<Symbol> new_symbol_list = Symbol.deserializeList(stringTest, inputAlphabetMap);
+                    List<Symbol> new_symbol_list = Symbol.stringIntoSymbolList(stringTest, inputAlphabetMap);
                     listOfTest.add(new_symbol_list);
                 }
 

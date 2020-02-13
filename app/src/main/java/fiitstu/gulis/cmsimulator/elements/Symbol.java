@@ -76,6 +76,25 @@ public class Symbol implements Serializable {
         }
 
         List<Symbol> result = new ArrayList<>();
+        String[] tokens = string.split("\\s+");
+        for (int i = 0; i < tokens.length; i++) {
+            result.add(symbolMap.get(Long.parseLong(tokens[i])));
+        }
+
+        return result;
+    }
+
+
+    public static List<Symbol> stringIntoSymbolList(String string, LongSparseArray<Symbol> symbolMap) {
+        if (string == null) {
+            return null;
+        }
+
+        if (string.equals("")) {
+            return new ArrayList<>();
+        }
+
+        List<Symbol> result = new ArrayList<>();
         char[] tokens = string.toCharArray();
 
         for (int i = 0; i < tokens.length; i++) {
@@ -84,6 +103,18 @@ public class Symbol implements Serializable {
 
         return result;
     }
+
+    private static Symbol getSymbolFromMap(LongSparseArray<Symbol> symbolMap, int input)
+    {
+        for (int i = 0; i < symbolMap.size(); i++)
+        {
+            Symbol symbol = symbolMap.valueAt(i);
+            if (symbol.getId() == Integer.parseInt(String.valueOf(input)))
+                return symbol;
+        }
+        return null;
+    }
+
 
     private static Symbol getSymbolFromMap(LongSparseArray<Symbol> symbolMap, char input)
     {
@@ -184,7 +215,7 @@ public class Symbol implements Serializable {
     private boolean getProperty(int property) {
         return (properties & property) != 0;
     }
-    
+
     private void setProperty(int property, boolean value) {
         if (value) {
             properties |= property;
