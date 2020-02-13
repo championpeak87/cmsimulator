@@ -67,6 +67,7 @@ public class RegexTest {
     }
 
     public List<String> getListOfParsedStrings(String input) {
+        QUANTIFIERS_DEPTH = DataSource.getInstance().getRegexDepth();
         List<String> outputTests = new ArrayList<>();
         outputTests.add(input);
         while (containsNoneOrMore(outputTests))
@@ -123,7 +124,9 @@ public class RegexTest {
                     String replication_pattern = null;
                     if (i == 0) {
                         replacement_string = NONE_OR_MORE;
-                        // TODO: return list of string without *
+                        replication_pattern = EMPTY_SYMBOL;
+
+                        regex_strings.add(_input.replace(replacement_string, replication_pattern));
                     } else {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(input_char[i - 1]);
@@ -160,7 +163,9 @@ public class RegexTest {
                     String replication_pattern = null;
                     if (i == 0) {
                         replacement_string = ONE_OR_MORE;
-                        // TODO: return list of string without +
+                        replication_pattern = EMPTY_SYMBOL;
+
+                        regex_strings.add(_input.replace(replacement_string, replication_pattern));
                     } else {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(input_char[i - 1]);
@@ -197,7 +202,9 @@ public class RegexTest {
                     String replication_pattern = null;
                     if (i == 0) {
                         replacement_string = NONE_OR_ONE;
-                        // TODO: return list of string without ?
+                        replication_pattern = EMPTY_SYMBOL;
+
+                        regex_strings.add(_input.replace(replacement_string, replication_pattern));
                     } else {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(input_char[i - 1]);

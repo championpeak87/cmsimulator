@@ -23,7 +23,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'cmsimulator',
-  password: '20572123',
+  password: '123456',
   port: 5432,
 })
 
@@ -51,8 +51,9 @@ app.get('/api/user/signup', (req, res) => {
       console.log(Date() + ' ', [username], 'already exists!');
     }
     else {
-      pool.query('INSERT INTO users(username, user_type, password_hash, first_name, last_name, salt) VALUES ($1,$2,$3,$4,$5,$6);',
-        [username, user_type, auth_key, first_name, last_name, salt], (err, result) => {
+      var query = 'INSERT INTO users(username, user_type, password_hash, first_name, last_name, salt) VALUES (\'' + [username] + '\', \'' + [user_type] + '\', E\'\\\\x' + auth_key + '\', \'' + [first_name] + '\', \'' + [last_name] + '\', E\'\\\\x' + salt + '\');';
+      console.log(query);
+      pool.query(query, (err, result) => {
           if (err) { throw err; }
           res.status(HTTP_OK).send('USER WAS ADDED!');
           console.log(Date() + ' ', [username], 'was successfully added to database');
@@ -75,7 +76,8 @@ app.get('/api/user/changePassword', (req, res) => {
     if (results.rowCount > 0) {
       console.log(Date() + ' ', [results.rows[0].username], 'has changed password.');
 
-      pool.query('UPDATE public.users SET password_hash=$1 WHERE user_id=$2;', [new_auth_key, user_id], (err, result) => {
+      var query = 'UPDATE public.users SET password_hash=E\'\\\\x' + new_auth_key + '\' WHERE user_id=' + user_id + ';'; 
+      pool.query(query, (err, result) => {
         if (error) {
           throw error;
         }
@@ -108,9 +110,8 @@ app.get('/api/login', (req, res) => {
   const username = req.query.username;
   const password = req.query.auth_key;
 
-  console.log("USERNAME: ", [username]);
-  console.log("PASSWORD_HASH: ", [password]);
-  pool.query('SELECT * FROM users WHERE username = $1;', [username], (error, results) => {
+
+  pool.query('select user_id, user_type, username, first_name, last_name, encode(password_hash::bytea, \'hex\') as password_hash, encode(salt::bytea, \'hex\') as salt from users where username = $1;', [username], (error, results) => {
     if (error) { throw error }
 
     if (results.rowCount > 0) {
@@ -134,7 +135,7 @@ app.get('/api/login', (req, res) => {
 app.get('/api/login_salt', (req, res) => {
   const username = req.query.username;
 
-  pool.query('SELECT salt FROM users WHERE username = $1;', [username], (error, results) => {
+  pool.query('SELECT encode(salt::bytea, \'hex\') as salt FROM users WHERE username = $1;', [username], (error, results) => {
     if (error) { throw error }
 
     if (results.rowCount > 0) {
@@ -583,7 +584,7 @@ app.get('/api/tasks/add', (req, res) => {
 app.get('/api/tasks/getTasks', (req, res) => {
   const user_id = req.query.user_id;
   const auth_key = req.query.auth_key;
-  
+
   pool.query('select at.*, atr.task_status, at.time - atr.time_elapsed as remaining_time, atr.submitted, atr.submission_date from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id;', [user_id], (err, results) => {
 
     if (err) { throw err }

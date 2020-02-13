@@ -18,8 +18,8 @@ CREATE TABLE users
     username text NOT NULL unique CHECK(length(username) >= 6),
     first_name text NOT NULL,
     last_name text NOT NULL,
-    password_hash text NOT NULL,
-    salt text NOT NULL,
+    password_hash bytea NOT NULL,
+    salt bytea NOT NULL,
     PRIMARY KEY (user_id)
 );
 
