@@ -163,7 +163,7 @@ app.get('/api/tasks/automata', (req, res) => {
 
 app.get('/api/user/update', (req, res) => {
   const logged_user_id = req.query.logged_user_id;
-  const auth_key = req.query.auth_key;
+  const auth_key = '\\x' + req.query.auth_key;
   const user_id = req.query.user_id;
   const first_name = req.query.first_name;
   const last_name = req.query.last_name;
@@ -174,7 +174,7 @@ app.get('/api/user/update', (req, res) => {
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND user_type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('UPDATE users SET username=$1, user_type=$2, password_hash=$3, first_name=$4, last_name=$5 WHERE user_id=$6;', [username, type, password_hash, first_name, last_name, user_id], (error, result) => {
+      pool.query('UPDATE users SET username=$1, user_type=$2, first_name=$3, last_name=$4 WHERE user_id=$5;', [username, type, first_name, last_name, user_id], (error, result) => {
         if (error) { throw error }
         if (result.rowCount > 0) {
           res.status(HTTP_OK).send({
@@ -199,7 +199,7 @@ app.get('/api/user/update', (req, res) => {
 
 app.get('/api/user/delete', (req, res) => {
   const logged_user_id = req.query.logged_user_id;
-  const auth_key = req.query.auth_key;
+  const auth_key = '\\x' + req.query.auth_key;
   const user_id = req.query.user_id;
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND user_type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
     if (err) { throw err }
@@ -228,7 +228,7 @@ app.get('/api/user/delete', (req, res) => {
 })
 
 app.get('/api/user/getUsers', (req, res) => {
-  const auth_key = req.query.auth_key;
+  const auth_key = '\\x' + req.query.auth_key;
   const offset = req.query.offset;
   console.log([auth_key]);
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_type = \'admin\';', [auth_key], (err, results) => {
@@ -374,7 +374,7 @@ app.get('/api/user/findUsers', (req, res) => {
 });
 
 app.get('/api/user/getUsersFiltered', (req, res) => {
-  const auth_key = req.query.auth_key;
+  const auth_key = '\\x' + req.query.auth_key;
   const last_name = req.query.last_name;
   console.log([auth_key]);
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_type = \'admin\';', [auth_key], (err, results) => {
@@ -583,7 +583,7 @@ app.get('/api/tasks/add', (req, res) => {
 
 app.get('/api/tasks/getTasks', (req, res) => {
   const user_id = req.query.user_id;
-  const auth_key = req.query.auth_key;
+  const auth_key = '\\x' + req.query.auth_key;
 
   pool.query('select at.*, atr.task_status, at.time - atr.time_elapsed as remaining_time, atr.submitted, atr.submission_date from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id;', [user_id], (err, results) => {
 

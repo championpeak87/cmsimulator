@@ -42,5 +42,5 @@ CREATE TABLE automata_task_results
     task_status task_status not null default('new'),
     time_elapsed interval not null default('00:00:00'),
     submitted boolean not null default(false),
-    submission_date interval
+    submission_date timestamp
 );

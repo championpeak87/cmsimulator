@@ -166,6 +166,8 @@ public class TaskLoginActivity extends FragmentActivity {
                     String salt = null;
                     try {
                         salt = userParser.getSaltFromJson(saltJson);
+                        if (salt.length() % 2 != 0)
+                            salt += '0';
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * An adapter for listing test scenarios, showing their index, input word, and optionally
  * also the result of their running. Also supports customizable background color for each entry.
- *
+ * <p>
  * Created by Jakub Sedlář on 21.01.2018.
  */
 public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioListAdapter.ViewHolder> {
@@ -66,7 +66,9 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
     public interface ItemClickCallback {
         void onLongClick(TestScenario test);
+
         void onEditItemClick(TestScenario test);
+
         void onRemoveItemClick(TestScenario test);
     }
 
@@ -106,7 +108,8 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
     /**
      * Sets the row's status/result message
-     * @param row the row index
+     *
+     * @param row    the row index
      * @param status the status of the test
      */
     public void setRowStatus(int row, Status status) {
@@ -117,7 +120,8 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
     public void notifyItemChanged(TestScenario testScenario) {
         notifyItemChanged(items.indexOf(testScenario));
-        this.onTestScenarioListChange.OnListChange();
+        if (this.onTestScenarioListChange != null)
+            this.onTestScenarioListChange.OnListChange();
     }
 
     /**
@@ -139,8 +143,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
         if (statuses.get(position) != null) {
             holder.setStatus(statuses.get(position));
-        }
-        else {
+        } else {
             holder.setStatus("");
         }
     }
@@ -159,14 +162,16 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         this.items.clear();
         this.items.addAll(items);
         notifyDataSetChanged();
-        this.onTestScenarioListChange.OnListChange();
+        if (this.onTestScenarioListChange != null)
+            this.onTestScenarioListChange.OnListChange();
     }
 
     public void addItem(TestScenario item) {
         Log.v(TAG, "addItem item added");
         items.add(item);
         notifyItemInserted(items.size() - 1);
-        this.onTestScenarioListChange.OnListChange();
+        if (this.onTestScenarioListChange != null)
+            this.onTestScenarioListChange.OnListChange();
     }
 
     public void removeItem(TestScenario item) {
@@ -178,7 +183,8 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         notifyItemRemoved(position);
         //also change numbers of next elements
         notifyItemRangeChanged(position, items.size() - position);
-        this.onTestScenarioListChange.OnListChange();
+        if (this.onTestScenarioListChange != null)
+            this.onTestScenarioListChange.OnListChange();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -213,8 +219,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
                         itemClickCallback.onRemoveItemClick(items.get(getAdapterPosition()));
                     }
                 });
-            }
-            else {
+            } else {
                 editImageButton.setVisibility(View.GONE);
                 removeImageButton.setVisibility(View.GONE);
             }

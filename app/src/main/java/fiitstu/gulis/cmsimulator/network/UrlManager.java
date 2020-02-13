@@ -496,6 +496,14 @@ public class UrlManager {
                 break;
         }
 
+        if (authkey.length() % 2 != 0)
+        {
+            authkey = authkey + '0';
+        }
+        if (salt.length() % 2 != 0)
+        {
+            salt = salt + '0';
+        }
         Uri builtUri = Uri.parse(URI + ADD_NEW_USER_PATH).buildUpon()
                 .appendQueryParameter(FIRST_NAME_KEY, first_name)
                 .appendQueryParameter(LAST_NAME_KEY, last_name)

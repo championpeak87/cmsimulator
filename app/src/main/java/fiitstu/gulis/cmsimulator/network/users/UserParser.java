@@ -44,6 +44,8 @@ public class UserParser {
         firstName = reader.getString(FIRST_NAME_KEY);
         lastName = reader.getString(LAST_NAME_KEY);
         authkey = reader.getString(AUTHKEY_KEY);
+        if (authkey.length() % 2 != 0)
+            authkey += '0';
         userid = reader.getInt(USER_ID_KEY);
         user_type = reader.getString(USER_TYPE_KEY);
 
