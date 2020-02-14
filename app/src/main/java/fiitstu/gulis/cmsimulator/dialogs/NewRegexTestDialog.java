@@ -60,32 +60,6 @@ public class NewRegexTestDialog extends DialogFragment {
 
         regexTestInput = view.findViewById(R.id.edittext_regex_test);
         regexInputLayout = view.findViewById(R.id.textinputlayout_regex_test);
-        IOCheckBox = view.findViewById(R.id.checkbox_output_word);
-        regexTestOutput = view.findViewById(R.id.edittext_regex_test_output);
-        regexOutputLayout = view.findViewById(R.id.textinputlayout_regex_test_output);
-        outputWordLabel = view.findViewById(R.id.textview_output_word_label);
-
-        if (hasInputOutputTest) {
-            IOCheckBox.setVisibility(View.VISIBLE);
-            IOCheckBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (IOCheckBox.isChecked()) {
-                        regexOutputLayout.setVisibility(View.VISIBLE);
-                        outputWordLabel.setVisibility(View.VISIBLE);
-                    } else {
-                        regexOutputLayout.setVisibility(View.GONE);
-                        outputWordLabel.setVisibility(View.GONE);
-                    }
-                }
-            });
-            regexOutputLayout.setVisibility(IOCheckBox.isChecked() ? View.VISIBLE : View.GONE);
-            outputWordLabel.setVisibility(IOCheckBox.isChecked() ? View.VISIBLE : View.GONE);
-        } else {
-            view.findViewById(R.id.textview_output_word_label).setVisibility(View.GONE);
-            IOCheckBox.setVisibility(View.GONE);
-            regexOutputLayout.setVisibility(View.GONE);
-        }
 
         builder.setTitle(R.string.new_test);
         builder.setNeutralButton(android.R.string.cancel, null);
@@ -101,15 +75,15 @@ public class NewRegexTestDialog extends DialogFragment {
                 }
 
                 RegexTest regexTest = RegexTest.getInstance();
-                List<String> regex_parsed_tests = new ArrayList<>();
+                List<String> regex_parsed_input_tests = new ArrayList<>();
                 if (!regexTest.containsWrongSymbols(regexTestInput.getText().toString())) {
-                    regex_parsed_tests = regexTest.getListOfParsedStrings(regexTestInput.getText().toString());
+                    regex_parsed_input_tests = regexTest.getListOfParsedStrings(regexTestInput.getText().toString());
                 } else {
                     regexInputLayout.setError(getActivity().getString(R.string.regex_contains_wrong_symbols));
                 }
 
                 List<List<Symbol>> listOfTest = new ArrayList<>();
-                for (String stringTest : regex_parsed_tests) {
+                for (String stringTest : regex_parsed_input_tests) {
                     List<Symbol> new_symbol_list = Symbol.stringIntoSymbolList(stringTest, inputAlphabetMap);
                     listOfTest.add(new_symbol_list);
                 }
@@ -118,10 +92,6 @@ public class NewRegexTestDialog extends DialogFragment {
                 for (List<Symbol> test : listOfTest) {
                     testManagementActivity.onSaveRegexTestClick(test, null, true);
                 }
-
-                /* TODO: Recyclerview shows empty tests, they are hidden behind the empty tests screen! Implement proper show!
-
-                 */
             }
         });
 

@@ -161,8 +161,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void showEmptyScreen()
-    {
+    private void showEmptyScreen() {
         boolean containsTests = scenariosListAdapter.getItemCount() > 0;
         RecyclerView recycler = findViewById(R.id.recyclerView_bulk_test_scenarios);
         recycler.setVisibility(containsTests ? View.VISIBLE : View.GONE);
@@ -187,6 +186,10 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = this.getMenuInflater();
         menuInflater.inflate(R.menu.menu_bulk_test, menu);
+
+        if (machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON || machineType == MainActivity.TURING_MACHINE) {
+            menu.findItem(R.id.menu_add_test_regex).setVisible(false);
+        }
 
         Bundle inputBundle = getIntent().getExtras();
 
@@ -308,6 +311,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
 
         return false;
     }
+
 
     @Override
     public void onResume() {
