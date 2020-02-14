@@ -13,9 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.database.DataSource;
@@ -34,10 +32,21 @@ import java.util.List;
 public class NewRegexTestDialog extends DialogFragment {
     private EditText regexTestInput;
     private TextInputLayout regexInputLayout;
+    private CheckBox IOCheckBox;
+    private TextInputLayout regexOutputLayout;
+    private EditText regexTestOutput;
+    private TextView outputWordLabel;
+
+    private boolean hasInputOutputTest = false;
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    public void setHasInputOutputTest(boolean value) {
+        this.hasInputOutputTest = value;
     }
 
     @NonNull
@@ -51,10 +60,34 @@ public class NewRegexTestDialog extends DialogFragment {
 
         regexTestInput = view.findViewById(R.id.edittext_regex_test);
         regexInputLayout = view.findViewById(R.id.textinputlayout_regex_test);
+        IOCheckBox = view.findViewById(R.id.checkbox_output_word);
+        regexTestOutput = view.findViewById(R.id.edittext_regex_test_output);
+        regexOutputLayout = view.findViewById(R.id.textinputlayout_regex_test_output);
+        outputWordLabel = view.findViewById(R.id.textview_output_word_label);
 
-        regexInputLayout.setError("NIEKDE JE CHYBA");
+        if (hasInputOutputTest) {
+            IOCheckBox.setVisibility(View.VISIBLE);
+            IOCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (IOCheckBox.isChecked()) {
+                        regexOutputLayout.setVisibility(View.VISIBLE);
+                        outputWordLabel.setVisibility(View.VISIBLE);
+                    } else {
+                        regexOutputLayout.setVisibility(View.GONE);
+                        outputWordLabel.setVisibility(View.GONE);
+                    }
+                }
+            });
+            regexOutputLayout.setVisibility(IOCheckBox.isChecked() ? View.VISIBLE : View.GONE);
+            outputWordLabel.setVisibility(IOCheckBox.isChecked() ? View.VISIBLE : View.GONE);
+        } else {
+            view.findViewById(R.id.textview_output_word_label).setVisibility(View.GONE);
+            IOCheckBox.setVisibility(View.GONE);
+            regexOutputLayout.setVisibility(View.GONE);
+        }
 
-        builder.setTitle("PRIDAJ NOVY TEST");
+        builder.setTitle(R.string.new_test);
         builder.setNeutralButton(android.R.string.cancel, null);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override

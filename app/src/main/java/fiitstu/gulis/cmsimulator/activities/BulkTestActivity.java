@@ -219,6 +219,7 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
             case R.id.menu_add_test_regex:
                 editTest = new TestScenario(new ArrayList<Symbol>(), null);
                 NewRegexTestDialog dialog = new NewRegexTestDialog();
+                dialog.setHasInputOutputTest(machineType == MainActivity.LINEAR_BOUNDED_AUTOMATON || machineType == MainActivity.TURING_MACHINE);
                 dialog.show(getSupportFragmentManager(), null);
                 return true;
             case R.id.menu_run_test:

@@ -830,7 +830,6 @@ public class ConfigurationActivity extends FragmentActivity
                 new SaveTaskToCloudAsync().execute(file);
                 return true;
             case R.id.menu_submit_task:
-
                 testScenarioListAdapter = new TestScenarioListAdapter(this, false);
                 List<TestScenario> tests = dataSource.getTestFullExtract(false, DataSource.getInstance().getInputAlphabetFullExtract());
                 testScenarioListAdapter.setItems(tests);

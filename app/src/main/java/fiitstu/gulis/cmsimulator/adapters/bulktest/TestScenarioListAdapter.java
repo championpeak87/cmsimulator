@@ -125,7 +125,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
     }
 
     /**
-     * Deletes all status messages previously set by {@link #setRowStatus(int, String)}
+     * Deletes all status messages previously set by
      */
     public void clearStatuses() {
         statuses.clear();
@@ -136,6 +136,14 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
     public void onBindViewHolder(ViewHolder holder, int position) {
         TestScenario test = items.get(position);
         holder.valueTextView.setText(Symbol.listToWord(test.getInputWord()));
+        holder.inputWordDetails.setText(Symbol.listToWord(test.getInputWord()));
+
+        if (test.getOutputWord() != null) {
+            holder.outputWordDetails.setText(Symbol.listToWord(test.getOutputWord()));
+        } else {
+            holder.outputWordDetails.setVisibility(View.GONE);
+            holder.outputWordTestLabel.setVisibility(View.GONE);
+        }
 
         holder.positionTextView.setText(String.valueOf(position + 1) + ".");
 
@@ -195,7 +203,13 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         private TextView statusTextView;
         private ImageButton editImageButton;
         private ImageButton removeImageButton;
+        private ImageButton moreImageButton;
         private LinearLayout background;
+        private LinearLayout detailsLayout;
+        private TextView inputWordDetails;
+        private TextView outputWordDetails;
+        private TextView outputWordTestLabel;
+        private boolean detailsShown = false;
 
         ViewHolder(View itemView, boolean editable) {
             super(itemView);
@@ -204,6 +218,13 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
             statusTextView = itemView.findViewById(R.id.textView_list_test_status);
             editImageButton = itemView.findViewById(R.id.imageButton_list_test_edit);
             removeImageButton = itemView.findViewById(R.id.imageButton_list_test_remove);
+            moreImageButton = itemView.findViewById(R.id.imageButton_list_test_more);
+            detailsLayout = itemView.findViewById(R.id.linearlayout_test_details);
+            inputWordDetails = itemView.findViewById(R.id.textView_list_test_word_details);
+            outputWordDetails = itemView.findViewById(R.id.textView_list_test_output_word_details);
+            outputWordTestLabel = itemView.findViewById(R.id.textview_output_word_test_label);
+
+
             if (editable) {
                 editImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -223,6 +244,16 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
                 editImageButton.setVisibility(View.GONE);
                 removeImageButton.setVisibility(View.GONE);
             }
+            moreImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    detailsShown = !detailsShown;
+                    valueTextView.setVisibility(detailsShown ? View.GONE : View.VISIBLE);
+                    statusTextView.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+                    detailsLayout.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+                    moreImageButton.setImageResource(detailsShown ? R.drawable.baseline_arrow_drop_up_24 : R.drawable.baseline_arrow_drop_down_24);
+                }
+            });
             background = itemView.findViewById(R.id.linearLayout_list_test_background);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

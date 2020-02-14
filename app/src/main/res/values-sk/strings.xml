@@ -956,4 +956,6 @@
     <string name="regex_contains_wrong_symbols">Regex contains wrong symbols!</string>
     <string name="regex_depth">Depth of regex quantifiers</string>
     <string name="testing_settings">Testing settings</string>
+    <string name="regex_input_word">Regex input word</string>
+    <string name="regex_output_word">Regex output word</string>
 </resources>
