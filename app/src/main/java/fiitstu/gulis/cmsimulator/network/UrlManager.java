@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.network;
 
 import android.net.Uri;
+import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
@@ -11,12 +12,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class UrlManager {
 
-    private final static String URI = "http://192.168.1.235:3000";
+    private static String URI;
 
     // PATHS
     private final static String LOGIN_PATH = "/api/login";
@@ -94,8 +94,18 @@ public class UrlManager {
     // SUBMIT TASK
     private final static String SUBMISSION_TIME = "submission_time";
 
-    public URL getUpdateTimerURL(Time elapsed_time, int user_id, int task_id)
-    {
+    public UrlManager() {
+        String buildType = BuildConfig.FLAVOR;
+        if (buildType.equals("alpha")) {
+            URI = "http://192.168.1.235:3000";
+        } else {
+            /* TODO: SET PUBLIC SERVER URI */
+            URI = "http://cmserver.fiit.stuba.sk";
+        }
+    }
+
+
+    public URL getUpdateTimerURL(Time elapsed_time, int user_id, int task_id) {
         Uri uri = Uri.parse(URI + UPDATE_TIMER_PATH).buildUpon()
                 .appendQueryParameter(ELAPSED_TIME_KEY, elapsed_time.toString())
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
@@ -112,8 +122,7 @@ public class UrlManager {
         }
     }
 
-    public URL getUsersCountURL()
-    {
+    public URL getUsersCountURL() {
         Uri uri = Uri.parse(URI + GET_USERS_COUNT_PATH);
 
         URL url = null;
@@ -347,8 +356,7 @@ public class UrlManager {
         return url;
     }
 
-    public URL getOrderUserURL(USER_ATTRIBUTE user_attribute, boolean ascending)
-    {
+    public URL getOrderUserURL(USER_ATTRIBUTE user_attribute, boolean ascending) {
         Uri uri = Uri.parse(URI + ORDER_USERS_URL).buildUpon()
                 .appendQueryParameter(ORDER_BY_KEY, user_attribute.toString().toLowerCase())
                 .appendQueryParameter(ASCENDING_KEY, Boolean.toString(ascending).toLowerCase())
@@ -496,12 +504,10 @@ public class UrlManager {
                 break;
         }
 
-        if (authkey.length() % 2 != 0)
-        {
+        if (authkey.length() % 2 != 0) {
             authkey = authkey + '0';
         }
-        if (salt.length() % 2 != 0)
-        {
+        if (salt.length() % 2 != 0) {
             salt = salt + '0';
         }
         Uri builtUri = Uri.parse(URI + ADD_NEW_USER_PATH).buildUpon()

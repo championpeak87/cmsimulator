@@ -129,8 +129,9 @@ public class MainActivity extends FragmentActivity
             TextView betaBanner = findViewById(R.id.beta_banner);
             String buildtype = BuildConfig.FLAVOR.toString();
             Log.d("BUILDTYPE", buildtype);
-            if (buildtype == "beta") {
+            if (buildtype != "normal") {
                 betaBanner.setVisibility(View.VISIBLE);
+                betaBanner.setText(buildtype);
             }
         }
 

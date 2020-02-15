@@ -26,6 +26,10 @@ android {
         beta {
             dimension "version"
         }
+
+        alpha {
+            dimension "version"
+        }
     }
 }
 
