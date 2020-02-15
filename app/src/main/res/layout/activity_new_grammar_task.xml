@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:orientation="vertical" android:padding="20dp">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader"
+                  android:text="@string/task_description"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:padding="10dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.3"
+                          android:text="@string/name"/>
+                <EditText android:id="@+id/edittext_task_name" android:layout_width="0dp"
+                          android:layout_height="wrap_content" android:layout_weight="0.7"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.3"
+                          android:text="@string/task_text"/>
+                <EditText android:id="@+id/edittext_task_text" android:layout_width="0dp" android:layout_height="200dp"
+                          android:layout_weight="0.7"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:text="@string/task_config" style="@style/text_subheader"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:padding="10dp">
+            <Button android:id="@+id/button_set_task_grammar" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_grammar_task" android:textColor="@color/md_white_1000"/>
+            <CheckBox android:id="@+id/checkbox_input_tests" android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/show_test_inputs"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+
+                <CheckBox android:id="@+id/checkbox_timer_grammar" android:layout_width="0dp"
+                          android:layout_height="wrap_content" android:layout_weight="0.6"
+                          android:text="@string/set_time_limit" android:layout_gravity="center_vertical"/>
+                <android.support.design.widget.TextInputLayout android:layout_width="0dp" android:layout_weight="0.4"
+                                                               android:layout_height="wrap_content"
+                                                               android:layout_gravity="center_vertical">
+                    <EditText android:id="@+id/edittext_timer_grammar" android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:hint="@string/minutes" android:inputType="number" android:enabled="false"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

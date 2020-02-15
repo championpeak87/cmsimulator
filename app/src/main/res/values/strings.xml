@@ -1320,5 +1320,11 @@
 	<string name="testing_settings">Testing settings</string>
     <string name="regex_input_word">Regex input word</string>
 	<string name="regex_output_word">Regex output word</string>
+    <string name="set_grammar_task">Set task\'s tests and configuration</string>
+	<string name="minutes">Minutes</string>
+    <string name="new_grammar_task">New grammar task</string>
+	<string name="dialog_exit_message">Are you sure you want to leave creating new grammar task? All unsaved work will
+		be lost!
+	</string>
 
 </resources>

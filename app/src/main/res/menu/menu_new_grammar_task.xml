@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_publish_grammar_task"
+          android:title="@string/upload_task"
+          android:showAsAction="always"
+          android:icon="@drawable/baseline_cloud_upload_24"
+          android:iconTint="@color/md_white_1000"
+          style="@style/dropDownMenuItemStyle"/>
+    <item android:id="@+id/menu_help"
+          android:title="@string/help"
+          android:showAsAction="always"
+          android:icon="@drawable/baseline_help_24"
+          android:iconTint="@color/md_white_1000"
+          style="@style/dropDownMenuItemStyle"/>
+</menu>

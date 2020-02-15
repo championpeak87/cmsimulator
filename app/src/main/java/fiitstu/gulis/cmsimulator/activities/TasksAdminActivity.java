@@ -140,6 +140,16 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             }
         });
 
+        Button createNewTaskGrammar = findViewById(R.id.button_tasks_create_grammar);
+        createNewTaskGrammar.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivityIntent = new Intent(TasksAdminActivity.this, NewGrammarTaskActivity.class);
+                startActivity(nextActivityIntent);
+            }
+        });
+
         /*Button findTasksButton = findViewById(R.id.button_tasks_find);
         findTasksButton.setOnClickListener(new View.OnClickListener() {
             @Override

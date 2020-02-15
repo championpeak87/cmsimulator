@@ -97,6 +97,11 @@ public class UrlManager {
     public UrlManager() {
         String buildType = BuildConfig.FLAVOR;
         if (buildType.equals("alpha")) {
+            // CHANGE YOUR IP ADDRESS TO LOCALHOST, leave port 3000 unless changed in CMServer.js
+            // USE "ipconfig" in cmd (WINDOWS) to find your LOCAL IP ADDRESS, "ifconfig" for *nix system
+            //
+            // DEBIAN BASED SYSTEM "ifconfig installation"
+            // sudo apt install net-tools -y
             URI = "http://192.168.1.235:3000";
         } else {
             /* TODO: SET PUBLIC SERVER URI */
