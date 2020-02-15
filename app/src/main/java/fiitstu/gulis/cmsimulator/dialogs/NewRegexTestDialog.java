@@ -24,29 +24,13 @@ import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A dialog for selecting tye of machine to be created
- * <p>
- * Created by Martin on 15. 4. 2017.
- */
 public class NewRegexTestDialog extends DialogFragment {
     private EditText regexTestInput;
     private TextInputLayout regexInputLayout;
-    private CheckBox IOCheckBox;
-    private TextInputLayout regexOutputLayout;
-    private EditText regexTestOutput;
-    private TextView outputWordLabel;
-
-    private boolean hasInputOutputTest = false;
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    public void setHasInputOutputTest(boolean value) {
-        this.hasInputOutputTest = value;
     }
 
     @NonNull

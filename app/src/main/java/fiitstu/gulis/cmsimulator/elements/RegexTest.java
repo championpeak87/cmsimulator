@@ -120,8 +120,9 @@ public class RegexTest {
 
             for (int i = 0; i < input_char_size; i++) {
                 if (input_char[i] == CHAR_NONE_OR_MORE) {
-                    String replacement_string;
+                    String replacement_string = null;
                     String replication_pattern = null;
+                    boolean contains_group = false;
                     if (i == 0) {
                         replacement_string = NONE_OR_MORE;
                         replication_pattern = EMPTY_SYMBOL;
@@ -129,10 +130,25 @@ public class RegexTest {
                         regex_strings.add(_input.replace(replacement_string, replication_pattern));
                     } else {
                         StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(input_char[i - 1]);
+                        if (input_char[i - 1] == GROUP_END.charAt(0)) {
+                            contains_group = true;
+                            for (int j = i - 2; j >= 0; j--) {
+                                if (input_char[j] == GROUP_START.charAt(0)) {
+                                    replication_pattern = _input.subSequence(j + 1, i - 1).toString();
+                                    stringBuilder.append(GROUP_START);
+                                    stringBuilder.append(replication_pattern);
+                                    stringBuilder.append(GROUP_END);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!contains_group)
+                            stringBuilder.append(input_char[i - 1]);
                         stringBuilder.append(NONE_OR_MORE);
 
-                        replication_pattern = String.valueOf(input_char[i - 1]);
+                        if (!contains_group) {
+                            replication_pattern = String.valueOf(input_char[i - 1]);
+                        }
                         replacement_string = stringBuilder.toString();
 
                         for (int j = 0; j < QUANTIFIERS_DEPTH; j++) {
