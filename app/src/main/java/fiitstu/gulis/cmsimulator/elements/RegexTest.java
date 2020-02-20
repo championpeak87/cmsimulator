@@ -158,13 +158,13 @@ public class RegexTest {
                 counter++;
             }
             if (regex.charAt(counter) == MULTIPLICATOR_END.charAt(0)) {
-                if (hasStartNumber) {
+                if (hasStartNumber && !hasSeparator && !hasEndNumber) {
                     result = MULTIPLICATOR_TYPE.EXACT_COUNT;
-                } else if (hasStartNumber && hasSeparator) {
+                } else if (hasStartNumber && hasSeparator && !hasEndNumber) {
                     result = MULTIPLICATOR_TYPE.MORE_THAN;
                 } else if (hasStartNumber && hasSeparator && hasEndNumber) {
                     result = MULTIPLICATOR_TYPE.IN_BETWEEN;
-                } else if (hasSeparator && hasEndNumber) {
+                } else if (!hasStartNumber && hasSeparator && hasEndNumber) {
                     result = MULTIPLICATOR_TYPE.LESS_THAN;
                 }
             }
@@ -297,7 +297,21 @@ public class RegexTest {
                         }
                         if (!contains_group)
                             stringBuilder.append(input_char[i - 1]);
-                        stringBuilder.append(NONE_OR_MORE);
+                        switch (type)
+                        {
+                            case EXACT_COUNT:
+                                stringBuilder.append(String.format("{%d}", exact_repeat_count));
+                                break;
+                            case MORE_THAN:
+                                stringBuilder.append(String.format("{%d,}", min_repeat_count));
+                                break;
+                            case LESS_THAN:
+                                stringBuilder.append(String.format("{,%d}", max_repeat_count));
+                                break;
+                            case IN_BETWEEN:
+                                stringBuilder.append(String.format("{%d,%d}", min_repeat_count, max_repeat_count));
+                                break;
+                        }
 
                         if (!contains_group) {
                             replication_pattern = String.valueOf(input_char[i - 1]);
