@@ -47,9 +47,20 @@ public class NewRegexTestDialog extends DialogFragment {
 
         builder.setTitle(R.string.new_test);
         builder.setNeutralButton(android.R.string.cancel, null);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, null);
+
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AlertDialog dialog = (AlertDialog)this.getDialog();
+        Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 List<Symbol> list = DataSource.getInstance().getInputAlphabetFullExtract();
 
                 //create maps from list
@@ -64,6 +75,7 @@ public class NewRegexTestDialog extends DialogFragment {
                     regex_parsed_input_tests = regexTest.getListOfParsedStrings(regexTestInput.getText().toString());
                 } else {
                     regexInputLayout.setError(getActivity().getString(R.string.regex_contains_wrong_symbols));
+                    return;
                 }
 
                 List<List<Symbol>> listOfTest = new ArrayList<>();
@@ -76,9 +88,9 @@ public class NewRegexTestDialog extends DialogFragment {
                 for (List<Symbol> test : listOfTest) {
                     testManagementActivity.onSaveRegexTestClick(test, null, true);
                 }
+
+                NewRegexTestDialog.this.dismiss();
             }
         });
-
-        return builder.create();
     }
 }

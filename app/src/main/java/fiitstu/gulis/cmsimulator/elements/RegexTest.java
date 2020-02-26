@@ -47,12 +47,25 @@ public class RegexTest {
         return instance;
     }
 
+    private boolean isAlphabetSymbol(String symbol) {
+        List<Symbol> alphabet = DataSource.getInstance().getInputAlphabetFullExtract();
+        for (Symbol sym : alphabet) {
+            final String value = sym.getValue();
+            if (symbol.equals(value))
+                return true;
+        }
+
+        return false;
+    }
+
     public boolean containsWrongSymbols(String input) {
         List<Symbol> alphabet = DataSource.getInstance().getInputAlphabetFullExtract();
-        for (Symbol symbol : alphabet) {
-            final String value = symbol.getValue();
-            if (!input.contains(value) && !isSpecialSymbol(value))
+        char[] inputArray = input.toCharArray();
+        for (char selectedChar : inputArray) {
+            final String selectedCharString = String.valueOf(selectedChar);
+            if (!isSpecialSymbol(selectedCharString) && !isAlphabetSymbol(selectedCharString)) {
                 return true;
+            }
         }
 
         return false;
@@ -297,8 +310,7 @@ public class RegexTest {
                         }
                         if (!contains_group)
                             stringBuilder.append(input_char[i - 1]);
-                        switch (type)
-                        {
+                        switch (type) {
                             case EXACT_COUNT:
                                 stringBuilder.append(String.format("{%d}", exact_repeat_count));
                                 break;
@@ -331,15 +343,13 @@ public class RegexTest {
                                 }
                                 break;
                             case LESS_THAN:
-                                for (int j = 1; j < max_repeat_count; j++)
-                                {
+                                for (int j = 1; j < max_repeat_count; j++) {
                                     replacementString = repeatString(replication_pattern, j);
                                     regex_strings.add(_input.replaceFirst(Pattern.quote(replacement_string), replacementString));
                                 }
                                 break;
                             case IN_BETWEEN:
-                                for (int j = min_repeat_count; j < max_repeat_count; j++)
-                                {
+                                for (int j = min_repeat_count; j < max_repeat_count; j++) {
                                     replacementString = repeatString(replication_pattern, j);
                                     regex_strings.add(_input.replaceFirst(Pattern.quote(replacement_string), replacementString));
                                 }
