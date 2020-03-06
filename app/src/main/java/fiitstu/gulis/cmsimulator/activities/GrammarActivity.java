@@ -48,11 +48,11 @@ import fiitstu.gulis.cmsimulator.elements.GrammarType;
 
 /**
  * Grammar creation activity.
- *
+ * <p>
  * Created by Krisztian Tóth on 29.1.2019.
  */
 
-public class GrammarActivity extends FragmentActivity implements SaveGrammarDialog.SaveDialogListener{
+public class GrammarActivity extends FragmentActivity implements SaveGrammarDialog.SaveDialogListener {
 
     //log tag
     private static final String TAG = GrammarActivity.class.getName();
@@ -68,7 +68,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private static final String GRAMMAR_LIST = "GrammarList";
     private static final String GRAMMAR_TYPE = "GrammarType";
     private static final String PIPE = "|";
-    private static final String EPSILON  = "ε";
+    private static final String EPSILON = "ε";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -81,12 +81,15 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private String filename;
     private int rulesTableSize = 15;
 
+    private boolean setGrammarTask = false;
+
     /**
      * Defines the usage of all the buttons in the activity
+     *
      * @param savedInstaceState Bundle of arguments passed to this activity
      */
     @Override
-    public void onCreate(Bundle savedInstaceState){
+    public void onCreate(Bundle savedInstaceState) {
         super.onCreate(savedInstaceState);
         setContentView(R.layout.activity_grammar);
 
@@ -96,6 +99,9 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.grammar_definition);
+
+        Intent thisIntent = this.getIntent();
+        setGrammarTask = thisIntent.getBooleanExtra("GRAMMAR_TASK_CONFIGURATION", false);
 
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
@@ -113,7 +119,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
         Bundle bundle = getIntent().getExtras();
 
-        if(bundle != null) {
+        if (bundle != null) {
             grammarExampleToLoad = bundle.getInt(MainActivity.CONFIGURATION_TYPE);
             prepareExmaple(grammarExampleToLoad);
         }
@@ -124,12 +130,12 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             @Override
             public void onClick(View v) {
                 List<GrammarRule> grammarRuleList = simplifyRules();
-                if(hasStartingNonTerminal(grammarRuleList)) {
+                if (hasStartingNonTerminal(grammarRuleList)) {
                     Intent nextActivityIntent = new Intent(GrammarActivity.this, SimulationGrammarActivity.class);
                     nextActivityIntent.putExtra(GRAMMAR_LIST, (Serializable) grammarRuleList);
                     nextActivityIntent.putExtra(GRAMMAR_TYPE, (Serializable) checkGrammarType(grammarRuleList));
                     startActivity(nextActivityIntent);
-                }else{
+                } else {
                     Toast.makeText(GrammarActivity.this, R.string.grammar_missing_start, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -146,7 +152,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 TextView grammarTypeTerminalsTypeTextView = findViewById(R.id.textView_grammar_type_terminals);
 
                 List<GrammarRule> simplifiedList = simplifyRules();
-                if(hasStartingNonTerminal(simplifiedList)) {
+                if (hasStartingNonTerminal(simplifiedList)) {
                     GrammarType grammarType = new GrammarType(checkGrammarType(simplifiedList), getNonTerminals(simplifiedList), getTerminals(simplifiedList));
 
                     String definitionString = "G = (" + grammarType.getDefinition() + ")";
@@ -158,13 +164,13 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                     grammarTypeNonTerminalsTypeTextView.setText(nonTerminalsString);
                     grammarTypeTerminalsTypeTextView.setText(terminalsString);
 
-                }else{
+                } else {
                     Toast.makeText(GrammarActivity.this, R.string.grammar_missing_start, Toast.LENGTH_SHORT).show();
                 }
 
                 LinearLayout grammarMainLayout = findViewById(R.id.linearLayout_grammar);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm != null) {
+                if (imm != null) {
                     imm.hideSoftInputFromWindow(grammarMainLayout.getWindowToken(), 0);
                 }
             }
@@ -207,8 +213,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -224,7 +229,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             REQUEST_WRITE_STORAGE);
                 } else {
-                    if(filename == null)
+                    if (filename == null)
                         filename = GRAMMAR;
                     showSaveGrammarDialog(false);
                 }
@@ -255,64 +260,63 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
-        TaskDialog.setStatusText(null);
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.warning)
-                .setMessage(R.string.grammar_confirmation)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (Build.VERSION.SDK_INT > 15
-                                && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(GrammarActivity.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    REQUEST_WRITE_STORAGE);
-                        } else {
-                            if(filename == null)
-                                filename = GRAMMAR;
-                            showSaveGrammarDialog(true);
+        if (!setGrammarTask) {
+            TaskDialog.setStatusText(null);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.warning)
+                    .setMessage(R.string.grammar_confirmation)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (Build.VERSION.SDK_INT > 15
+                                    && ContextCompat.checkSelfPermission(GrammarActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(GrammarActivity.this,
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        REQUEST_WRITE_STORAGE);
+                            } else {
+                                if (filename == null)
+                                    filename = GRAMMAR;
+                                showSaveGrammarDialog(true);
+                            }
                         }
-                    }
-                })
-                .setNeutralButton(R.string.cancel, null)
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dataSource.globalDrop();
-                        GrammarActivity.this.finish();
-                        GrammarActivity.super.onBackPressed();
-                    }
-                })
-                .show();
+                    })
+                    .setNeutralButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dataSource.globalDrop();
+                            GrammarActivity.this.finish();
+                            GrammarActivity.super.onBackPressed();
+                        }
+                    })
+                    .show();
+        } else super.onBackPressed();
     }
 
     /**
      * Method for checking the type of the defined grammar. The input list of grammar rules is iterated and on the base of
      * various conditions the type of the grammar is determined within the Chomsky hierarchy. ArrayList is used for easy
      * iteration and the GrammarRule object is used for easy access to the left and right side of the rule.
+     *
      * @param simplifiedList a list of all the defined rules - each rule in a separate row
      * @return the type of the grammar as string
      */
-    private String checkGrammarType(List<GrammarRule> simplifiedList){
+    private String checkGrammarType(List<GrammarRule> simplifiedList) {
         int grammarType = 0;
 
-        for(GrammarRule grammarRule : simplifiedList) {
-            if(grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
-                if(grammarRule.getGrammarLeft().length() == 1 && isUpperCase(grammarRule.getGrammarLeft())){
-                    if(grammarRule.getGrammarRight().length() == 1 && isLowerCase(grammarRule.getGrammarRight())) {
+        for (GrammarRule grammarRule : simplifiedList) {
+            if (grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
+                if (grammarRule.getGrammarLeft().length() == 1 && isUpperCase(grammarRule.getGrammarLeft())) {
+                    if (grammarRule.getGrammarRight().length() == 1 && isLowerCase(grammarRule.getGrammarRight())) {
                         grammarType = grammarType < 1 ? 1 : grammarType;
-                    }
-                    else if(grammarRule.getGrammarRight().length() == 2 && isOneUpperOneLower(grammarRule.getGrammarRight())){
+                    } else if (grammarRule.getGrammarRight().length() == 2 && isOneUpperOneLower(grammarRule.getGrammarRight())) {
                         grammarType = grammarType < 1 ? 1 : grammarType;
-                    }
-                    else{
+                    } else {
                         grammarType = grammarType < 2 ? 2 : grammarType;
                     }
-                }
-                else{
-                    if(grammarRule.getGrammarLeft().length() <= grammarRule.getGrammarRight().length()){
+                } else {
+                    if (grammarRule.getGrammarLeft().length() <= grammarRule.getGrammarRight().length()) {
                         grammarType = grammarType < 3 ? 3 : grammarType;
-                    }
-                    else{
+                    } else {
                         grammarType = grammarType < 4 ? 4 : grammarType;
                     }
                 }
@@ -325,23 +329,24 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     /**
      * Method used for extracting all the unique terminal symbols from the rules. ArrayList is used for easy
      * iteration and the GrammarRule object is used for easy access to the left and right side of the rule.
+     *
      * @param simplifiedList a list of all the defined rules - each rule in a separate row
      * @return all the terminal symbols as string
      */
-    private String getTerminals(List<GrammarRule> simplifiedList){
+    private String getTerminals(List<GrammarRule> simplifiedList) {
         Set<Character> terminals = new HashSet<>();
 
-        for(GrammarRule grammarRule : simplifiedList) {
-            if(grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
-                for(int i = 0; i < grammarRule.getGrammarLeft().length(); i++){
+        for (GrammarRule grammarRule : simplifiedList) {
+            if (grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
+                for (int i = 0; i < grammarRule.getGrammarLeft().length(); i++) {
                     char currentCharLeft = grammarRule.getGrammarLeft().charAt(i);
-                    if(Character.isLowerCase(currentCharLeft) || Character.isDigit(currentCharLeft)){
+                    if (Character.isLowerCase(currentCharLeft) || Character.isDigit(currentCharLeft)) {
                         terminals.add(currentCharLeft);
                     }
                 }
-                for(int i = 0; i < grammarRule.getGrammarRight().length(); i++) {
+                for (int i = 0; i < grammarRule.getGrammarRight().length(); i++) {
                     char currentCharRight = grammarRule.getGrammarRight().charAt(i);
-                    if(Character.isLowerCase(currentCharRight) || Character.isDigit(currentCharRight)){
+                    if (Character.isLowerCase(currentCharRight) || Character.isDigit(currentCharRight)) {
                         terminals.add(currentCharRight);
                     }
                 }
@@ -349,56 +354,58 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             }
         }
 
-        return terminals.toString().substring(1, terminals.toString().length()-1);
+        return terminals.toString().substring(1, terminals.toString().length() - 1);
     }
 
     /**
      * Method used for extracting all the unique non-terminal symbols from the rules. ArrayList is used for easy
      * iteration and the GrammarRule object is used for easy access to the left and right side of the rule.
+     *
      * @param simplifiedList a list of all the defined rules - each rule in a separate row
      * @return all the non-terminal symbols as string
      */
-    private String getNonTerminals(List<GrammarRule> simplifiedList){
+    private String getNonTerminals(List<GrammarRule> simplifiedList) {
         Set<Character> non_terminals = new HashSet<>();
 
-        for(GrammarRule grammarRule : simplifiedList) {
-            if(grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
-                for(int i = 0; i < grammarRule.getGrammarLeft().length(); i++){
+        for (GrammarRule grammarRule : simplifiedList) {
+            if (grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
+                for (int i = 0; i < grammarRule.getGrammarLeft().length(); i++) {
                     char currentCharLeft = grammarRule.getGrammarLeft().charAt(i);
-                    if(Character.isUpperCase(currentCharLeft)){
+                    if (Character.isUpperCase(currentCharLeft)) {
                         non_terminals.add(currentCharLeft);
                     }
                 }
-                for(int i = 0; i < grammarRule.getGrammarRight().length(); i++) {
+                for (int i = 0; i < grammarRule.getGrammarRight().length(); i++) {
                     char currentCharRight = grammarRule.getGrammarRight().charAt(i);
-                    if(Character.isUpperCase(currentCharRight)){
+                    if (Character.isUpperCase(currentCharRight)) {
                         non_terminals.add(currentCharRight);
                     }
                 }
             }
         }
-        return non_terminals.toString().substring(1, non_terminals.toString().length()-1);
+        return non_terminals.toString().substring(1, non_terminals.toString().length() - 1);
     }
 
     /**
      * Method for simplifying the list of grammar rules. All the other methods require each rule in a separate row.
      * This method separates the rules to different rows if the contain PIPE and removes all the unnecessary whitespaces.
+     *
      * @return the list of grammar rules with each rule in a different row
      */
-    private List<GrammarRule> simplifyRules(){
+    private List<GrammarRule> simplifyRules() {
         List<GrammarRule> simplifiedRuleList = new ArrayList<>();
 
-        for(GrammarRule grammarRule : rulesAdapter.getGrammarRuleList()){
-            if(grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
+        for (GrammarRule grammarRule : rulesAdapter.getGrammarRuleList()) {
+            if (grammarRule.getGrammarLeft() != null && grammarRule.getGrammarRight() != null) {
                 String rule = grammarRule.getGrammarRight();
                 rule = rule.replaceAll("\\s+", "");
                 if (rule.contains(PIPE)) {
                     String[] splitRule = rule.split("\\|");
-                    for(String newRule : splitRule){
+                    for (String newRule : splitRule) {
                         GrammarRule newGrammarRule = new GrammarRule(grammarRule.getGrammarLeft(), newRule);
                         simplifiedRuleList.add(newGrammarRule);
                     }
-                }else{
+                } else {
                     GrammarRule newGrammarRule = new GrammarRule(grammarRule.getGrammarLeft(), grammarRule.getGrammarRight());
                     simplifiedRuleList.add(newGrammarRule);
                 }
@@ -408,11 +415,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         return simplifiedRuleList;
     }
 
-    private boolean isUpperCase(String rule){
+    private boolean isUpperCase(String rule) {
         return rule.equals(rule.toUpperCase());
     }
 
-    private  boolean isLowerCase(String rule){
+    private boolean isLowerCase(String rule) {
         return rule.equals(rule.toLowerCase());
     }
 
@@ -424,7 +431,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
      * Method for handling the file selection the loading the grammar rules from an external file.
      * The rules are loaded to an ArrayList of grammar rules, because this data structure is used in every other method.
      */
-    private void loadGrammar(){
+    private void loadGrammar() {
         FileSelector fileSelector = new FileSelector();
         fileSelector.setFileSelectedListener(new FileSelector.FileSelectedListener() {
             @Override
@@ -440,7 +447,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                     recyclerView.setAdapter(rulesAdapter);
                     recyclerView.setItemViewCacheSize(rulesTableSize);
 
-                }catch (Exception e) {
+                } catch (Exception e) {
                     Log.e(TAG, "File was not loaded", e);
                     Toast.makeText(GrammarActivity.this, getResources().getString(R.string.file_not_loaded), Toast.LENGTH_SHORT).show();
                     dataSource.globalDrop();
@@ -461,6 +468,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     /**
      * Method for opening the dialog box for saving the grammar
+     *
      * @param exit a boolean indicating if the user wants to close the activity after saving
      */
     private void showSaveGrammarDialog(boolean exit) {
@@ -470,14 +478,15 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     /**
      * Method for handling the save of the defined grammar to an external file.
+     *
      * @param filename name of the created file
-     * @param format format of the created file
-     * @param exit a boolean indicating if the user wants to close the activity after saving
+     * @param format   format of the created file
+     * @param exit     a boolean indicating if the user wants to close the activity after saving
      */
     @Override
     public void saveDialogClick(String filename, FileHandler.Format format, boolean exit) {
         this.filename = filename;
-        try{
+        try {
             FileHandler fileHandler = new FileHandler(format);
             List<GrammarRule> grammarRuleList = simplifyRules();
 
@@ -490,12 +499,12 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 saveGrammarDialog.dismiss();
             }
 
-            if(exit){
+            if (exit) {
                 dataSource.globalDrop();
                 GrammarActivity.this.finish();
                 GrammarActivity.super.onBackPressed();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "File was not saved", e);
             Toast.makeText(this, getResources().getString(R.string.file_not_saved), Toast.LENGTH_SHORT).show();
         }
@@ -503,12 +512,13 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     /**
      * Method for checking if the rules have a starting non-terminal symbol
+     *
      * @param grammarRuleList list of rules
      * @return boolean indicating if the grammar contains a starting non-terminal symbol
      */
-    public boolean hasStartingNonTerminal(List<GrammarRule> grammarRuleList){
-        for(GrammarRule grammarRule : grammarRuleList){
-            if(grammarRule.getGrammarLeft().equals("S")){
+    public boolean hasStartingNonTerminal(List<GrammarRule> grammarRuleList) {
+        for (GrammarRule grammarRule : grammarRuleList) {
+            if (grammarRule.getGrammarLeft().equals("S")) {
                 return true;
             }
         }
@@ -518,11 +528,12 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     /**
      * Method for handling and loading any example grammar.
      * The rules are loaded to an ArrayList of grammar rules, because this data structure is used in every other method.
+     *
      * @param grammarExampleToLoad id of the example grammar to be loaded
      */
-    private void prepareExmaple(int grammarExampleToLoad){
+    private void prepareExmaple(int grammarExampleToLoad) {
         String file = null;
-        switch (grammarExampleToLoad){
+        switch (grammarExampleToLoad) {
             case MainActivity.EXAMPLE_GRAMMAR1:
                 file = FileHandler.GrammarExamples.GREG_AN;
                 break;
@@ -545,7 +556,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 file = FileHandler.GrammarExamples.LCS_ANBNCN;
                 break;
         }
-        try{
+        try {
             FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
             fileHandler.loadAsset(getAssets(), file);
             fileHandler.getData(dataSource);
@@ -556,7 +567,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             recyclerView.setAdapter(rulesAdapter);
             recyclerView.setItemViewCacheSize(rulesTableSize);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "File was not loaded", e);
             Toast.makeText(GrammarActivity.this, getResources().getString(R.string.file_not_loaded), Toast.LENGTH_SHORT).show();
             dataSource.globalDrop();

@@ -1326,5 +1326,6 @@
 	<string name="dialog_exit_message">Are you sure you want to leave creating new grammar task? All unsaved work will
 		be lost!
 	</string>
+    <string name="task_not_set">Task wasn\'t set!</string>
 
 </resources>

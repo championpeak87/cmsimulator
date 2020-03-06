@@ -9,6 +9,17 @@ import android.os.Bundle;
 import fiitstu.gulis.cmsimulator.R;
 
 public class ExitDialog extends DialogFragment {
+    private OnExitListener onExitListener = null;
+
+    public interface OnExitListener {
+        void onExit();
+    }
+
+    public void setOnExitListener(OnExitListener onExitListener)
+    {
+        this.onExitListener = onExitListener;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -23,6 +34,8 @@ public class ExitDialog extends DialogFragment {
         alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (onExitListener != null)
+                    ExitDialog.this.onExitListener.onExit();
                 ExitDialog.this.getActivity().finish();
             }
         });

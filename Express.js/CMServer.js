@@ -54,10 +54,10 @@ app.get('/api/user/signup', (req, res) => {
       var query = 'INSERT INTO users(username, user_type, password_hash, first_name, last_name, salt) VALUES (\'' + [username] + '\', \'' + [user_type] + '\', E\'\\\\x' + auth_key + '\', \'' + [first_name] + '\', \'' + [last_name] + '\', E\'\\\\x' + salt + '\');';
       console.log(query);
       pool.query(query, (err, result) => {
-          if (err) { throw err; }
-          res.status(HTTP_OK).send('USER WAS ADDED!');
-          console.log(Date() + ' ', [username], 'was successfully added to database');
-        });
+        if (err) { throw err; }
+        res.status(HTTP_OK).send('USER WAS ADDED!');
+        console.log(Date() + ' ', [username], 'was successfully added to database');
+      });
     }
   })
 })
@@ -76,7 +76,7 @@ app.get('/api/user/changePassword', (req, res) => {
     if (results.rowCount > 0) {
       console.log(Date() + ' ', [results.rows[0].username], 'has changed password.');
 
-      var query = 'UPDATE public.users SET password_hash=E\'\\\\x' + new_auth_key + '\' WHERE user_id=' + user_id + ';'; 
+      var query = 'UPDATE public.users SET password_hash=E\'\\\\x' + new_auth_key + '\' WHERE user_id=' + user_id + ';';
       pool.query(query, (err, result) => {
         if (error) {
           throw error;
@@ -812,5 +812,33 @@ app.get('/api/tasks/download', (req, res) => {
     })
   }
 })
+
+
+app.post('/api/grammarTasks/upload', (req, res, next) => {
+  const file = req.files.task;
+  const file_name = req.query.file_name;
+
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir("./uploads/grammarTasks/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  if (!file) {
+    console.log(req);
+    console.log("FILE NOT SAVED!");
+  }
+  else {
+    file.mv("./uploads/grammarTasks/" + file_name + ".cmsg", function (err, results) {
+      if (err) throw err;
+      res.send({
+        success: true,
+        message: "File uploaded!"
+      });
+      console.log("NEW TASK UPLOADED!");
+    });
+  }
+
+});
 
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

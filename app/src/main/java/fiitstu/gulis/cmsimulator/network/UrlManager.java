@@ -39,6 +39,7 @@ public class UrlManager {
     private final static String GET_USERS_COUNT_PATH = "/api/user/getCount";
     private final static String UPDATE_TIMER_PATH = "/api/tasks/updateTimer";
     private final static String ORDER_USERS_URL = "/api/user/filterUsers";
+    private final static String UPLOAD_GRAMMAR_TASK_URL = "/api/grammarTasks/upload";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -106,6 +107,23 @@ public class UrlManager {
         } else {
             /* TODO: SET PUBLIC SERVER URI */
             URI = "http://cmserver.fiit.stuba.sk";
+        }
+    }
+
+    public URL getUploadGrammarTaskURL(String file_name) {
+
+        Uri uri = Uri.parse(URI + UPLOAD_GRAMMAR_TASK_URL).buildUpon()
+                .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
         }
     }
 
