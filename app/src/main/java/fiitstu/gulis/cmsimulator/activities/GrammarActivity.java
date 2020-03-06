@@ -217,6 +217,10 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_grammar_test:
+                Intent grammarTest = new Intent(this, GrammarTestingActivity.class);
+                startActivity(grammarTest);
+                return true;
             case R.id.menu_grammar_help:
                 FragmentManager fm = getSupportFragmentManager();
                 GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.GRAMMAR);

@@ -81,6 +81,9 @@ class DbOpenHelper extends SQLiteOpenHelper {
     static final String AUTOLOGIN_USERNAME = "USERNAME";
     static final String AUTOLOGIN_AUTHKEY = "AUTHKEY";
     static final String AUTOLOGIN_VALUES = "AUTOLOGIN_VALUES";
+    //table grammar tests
+    static final String TABLE_GRAMMAR_TEST = "GRAMMAR_TESTS";
+    static final String COLUMN_INPUT_WORD = "INPUT_WORD";
 
     //create table input alphabet sqlite query
     private static final String TABLE_INPUT_ALPHABET_CREATE =
@@ -177,6 +180,10 @@ class DbOpenHelper extends SQLiteOpenHelper {
                     COLUMN_RIGHT_RULE + " TEXT, " +
                     COLUMN_LEFT_RULE + " TEXT " +
                     ")";
+    //create table grammar tests
+    private static final String TABLE_GRAMMAR_TEST_CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_GRAMMAR_TEST + "(" +
+            COLUMN_INPUT_WORD + " TEXT " +
+            ")";
 
     //singleton pattern
     private static DbOpenHelper instance = null;
@@ -228,6 +235,9 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(TABLE_GRAMMAR_RULE_CREATE);
         Log.i(TAG, "GRAMMAR RULE table created (query command executed)");
+
+        db.execSQL(TABLE_GRAMMAR_TEST_CREATE);
+        Log.i(TAG, "GRAMMAR TEST table created (query command executed)");
     }
 
     //method updates basic tables in sqlite database
@@ -274,6 +284,9 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_GRAMMAR_RULE);
         Log.w(TAG, "GRAMMAR RULE table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_GRAMMAR_TEST);
+        Log.w(TAG, "GRAMMAR TEST table dropped (query command executed)");
     }
 
     private void dropAllTables(SQLiteDatabase db) {

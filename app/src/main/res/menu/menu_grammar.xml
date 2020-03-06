@@ -1,24 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="fiitstu.gulis.cmsimulator.activities.GrammarActivity">
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="fiitstu.gulis.cmsimulator.activities.GrammarActivity">
 
     <item
-        android:id="@+id/menu_new_grammar"
-        android:title="@string/new_grammar"
-        style="@style/dropDownMenuItemStyle" />
+            android:id="@+id/menu_new_grammar"
+            android:title="@string/new_grammar"
+            style="@style/dropDownMenuItemStyle"/>
 
     <item
-        android:id="@+id/menu_load"
-        android:title="@string/load_grammar"
-        style="@style/dropDownMenuItemStyle" />
+            android:id="@+id/menu_load"
+            android:title="@string/load_grammar"
+            style="@style/dropDownMenuItemStyle"/>
 
     <item
-        android:id="@+id/menu_save"
-        android:title="@string/save_grammar"
-        style="@style/dropDownMenuItemStyle" />
+            android:id="@+id/menu_save"
+            android:title="@string/save_grammar"
+            style="@style/dropDownMenuItemStyle"/>
+
+    <item android:id="@+id/menu_grammar_test"
+          android:title="@string/bulk_test"
+          style="@style/dropDownMenuItemStyle"/>
 
     <item
-        android:id="@+id/menu_grammar_help"
-        android:title="@string/help"
-        style="@style/dropDownMenuItemStyle" />
+            android:id="@+id/menu_grammar_help"
+            android:title="@string/help"
+            style="@style/dropDownMenuItemStyle"/>
 </menu>

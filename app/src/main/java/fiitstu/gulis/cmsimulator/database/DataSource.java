@@ -593,6 +593,68 @@ public class DataSource {
         }
     }
 
+    public void updateGrammarTest(String inputWord, String updatedWord) throws SQLException {
+        Log.v(TAG, "addGrammarTest method started");
+        String table = DbOpenHelper.TABLE_GRAMMAR_TEST;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.COLUMN_INPUT_WORD, updatedWord);
+        Log.v(TAG, "content values prepared");
+
+        database.update(table, contentValues, DbOpenHelper.COLUMN_INPUT_WORD + " = ?", new String[]{inputWord});
+        Log.i(TAG, "content values added to table");
+    }
+
+    public void addGrammarTest(String inputWord) throws SQLException {
+        Log.v(TAG, "addGrammarTest method started");
+        String table = DbOpenHelper.TABLE_GRAMMAR_TEST;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.COLUMN_INPUT_WORD, inputWord);
+        Log.v(TAG, "content values prepared");
+
+
+        database.insertOrThrow(table, null, contentValues);
+        Log.i(TAG, "content values added to table");
+    }
+
+    public void deleteGrammarTest(String inputWord) throws SQLException {
+        Log.v(TAG, "deleteGrammarTest method started");
+        String table = DbOpenHelper.TABLE_GRAMMAR_TEST;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.COLUMN_INPUT_WORD, inputWord);
+        Log.v(TAG, "content values prepared");
+
+        database.delete(table, DbOpenHelper.COLUMN_INPUT_WORD + " = ? ", new String[]{inputWord});
+        Log.i(TAG, "content values deleted from table");
+    }
+
+    public List<String> getGrammarTests() throws SQLException {
+        Log.v(TAG, "getGrammarTests method started");
+        String table = DbOpenHelper.TABLE_GRAMMAR_TEST;
+        List<String> tests = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = database.query(table,
+                    new String[]{DbOpenHelper.COLUMN_INPUT_WORD},
+                    null, null, null, null, null);
+            Log.v(TAG, "cursor initialized -> " + cursor.getCount() + " rows returned");
+
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    String inputWord = cursor.getString(cursor.getColumnIndex(DbOpenHelper.COLUMN_INPUT_WORD));
+
+                    tests.add(inputWord);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "error while getting content of TEST table", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return tests;
+    }
+
     /**
      * Deletes a test from the database. Throws if not successful.
      *
@@ -1230,8 +1292,7 @@ public class DataSource {
         Log.i(TAG, "user name option updated in database");
     }
 
-    public void updateRegexDepth(int regexDepth)
-    {
+    public void updateRegexDepth(int regexDepth) {
         Log.v(TAG, "updateRegexDepth method started");
 
         ContentValues contentValues = new ContentValues();
@@ -1241,7 +1302,6 @@ public class DataSource {
         database.update(DbOpenHelper.TABLE_OPTIONS, contentValues, null, null);
         Log.i("TAG", "regex depth updated in database");
     }
-
 
 
     private void addOptions() {

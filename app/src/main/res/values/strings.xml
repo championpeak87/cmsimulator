@@ -1332,5 +1332,6 @@
 	<string name="context_free_grammar">Context-free grammar</string>
 	<string name="regular_grammar">Regular grammar</string>
 	<string name="context_sensitive_grammar">Context-sensitive grammar</string>
+    <string name="wrong_input_word">This input word is incorrect!</string>
 
 </resources>

@@ -30,6 +30,8 @@
 			<meta-data android:name="android.app.shortcuts"
 					   android:resource="@xml/shortcuts" />
 		</activity>
+		<activity android:name=".activities.GrammarTestingActivity"
+				  android:configChanges="screenSize|orientation"/>
 		<activity android:name=".activities.GrammarTaskDetailsActivity"
 				  android:configChanges="orientation|screenSize"/>
 		<activity android:name=".activities.ExampleGrammars"

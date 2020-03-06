@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="fiitstu.gulis.cmsimulator.activities.BulkTestActivity">
+    <item
+            android:id="@+id/menu_add_test"
+            android:title="@string/new_test"
+            android:iconTint="@color/md_white_1000"
+            android:icon="@drawable/baseline_add_box_24"
+            android:showAsAction="always"
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_add_test_regex"
+            android:title="@string/new_test_regex"
+            android:iconTint="@color/md_white_1000"
+            android:icon="@drawable/baseline_offline_bolt_24"
+            android:showAsAction="always"
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_run_test"
+            android:title="@string/run_bulk_test"
+            android:iconTint="@color/md_white_1000"
+            android:icon="@drawable/baseline_play_arrow_24"
+            android:showAsAction="always"
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_bulk_test_help"
+            android:title="@string/help"
+            style="@style/dropDownMenuItemStyle" />
+</menu>

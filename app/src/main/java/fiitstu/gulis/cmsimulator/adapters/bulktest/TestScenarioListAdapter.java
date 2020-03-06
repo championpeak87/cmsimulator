@@ -134,6 +134,7 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.resetDetails();
         TestScenario test = items.get(position);
         holder.valueTextView.setText(Symbol.listToWord(test.getInputWord()));
         holder.inputWordDetails.setText(Symbol.listToWord(test.getInputWord()));
@@ -267,5 +268,10 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
         public void setStatus(String status) {
             statusTextView.setText(status);
         }
+
+        public void resetDetails() {
+            this.detailsShown = false;
+        }
+
     }
 }
