@@ -5,6 +5,7 @@ import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
+import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.models.users.User;
 import fiitstu.gulis.cmsimulator.network.users.PasswordManager;
 
@@ -40,6 +41,7 @@ public class UrlManager {
     private final static String UPDATE_TIMER_PATH = "/api/tasks/updateTimer";
     private final static String ORDER_USERS_URL = "/api/user/filterUsers";
     private final static String UPLOAD_GRAMMAR_TASK_URL = "/api/grammarTasks/upload";
+    private final static String ADD_GRAMMAR_TASK_TO_TABLE = "/api/grammarTasks/add";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -437,6 +439,29 @@ public class UrlManager {
         Uri builtUri = Uri.parse(URI + GET_ALL_AUTOMATA_TASKS_PATH).buildUpon()
                 .appendQueryParameter(AUTHKEY_QUERY_KEY, auth_key)
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public URL getPushGrammarTaskToTable(GrammarTask task, int user_id) {
+        final int minutes = task.getAvailable_time().getMinutes();
+        final String sTime = String.format("00:%02d:00", minutes);
+
+        Uri builtUri = Uri.parse(URI + ADD_GRAMMAR_TASK_TO_TABLE).buildUpon()
+                .appendQueryParameter(TASK_NAME_KEY, task.getTitle())
+                .appendQueryParameter(TASK_DESCRIPTION_KEY, task.getText())
+                .appendQueryParameter(TIME_KEY, sTime)
+                .appendQueryParameter(PUBLIC_INPUT_KEY, Boolean.toString(task.isPublicInputs()))
+                .appendQueryParameter(ASSIGNER_KEY, Integer.toString(user_id))
                 .build();
 
         URL url = null;

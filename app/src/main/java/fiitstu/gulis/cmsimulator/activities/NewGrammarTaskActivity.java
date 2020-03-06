@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,18 +18,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExitDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
+import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
 
@@ -49,6 +51,8 @@ public class NewGrammarTaskActivity extends FragmentActivity {
     private CheckBox publicTestsCheckBox;
     private CheckBox timerCheckBox;
     private EditText timerEditText;
+    private FrameLayout contentLayout;
+    private ProgressBar uploadingProgressBar;
 
     private boolean hasTaskSet = false;
     private boolean modified = false;
@@ -127,27 +131,16 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                     }
 
                     final File file = new File(FileHandler.PATH, "grammarTask" + ".cmsg");
-                    try {
-                        Scanner scanner = new Scanner(file);
-                        String line;
-                        while (scanner.hasNextLine()){
-                            line = scanner.nextLine();
-                        }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
 
-                    final String file_name = taskNameEditText.getText() + ".cmsg";
-
-                    class UploadGrammarTask extends AsyncTask<File, Void, String> {
+                    class UploadGrammarTask extends AsyncTask<String, Void, String> {
                         @Override
-                        protected String doInBackground(File... files) {
+                        protected String doInBackground(String... strings) {
                             UrlManager urlManager = new UrlManager();
-                            URL url = urlManager.getUploadGrammarTaskURL(file_name);
+                            URL url = urlManager.getUploadGrammarTaskURL(strings[0]);
                             ServerController serverController = new ServerController();
                             String output = null;
 
-                            output = serverController.doPostRequest(url, files[0]);
+                            output = serverController.doPostRequest(url, file);
 
                             return output;
 
@@ -155,15 +148,72 @@ public class NewGrammarTaskActivity extends FragmentActivity {
 
                         @Override
                         protected void onPostExecute(String s) {
+                            showLoadingScreen(false);
                             if (s == null || s.isEmpty()) {
                                 Toast.makeText(NewGrammarTaskActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(NewGrammarTaskActivity.this, R.string.upload_task_complete, Toast.LENGTH_SHORT).show();
+                                NewGrammarTaskActivity.this.finish();
+                            }
+
+                        }
+                    }
+
+                    class AddGrammarTaskToDatabase extends AsyncTask<GrammarTask, Void, String> {
+                        @Override
+                        protected void onPreExecute() {
+                            showLoadingScreen(true);
+                        }
+
+                        @Override
+                        protected String doInBackground(GrammarTask... grammarTasks) {
+                            UrlManager urlManager = new UrlManager();
+                            URL url = urlManager.getPushGrammarTaskToTable(grammarTasks[0], TaskLoginActivity.loggedUser.getUser_id());
+                            ServerController serverController = new ServerController();
+                            String output = null;
+
+                            try {
+                                output = serverController.getResponseFromServer(url);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                return output;
+                            }
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if (s == null || s.isEmpty()) {
+                                {
+                                    Toast.makeText(NewGrammarTaskActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                    showLoadingScreen(false);
+                                }
+                            } else {
+                                try {
+                                    JSONObject object = new JSONObject(s);
+                                    int task_id = object.getInt("task_id");
+
+                                    new UploadGrammarTask().execute(Integer.toString(task_id));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
 
-                    new UploadGrammarTask().execute(file);
+                    final String taskName = taskNameEditText.getText().toString();
+                    final String taskDescription = taskTextEditText.getText().toString();
+                    Time timer = null;
+                    if (timerCheckBox.isChecked()) {
+                        final int minutes = Integer.parseInt(timerEditText.getText().toString());
+                        final String sTime = String.format("00:%02d:00", minutes);
+                        timer = Time.valueOf(sTime);
+                    } else
+                        timer = Time.valueOf("00:00:00");
+                    final boolean publicInputs = publicTestsCheckBox.isChecked();
+                    GrammarTask task = new GrammarTask(taskName, taskDescription, timer, publicInputs);
+
+                    new AddGrammarTaskToDatabase().execute(task);
                 }
 
                 return true;
@@ -185,6 +235,14 @@ public class NewGrammarTaskActivity extends FragmentActivity {
         this.publicTestsCheckBox = findViewById(R.id.checkbox_input_tests);
         this.timerCheckBox = findViewById(R.id.checkbox_timer_grammar);
         this.timerEditText = findViewById(R.id.edittext_timer_grammar);
+        this.contentLayout = findViewById(R.id.frameLayout_grammar_task_configuration);
+        this.uploadingProgressBar = findViewById(R.id.progressBar_grammar_task_uploading);
+    }
+
+    private void showLoadingScreen(boolean value) {
+        contentLayout.setForeground(value ? new ColorDrawable(0x4d757575) : new ColorDrawable(0x00000000));
+        contentLayout.setEnabled(!value);
+        uploadingProgressBar.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 
     private void setEvents() {
@@ -207,5 +265,4 @@ public class NewGrammarTaskActivity extends FragmentActivity {
             }
         });
     }
-
 }

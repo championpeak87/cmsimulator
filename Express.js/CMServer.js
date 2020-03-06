@@ -486,9 +486,12 @@ app.post('/api/tasks/upload', (req, res, next) => {
   const file = req.files.task;
   const file_name = req.query.file_name;
 
-  var mkdirp = require('mkdirp');
-  mkdirp("./uploads/", function (err) { });
-  mkdirp("./uploads/automataTasks/", function (err) { });
+  filesystem.mkdir("./uploads/",{ recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir("./uploads/automataTasks/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
   if (!file) {
     console.log(req);
     console.log("FILE NOT SAVED!");
@@ -607,9 +610,12 @@ app.post('/api/tasks/save', (req, res, next) => {
   const makedirPath = "./uploads/" + user_id;
   const path = "./uploads/" + user_id + "/" + file_name;
 
-  var mkdirp = require('mkdirp');
-  mkdirp("./uploads/", function (err) { });
-  mkdirp(makedirPath, function (err) { });
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir(makedirPath, { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
   if (!file) {
     console.log("FILE NOT SAVED!");
   }
@@ -697,8 +703,9 @@ app.get('/api/tasks/changeFlag', (req, res) => {
       }
     }
     else {
-      var mkdirp = require('mkdirp');
-      mkdirp("./uploads/" + user_id + "/");
+      filesystem.mkdir("./uploads/" + user_id + "/", { recursive: true }, (err) => {
+        if (err) { throw err };
+      });
       filesystem.copyFile("./uploads/automataTasks/" + task_id + ".cmst", "./uploads/" + user_id + "/" + task_id + ".cmst", (error) => {
         if (error) { throw error; }
       }
@@ -840,5 +847,34 @@ app.post('/api/grammarTasks/upload', (req, res, next) => {
   }
 
 });
+
+app.get('/api/grammarTasks/add', (req, res) => {
+  const task_name = req.query.task_name;
+  const task_description = req.query.task_description;
+  const time = req.query.time;
+  const assigner = req.query.assigner;
+  const public_input = req.query.public_input;
+
+
+  pool.query('INSERT INTO grammar_tasks(assigner_id, public_input, task_description, task_name, time) VALUES ($1, $2, $3, $4, $5);',
+    [assigner, public_input, task_description, task_name, time], (err, results) => {
+      if (err) { throw err; }
+
+      if (results.rowCount > 0) {
+        pool.query('SELECT * FROM grammar_tasks WHERE assigner_id = $1 AND task_name = $2 AND task_description = $3;', [assigner, task_name, task_description], (error, result) => {
+          res.status(HTTP_OK).send(
+            {
+              task_id: result.rows[0].task_id,
+              task_name: task_name,
+              task_description: task_description,
+              time: time,
+              public_input: public_input
+            }
+          )
+        })
+      }
+    });
+
+})
 
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

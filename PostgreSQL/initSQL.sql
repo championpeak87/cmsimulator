@@ -44,3 +44,24 @@ CREATE TABLE automata_task_results
     submitted boolean not null default(false),
     submission_date timestamp
 );
+
+CREATE TABLE grammar_tasks
+(
+    task_id serial NOT NULL unique,
+    assigner_id serial NOT NULL references users(user_id),
+    task_name text not null,
+    task_description text,
+    time interval not null default('00:00:00'),
+    public_input boolean not null default(true),
+    PRIMARY KEY (task_id)
+);
+
+CREATE TABLE grammar_task_results
+(
+    user_id serial not null references users(user_id),
+    task_id serial not null references grammar_tasks(task_id),
+    task_status task_status not null default('new'),
+    time_elapsed interval not null default('00:00:00'),
+    submitted boolean not null default(false),
+    submission_date timestamp
+);
