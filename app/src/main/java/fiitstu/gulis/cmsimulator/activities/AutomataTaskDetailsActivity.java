@@ -10,14 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.elements.Task;
 
@@ -52,6 +46,14 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
             ActionBar actionBar = this.getActionBar();
             actionBar.setBackgroundDrawable(new ColorDrawable(getColor(color)));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = this.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_task_details, menu);
+
+        return true;
     }
 
     @Override
@@ -171,6 +173,10 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.menu_help:
+                // TODO: IMPLEMENT HELP
+                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
                 return true;
         }
 

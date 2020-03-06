@@ -1,11 +1,14 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
+import fiitstu.gulis.cmsimulator.activities.GrammarTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.dialogs.ExampleGrammarDialog;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
@@ -32,13 +36,13 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
     public ExampleGrammarAdapter(Context mContext) {
         this.mContext = mContext;
 
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar1), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar2), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar3), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar4), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar5), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar6), "Pocet pismen a", null, false));
-        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar7), "Pocet pismen a", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar1), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar2), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar3), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar4), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar5), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar6), "TO BE ADDED", null, false));
+        this.listOfTasks.add(new GrammarTask(mContext.getString(R.string.example_grammar7), "TO BE ADDED", null, false));
     }
 
     @NonNull
@@ -96,13 +100,22 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
                 holder.task_name.setText(R.string.example_grammar7);
                 break;
         }
-        
+
+        final TextView grammarType = holder.grammar_type;
+        final CardView cardView = holder.cardView;
         holder.help_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
+                final GrammarTask selectedTask = listOfTasks.get(position);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
+                Intent hintIntent = new Intent(mContext, GrammarTaskDetailsActivity.class);
+                hintIntent.putExtra("TASK_NAME", selectedTask.getTitle());
+                hintIntent.putExtra("TASK_DETAILS", selectedTask.getText());
+                hintIntent.putExtra("EXAMPLE_TASK", true);
+                hintIntent.putExtra("GRAMMAR_TYPE", grammarType.getText().toString());
 
-                Toast.makeText(mContext, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                mContext.startActivity(hintIntent, options.toBundle());
             }
         });
         
