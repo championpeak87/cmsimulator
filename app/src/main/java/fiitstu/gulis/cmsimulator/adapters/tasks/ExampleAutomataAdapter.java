@@ -107,9 +107,8 @@ public class ExampleAutomataAdapter extends RecyclerView.Adapter<ExampleAutomata
     @NonNull
     @Override
     public CardViewBuilder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.list_view_task_example_item, parent, false);
+        View view = inflater.inflate(R.layout.list_view_task_example_item, parent, false);
 
         return new CardViewBuilder(view);
     }

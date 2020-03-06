@@ -388,10 +388,12 @@ public class MainActivity extends FragmentActivity
                 break;
             //example grammar
             case R.id.button_main_example_grammar:
-                Log.v(TAG, "grammar grammar button click noted");
-                fm = getSupportFragmentManager();
-                ExampleGrammarDialog exampleGrammarDialog = ExampleGrammarDialog.newInstance();
-                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);
+                Intent exampleGrammarsIntent = new Intent(this, ExampleGrammars.class);
+                startActivity(exampleGrammarsIntent);
+//                Log.v(TAG, "grammar grammar button click noted");
+//                fm = getSupportFragmentManager();
+//                ExampleGrammarDialog exampleGrammarDialog = ExampleGrammarDialog.newInstance();
+//                exampleGrammarDialog.show(fm, EXAMPLE_GRAMMAR_DIALOG);
                 break;
             //options
             case R.id.button_main_options:

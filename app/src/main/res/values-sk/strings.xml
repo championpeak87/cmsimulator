@@ -96,13 +96,13 @@
     <string name="turing_machine_example2">w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
 
     <!--Popup Main Activity grammar examples-->
-    <string name="example_grammar1">Greg - a<sup><small>N</small></sup></string>
-    <string name="example_grammar2">Greg - 3k+1</string>
-    <string name="example_grammar3">Greg - končiace 01 alebo 10</string>
-    <string name="example_grammar4">Gcf - a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="example_grammar5">Gcf - a<sup><small>N</small></sup>b<sup><small>N</small></sup> v Chomského normálnom tvare</string>
-    <string name="example_grammar6">Gcf - ww<sup><small>R</small></sup></string>
-    <string name="example_grammar7">Gcs - a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
+    <string name="example_grammar1">a<sup><small>N</small></sup></string>
+    <string name="example_grammar2">3k+1</string>
+    <string name="example_grammar3">končiace 01 alebo 10</string>
+    <string name="example_grammar4">a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
+    <string name="example_grammar5">a<sup><small>N</small></sup>b<sup><small>N</small></sup> v Chomského normálnom tvare</string>
+    <string name="example_grammar6">ww<sup><small>R</small></sup></string>
+    <string name="example_grammar7">a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
 
     <!--Options Activity-->
     <string name="simulation_settings">Nastavenia simulácie</string>
@@ -942,7 +942,7 @@
     <string name="mark_task_as">Označiť úlohu ako ...</string>
     <string name="task_status_updated">Stav úlohy bol aktualizovaný!</string>
     <string name="task_status">Stav úlohy</string>
-    <string name="change_task_status">Change task status</string>
+    <string name="change_task_status">Zmeniť stav úlohy</string>
     <string name="task_in_progress">Riešená</string>
     <string name="task_correct">Správne</string>
     <string name="task_wrong">Nesprávne</string>
@@ -953,16 +953,20 @@
     <string name="show_task">Zobraziť úlohu</string>
     <string name="regex_input">Regulárny výraz</string>
     <string name="new_test_regex">Nový regex test</string>
-    <string name="regex_contains_wrong_symbols">Regex contains wrong symbols!</string>
-    <string name="regex_depth">Depth of regex quantifiers</string>
-    <string name="testing_settings">Testing settings</string>
-    <string name="regex_input_word">Regex input word</string>
+    <string name="regex_contains_wrong_symbols">Regulárny výraz obsahuje nesprávne symboly!</string>
+    <string name="regex_depth">Hĺbka kvantifikátorov regulárnych výrazov</string>
+    <string name="testing_settings">Nastavenia testovanie</string>
+    <string name="regex_input_word">Vstupný regulárny výraz</string>
     <string name="regex_output_word">Regex output word</string>
-    <string name="set_grammar_task">Set task\'s tests and configuration</string>
-    <string name="minutes">Minutes</string>
-    <string name="new_grammar_task">New grammar task</string>
-    <string name="dialog_exit_message">Are you sure you want to leave creating new grammar task? All unsaved work will
-        be lost!
+    <string name="set_grammar_task">Nastaviť úlohu</string>
+    <string name="minutes">Minúty</string>
+    <string name="new_grammar_task">Nová úloha gramatiky</string>
+    <string name="dialog_exit_message">Ste si istý, že chcete ukončiť tvorbu novej úlohy? Neuložená práca bude zahodená!
     </string>
-    <string name="task_not_set">Task wasn\'t set!</string>
+    <string name="task_not_set">Úloha nebola nastavená!</string>
+    <string name="task_name_empty">Názov úlohy nemôže byť prázdny!</string>
+    <string name="task_text_empty">Popis úlohy nemôže byť prázdny!</string>
+    <string name="context_free_grammar">Bezkontextová gramatika</string>
+    <string name="regular_grammar">Regulárna gramatika</string>
+    <string name="context_sensitive_grammar">Kontextová gramatika</string>
 </resources>

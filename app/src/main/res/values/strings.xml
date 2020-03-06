@@ -153,14 +153,14 @@
 	</string>
 
 	<!--Popup Main Activity grammar examples-->
-	<string name="example_grammar1">Greg - a
+	<string name="example_grammar1">a
 		<sup>
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="example_grammar2">Greg - 3k+1</string>
-	<string name="example_grammar3">Greg - ends with 01 or 10</string>
-	<string name="example_grammar4">Gcf - a
+	<string name="example_grammar2">3k+1</string>
+	<string name="example_grammar3">ends with 01 or 10</string>
+	<string name="example_grammar4">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -169,7 +169,7 @@
 			<small>N</small>
 		</sup>
 	</string>
-	<string name="example_grammar5">Gcf - a
+	<string name="example_grammar5">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -179,12 +179,12 @@
 		</sup>
 		in Chomsky normal form
 	</string>
-	<string name="example_grammar6">Gcf - ww
+	<string name="example_grammar6">ww
 		<sup>
 			<small>R</small>
 		</sup>
 	</string>
-	<string name="example_grammar7">Gcs - a
+	<string name="example_grammar7">a
 		<sup>
 			<small>N</small>
 		</sup>
@@ -1327,5 +1327,10 @@
 		be lost!
 	</string>
     <string name="task_not_set">Task wasn\'t set!</string>
+    <string name="task_name_empty">Task name cannot be empty!</string>
+	<string name="task_text_empty">Task description cannot be empty!</string>
+	<string name="context_free_grammar">Context-free grammar</string>
+	<string name="regular_grammar">Regular grammar</string>
+	<string name="context_sensitive_grammar">Context-sensitive grammar</string>
 
 </resources>

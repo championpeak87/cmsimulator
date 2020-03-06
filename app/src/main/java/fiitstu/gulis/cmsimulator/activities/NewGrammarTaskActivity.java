@@ -55,7 +55,6 @@ public class NewGrammarTaskActivity extends FragmentActivity {
     private ProgressBar uploadingProgressBar;
 
     private boolean hasTaskSet = false;
-    private boolean modified = false;
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -73,7 +72,7 @@ public class NewGrammarTaskActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (modified) {
+        if (isModified()) {
             FragmentManager fm = getFragmentManager();
             ExitDialog exitDialog = new ExitDialog();
             exitDialog.setOnExitListener(new ExitDialog.OnExitListener() {
@@ -109,8 +108,7 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                 return true;
             case R.id.menu_publish_grammar_task:
                 // TODO: IMPLEMENT TASK UPLOADING
-                if (!modified && !hasTaskSet) {
-                    Toast.makeText(this, R.string.task_not_set, Toast.LENGTH_SHORT).show();
+                if (!canUpload()) {
                     return true;
                 }
                 if (Build.VERSION.SDK_INT > 15
@@ -153,6 +151,13 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                                 Toast.makeText(NewGrammarTaskActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(NewGrammarTaskActivity.this, R.string.upload_task_complete, Toast.LENGTH_SHORT).show();
+
+                                // WIPE CREATED TASK FROM MEMORY
+                                DataSource dataSource = DataSource.getInstance();
+                                dataSource.open();
+                                dataSource.globalDrop();
+                                dataSource.close();
+
                                 NewGrammarTaskActivity.this.finish();
                             }
 
@@ -261,8 +266,33 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                 grammarConfiguration.putExtra("GRAMMAR_TASK_CONFIGURATION", true);
                 startActivity(grammarConfiguration);
                 hasTaskSet = true;
-                modified = true;
             }
         });
+    }
+
+    private boolean canUpload() {
+        if (taskNameEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.task_name_empty, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (taskTextEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.task_text_empty, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!hasTaskSet) {
+            Toast.makeText(this, R.string.task_not_set, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isModified() {
+        if (!taskNameEditText.getText().toString().isEmpty() ||
+                !taskTextEditText.getText().toString().isEmpty() ||
+                hasTaskSet)
+            return true;
+
+        return false;
     }
 }
