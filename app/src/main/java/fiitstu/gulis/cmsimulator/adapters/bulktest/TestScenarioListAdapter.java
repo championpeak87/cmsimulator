@@ -271,6 +271,10 @@ public class TestScenarioListAdapter extends RecyclerView.Adapter<TestScenarioLi
 
         public void resetDetails() {
             this.detailsShown = false;
+            valueTextView.setVisibility(detailsShown ? View.GONE : View.VISIBLE);
+            statusTextView.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+            detailsLayout.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+            moreImageButton.setImageResource(detailsShown ? R.drawable.baseline_arrow_drop_up_24 : R.drawable.baseline_arrow_drop_down_24);
         }
 
     }

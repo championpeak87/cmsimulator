@@ -8,6 +8,7 @@ import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
@@ -387,6 +388,17 @@ public class FileHandler {
         }
         else {
             setDataJFF(states, inputAlphabet, stackAlphabet, transitions, machineType);
+        }
+    }
+
+    public void setData(List<GrammarRule> grammarRules, List<String> tests) throws ParserConfigurationException {
+        if (document == null)
+            createDoc();
+        if(format == Format.CMSG){
+            setDataCMSG(grammarRules, tests);
+        }
+        else{
+            setDataJFF(grammarRules);
         }
     }
 
@@ -1557,6 +1569,39 @@ public class FileHandler {
 
             rootElement.appendChild(productionElement);
         }
+        document.appendChild(rootElement);
+        Log.i(TAG, "rootElement attached to document");
+    }
+
+    private void setDataCMSG(List<GrammarRule> grammarRules, List<String> tests)
+    {
+        Log.v(TAG, "setDataCMSG method started");
+
+        Element rootElement = document.createElement(GRAMMAR);
+
+        for(int i = 0; i < grammarRules.size(); i++){
+            Element ruleElement = document.createElement(RULE);
+
+            Element leftElement = document.createElement(LEFT);
+            leftElement.appendChild(document.createTextNode(grammarRules.get(i).getGrammarLeft()));
+            ruleElement.appendChild(leftElement);
+
+            Element rightElement = document.createElement(RIGHT);
+            rightElement.appendChild(document.createTextNode(grammarRules.get(i).getGrammarRight()));
+            ruleElement.appendChild(rightElement);
+
+            rootElement.appendChild(ruleElement);
+        }
+
+        Element testsElement = document.createElement(TEST_SCENARIOS);
+        for (int i = 0; i < tests.size(); i++)
+        {
+            Element testScenarioElement = document.createElement(TEST_SCENARIO);
+            testScenarioElement.setAttribute(INPUT_WORD, tests.get(i));
+            testsElement.appendChild(testScenarioElement);
+        }
+        rootElement.appendChild(testsElement);
+        Log.i(TAG, "ruleElement created");
         document.appendChild(rootElement);
         Log.i(TAG, "rootElement attached to document");
     }

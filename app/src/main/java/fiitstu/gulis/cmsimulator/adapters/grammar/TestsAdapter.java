@@ -74,7 +74,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
             @Override
             public void onClick(View view) {
                 EditGrammarTestDialog editGrammarTestDialog = new EditGrammarTestDialog(inputWord, position, TestsAdapter.this);
-                FragmentManager fm = ((FragmentActivity)mContext).getSupportFragmentManager();
+                FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
                 editGrammarTestDialog.show(fm, TAG);
             }
         });
@@ -95,6 +95,9 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         private TextView inputWordDetailsTextView;
         private LinearLayout detailsLayout;
 
+        private TextView outputTestLabel;
+        private TextView outputTest;
+
         private boolean detailsShown = false;
 
         public TestHolder(View itemView) {
@@ -109,13 +112,19 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
             this.inputWordDetailsTextView = itemView.findViewById(R.id.textView_list_test_word_details);
             this.detailsLayout = itemView.findViewById(R.id.linearlayout_test_details);
 
+            this.outputTestLabel = itemView.findViewById(R.id.textview_output_word_test_label);
+            this.outputTestLabel.setVisibility(View.GONE);
+
+            this.outputTest = itemView.findViewById(R.id.textView_list_test_output_word_details);
+            this.outputTest.setVisibility(View.GONE);
+
             moreImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     detailsShown = !detailsShown;
                     moreImageButton.setImageResource(detailsShown ? R.drawable.baseline_arrow_drop_up_24 : R.drawable.baseline_arrow_drop_down_24);
                     testStatusTextView.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
-                    inputWordTextView.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+                    inputWordTextView.setVisibility(detailsShown ? View.GONE : View.VISIBLE);
                     detailsLayout.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
                 }
             });
@@ -123,6 +132,11 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
 
         public void resetDetails() {
             this.detailsShown = false;
+
+            inputWordTextView.setVisibility(detailsShown ? View.GONE : View.VISIBLE);
+            testStatusTextView.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+            detailsLayout.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
+            moreImageButton.setImageResource(detailsShown ? R.drawable.baseline_arrow_drop_up_24 : R.drawable.baseline_arrow_drop_down_24);
         }
     }
 
@@ -137,12 +151,15 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
     public void deleteTest(int position) {
         listOfInputWords.remove(position);
         this.notifyItemRemoved(position);
+
+        int sizeOfList = listOfInputWords.size();
+        for (int i = position; i < sizeOfList; i++)
+            this.notifyItemChanged(i);
         if (onDataSetChangedListener != null)
             onDataSetChangedListener.OnDataChanged();
     }
 
-    public void updateTest(String inputWord, int position)
-    {
+    public void updateTest(String inputWord, int position) {
         listOfInputWords.set(position, inputWord);
         notifyItemChanged(position);
     }

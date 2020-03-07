@@ -494,7 +494,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             FileHandler fileHandler = new FileHandler(format);
             List<GrammarRule> grammarRuleList = simplifyRules();
 
-            fileHandler.setData(grammarRuleList);
+            dataSource.open();
+            List<String> tests = dataSource.getGrammarTests();
+            if (tests.size() > 0)
+                fileHandler.setData(grammarRuleList, tests);
+            else fileHandler.setData(grammarRuleList);
             fileHandler.writeFile(filename);
 
             Toast.makeText(this, FileHandler.PATH + "/" + filename + format.getExtension() + " " + getResources().getString(R.string.save_succ), Toast.LENGTH_SHORT).show();
