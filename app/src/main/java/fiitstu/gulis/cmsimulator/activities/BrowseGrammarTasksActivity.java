@@ -84,6 +84,16 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
         return false;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        else
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+    }
+
     private void setActionBar() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
