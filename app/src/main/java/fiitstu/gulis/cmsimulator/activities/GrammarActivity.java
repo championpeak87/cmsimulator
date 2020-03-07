@@ -443,6 +443,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 try {
                     FileHandler fileHandler = new FileHandler(format);
                     fileHandler.loadFile(filePath);
+                    dataSource.open();
+                    dataSource.globalDrop();
                     fileHandler.getData(dataSource);
                     List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
                     filename = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));

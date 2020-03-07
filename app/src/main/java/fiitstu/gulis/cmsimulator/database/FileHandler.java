@@ -7,6 +7,7 @@ import android.sax.RootElement;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
@@ -14,10 +15,6 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
 import fiitstu.gulis.cmsimulator.app.CMSimulator;
 import fiitstu.gulis.cmsimulator.elements.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.*;
 import java.sql.Time;
@@ -1078,6 +1075,16 @@ public class FileHandler {
                     Log.v(TAG, "grammar rule created");
                 }
             }
+        }
+
+        NodeList testsList = document.getElementsByTagName(TEST_SCENARIO);
+        for (int i = 0; i < testsList.getLength(); i++)
+        {
+            Node node = testsList.item(i);
+            NamedNodeMap attr = node.getAttributes();
+            String input_word = attr.getNamedItem(INPUT_WORD).getNodeValue();
+
+            dataSource.addGrammarTest(input_word);
         }
     }
 
