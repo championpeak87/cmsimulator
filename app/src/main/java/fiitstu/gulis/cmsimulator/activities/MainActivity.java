@@ -116,6 +116,57 @@ public class MainActivity extends FragmentActivity
 
     private Timer timer;
 
+    private boolean isFirstTimeLaunch() {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        int defaultValue = getResources().getInteger(R.integer.first_time_launch);
+        int currentValue = sharedPreferences.getInt("FIRST_TIME_LAUNCH", defaultValue);
+
+        if (currentValue == 0) {
+            // SAVE FIRST TIME LAUNCH
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("FIRST_TIME_LAUNCH", 1);
+            editor.putString("LAST_KNOWN_VERSION", BuildConfig.VERSION_NAME);
+            editor.apply();
+        }
+
+        return currentValue == 0;
+    }
+
+    private boolean isNewVersion() {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        String lastKnownVersion = sharedPreferences.getString("LAST_KNOWN_VERSION", "");
+        String currentVersion = BuildConfig.VERSION_NAME;
+
+        if (lastKnownVersion.equals("") || !lastKnownVersion.equals(currentVersion)) {
+            // SAVE LAST KNOWN VERSION
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("LAST_KNOWN_VERSION", BuildConfig.VERSION_NAME);
+            editor.apply();
+        }
+
+        return !currentVersion.equals(lastKnownVersion);
+    }
+
+    private void handleWhatsNewShowcase() {
+        boolean firstTimeLaunch = isFirstTimeLaunch();
+        boolean isNewVersion = isNewVersion();
+
+        if (isNewVersion && !firstTimeLaunch) {
+            MaterialShowcaseView whatsNewMessage = new MaterialShowcaseView.Builder(this)
+                    .renderOverNavigationBar()
+                    .setTitleText(getString(R.string.whats_new))
+                    .setContentTextColor(getColor(R.color.introContentText))
+                    .setContentText(getString(R.string.whats_new_content))
+                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                    .setDismissText(R.string.understood)
+                    .setDelay(500)
+                    .build();
+
+            whatsNewMessage._showNow();
+        }
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +186,7 @@ public class MainActivity extends FragmentActivity
             }
         }
 
-
+        handleWhatsNewShowcase();
 
         final int textColor = getColor(R.color.introContentText);
 

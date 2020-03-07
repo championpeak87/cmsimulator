@@ -2,4 +2,5 @@
 <resources>
     <integer name="port">3000</integer>
     <integer name="request_magic_number">0xF117C500</integer>
+    <integer name="first_time_launch">0</integer>
 </resources>
