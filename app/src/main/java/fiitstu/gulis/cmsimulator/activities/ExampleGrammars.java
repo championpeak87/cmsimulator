@@ -8,14 +8,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.tasks.ExampleGrammarAdapter;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 
 public class ExampleGrammars extends FragmentActivity {
+    private static final String TAG = "ExampleGrammars";
     private RecyclerView recyclerView;
 
     @Override
@@ -45,7 +48,11 @@ public class ExampleGrammars extends FragmentActivity {
                 return true;
             case R.id.menu_help:
                 // TODO: CREATE HELP MENU
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
                 return true;
         }
 

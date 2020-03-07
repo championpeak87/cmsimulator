@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,10 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 
 import java.sql.Time;
 
 public class GrammarTaskDetailsActivity extends FragmentActivity {
+    private static final String TAG = "GrammarTaskDetailsActiv";
 
     // EXTRA INTENT VALUES
     private boolean exampleTask;
@@ -76,7 +79,11 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
                 return true;
             case R.id.menu_help:
                 // TODO: IMPLEMENT HELP
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
                 return true;
         }
 

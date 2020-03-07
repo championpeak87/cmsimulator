@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExitDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
@@ -104,7 +106,11 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                 return true;
             case R.id.menu_help:
                 /* TODO: IMPLEMENT HELP */
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
                 return true;
             case R.id.menu_publish_grammar_task:
                 // TODO: IMPLEMENT TASK UPLOADING

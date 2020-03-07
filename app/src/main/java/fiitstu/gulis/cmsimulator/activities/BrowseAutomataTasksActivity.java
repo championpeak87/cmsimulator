@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
 import fiitstu.gulis.cmsimulator.models.users.User;
@@ -39,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseAutomataTasksActivity extends FragmentActivity {
+    private static final String TAG = "BrowseAutomataTasksActi";
+
     private List<Task> listOfTasks;
     public static int user_id;
     private String authkey;
@@ -100,7 +104,12 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
                 return true;
             case R.id.menu_help:
                 // TODO: IMPLEMENT HELP DIALOG
-                Toast.makeText(mContext, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
+                return true;
         }
 
         return false;

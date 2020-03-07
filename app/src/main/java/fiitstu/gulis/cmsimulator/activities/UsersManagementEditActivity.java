@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.UserManagementAdapter;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
@@ -43,6 +45,8 @@ public class UsersManagementEditActivity extends FragmentActivity {
     private int item_position;
 
     private ArrayAdapter<CharSequence> adapter;
+
+    private static final String TAG = "UsersManagementEditActi";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -211,7 +215,11 @@ public class UsersManagementEditActivity extends FragmentActivity {
                 return true;
             case R.id.menu_help:
                 // TODO: IMPLEMENT HELP
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    Log.w(TAG, e.getMessage(), e);
+                }
                 return true;
         }
 
