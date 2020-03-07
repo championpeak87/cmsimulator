@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout android:id="@+id/constraintLayout_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.v7.widget.RecyclerView android:layout_height="match_parent" android:layout_width="match_parent" android:layoutAnimation="@anim/layout_animation" />
+    <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view_grammar_tasks" android:layout_height="match_parent" android:layout_width="match_parent"
+                                            android:layoutAnimation="@anim/layout_animation"/>
 
     <LinearLayout android:id="@+id/linearLayout_empty_tasks"
                   android:layout_width="wrap_content"

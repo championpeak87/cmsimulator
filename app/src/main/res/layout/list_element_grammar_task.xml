@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/cardview_task"
+                                    xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dp"
+                                    android:layout_margin="5dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardCornerRadius="10dp"
+                                    card_view:cardElevation="5dp"
+                                    android:foreground="?android:attr/selectableItemBackground"
+                                    android:transitionName="card_transition"
+                                    android:clickable="true">
+    <FrameLayout android:id="@+id/framelayout_context" android:layout_width="match_parent" android:layout_height="match_parent">
+        <android.support.constraint.ConstraintLayout
+                android:id="@+id/task_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp">
+            <TextView android:id="@+id/textview_grammar_type"
+                      android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:gravity="center_vertical"
+                      android:lines="2"
+                      android:text="@string/grammar"
+                      android:background="@color/primary_color"
+                      android:textColor="@color/md_white_1000" android:padding="10dp" android:textAllCaps="true"
+                      android:textStyle="bold" card_view:layout_constraintTop_toTopOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView android:id="@+id/textview_task_name"
+                  android:layout_marginTop="55dp" android:layout_marginHorizontal="10dp"
+                  android:layout_width="match_parent" android:layout_height="95dp"
+                  android:gravity="center" android:textSize="20sp"/>
+
+        <LinearLayout android:id="@+id/task_bottom_bar" android:elevation="5dp"
+                      android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:gravity="right" android:layout_gravity="bottom"
+                      android:background="@color/primary_color_light">
+            <ImageButton
+                    android:id="@+id/button_delete_task"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_delete_24"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/delete"/>
+            <ImageButton
+                    android:id="@+id/button_help_task"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_help_24"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/help"/>
+            <ImageButton
+                    android:id="@+id/button_flag_task"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_flag_24"
+                    android:background="@null"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/mark_task_as"/>
+        </LinearLayout>
+    </FrameLayout>
+    <ProgressBar android:id="@+id/progressbar_task_loading" android:layout_gravity="center"
+                 android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="gone"/>
+</android.support.v7.widget.CardView>
