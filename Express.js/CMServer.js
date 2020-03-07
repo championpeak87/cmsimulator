@@ -877,4 +877,23 @@ app.get('/api/grammarTasks/add', (req, res) => {
 
 })
 
+app.get('/api/grammarTasks/getTasks', (req, res) => {
+  const user_id = req.query.user_id;
+  const auth_key = '\\x' + req.query.auth_key;
+
+  pool.query('select gt.*, gtr.task_status, gt.time - gtr.time_elapsed as remaining_time, gtr.submitted, gtr.submission_date from grammar_tasks as gt left join (SELECT * from grammar_task_results where user_id=$1) as gtr on gtr.task_id = gt.task_id;', [user_id], (err, results) => {
+
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(results.rows);
+      console.log(Date(), [user_id], 'has fetched tasks!');
+    }
+    else {
+      res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
+    }
+  })
+})
+
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

@@ -120,9 +120,10 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                     DataSource dataSource = DataSource.getInstance();
                     dataSource.open();
                     List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+                    List<String> tests = dataSource.getGrammarTests();
                     FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
                     try {
-                        fileHandler.setData(grammarRuleList);
+                        fileHandler.setData(grammarRuleList, tests);
                         fileHandler.writeFile("grammarTask");
                     } catch (ParserConfigurationException | IOException | TransformerException e) {
                         e.printStackTrace();

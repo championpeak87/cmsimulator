@@ -2,7 +2,7 @@ package fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks;
 
 import fiitstu.gulis.cmsimulator.elements.Task;
 
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Time;
 
 public class GrammarTask {
@@ -21,6 +21,17 @@ public class GrammarTask {
         this.text = text;
         this.available_time = available_time;
         this.publicInputs = publicInputs;
+    }
+
+    public GrammarTask(String title, String text, Time available_time, Time remaining_time, boolean publicInputs, int task_id, Task.TASK_STATUS status, Date submission_date) {
+        this.title = title;
+        this.text = text;
+        this.available_time = available_time;
+        this.remaining_time = remaining_time;
+        this.publicInputs = publicInputs;
+        this.task_id = task_id;
+        this.status = status;
+        this.submission_date = submission_date;
     }
 
     public String getTitle() {

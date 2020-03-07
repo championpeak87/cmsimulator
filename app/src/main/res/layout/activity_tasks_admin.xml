@@ -160,7 +160,6 @@
 						android:text="@string/find_tasks"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_slideshow_24"
-						android:enabled="false"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
