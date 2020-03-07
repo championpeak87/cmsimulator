@@ -12,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
+import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.R;
+
+import java.util.Calendar;
 
 /**
  * A fragment that displays the user guide.
@@ -375,7 +379,15 @@ public class GuideFragment extends DialogFragment {
             }
         });
         resetScrollView();
-        ScrollView.inflate(contentScrollView.getContext(), R.layout.guide_credits, contentScrollView);
+        View credits = ScrollView.inflate(contentScrollView.getContext(), R.layout.guide_credits, contentScrollView);
+        TextView version = credits.findViewById(R.id.textview_version);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String sYear = Integer.toString(year);
+        String buildVariant = "";
+        if (!BuildConfig.FLAVOR.equals("normal"))
+            buildVariant = " " + BuildConfig.FLAVOR;
+        String versionText = String.format("CMSimulator v" + BuildConfig.VERSION_NAME + buildVariant.toUpperCase() + " ©" + sYear);
+        version.setText(versionText);
 
         int nightModeFlags =
                 getContext().getResources().getConfiguration().uiMode &
