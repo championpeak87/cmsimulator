@@ -44,6 +44,7 @@ public class UrlManager {
     private final static String ADD_GRAMMAR_TASK_TO_TABLE = "/api/grammarTasks/add";
     private final static String GET_ALL_GRAMMAR_TASKS_PATH = "/api/grammarTasks/getTasks";
     private final static String DELETE_GRAMMAR_TASK_PATH = "/api/grammarTasks/delete";
+    private final static String CHANGE_GRAMMAR_TASK_FLAG_PATH = "/api/grammarTasks/changeFlag";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -114,8 +115,26 @@ public class UrlManager {
         }
     }
 
-    public URL getDeleteGrammarTaskURL(int task_id)
-    {
+    public URL getChangeGrammarTaskFlagURL(Task.TASK_STATUS status, int task_id, int user_id) {
+        Uri uri = Uri.parse(URI + CHANGE_GRAMMAR_TASK_FLAG_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(TASK_STATUS_KEY, status.toString())
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+
+    public URL getDeleteGrammarTaskURL(int task_id) {
         Uri uri = Uri.parse(URI + DELETE_GRAMMAR_TASK_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .build();

@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,9 +28,10 @@ import java.util.ArrayList;
  */
 public class TaskStatusDialog extends DialogFragment {
     private Spinner status_spinner;
-    private static ArrayList<String> task_states = initStates();
+    private ArrayList<String> task_states;
     private ArrayAdapter<String> adapter;
     private Task.TASK_STATUS selectedStatus = Task.TASK_STATUS.IN_PROGRESS;
+    private Context mContext;
 
     private OnClickListener listener;
 
@@ -37,22 +39,18 @@ public class TaskStatusDialog extends DialogFragment {
         void onClick(Bundle outputBundle);
     }
 
-    public static ArrayList<String> initStates() {
+    public void initStates() {
         ArrayList<String> list = new ArrayList<>();
         for (Task.TASK_STATUS status :
                 Task.TASK_STATUS.values()) {
-            list.add(status.getLocalised_name());
+            list.add(status.getLocalised_name(mContext));
         }
 
-        return list;
+        task_states = list;
     }
 
     public void setOnClickListener(OnClickListener listener) {
         this.listener = listener;
-    }
-
-    public static TaskStatusDialog newInstance() {
-        return new TaskStatusDialog();
     }
 
     @NonNull
@@ -75,33 +73,11 @@ public class TaskStatusDialog extends DialogFragment {
                 });
 
         status_spinner = view.findViewById(R.id.spinner_task_status);
+        initStates();
         String[] itemsArray = new String[task_states.size()];
         itemsArray = task_states.toArray(itemsArray);
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsArray);
         status_spinner.setAdapter(adapter);
-//        status_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                switch (position)
-//                {
-//                    case 0:
-//                        selectedStatus = Task.TASK_STATUS.IN_PROGRESS;
-//                        break;
-//                    case 1:
-//                        selectedStatus = Task.TASK_STATUS.CORRECT;
-//                        break;
-//                    case 2:
-//                        selectedStatus = Task.TASK_STATUS.WRONG;
-//                        break;
-//                    case 3:
-//                        selectedStatus = Task.TASK_STATUS.NEW;
-//                        break;
-//                    case 4:
-//                        selectedStatus = Task.TASK_STATUS.TOO_LATE;
-//                        break;
-//                }
-//            }
-//        });
         return builder.create();
     }
 
@@ -127,6 +103,11 @@ public class TaskStatusDialog extends DialogFragment {
         outputBundle.putSerializable("SELECTED_FLAG", selectedStatus);
 
         return outputBundle;
+    }
+
+    public void setContext(Context context)
+    {
+        this.mContext = context;
     }
 
 }

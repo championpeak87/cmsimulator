@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.elements;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Resources;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
@@ -73,19 +74,19 @@ public class Task implements Serializable {
 
         private String query;
 
-        public String getLocalised_name() {
+        public String getLocalised_name(Context mContext) {
             switch (this) {
                 default:
                 case IN_PROGRESS:
-                    return BrowseAutomataTasksActivity.context.getString(R.string.task_in_progress);
+                    return mContext.getString(R.string.task_in_progress);
                 case CORRECT:
-                    return BrowseAutomataTasksActivity.context.getString(R.string.task_correct);
+                    return mContext.getString(R.string.task_correct);
                 case WRONG:
-                    return BrowseAutomataTasksActivity.context.getString(R.string.task_wrong);
+                    return mContext.getString(R.string.task_wrong);
                 case NEW:
-                    return BrowseAutomataTasksActivity.context.getString(R.string.task_new);
+                    return mContext.getString(R.string.task_new);
                 case TOO_LATE:
-                    return BrowseAutomataTasksActivity.context.getString(R.string.task_too_late);
+                    return mContext.getString(R.string.task_too_late);
             }
         }
 

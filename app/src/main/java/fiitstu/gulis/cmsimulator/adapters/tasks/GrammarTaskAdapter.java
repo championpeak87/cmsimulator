@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.GrammarTaskDetailsActivity;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.dialogs.TaskStatusDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
@@ -59,9 +65,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ItemHolder holder, int position) {
         final GrammarTask selectedGrammarTask = grammarTaskList.get(position);
         final CardView selectedCard = holder.card_CardView;
+
+        holder.setStatusColor(selectedGrammarTask.getStatus());
         holder.taskName_TextView.setText(grammarTaskList.get(position).getTitle());
 
         holder.helpTask_ImageButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +143,56 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                 alertDialog.show();
             }
         });
+
+        holder.flagTask_ImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final int task_id = selectedGrammarTask.getTask_id();
+                final int user_id = TaskLoginActivity.loggedUser.getUser_id();
+
+                TaskStatusDialog taskStatusDialog = new TaskStatusDialog();
+                taskStatusDialog.setContext(mContext);
+                taskStatusDialog.setOnClickListener(new TaskStatusDialog.OnClickListener() {
+                    @Override
+                    public void onClick(Bundle outputBundle) {
+                        final Task.TASK_STATUS status = (Task.TASK_STATUS) outputBundle.getSerializable("SELECTED_FLAG");
+
+                        class MarkTaskAsAsync extends AsyncTask<Void, Void, String> {
+                            @Override
+                            protected String doInBackground(Void... voids) {
+                                ServerController serverController = new ServerController();
+                                UrlManager urlManager = new UrlManager();
+                                URL markTaskStatusURL = urlManager.getChangeGrammarTaskFlagURL(status, task_id, user_id);
+                                String output = null;
+                                try {
+                                    output = serverController.getResponseFromServer(markTaskStatusURL);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s != null && !s.isEmpty()) {
+                                    Toast.makeText(mContext, R.string.task_status_updated, Toast.LENGTH_SHORT).show();
+                                    //holder.setStatusColor(status);
+                                    GrammarTaskAdapter.this.changeTaskStatus(task_id, status);
+                                } else {
+                                    Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        new MarkTaskAsAsync().execute();
+                    }
+                });
+
+                FragmentManager fm = ((FragmentActivity)mContext).getSupportFragmentManager();
+                taskStatusDialog.show(fm, "TASK_STATUS_DIALOG");
+            }
+        });
     }
 
     @Override
@@ -149,6 +207,8 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
         private ImageButton flagTask_ImageButton;
         private FrameLayout content_FrameLayout;
         private CardView card_CardView;
+        private LinearLayout bottomBar_LinearLayout;
+        private TextView textview_grammar_type;
 
         private ProgressBar taskLoading_ProgressBar;
 
@@ -162,6 +222,8 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
             taskLoading_ProgressBar = itemView.findViewById(R.id.progressbar_task_loading);
             content_FrameLayout = itemView.findViewById(R.id.framelayout_context);
             card_CardView = itemView.findViewById(R.id.cardview_task);
+            bottomBar_LinearLayout = itemView.findViewById(R.id.task_bottom_bar);
+            textview_grammar_type = itemView.findViewById(R.id.textview_grammar_type);
         }
 
         public void showLoadingProgressBar(boolean value, Task.TASK_STATUS status) {
@@ -199,6 +261,40 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                     break;
             }
         }
+
+        public void setStatusColor(Task.TASK_STATUS status)
+        {
+            final int topBarColor;
+            final int bottomBarColor;
+
+            switch (status)
+            {
+                case IN_PROGRESS:
+                    topBarColor = mContext.getColor(R.color.in_progress_top_bar);
+                    bottomBarColor = mContext.getColor(R.color.in_progress_bottom_bar);
+                    break;
+                case CORRECT:
+                    topBarColor = mContext.getColor(R.color.correct_answer_top_bar);
+                    bottomBarColor = mContext.getColor(R.color.correct_answer_bottom_bar);
+                    break;
+                case WRONG:
+                    topBarColor = mContext.getColor(R.color.wrong_answer_top_bar);
+                    bottomBarColor = mContext.getColor(R.color.wrong_answer_bottom_bar);
+                    break;
+                default:
+                case NEW:
+                    topBarColor = mContext.getColor(R.color.primary_color);
+                    bottomBarColor = mContext.getColor(R.color.primary_color_light);
+                    break;
+                case TOO_LATE:
+                    topBarColor = mContext.getColor(R.color.too_late_answer_top_bar);
+                    bottomBarColor = mContext.getColor(R.color.too_late_answer_bottom_bar);
+                    break;
+            }
+
+            bottomBar_LinearLayout.setBackgroundColor(bottomBarColor);
+            textview_grammar_type.setBackgroundColor(topBarColor);
+        }
     }
 
     public void deleteTask(int task_id) {
@@ -208,6 +304,23 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
             if (currentTask.getTask_id() == task_id) {
                 grammarTaskList.remove(currentTask);
                 notifyItemRemoved(i);
+                if (datasetChangedListener != null)
+                    datasetChangedListener.onDataChange();
+                break;
+            }
+        }
+    }
+
+    public void changeTaskStatus(int task_id, Task.TASK_STATUS status)
+    {
+        final int grammarTaskListSize = grammarTaskList.size();
+        for (int i = 0; i < grammarTaskListSize; i++)
+        {
+            final GrammarTask task = grammarTaskList.get(i);
+            if (task.getTask_id() == task_id)
+            {
+                task.setStatus(status);
+                notifyItemChanged(i);
                 if (datasetChangedListener != null)
                     datasetChangedListener.onDataChange();
                 break;

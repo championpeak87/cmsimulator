@@ -942,4 +942,98 @@ app.get('/api/grammarTasks/delete', (req, res) => {
   })
 })
 
+app.get('/api/grammarTasks/changeFlag', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+  const task_status = req.query.task_status;
+
+  pool.query('SELECT * FROM grammar_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (err, result) => {
+    if (err) { throw err; }
+    if (result.rowCount > 0) {
+      if (task_status == "too_late") {
+        pool.query('SELECT time FROM grammar_tasks where task_id = $1;', [task_id], (er, rs) => {
+          if (er) { throw er }
+          if (rs.rowCount > 0) {
+            const available_time = rs.rows[0].time;
+            var interval = "";
+            if (available_time.hours) {
+              interval += available_time.hours + ":";
+            }
+            else {
+              interval += "00:";
+            }
+
+            if (available_time.minutes) {
+              interval += available_time.minutes + ":";
+            }
+            else {
+              interval += "00:";
+            }
+
+            if (available_time.seconds) {
+              interval += available_time.seconds;
+            }
+            else {
+              interval += "00";
+            }
+
+            pool.query('UPDATE grammar_task_results SET task_status=\'too_late\', time_elapsed = $1 WHERE task_id = $2 AND user_id = $3;', [interval, task_id, user_id], (e, r) => {
+              if (e) { throw e }
+              if (r.rowCount > 0) {
+                res.status(HTTP_OK).send({
+                  task_id: task_id,
+                  user_id: user_id,
+                  task_status: task_status,
+                  updated: true
+                });
+              }
+              else {
+                res.status(HTTP_OK).send({
+                  task_id: task_id,
+                  user_id: user_id,
+                  task_status: task_status,
+                  updated: true
+                });
+              }
+            })
+          }
+        });
+      }
+      else {
+        pool.query('UPDATE grammar_task_results SET task_status=$1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result2) => {
+          if (error) { throw error }
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              task_status: task_status,
+              updated: true
+            }
+          );
+        });
+      }
+    }
+    else {
+      filesystem.mkdir("./uploads/" + user_id + "/", { recursive: true }, (err) => {
+        if (err) { throw err };
+      });
+      filesystem.copyFile("./uploads/grammarTasks/" + task_id + ".cmsg", "./uploads/" + user_id + "/" + task_id + ".cmsg", (error) => {
+        if (error) { throw error; }
+      }
+      );
+      pool.query("INSERT INTO grammar_task_results(task_id, time_elapsed, task_status, user_id) VALUES ($1, $2, $3, $4);", [task_id, '00:00:00', task_status, user_id], (error, result2) => {
+        if (error) { throw error }
+        res.status(HTTP_OK).send(
+          {
+            task_id: task_id,
+            user_id: user_id,
+            task_status: task_status,
+            updated: true
+          }
+        )
+      })
+    }
+  })
+})
+
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))
