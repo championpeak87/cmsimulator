@@ -113,7 +113,6 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                 }
                 return true;
             case R.id.menu_publish_grammar_task:
-                // TODO: IMPLEMENT TASK UPLOADING
                 if (!canUpload()) {
                     return true;
                 }
@@ -270,7 +269,7 @@ public class NewGrammarTaskActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent grammarConfiguration = new Intent(NewGrammarTaskActivity.this, GrammarActivity.class);
-                grammarConfiguration.putExtra("GRAMMAR_TASK_CONFIGURATION", true);
+                grammarConfiguration.putExtra(GrammarActivity.CONFIGURATION_GRAMMAR_KEY, true);
                 startActivity(grammarConfiguration);
                 hasTaskSet = true;
             }

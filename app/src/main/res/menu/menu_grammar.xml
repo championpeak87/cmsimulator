@@ -18,7 +18,7 @@
             style="@style/dropDownMenuItemStyle"/>
 
     <item android:id="@+id/menu_grammar_test"
-          android:title="@string/bulk_test"
+          android:title="@string/testing"
           style="@style/dropDownMenuItemStyle"/>
 
     <item

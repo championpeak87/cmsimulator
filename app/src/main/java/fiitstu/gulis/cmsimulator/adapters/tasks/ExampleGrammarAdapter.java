@@ -123,11 +123,9 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
         {
             @Override
             public void onClick(View view) {
-                Bundle outputBundle = new Bundle();
-                outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, position);
-
                 Intent nextActivityIntent = new Intent(mContext, GrammarActivity.class);
-                nextActivityIntent.putExtras(outputBundle);
+                nextActivityIntent.putExtra(GrammarActivity.EXAMPLE_GRAMMAR_KEY, true);
+                nextActivityIntent.putExtra(GrammarActivity.EXAMPLE_NUMBER_KEY, position);
                 mContext.startActivity(nextActivityIntent);
             }
         });

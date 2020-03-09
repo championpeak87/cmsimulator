@@ -3,6 +3,7 @@ package fiitstu.gulis.cmsimulator.elements;
 import android.provider.ContactsContract;
 import android.util.Log;
 import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.dialogs.NewRegexTestDialog;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class RegexTest {
     // escape char
     private static final String ESCAPE_CHARACTER = "\\";
 
+    public enum TestVerification {
+        GRAMMAR,
+        AUTOMATA
+    }
+
     private RegexTest() {
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
@@ -59,7 +65,6 @@ public class RegexTest {
     }
 
     public boolean containsWrongSymbols(String input) {
-        List<Symbol> alphabet = DataSource.getInstance().getInputAlphabetFullExtract();
         char[] inputArray = input.toCharArray();
         for (char selectedChar : inputArray) {
             final String selectedCharString = String.valueOf(selectedChar);
@@ -67,7 +72,6 @@ public class RegexTest {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -89,7 +93,9 @@ public class RegexTest {
     }
 
     public List<String> getListOfParsedStrings(String input) {
-        QUANTIFIERS_DEPTH = DataSource.getInstance().getRegexDepth();
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        QUANTIFIERS_DEPTH = dataSource.getRegexDepth();
         List<String> outputTests = new ArrayList<>();
         outputTests.add(input);
         while (containsNoneOrMore(outputTests))

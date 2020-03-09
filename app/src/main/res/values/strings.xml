@@ -1337,5 +1337,6 @@
     <string name="last_known_version">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
 	<string name="whats_new_content">- Bugfixes</string>
+    <string name="testing">Testing</string>
 
 </resources>

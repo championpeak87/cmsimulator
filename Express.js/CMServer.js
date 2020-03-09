@@ -1036,4 +1036,72 @@ app.get('/api/grammarTasks/changeFlag', (req, res) => {
   })
 })
 
+app.get('/api/grammarTasks/download', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+
+  if (!user_id) {
+    pool.query('SELECT * FROM grammar_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+      if (err) { throw err }
+      {
+        if (result.rowCount > 0) {
+          const filePath = "./uploads/grammarTasks/" + task_id + ".cmsg";
+          res.status(HTTP_OK).download(filePath);
+        }
+        else {
+          res.status(HTTP_NOT_FOUND).send(
+            {
+              task_id: task_id,
+              found: false
+            }
+          );
+        }
+      }
+    })
+  }
+  else {
+    pool.query('SELECT * FROM grammar_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (error, results) => {
+      if (error) { throw error }
+      if (results.rowCount > 0) {
+        pool.query('SELECT task_id FROM grammar_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+          if (err) { throw err }
+          {
+            if (result.rowCount > 0) {
+              const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsg";
+              res.status(HTTP_OK).download(filePath);
+            }
+            else {
+              res.status(HTTP_NOT_FOUND).send(
+                {
+                  task_id: task_id,
+                  found: false
+                }
+              );
+            }
+          }
+        })
+      }
+      else {
+        pool.query('SELECT task_id FROM grammar_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+          if (err) { throw err }
+          {
+            if (result.rowCount > 0) {
+              const filePath = "./uploads/grammarTasks/" + task_id + ".cmsg";
+              res.status(HTTP_OK).download(filePath);
+            }
+            else {
+              res.status(HTTP_NOT_FOUND).send(
+                {
+                  task_id: task_id,
+                  found: false
+                }
+              );
+            }
+          }
+        })
+      }
+    })
+  }
+})
+
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

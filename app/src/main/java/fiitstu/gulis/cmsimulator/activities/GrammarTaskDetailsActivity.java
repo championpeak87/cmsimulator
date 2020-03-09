@@ -2,6 +2,7 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,15 +11,14 @@ import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.*;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 
 import java.sql.Time;
+
+import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
 public class GrammarTaskDetailsActivity extends FragmentActivity {
     private static final String TAG = "GrammarTaskDetailsActiv";
@@ -183,8 +183,19 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
         findViewById(R.id.task_bottom_bar).setBackgroundColor(getColor(lightColor));
         TextView detailsTextView = findViewById(R.id.textview_task_details);
 
-        // TODO: HANDLE DARK MODE!
-        detailsTextView.setTextColor(getColor(lightColor));
+        int nightModeFlags =
+                getContext().getResources().getConfiguration().uiMode &
+                        Configuration.UI_MODE_NIGHT_MASK;
+
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                detailsTextView.setTextColor(getColor(R.color.md_white_1000));
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                detailsTextView.setTextColor(getColor(lightColor));
+                break;
+        }
 
         setWindowColor(primaryColor, darkColor);
     }

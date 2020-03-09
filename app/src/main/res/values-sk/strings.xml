@@ -972,4 +972,5 @@
     <string name="wrong_input_word">Vstupné slovo je nesprávne!</string>
     <string name="not_implemented">Táto funkcia nebola implementovaná!</string>
     <string name="whats_new">Čo je nové</string>
+    <string name="testing">Testovanie</string>
 </resources>

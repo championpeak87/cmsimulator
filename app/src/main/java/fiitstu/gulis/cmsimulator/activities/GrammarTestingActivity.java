@@ -24,6 +24,8 @@ import fiitstu.gulis.cmsimulator.adapters.grammar.TestsAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.dialogs.NewGrammarTestDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
+import fiitstu.gulis.cmsimulator.dialogs.NewRegexTestDialog;
+import fiitstu.gulis.cmsimulator.elements.RegexTest;
 
 import java.util.List;
 
@@ -66,13 +68,10 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (recyclerView != null)
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        }
-        else
-        {
+        } else {
             if (recyclerView != null)
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         }
@@ -88,10 +87,12 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                 FragmentManager fm = getSupportFragmentManager();
                 NewGrammarTestDialog newGrammarTestDialog = new NewGrammarTestDialog();
                 newGrammarTestDialog.show(fm, TAG);
-                // TODO: ADD TEST
                 return true;
             case R.id.menu_add_test_regex:
                 // TODO: ADD REGEX TEST
+                NewRegexTestDialog dialog = new NewRegexTestDialog(RegexTest.TestVerification.GRAMMAR);
+                dialog.setAdapter(adapter);
+                dialog.show(getSupportFragmentManager(), TAG);
                 return true;
             case R.id.menu_run_test:
                 // TODO: EXECUTE TESTS

@@ -70,6 +70,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private static final String PIPE = "|";
     private static final String EPSILON = "ε";
 
+    // INTENT EXTRA KEYS
+    public static final String EXAMPLE_GRAMMAR_KEY = "EXAMPLE_GRAMMAR";
+    public static final String EXAMPLE_NUMBER_KEY = "EXAMPLE_GRAMMAR_NUMBER";
+    public static final String CONFIGURATION_GRAMMAR_KEY = "CONFIGURATION_GRAMMAR_KEY";
+
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
     public static final int REQUEST_WRITE_STORAGE = 1;
@@ -82,6 +87,14 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private int rulesTableSize = 15;
 
     private boolean setGrammarTask = false;
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem tests = menu.findItem(R.id.menu_grammar_test);
+        tests.setVisible(setGrammarTask ? true : false);
+
+        return true;
+    }
 
     /**
      * Defines the usage of all the buttons in the activity
@@ -101,7 +114,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         actionBar.setTitle(R.string.grammar_definition);
 
         Intent thisIntent = this.getIntent();
-        setGrammarTask = thisIntent.getBooleanExtra("GRAMMAR_TASK_CONFIGURATION", false);
+        setGrammarTask = thisIntent.getBooleanExtra(CONFIGURATION_GRAMMAR_KEY, false);
 
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
@@ -117,10 +130,12 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         dataSource = DataSource.getInstance();
         dataSource.open();
 
-        Bundle bundle = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
 
-        if (bundle != null) {
-            grammarExampleToLoad = bundle.getInt(MainActivity.CONFIGURATION_TYPE);
+        // EXAMPLE GRAMMAR
+        if (intent.getBooleanExtra(EXAMPLE_GRAMMAR_KEY, false)) {
+            grammarExampleToLoad = intent.getIntExtra(EXAMPLE_NUMBER_KEY, 0);
             prepareExmaple(grammarExampleToLoad);
         }
 
