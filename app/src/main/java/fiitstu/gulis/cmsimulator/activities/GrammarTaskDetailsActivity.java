@@ -23,6 +23,14 @@ import java.sql.Time;
 public class GrammarTaskDetailsActivity extends FragmentActivity {
     private static final String TAG = "GrammarTaskDetailsActiv";
 
+    // INTENT EXTRA KEYS
+    public static final String EXAMPLE_TASK_KEY = "EXAMPLE_TASK";
+    public static final String TASK_NAME_KEY = "TASK_NAME";
+    public static final String TASK_DETAILS_KEY = "TASK_DETAILS";
+    public static final String GRAMMAR_TYPE_KEY = "GRAMMAR_TYPE";
+    public static final String PUBLIC_INPUTS_KEY = "PUBLIC_INPUTS";
+    public static final String AVAILABLE_TIME_KEY = "AVAILABLE_TIME";
+
     // EXTRA INTENT VALUES
     private boolean exampleTask;
     private String task_name;
@@ -37,6 +45,8 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
     private EditText textView_taskDescription;
     private LinearLayout available_time_layout;
     private LinearLayout public_inputs;
+    private EditText edittext_task_test_inputs;
+    private EditText edittext_task_solution_time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,10 +62,12 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
 
     private void handleIntentExtras() {
         Intent intent = this.getIntent();
-        exampleTask = intent.getBooleanExtra("EXAMPLE_TASK", false);
-        task_name = intent.getStringExtra("TASK_NAME");
-        task_description = intent.getStringExtra("TASK_DETAILS");
-        grammar_type = intent.getStringExtra("GRAMMAR_TYPE");
+        exampleTask = intent.getBooleanExtra(EXAMPLE_TASK_KEY, false);
+        task_name = intent.getStringExtra(TASK_NAME_KEY);
+        task_description = intent.getStringExtra(TASK_DETAILS_KEY);
+        grammar_type = intent.getStringExtra(GRAMMAR_TYPE_KEY);
+        available_time = (Time) intent.getSerializableExtra(AVAILABLE_TIME_KEY);
+        public_input = intent.getBooleanExtra(PUBLIC_INPUTS_KEY, false);
 
         if (exampleTask) {
             available_time_layout.setVisibility(View.GONE);
@@ -102,13 +114,19 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
         this.available_time_layout = findViewById(R.id.linearlayout_solution_time);
         this.public_inputs = findViewById(R.id.linearlayout_public_tests);
         this.textView_grammarType = findViewById(R.id.textview_grammar_type);
+        this.edittext_task_solution_time = findViewById(R.id.edittext_task_solution_time);
+        this.edittext_task_test_inputs = findViewById(R.id.edittext_task_test_inputs);
     }
 
-    private void setData()
-    {
+    private void setData() {
         this.textView_taskName.setText(task_name);
         this.textView_taskDescription.setText(task_description);
         this.textView_grammarType.setText(grammar_type);
+
+        if (!exampleTask) {
+            this.edittext_task_test_inputs.setText(public_input ? R.string.yes : R.string.no);
+            this.edittext_task_solution_time.setText(available_time.toString());
+        }
     }
 
     private void setConnectedTransition() {

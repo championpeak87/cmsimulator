@@ -110,10 +110,10 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
                 final GrammarTask selectedTask = listOfTasks.get(position);
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, cardView, ViewCompat.getTransitionName(cardView));
                 Intent hintIntent = new Intent(mContext, GrammarTaskDetailsActivity.class);
-                hintIntent.putExtra("TASK_NAME", selectedTask.getTitle());
-                hintIntent.putExtra("TASK_DETAILS", selectedTask.getText());
-                hintIntent.putExtra("EXAMPLE_TASK", true);
-                hintIntent.putExtra("GRAMMAR_TYPE", grammarType.getText().toString());
+                hintIntent.putExtra(GrammarTaskDetailsActivity.TASK_NAME_KEY, selectedTask.getTitle());
+                hintIntent.putExtra(GrammarTaskDetailsActivity.TASK_DETAILS_KEY, selectedTask.getText());
+                hintIntent.putExtra(GrammarTaskDetailsActivity.EXAMPLE_TASK_KEY, true);
+                hintIntent.putExtra(GrammarTaskDetailsActivity.GRAMMAR_TYPE_KEY, grammarType.getText().toString());
 
                 mContext.startActivity(hintIntent, options.toBundle());
             }

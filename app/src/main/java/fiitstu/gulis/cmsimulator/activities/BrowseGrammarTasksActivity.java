@@ -27,6 +27,7 @@ import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.grammar_tasks.GrammarTasksParser;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -140,11 +141,13 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
                 if (s == null || s.isEmpty()) {
                     Toast.makeText(BrowseGrammarTasksActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    GrammarTasksParser grammarTasksParser = GrammarTasksParser.getInstance();
-                    try {
-                        grammarTaskList = grammarTasksParser.getTasksFromJSONArray(s);
-                    } catch (JSONException e) {
-                        Toast.makeText(BrowseGrammarTasksActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    if (!s.contains("not_found")) {
+                        GrammarTasksParser grammarTasksParser = GrammarTasksParser.getInstance();
+                        try {
+                            grammarTaskList = grammarTasksParser.getTasksFromJSONArray(s);
+                        } catch (JSONException e) {
+                            Toast.makeText(BrowseGrammarTasksActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

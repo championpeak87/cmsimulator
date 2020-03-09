@@ -23,7 +23,7 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'cmsimulator',
-  password: '123456',
+  password: '6b7f8538234541e9af7c40559be2a508',
   port: 5432,
 })
 
@@ -889,9 +889,55 @@ app.get('/api/grammarTasks/getTasks', (req, res) => {
       console.log(Date(), [user_id], 'has fetched tasks!');
     }
     else {
-      res.status(HTTP_NOT_FOUND).send({
+      res.status(HTTP_OK).send({
         not_found: true
       });
+    }
+  })
+})
+
+app.get('/api/grammarTasks/delete', (req, res) => {
+  const task_id = req.query.task_id;
+
+  pool.query('SELECT * FROM grammar_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
+    if (result.rowCount > 0) {
+      const filename = "./uploads/grammarTasks/" + result.rows[0].task_id + ".cmsg";
+      filesystem.exists(filename, (exists) => {
+        if (exists) {
+          filesystem.unlink(filename, (error) => {
+            if (error) {
+              throw error;
+            }
+          });
+        }
+        else {
+          console.log("TASK COULD NOT BE DELETED! FILE DOES NOT EXIST!");
+        }
+      });
+    }
+  })
+  pool.query('DELETE FROM grammar_task_results WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
+    if (result.rowCount > 0) {
+      pool.query('DELETE FROM grammar_tasks WHERE task_id = $1;', [task_id], (error, result2) => {
+        if (error) { throw error }
+        console.log([task_id], "Task has been deleted!");
+        res.status(HTTP_OK).send({
+          task_id: task_id,
+          deleted: true
+        });
+      })
+    }
+    else {
+      pool.query('DELETE FROM grammar_tasks WHERE task_id = $1;', [task_id], (error, result2) => {
+        if (error) { throw error }
+        console.log([task_id], "Task has been deleted!");
+        res.status(HTTP_OK).send({
+          task_id: task_id,
+          deleted: true
+        });
+      })
     }
   })
 })

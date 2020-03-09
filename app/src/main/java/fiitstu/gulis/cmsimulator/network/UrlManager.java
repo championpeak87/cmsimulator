@@ -43,6 +43,7 @@ public class UrlManager {
     private final static String UPLOAD_GRAMMAR_TASK_URL = "/api/grammarTasks/upload";
     private final static String ADD_GRAMMAR_TASK_TO_TABLE = "/api/grammarTasks/add";
     private final static String GET_ALL_GRAMMAR_TASKS_PATH = "/api/grammarTasks/getTasks";
+    private final static String DELETE_GRAMMAR_TASK_PATH = "/api/grammarTasks/delete";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -111,6 +112,24 @@ public class UrlManager {
             /* TODO: SET PUBLIC SERVER URI */
             URI = "http://cmserver.fiit.stuba.sk";
         }
+    }
+
+    public URL getDeleteGrammarTaskURL(int task_id)
+    {
+        Uri uri = Uri.parse(URI + DELETE_GRAMMAR_TASK_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+
     }
 
     public URL getAllGrammarTasksUrl(int user_id) {
