@@ -2,20 +2,20 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.transition.Fade;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 
 import java.sql.Time;
@@ -30,6 +30,7 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
     public static final String GRAMMAR_TYPE_KEY = "GRAMMAR_TYPE";
     public static final String PUBLIC_INPUTS_KEY = "PUBLIC_INPUTS";
     public static final String AVAILABLE_TIME_KEY = "AVAILABLE_TIME";
+    public static final String TASK_STATUS_KEY = "TASK_STATUS";
 
     // EXTRA INTENT VALUES
     private boolean exampleTask;
@@ -38,6 +39,7 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
     private String grammar_type;
     private Time available_time;
     private boolean public_input;
+    private Task.TASK_STATUS task_status;
 
     // UI ELEMENTS
     private TextView textView_grammarType;
@@ -68,6 +70,7 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
         grammar_type = intent.getStringExtra(GRAMMAR_TYPE_KEY);
         available_time = (Time) intent.getSerializableExtra(AVAILABLE_TIME_KEY);
         public_input = intent.getBooleanExtra(PUBLIC_INPUTS_KEY, false);
+        task_status = (Task.TASK_STATUS) intent.getSerializableExtra(TASK_STATUS_KEY);
 
         if (exampleTask) {
             available_time_layout.setVisibility(View.GONE);
@@ -126,7 +129,64 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
         if (!exampleTask) {
             this.edittext_task_test_inputs.setText(public_input ? R.string.yes : R.string.no);
             this.edittext_task_solution_time.setText(available_time.toString());
+            setWindowsColor(task_status);
         }
+    }
+
+    private void setWindowColor(int color, int color2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getColor(color2));
+            window.setNavigationBarColor(getColor(color2));
+
+            ActionBar actionBar = this.getActionBar();
+            actionBar.setBackgroundDrawable(new ColorDrawable(getColor(color)));
+        }
+    }
+
+    private void setWindowsColor(Task.TASK_STATUS status) {
+        final int primaryColor;
+        final int darkColor;
+        final int lightColor;
+
+        switch (status) {
+            case IN_PROGRESS:
+                lightColor = R.color.in_progress_bottom_bar;
+                primaryColor = R.color.in_progress_top_bar;
+                darkColor = R.color.in_progress_dark;
+                break;
+            case CORRECT:
+                lightColor = R.color.correct_answer_bottom_bar;
+                primaryColor = R.color.correct_answer_top_bar;
+                darkColor = R.color.correct_answer_dark;
+                break;
+            case WRONG:
+                lightColor = R.color.wrong_answer_bottom_bar;
+                primaryColor = R.color.wrong_answer_top_bar;
+                darkColor = R.color.wrong_answer_dark;
+                break;
+            default:
+            case NEW:
+                lightColor = R.color.primary_color_light;
+                primaryColor = R.color.primary_color;
+                darkColor = R.color.primary_color_dark;
+                break;
+            case TOO_LATE:
+                lightColor = R.color.too_late_answer_bottom_bar;
+                primaryColor = R.color.too_late_answer_top_bar;
+                darkColor = R.color.too_late_answer_dark;
+                break;
+        }
+
+        this.textView_grammarType.setBackgroundColor(getColor(primaryColor));
+        findViewById(R.id.task_bottom_bar).setBackgroundColor(getColor(lightColor));
+        TextView detailsTextView = findViewById(R.id.textview_task_details);
+
+        // TODO: HANDLE DARK MODE!
+        detailsTextView.setTextColor(getColor(lightColor));
+
+        setWindowColor(primaryColor, darkColor);
     }
 
     private void setConnectedTransition() {

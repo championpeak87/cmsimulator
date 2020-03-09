@@ -82,6 +82,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                 grammarTaskDetailsIntent.putExtra(GrammarTaskDetailsActivity.GRAMMAR_TYPE_KEY, mContext.getString(R.string.grammar));
                 grammarTaskDetailsIntent.putExtra(GrammarTaskDetailsActivity.AVAILABLE_TIME_KEY, selectedGrammarTask.getAvailable_time());
                 grammarTaskDetailsIntent.putExtra(GrammarTaskDetailsActivity.PUBLIC_INPUTS_KEY, selectedGrammarTask.isPublicInputs());
+                grammarTaskDetailsIntent.putExtra(GrammarTaskDetailsActivity.TASK_STATUS_KEY, selectedGrammarTask.getStatus());
 
                 ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, selectedCard, ViewCompat.getTransitionName(selectedCard));
 
