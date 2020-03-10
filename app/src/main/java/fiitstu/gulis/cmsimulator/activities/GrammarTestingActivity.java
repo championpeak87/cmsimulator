@@ -138,7 +138,7 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                 dialog.setAdapter(adapter);
                 dialog.show(getSupportFragmentManager(), TAG);
                 return true;
-            case R.id.menu_bulk_test_configure:
+            case R.id.menu_bulk_test_settings:
                 Intent optionIntent = new Intent(this, OptionsActivity.class);
                 startActivity(optionIntent);
             case R.id.menu_run_test:
