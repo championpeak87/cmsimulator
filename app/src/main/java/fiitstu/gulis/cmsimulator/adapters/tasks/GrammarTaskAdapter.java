@@ -26,10 +26,16 @@ import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
+import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
 import fiitstu.gulis.cmsimulator.activities.GrammarTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.adapters.grammar.RulesAdapter;
+import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.database.FileFormatException;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.GrammarTaskDialog;
 import fiitstu.gulis.cmsimulator.dialogs.TaskStatusDialog;
+import fiitstu.gulis.cmsimulator.elements.GrammarRule;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.network.ServerController;
@@ -80,12 +86,10 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
         holder.setStatusColor(selectedGrammarTask.getStatus());
         holder.taskName_TextView.setText(grammarTaskList.get(position).getTitle());
 
-        selectedCard.setOnClickListener(new View.OnClickListener()
-        {
+        selectedCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                class DownloadGrammarTaskAsync extends AsyncTask<Void,Void,String>
-                {
+                class DownloadGrammarTaskAsync extends AsyncTask<Void, Void, String> {
                     @Override
                     protected void onPreExecute() {
                         holder.showLoadingProgressBar(true, selectedGrammarTask.getStatus());
@@ -120,9 +124,34 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                             return;
                         }
 
-                        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                        FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
 
-                        GrammarTaskDialog grammarTaskDialog = new GrammarTaskDialog(selectedGrammarTask, GrammarTaskDialog.DialogStyle.NEW_TASK_ENTERING);
+                        GrammarTaskDialog.DialogStyle style;
+                        switch (selectedGrammarTask.getStatus()) {
+                            case IN_PROGRESS:
+                                style = GrammarTaskDialog.DialogStyle.OLD_TASK_ENTERING;
+                                break;
+                            case CORRECT:
+                            case TOO_LATE:
+                            case WRONG:
+                                style = GrammarTaskDialog.DialogStyle.SOLVED_TASK_ENTERING;
+                                break;
+                            default:
+                            case NEW:
+                                style = GrammarTaskDialog.DialogStyle.NEW_TASK_ENTERING;
+                                break;
+                        }
+                        GrammarTaskDialog grammarTaskDialog = new GrammarTaskDialog(selectedGrammarTask, style);
+                        grammarTaskDialog.setOnTaskStartListener(new GrammarTaskDialog.OnTaskStartListener() {
+                            @Override
+                            public void onStart() {
+                                loadFile();
+
+                                Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
+                                grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
+                                mContext.startActivity(grammarActivityIntent);
+                            }
+                        });
                         grammarTaskDialog.show(fragmentManager, TAG);
                     }
                 }
@@ -249,7 +278,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                     }
                 });
 
-                FragmentManager fm = ((FragmentActivity)mContext).getSupportFragmentManager();
+                FragmentManager fm = ((FragmentActivity) mContext).getSupportFragmentManager();
                 taskStatusDialog.show(fm, "TASK_STATUS_DIALOG");
             }
         });
@@ -322,13 +351,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
             }
         }
 
-        public void setStatusColor(Task.TASK_STATUS status)
-        {
+        public void setStatusColor(Task.TASK_STATUS status) {
             final int topBarColor;
             final int bottomBarColor;
 
-            switch (status)
-            {
+            switch (status) {
                 case IN_PROGRESS:
                     topBarColor = mContext.getColor(R.color.in_progress_top_bar);
                     bottomBarColor = mContext.getColor(R.color.in_progress_bottom_bar);
@@ -371,14 +398,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
         }
     }
 
-    public void changeTaskStatus(int task_id, Task.TASK_STATUS status)
-    {
+    public void changeTaskStatus(int task_id, Task.TASK_STATUS status) {
         final int grammarTaskListSize = grammarTaskList.size();
-        for (int i = 0; i < grammarTaskListSize; i++)
-        {
+        for (int i = 0; i < grammarTaskListSize; i++) {
             final GrammarTask task = grammarTaskList.get(i);
-            if (task.getTask_id() == task_id)
-            {
+            if (task.getTask_id() == task_id) {
                 task.setStatus(status);
                 notifyItemChanged(i);
                 if (datasetChangedListener != null)
@@ -415,5 +439,22 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
         }
 
         return false;
+    }
+
+    private void loadFile() {
+        try {
+            FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
+            String path = mContext.getApplicationInfo().dataDir + "/grammarTask.cmsg";
+            fileHandler.loadFile(path);
+
+            DataSource dataSource = DataSource.getInstance();
+            dataSource.open();
+            dataSource.globalDrop();
+            fileHandler.getData(dataSource);
+        } catch (FileFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1339,5 +1339,6 @@
 	<string name="whats_new_content">- Bugfixes</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
+    <string name="preview_task">Preview task</string>
 
 </resources>

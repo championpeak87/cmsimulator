@@ -32,7 +32,7 @@ import fiitstu.gulis.cmsimulator.activities.MainActivity;
 /**
  * A class that allows serializing and deserializing data from XML and reading and
  * writing the XML to files.
- *
+ * <p>
  * Created by Martin on 7. 3. 2017.
  */
 public class FileHandler {
@@ -56,7 +56,7 @@ public class FileHandler {
     /**
      * Contains the file names of the built-in example grammars
      */
-    public static class GrammarExamples{
+    public static class GrammarExamples {
         public static final String GREG_AN = "Greg_a^n.cmsg";
         public static final String GREG_3KPlus1 = "Greg_3k+1.cmsg";
         public static final String GREG_End01Or10 = "Greg_End01Or10.cmsg";
@@ -94,7 +94,7 @@ public class FileHandler {
         }
 
         public static Format fromExtension(String extension) {
-            switch(extension) {
+            switch (extension) {
                 case "jff":
                 case ".jff":
                     return JFF;
@@ -123,6 +123,7 @@ public class FileHandler {
 
         /**
          * Creates a Version object representing the version of the given root element
+         *
          * @param rootElement the root element of the file whose version you want to obtain
          */
         Version(Element rootElement) {
@@ -130,8 +131,7 @@ public class FileHandler {
             if (versionString.equals("")) {
                 major = 1;
                 minor = 0;
-            }
-            else {
+            } else {
                 String[] versionNumbers = versionString.split("\\.");
                 major = Integer.parseInt(versionNumbers[0]);
                 minor = versionNumbers.length > 1 ? Integer.parseInt(versionNumbers[1]) : 0;
@@ -217,9 +217,10 @@ public class FileHandler {
 
     /**
      * Opens a file and builds parse tree
+     *
      * @param filePath the path to the file
      * @throws FileFormatException when something goes wrong during the parse
-     * @throws IOException if the file cannot be read
+     * @throws IOException         if the file cannot be read
      */
     public void loadFile(String filePath) throws FileFormatException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -238,10 +239,11 @@ public class FileHandler {
 
     /**
      * Opens a file from assets and builds parse tree
+     *
      * @param assetManager the AssetManager that will be used to load the asset
-     * @param filename the name of the asset file
+     * @param filename     the name of the asset file
      * @throws FileFormatException when something goes wrong during the parse
-     * @throws IOException if the file cannot be read
+     * @throws IOException         if the file cannot be read
      */
     public void loadAsset(AssetManager assetManager, String filename) throws IOException, FileFormatException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -260,31 +262,30 @@ public class FileHandler {
 
     /**
      * Reads data from the open file and populates the DataSource
+     *
      * @param dataSource the DataSource to be populated
      * @throws FileFormatException if the open file contains invalid data
      */
     public void getData(DataSource dataSource) throws FileFormatException {
         if (format == Format.CMS || format == Format.CMST) {
             getDataCMS(dataSource);
-        }
-        else if (format == Format.CMSG){
+        } else if (format == Format.CMSG) {
             getDataCMSG(dataSource);
-        }
-        else {
+        } else {
             getDataJFF(dataSource);
         }
     }
 
     /**
      * Returns a task stored in the file, or null if there is none
+     *
      * @return a task stored in the file, or null if there is none
      */
     public Task getTask() {
         if (format == Format.JFF) {
             //JFLAP does not support tasks
             return null;
-        }
-        else {
+        } else {
             Log.v(TAG, "getTask method started");
             Element rootElement = document.getDocumentElement();
 
@@ -303,8 +304,7 @@ public class FileHandler {
             int resultVersion;
             if (version.major == 2 && version.minor == 0) {
                 resultVersion = 0;
-            }
-            else {
+            } else {
                 resultVersion = Integer.parseInt(taskElement.getAttribute(TASK_RESULT_VERSION));
             }
 
@@ -316,6 +316,7 @@ public class FileHandler {
 
     /**
      * Writes a task into the document
+     *
      * @param task the task to be written
      */
     public void writeTask(Task task) throws ParserConfigurationException {
@@ -344,7 +345,8 @@ public class FileHandler {
 
     /**
      * Loads data from the DataSource into the document
-     * @param dataSource the dataSource from which to read data
+     *
+     * @param dataSource  the dataSource from which to read data
      * @param machineType the type of the machine
      * @throws ParserConfigurationException if the parser configuration failed
      */
@@ -382,8 +384,7 @@ public class FileHandler {
         if (format == Format.CMS || format == Format.CMST) {
             setDataCMS(states, inputAlphabet, stackAlphabet, transitions, tapeElements,
                     positiveTests, negativeTests, machineType);
-        }
-        else {
+        } else {
             setDataJFF(states, inputAlphabet, stackAlphabet, transitions, machineType);
         }
     }
@@ -391,31 +392,30 @@ public class FileHandler {
     public void setData(List<GrammarRule> grammarRules, List<String> tests) throws ParserConfigurationException {
         if (document == null)
             createDoc();
-        if(format == Format.CMSG){
+        if (format == Format.CMSG) {
             setDataCMSG(grammarRules, tests);
-        }
-        else{
+        } else {
             setDataJFF(grammarRules);
         }
     }
 
     public void setData(List<GrammarRule> grammarRules) throws ParserConfigurationException {
-        if(document == null){
+        if (document == null) {
             createDoc();
         }
-        if(format == Format.CMSG){
+        if (format == Format.CMSG) {
             setDataCMSG(grammarRules);
-        }
-        else{
+        } else {
             setDataJFF(grammarRules);
         }
     }
 
     /**
      * Loads data from an XML String
+     *
      * @param xmlDoc a string that contains an XML document to be parsed
      * @throws ParserConfigurationException if the parser configuration failed
-     * @throws FileFormatException if the file could not be parsed
+     * @throws FileFormatException          if the file could not be parsed
      */
     public void loadFromString(String xmlDoc) throws ParserConfigurationException, FileFormatException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -431,6 +431,7 @@ public class FileHandler {
     /**
      * Saves the document into a String. The contents of the String are equivalent to those written into
      * a file by {@link #writeFile(String)}, but the formatting is optimized for minimum size
+     *
      * @return a String representation of the generated XML document
      * @throws TransformerException if error happened while formatting the document
      */
@@ -457,8 +458,9 @@ public class FileHandler {
     /**
      * Saves the file. The data written into the file is equivalent to that returned by
      * {@link #writeToString()}, but the formatting is more friendly to human readers
+     *
      * @param fileName the name of the file
-     * @throws IOException if error happened while saving the file
+     * @throws IOException          if error happened while saving the file
      * @throws TransformerException if error happened while formatting the file
      */
     public void writeFile(String fileName) throws IOException, TransformerException {
@@ -482,7 +484,7 @@ public class FileHandler {
 
     public int getMachineType() throws FileFormatException {
         int machineType;
-        
+
         Element rootElement = document.getDocumentElement();
         Version version = format == Format.JFF ? null : new Version(rootElement);
 
@@ -495,8 +497,7 @@ public class FileHandler {
                 throw new FileFormatException(TYPE + " element not found");
             }
             machineTypeString = type.getFirstChild().getNodeValue();
-        }
-        else {
+        } else {
             Element automatonElement = (Element) rootElement.getElementsByTagName(AUTOMATON).item(0);
             machineTypeString = automatonElement.getAttribute(TYPE);
         }
@@ -575,7 +576,7 @@ public class FileHandler {
         LongSparseArray<Symbol> inputAlphabetMap = new LongSparseArray<>();
         Element inputAlphabetElement = (Element) automatonElement.getElementsByTagName(INPUT_ALPHABET).item(0);
         if (inputAlphabetElement == null) {
-            throw  new FileFormatException(INPUT_ALPHABET + " element not found");
+            throw new FileFormatException(INPUT_ALPHABET + " element not found");
         }
         NodeList inputAlphabetNodeList = inputAlphabetElement.getElementsByTagName(SYMBOL);
         for (int i = 0; i < inputAlphabetNodeList.getLength(); i++) {
@@ -587,12 +588,10 @@ public class FileHandler {
             int inputSymbolProperties;
             if (version.major >= 2) {
                 inputSymbolProperties = Integer.parseInt(symbolNode.getAttribute(PROPERTIES));
-            }
-            else {
+            } else {
                 if (inputSymbolValue.equals("ε") || inputSymbolValue.equals("#")) {
                     inputSymbolProperties = Symbol.EMPTY;
-                }
-                else {
+                } else {
                     inputSymbolProperties = 0;
                 }
             }
@@ -617,7 +616,7 @@ public class FileHandler {
         if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
             Element stackAlphabetElement = (Element) automatonElement.getElementsByTagName(STACK_ALPHABET).item(0);
             if (stackAlphabetElement == null) {
-                throw  new FileFormatException(STACK_ALPHABET + " element not found");
+                throw new FileFormatException(STACK_ALPHABET + " element not found");
             }
             NodeList stackAlphabetNodeList = stackAlphabetElement.getElementsByTagName(SYMBOL);
             for (int i = 0; i < stackAlphabetNodeList.getLength(); i++) {
@@ -627,12 +626,10 @@ public class FileHandler {
                 int stackSymbolProperties;
                 if (version.major >= 2) {
                     stackSymbolProperties = Integer.parseInt(symbolNode.getAttribute(PROPERTIES));
-                }
-                else {
+                } else {
                     if (i == 0) {
                         stackSymbolProperties = Symbol.STACK_BOTTOM;
-                    }
-                    else {
+                    } else {
                         stackSymbolProperties = 0;
                     }
                 }
@@ -649,7 +646,7 @@ public class FileHandler {
         LongSparseArray<State> stateMap = new LongSparseArray<>();
         Element statesElement = (Element) automatonElement.getElementsByTagName(STATES).item(0);
         if (statesElement == null) {
-            throw  new FileFormatException(STATES + " element not found");
+            throw new FileFormatException(STATES + " element not found");
         }
         NodeList stateNodeList = statesElement.getElementsByTagName(STATE);
         for (int i = 0; i < stateNodeList.getLength(); i++) {
@@ -672,7 +669,7 @@ public class FileHandler {
         ////initialize transitionElements
         Element transitionsElement = (Element) automatonElement.getElementsByTagName(TRANSITIONS).item(0);
         if (transitionsElement == null) {
-            throw  new FileFormatException(TRANSITIONS + " element not found");
+            throw new FileFormatException(TRANSITIONS + " element not found");
         }
         NodeList transitionNodeList = transitionsElement.getElementsByTagName(TRANSITION);
         for (int i = 0; i < transitionNodeList.getLength(); i++) {
@@ -805,18 +802,18 @@ public class FileHandler {
         Log.v(TAG, "getDataJFF method started");
 
         Element documentType = (Element) document.getElementsByTagName(TYPE).item(0);
-        if(documentType.getTextContent().equals(GRAMMAR)){
+        if (documentType.getTextContent().equals(GRAMMAR)) {
             NodeList nodeList = document.getElementsByTagName(PRODUCTION);
             dataSource.clearGrammarRuleTable();
-            for(int i = 0; i < nodeList.getLength(); i++){
+            for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
                 NodeList rules = node.getChildNodes();
 
-                for(int j = 1; j < rules.getLength(); j += 4) {
-                    if(rules.item(j) != null && rules.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                for (int j = 1; j < rules.getLength(); j += 4) {
+                    if (rules.item(j) != null && rules.item(j).getNodeType() == Node.ELEMENT_NODE) {
                         String leftRule = rules.item(j).getTextContent();
-                        String rightRule = rules.item(j+2).getTextContent();
-                        if(rightRule.equals("")){
+                        String rightRule = rules.item(j + 2).getTextContent();
+                        if (rightRule.equals("")) {
                             rightRule = "ε";
                         }
                         dataSource.addGrammarRule(leftRule, rightRule);
@@ -824,8 +821,7 @@ public class FileHandler {
                     }
                 }
             }
-        }
-        else {
+        } else {
             int machineType = getMachineType();
 
             //insert empty symbol
@@ -1058,19 +1054,19 @@ public class FileHandler {
         }
     }
 
-    private void getDataCMSG(DataSource dataSource) throws FileFormatException{
+    private void getDataCMSG(DataSource dataSource) throws FileFormatException {
         Log.v(TAG, "getDataCMSG method started");
 
         NodeList nodeList = document.getElementsByTagName("rule");
         dataSource.clearGrammarRuleTable();
-        for(int i = 0; i < nodeList.getLength(); i++){
+        for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             NodeList rules = node.getChildNodes();
 
-            for(int j = 1; j < rules.getLength(); j += 4) {
-                if(rules.item(j) != null && rules.item(j).getNodeType() == Node.ELEMENT_NODE) {
+            for (int j = 1; j < rules.getLength(); j += 4) {
+                if (rules.item(j) != null && rules.item(j).getNodeType() == Node.ELEMENT_NODE) {
                     String leftRule = rules.item(j).getTextContent();
-                    String rightRule = rules.item(j+2).getTextContent();
+                    String rightRule = rules.item(j + 2).getTextContent();
                     dataSource.addGrammarRule(leftRule, rightRule);
                     Log.v(TAG, "grammar rule created");
                 }
@@ -1078,8 +1074,7 @@ public class FileHandler {
         }
 
         NodeList testsList = document.getElementsByTagName(TEST_SCENARIO);
-        for (int i = 0; i < testsList.getLength(); i++)
-        {
+        for (int i = 0; i < testsList.getLength(); i++) {
             Node node = testsList.item(i);
             NamedNodeMap attr = node.getAttributes();
             String input_word = attr.getNamedItem(INPUT_WORD).getNodeValue();
@@ -1143,7 +1138,7 @@ public class FileHandler {
         if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {
             Element stackAlphabetElement = document.createElement(STACK_ALPHABET);
             for (Symbol symbol : stackAlphabetList) {
-                Element SymbolElement  = document.createElement(SYMBOL);
+                Element SymbolElement = document.createElement(SYMBOL);
                 SymbolElement.setAttribute(ID, String.valueOf(symbol.getId()));
                 SymbolElement.setAttribute(NAME, symbol.getValue());
                 SymbolElement.setAttribute(PROPERTIES, String.valueOf(symbol.getProperties()));
@@ -1288,7 +1283,7 @@ public class FileHandler {
 
         //create test elements
         Element tests = document.createElement(TEST_SCENARIOS);
-        for (TestScenario testScenario: testScenarios) {
+        for (TestScenario testScenario : testScenarios) {
             Element testElement = document.createElement(TEST_SCENARIO);
             //store input word
             if (testScenario.getInputWord() != null) {
@@ -1320,7 +1315,7 @@ public class FileHandler {
 
         //create negative test elements
         tests = document.createElement(NEGATIVE_SCENARIOS);
-        for (TestScenario testScenario: negativeTestScenarios) {
+        for (TestScenario testScenario : negativeTestScenarios) {
             Element testElement = document.createElement(TEST_SCENARIO);
             //store input word
             if (testScenario.getInputWord() != null) {
@@ -1551,7 +1546,7 @@ public class FileHandler {
         Log.i(TAG, "rootElement attached to document");
     }
 
-    private void setDataJFF(List<GrammarRule> grammarRules){
+    private void setDataJFF(List<GrammarRule> grammarRules) {
         Log.v(TAG, "setDataJFF method started");
 
         Element rootElement = document.createElement(ROOT);
@@ -1559,7 +1554,7 @@ public class FileHandler {
         typeElement.appendChild(document.createTextNode(GRAMMAR));
         rootElement.appendChild(typeElement);
 
-        for(int i = 0; i < grammarRules.size(); i++){
+        for (int i = 0; i < grammarRules.size(); i++) {
             Element productionElement = document.createElement(PRODUCTION);
 
             Element leftElement = document.createElement(LEFT);
@@ -1567,9 +1562,9 @@ public class FileHandler {
             productionElement.appendChild(leftElement);
 
             Element rightElement = document.createElement(RIGHT);
-            if(grammarRules.get(i).getGrammarRight().equals("ε")){
+            if (grammarRules.get(i).getGrammarRight().equals("ε")) {
                 rightElement.appendChild(document.createTextNode(""));
-            }else{
+            } else {
                 rightElement.appendChild(document.createTextNode(grammarRules.get(i).getGrammarRight()));
             }
             productionElement.appendChild(rightElement);
@@ -1580,29 +1575,32 @@ public class FileHandler {
         Log.i(TAG, "rootElement attached to document");
     }
 
-    private void setDataCMSG(List<GrammarRule> grammarRules, List<String> tests)
-    {
+    private void setDataCMSG(List<GrammarRule> grammarRules, List<String> tests) {
         Log.v(TAG, "setDataCMSG method started");
 
         Element rootElement = document.createElement(GRAMMAR);
 
-        for(int i = 0; i < grammarRules.size(); i++){
+        for (int i = 0; i < grammarRules.size(); i++) {
+            final GrammarRule current = grammarRules.get(i);
+            if (current == null)
+                continue;
+            if (current.getGrammarLeft() == null || current.getGrammarRight() == null)
+                continue;
             Element ruleElement = document.createElement(RULE);
 
             Element leftElement = document.createElement(LEFT);
-            leftElement.appendChild(document.createTextNode(grammarRules.get(i).getGrammarLeft()));
+            leftElement.appendChild(document.createTextNode(current.getGrammarLeft()));
             ruleElement.appendChild(leftElement);
 
             Element rightElement = document.createElement(RIGHT);
-            rightElement.appendChild(document.createTextNode(grammarRules.get(i).getGrammarRight()));
+            rightElement.appendChild(document.createTextNode(current.getGrammarRight()));
             ruleElement.appendChild(rightElement);
 
             rootElement.appendChild(ruleElement);
         }
 
         Element testsElement = document.createElement(TEST_SCENARIOS);
-        for (int i = 0; i < tests.size(); i++)
-        {
+        for (int i = 0; i < tests.size(); i++) {
             Element testScenarioElement = document.createElement(TEST_SCENARIO);
             testScenarioElement.setAttribute(INPUT_WORD, tests.get(i));
             testsElement.appendChild(testScenarioElement);
@@ -1613,12 +1611,12 @@ public class FileHandler {
         Log.i(TAG, "rootElement attached to document");
     }
 
-    private void setDataCMSG(List<GrammarRule> grammarRules){
+    private void setDataCMSG(List<GrammarRule> grammarRules) {
         Log.v(TAG, "setDataCMSG method started");
 
         Element rootElement = document.createElement(GRAMMAR);
 
-        for(int i = 0; i < grammarRules.size(); i++){
+        for (int i = 0; i < grammarRules.size(); i++) {
             Element ruleElement = document.createElement(RULE);
 
             Element leftElement = document.createElement(LEFT);

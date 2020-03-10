@@ -74,6 +74,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String EXAMPLE_GRAMMAR_KEY = "EXAMPLE_GRAMMAR";
     public static final String EXAMPLE_NUMBER_KEY = "EXAMPLE_GRAMMAR_NUMBER";
     public static final String CONFIGURATION_GRAMMAR_KEY = "CONFIGURATION_GRAMMAR_KEY";
+    public static final String TASK_SOLVE_GRAMMAR_KEY = "TASK_SOLVE_GRAMMAR_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -87,6 +88,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private int rulesTableSize = 15;
 
     private boolean setGrammarTask = false;
+    private boolean taskSolving = false;
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -137,6 +139,16 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         if (intent.getBooleanExtra(EXAMPLE_GRAMMAR_KEY, false)) {
             grammarExampleToLoad = intent.getIntExtra(EXAMPLE_NUMBER_KEY, 0);
             prepareExmaple(grammarExampleToLoad);
+        }
+
+        if (setGrammarTask) {
+            loadTask();
+        }
+
+        if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
+            taskSolving = true;
+            loadTask();
+            Toast.makeText(this, "TASK SOLVING", Toast.LENGTH_SHORT).show();
         }
 
         //test
@@ -216,6 +228,14 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         });
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    private void loadTask() {
+        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+        rulesAdapter = new RulesAdapter(rulesTableSize);
+        rulesAdapter.setGrammarRuleList(grammarRuleList);
+        recyclerView.setAdapter(rulesAdapter);
+        recyclerView.setItemViewCacheSize(rulesTableSize);
     }
 
     @Override
@@ -310,7 +330,21 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                         }
                     })
                     .show();
-        } else super.onBackPressed();
+        } else {
+            saveRules();
+            super.onBackPressed();
+        }
+    }
+
+    private void saveRules()
+    {
+        List<GrammarRule> grammarRuleList = rulesAdapter.getGrammarRuleList();
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        for (GrammarRule rule : grammarRuleList)
+        {
+            dataSource.addGrammarRule(rule.getGrammarLeft(), rule.getGrammarRight());
+        }
     }
 
     /**
