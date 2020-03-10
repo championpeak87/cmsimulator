@@ -183,19 +183,25 @@ public class GrammarTaskDetailsActivity extends FragmentActivity {
         findViewById(R.id.task_bottom_bar).setBackgroundColor(getColor(lightColor));
         TextView detailsTextView = findViewById(R.id.textview_task_details);
 
-        int nightModeFlags =
-                getContext().getResources().getConfiguration().uiMode &
-                        Configuration.UI_MODE_NIGHT_MASK;
+        if (status == Task.TASK_STATUS.TOO_LATE) {
+            int nightModeFlags =
+                    getContext().getResources().getConfiguration().uiMode &
+                            Configuration.UI_MODE_NIGHT_MASK;
 
-        switch (nightModeFlags) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                detailsTextView.setTextColor(getColor(R.color.md_white_1000));
-                break;
-            case Configuration.UI_MODE_NIGHT_NO:
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                detailsTextView.setTextColor(getColor(lightColor));
-                break;
+            
+
+            switch (nightModeFlags) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    detailsTextView.setTextColor(getColor(R.color.md_white_1000));
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                    detailsTextView.setTextColor(getColor(lightColor));
+                    break;
+            }
         }
+        else detailsTextView.setTextColor(getColor(primaryColor));
+
 
         setWindowColor(primaryColor, darkColor);
     }

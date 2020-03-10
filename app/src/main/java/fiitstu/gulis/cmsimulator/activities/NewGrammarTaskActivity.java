@@ -289,6 +289,10 @@ public class NewGrammarTaskActivity extends FragmentActivity {
             Toast.makeText(this, R.string.task_not_set, Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (timerCheckBox.isChecked() && (timerEditText.getText().toString().isEmpty() || Integer.parseInt(timerEditText.getText().toString()) == 0)) {
+            timerCheckBox.setChecked(false);
+            timerEditText.setText("");
+        }
 
         return true;
     }

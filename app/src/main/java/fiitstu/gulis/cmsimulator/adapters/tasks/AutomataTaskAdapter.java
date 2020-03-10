@@ -3,6 +3,7 @@ package fiitstu.gulis.cmsimulator.adapters.tasks;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -150,17 +151,17 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
             case WRONG:
                 primary = mContext.getColor(R.color.wrong_answer_top_bar);
-                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.wrong_answer_bottom_bar);
+                light_primary = mContext.getColor(R.color.wrong_answer_bottom_bar);
                 break;
 
             case IN_PROGRESS:
                 primary = mContext.getColor(R.color.in_progress_top_bar);
-                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.in_progress_bottom_bar);
+                light_primary = mContext.getColor(R.color.in_progress_bottom_bar);
                 break;
 
             case CORRECT:
                 primary = mContext.getColor(R.color.correct_answer_top_bar);
-                light_primary = BrowseAutomataTasksActivity.mContext.getColor(R.color.correct_answer_bottom_bar);
+                light_primary = mContext.getColor(R.color.correct_answer_bottom_bar);
                 break;
 
             case TOO_LATE:
@@ -299,11 +300,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         if (AutomataTaskAdapter.this.view_results) {
                             TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.PREVIEW, machineType);
                             taskDialog.setAdapter(thisAdapter);
-                            taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
+                            taskDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), TASK_DIALOG);
                         } else {
                             TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
                             taskDialog.setAdapter(thisAdapter);
-                            taskDialog.show(BrowseAutomataTasksActivity.context.getSupportFragmentManager(), TASK_DIALOG);
+                            taskDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), TASK_DIALOG);
                         }
                     }
                 }
@@ -446,11 +447,12 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfTasks.size());
         if (listOfTasks.size() == 0)
+            // TODO: RESOLVE BrowseAutomataTasksActivity dependency
             BrowseAutomataTasksActivity.context.showEmptyScreen(true);
     }
 
     private boolean saveDownloadedFile(String input) {
-        String path = BrowseAutomataTasksActivity.context.getApplicationInfo().dataDir;
+        String path = mContext.getApplicationInfo().dataDir;
         File file = new File(path + "/automataTask.cmst");
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

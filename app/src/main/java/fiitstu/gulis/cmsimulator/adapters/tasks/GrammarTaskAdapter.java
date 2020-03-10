@@ -1,18 +1,22 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +28,7 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.GrammarTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.dialogs.GrammarTaskDialog;
 import fiitstu.gulis.cmsimulator.dialogs.TaskStatusDialog;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
@@ -32,6 +37,9 @@ import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -71,6 +79,57 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
 
         holder.setStatusColor(selectedGrammarTask.getStatus());
         holder.taskName_TextView.setText(grammarTaskList.get(position).getTitle());
+
+        selectedCard.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                class DownloadGrammarTaskAsync extends AsyncTask<Void,Void,String>
+                {
+                    @Override
+                    protected void onPreExecute() {
+                        holder.showLoadingProgressBar(true, selectedGrammarTask.getStatus());
+                    }
+
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        URL downloadURL = urlManager.getDownloadGrammarTaskURL(TaskLoginActivity.loggedUser.getUser_id(), selectedGrammarTask.getTask_id());
+                        ServerController serverController = new ServerController();
+                        String output = null;
+
+                        try {
+                            output = serverController.getResponseFromServer(downloadURL);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        holder.showLoadingProgressBar(false, selectedGrammarTask.getStatus());
+                        if (s == null || s.isEmpty()) {
+                            Toast.makeText(mContext, R.string.task_not_found, Toast.LENGTH_LONG).show();
+                            deleteTask(selectedGrammarTask.getTask_id());
+                            return;
+                        }
+                        if (!saveDownloadedFile(s)) {
+                            Toast.makeText(mContext, R.string.error_no_permissions, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+
+                        GrammarTaskDialog grammarTaskDialog = new GrammarTaskDialog(selectedGrammarTask, GrammarTaskDialog.DialogStyle.NEW_TASK_ENTERING);
+                        grammarTaskDialog.show(fragmentManager, TAG);
+                    }
+                }
+
+                new DownloadGrammarTaskAsync().execute();
+            }
+        });
 
         holder.helpTask_ImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -331,5 +390,30 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
 
     public void setDatasetChangedListener(DatasetChangedListener datasetChangedListener) {
         this.datasetChangedListener = datasetChangedListener;
+    }
+
+    private boolean saveDownloadedFile(String input) {
+        String path = mContext.getApplicationInfo().dataDir;
+        File file = new File(path + "/grammarTask.cmsg");
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) mContext,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            return false;
+        } else {
+            BufferedWriter writer = null;
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                writer = new BufferedWriter(fileWriter);
+                writer.write(input);
+                writer.close();
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 }
