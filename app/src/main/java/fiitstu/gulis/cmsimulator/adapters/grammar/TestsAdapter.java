@@ -75,6 +75,9 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         if (testWord.getResult() != null) {
             holder.linearLayout_list_test_background.setBackgroundColor(mContext.getColor(testWord.getResult() ? R.color.md_green_400 : R.color.md_red_500));
             holder.testStatusTextView.setText(testWord.getResult() ? R.string.accept : R.string.reject);
+        } else {
+            holder.linearLayout_list_test_background.setBackgroundColor(0);
+            holder.testStatusTextView.setText("");
         }
 
         holder.removeTestImageButton.setOnClickListener(new View.OnClickListener() {

@@ -138,9 +138,10 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                 dialog.setAdapter(adapter);
                 dialog.show(getSupportFragmentManager(), TAG);
                 return true;
+            case R.id.menu_bulk_test_configure:
+                Intent optionIntent = new Intent(this, OptionsActivity.class);
+                startActivity(optionIntent);
             case R.id.menu_run_test:
-                // TODO: EXECUTE TESTS
-
                 List<String> stringList = adapter.getListOfInputWords();
                 List<TestWord> testWordList = new ArrayList<>();
                 for (String test : stringList) {
@@ -166,8 +167,6 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                         queue.clear();
                     }
                 }
-
-
                 return true;
             case R.id.menu_bulk_test_help:
                 // TODO: IMPLEMENT HELP
