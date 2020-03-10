@@ -21,13 +21,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.adapters.grammar.MultipleTestsAdapter;
 import fiitstu.gulis.cmsimulator.adapters.grammar.TestsAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.dialogs.NewGrammarTestDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.dialogs.NewRegexTestDialog;
-import fiitstu.gulis.cmsimulator.elements.RegexTest;
+import fiitstu.gulis.cmsimulator.elements.*;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GrammarTestingActivity extends FragmentActivity implements NewGrammarTestDialog.OnAddedTestListener {
@@ -41,12 +44,16 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
     // INTENT EXTRA KEYS
     public static final String SOLVE_MODE = "SOLVE_MODE";
     public static final String CONFIGURATION_MODE = "CONFIGURATION_MODE";
+    public static final String GRAMMAR_TYPE = "GRAMMAR_TYPE";
 
     private boolean solveMode = false;
     private boolean configurationMode = false;
+    private String grammarType;
 
     // RecyclerView Adapter
     TestsAdapter adapter = null;
+
+    private UniqueQueue<String> queue = new UniqueQueue<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
         Intent intent = this.getIntent();
         solveMode = intent.getBooleanExtra(SOLVE_MODE, false);
         configurationMode = intent.getBooleanExtra(CONFIGURATION_MODE, false);
+        grammarType = intent.getStringExtra(GRAMMAR_TYPE);
     }
 
     @Override
@@ -126,16 +134,48 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                 newGrammarTestDialog.show(fm, TAG);
                 return true;
             case R.id.menu_add_test_regex:
-                // TODO: ADD REGEX TEST
                 NewRegexTestDialog dialog = new NewRegexTestDialog(RegexTest.TestVerification.GRAMMAR);
                 dialog.setAdapter(adapter);
                 dialog.show(getSupportFragmentManager(), TAG);
                 return true;
             case R.id.menu_run_test:
                 // TODO: EXECUTE TESTS
+
+                List<String> stringList = adapter.getListOfInputWords();
+                List<TestWord> testWordList = new ArrayList<>();
+                for (String test : stringList) {
+                    testWordList.add(new TestWord(test, 0, false));
+                }
+
+                String result;
+
+                for (int i = 0; i < testWordList.size(); i++) {
+                    TestWord testWord = testWordList.get(i);
+                    if (testWord.getWord() != null) {
+                        result = simulateGrammar(testWord.getWord(), grammarType);
+
+                        if (result.equals(getString(R.string.accept))) {
+                            testWord.setResult(true);
+                            adapter.markTestResult(testWord.getWord(), true);
+                        } else {
+                            testWord.setResult(false);
+                            adapter.markTestResult(testWord.getWord(), false);
+                        }
+
+                        testWordList.set(i, testWord);
+                        queue.clear();
+                    }
+                }
+
+
                 return true;
             case R.id.menu_bulk_test_help:
                 // TODO: IMPLEMENT HELP
+                try {
+                    throw new NotImplementedException(this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return true;
         }
 
@@ -188,5 +228,84 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
     @Override
     public void OnAdd(String inputWord) {
         adapter.addNewTest(inputWord);
+    }
+
+    private String simulateGrammar(String input, String grammarType) {
+        List<GrammarRule> startingRules = filterStartingRules();
+        String current;
+        StringBuilder temp;
+        long startTime, stopTime;
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+
+        for (GrammarRule grammarRule : startingRules) {
+            current = grammarRule.getGrammarRight();
+            queue.add(current);
+        }
+
+        startTime = System.currentTimeMillis();
+        while (!queue.isEmpty()) {
+            current = queue.remove();
+            stopTime = System.currentTimeMillis();
+
+            if (current.equals(input)) {
+                return getString(R.string.accept);
+            }
+
+            if (stopTime - startTime > 3000)
+                return getString(R.string.reject);
+
+            for (GrammarRule grammarRule : grammarRuleList) {
+                int index = 0;
+
+                String rightGrammarRule = grammarRule.getGrammarRight();
+                String leftGrammarRule = grammarRule.getGrammarLeft();
+                if (rightGrammarRule != null && leftGrammarRule != null)
+                    while ((index = (current.indexOf(leftGrammarRule, index) + 1)) > 0) {
+                        temp = new StringBuilder(current);
+                        if (rightGrammarRule != null && leftGrammarRule != null && rightGrammarRule.equals("ε")) {
+                            temp.replace(index - 1, index + leftGrammarRule.length() - 1, "");
+                            if (temp.toString().equals(input)) {
+                                return getString(R.string.accept);
+                            }
+                        } else {
+                            if (leftGrammarRule != null && rightGrammarRule != null) {
+                                temp.replace(index - 1, index + leftGrammarRule.length() - 1, rightGrammarRule);
+                                if (temp.toString().equals(input)) {
+                                    return getString(R.string.accept);
+                                }
+                            }
+                        }
+
+                        if (grammarType.equals("Unrestricted")) {
+                            queue.add(temp.toString());
+                        } else {
+                            if (temp.length() <= input.length() + 1) {
+                                queue.add(temp.toString());
+                            }
+                        }
+                    }
+            }
+        }
+        return getString(R.string.reject);
+    }
+
+    private List<GrammarRule> filterStartingRules() {
+        List<GrammarRule> startingRules = new ArrayList<>();
+
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+        for (GrammarRule grammarRule : grammarRuleList) {
+            if (grammarRule != null) {
+                String leftRule = grammarRule.getGrammarLeft();
+                if (leftRule != null && leftRule.equals("S")) {
+                    startingRules.add(grammarRule);
+                }
+            }
+        }
+
+        return startingRules;
     }
 }

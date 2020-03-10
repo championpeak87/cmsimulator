@@ -155,7 +155,6 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             loadTask();
         }
 
-
         //test
         Button grammarTestButton = findViewById(R.id.button_grammar_test);
         grammarTestButton.setOnClickListener(new View.OnClickListener() {
@@ -270,9 +269,14 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 onBackPressed();
                 return true;
             case R.id.menu_grammar_test:
+                saveRules();
+                DataSource dataSource = DataSource.getInstance();
+                dataSource.open();
+                List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
                 Intent grammarTest = new Intent(this, GrammarTestingActivity.class);
                 grammarTest.putExtra(GrammarTestingActivity.CONFIGURATION_MODE, setGrammarTask);
                 grammarTest.putExtra(GrammarTestingActivity.SOLVE_MODE, taskSolving);
+                grammarTest.putExtra(GrammarTestingActivity.GRAMMAR_TYPE, checkGrammarType(grammarRuleList));
                 startActivity(grammarTest);
                 return true;
             case R.id.menu_grammar_help:

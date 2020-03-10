@@ -27,7 +27,7 @@ import fiitstu.gulis.cmsimulator.elements.UniqueQueue;
 
 /**
  * Multiple tests activity.
- *
+ * <p>
  * Created by Krisztian Toth.
  */
 public class MultipleTestsActivity extends FragmentActivity {
@@ -46,6 +46,7 @@ public class MultipleTestsActivity extends FragmentActivity {
 
     /**
      * Defines the usage of all the buttons in the activity
+     *
      * @param savedInstaceState Bundle of arguments passed to this activity
      */
     @Override
@@ -66,7 +67,7 @@ public class MultipleTestsActivity extends FragmentActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        if(bundle != null){
+        if (bundle != null) {
             grammarType = (String) bundle.getSerializable("GrammarType");
             grammarRuleList = (List<GrammarRule>) bundle.getSerializable("GrammarList");
         }
@@ -79,18 +80,18 @@ public class MultipleTestsActivity extends FragmentActivity {
 
                 String result;
 
-                for(int i = 0; i < testWordList.size(); i++){
+                for (int i = 0; i < testWordList.size(); i++) {
                     TestWord testWord = testWordList.get(i);
-                    if(testWord.getWord() != null) {
+                    if (testWord.getWord() != null) {
                         result = simulateGrammar(testWord.getWord(), grammarType);
 
-                        if(result.equals(getString(R.string.accept))){
+                        if (result.equals(getString(R.string.accept))) {
                             testWord.setResult(true);
-                        }else{
+                        } else {
                             testWord.setResult(false);
                         }
 
-                        testWordList.set(i,testWord);
+                        testWordList.set(i, testWord);
                         queue.clear();
                     }
                 }
@@ -106,7 +107,7 @@ public class MultipleTestsActivity extends FragmentActivity {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(testWordList != null) {
+                if (testWordList != null) {
                     testWordList.clear();
 
                     multipleTestsAdapter = new MultipleTestsAdapter(multipleTestsTableSize);
@@ -128,8 +129,7 @@ public class MultipleTestsActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -156,13 +156,14 @@ public class MultipleTestsActivity extends FragmentActivity {
     /**
      * Method the extracts all the rules with a starting non-terminal symbols. It is used in the simulation process
      * so the algorithm knows where to start the simulation
+     *
      * @return list of grammar rules containing the rules with a starting non-terminal symbol
      */
-    private List<GrammarRule> filterStartingRules(){
+    private List<GrammarRule> filterStartingRules() {
         List<GrammarRule> startingRules = new ArrayList<>();
 
-        for(GrammarRule grammarRule : grammarRuleList){
-            if(grammarRule.getGrammarLeft().equals("S")){
+        for (GrammarRule grammarRule : grammarRuleList) {
+            if (grammarRule.getGrammarLeft().equals("S")) {
                 startingRules.add(grammarRule);
             }
         }
@@ -174,55 +175,59 @@ public class MultipleTestsActivity extends FragmentActivity {
      * A modified version of the simulation method from the simulation grammar activity. This version
      * does not include the hash map creation for backtracking since in the multiple tests activity
      * no backtracking is needed.
-     * @param input a string to check if it belongs to the defined grammar
+     *
+     * @param input       a string to check if it belongs to the defined grammar
      * @param grammarType type of the used grammar
      * @return string that means if the input word belongs to the defined grammar
      */
-    private String simulateGrammar(String input, String grammarType){
+    private String simulateGrammar(String input, String grammarType) {
         List<GrammarRule> startingRules = filterStartingRules();
         String current;
         StringBuilder temp;
         long startTime, stopTime;
 
-        for(GrammarRule grammarRule : startingRules){
+        for (GrammarRule grammarRule : startingRules) {
             current = grammarRule.getGrammarRight();
             queue.add(current);
         }
 
         startTime = System.currentTimeMillis();
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             current = queue.remove();
             stopTime = System.currentTimeMillis();
 
-            if(current.equals(input)){
+            if (current.equals(input)) {
                 return getString(R.string.accept);
             }
 
-            if(stopTime - startTime > 3000)
+            if (stopTime - startTime > 3000)
                 return getString(R.string.reject);
 
-            for(GrammarRule grammarRule : grammarRuleList){
-                int index =0;
+            for (GrammarRule grammarRule : grammarRuleList) {
+                int index = 0;
 
-                while((index=(current.indexOf(grammarRule.getGrammarLeft(),index)+1))>0){
+                while ((index = (current.indexOf(grammarRule.getGrammarLeft(), index) + 1)) > 0) {
                     temp = new StringBuilder(current);
-                    if(grammarRule.getGrammarRight().equals("ε")) {
-                        temp.replace(index-1, index+grammarRule.getGrammarLeft().length()-1, "");
-                        if(temp.toString().equals(input)){
+                    String rightGrammarRule = grammarRule.getGrammarRight();
+                    String leftGrammarRule = grammarRule.getGrammarLeft();
+                    if (rightGrammarRule != null && leftGrammarRule != null && rightGrammarRule.equals("ε")) {
+                        temp.replace(index - 1, index + leftGrammarRule.length() - 1, "");
+                        if (temp.toString().equals(input)) {
                             return getString(R.string.accept);
                         }
-                    }
-                    else {
-                        temp.replace(index-1, index+grammarRule.getGrammarLeft().length()-1, grammarRule.getGrammarRight());
-                        if(temp.toString().equals(input)){
-                            return getString(R.string.accept);
+                    } else {
+                        if (leftGrammarRule != null && rightGrammarRule != null) {
+                            temp.replace(index - 1, index + leftGrammarRule.length() - 1, rightGrammarRule);
+                            if (temp.toString().equals(input)) {
+                                return getString(R.string.accept);
+                            }
                         }
                     }
 
-                    if(grammarType.equals("Unrestricted")){
+                    if (grammarType.equals("Unrestricted")) {
                         queue.add(temp.toString());
-                    }else {
-                        if (temp.length() <= input.length()+1) {
+                    } else {
+                        if (temp.length() <= input.length() + 1) {
                             queue.add(temp.toString());
                         }
                     }

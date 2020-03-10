@@ -15,6 +15,7 @@ import android.widget.TextView;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.dialogs.EditGrammarTestDialog;
+import fiitstu.gulis.cmsimulator.elements.TestWord;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,12 +25,17 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
     private static final String TAG = "TestsAdapter";
 
     private Context mContext;
-    private List<String> listOfInputWords = new ArrayList<>();
+    private List<String> listOfInputWords;
+    private List<TestWord> testWordList = new ArrayList<>();
     private OnDataSetChangedListener onDataSetChangedListener = null;
     private boolean solveMode = false;
 
     public interface OnDataSetChangedListener {
         void OnDataChanged();
+    }
+
+    public List<String> getListOfInputWords() {
+        return listOfInputWords;
     }
 
     public void setOnDataSetChangedListener(OnDataSetChangedListener onDataSetChangedListener) {
@@ -40,6 +46,11 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         this.mContext = mContext;
         this.listOfInputWords = listOfInputWords;
         this.solveMode = solveMode;
+
+        for (String inputWord :
+                listOfInputWords) {
+            testWordList.add(new TestWord(inputWord, 0, null));
+        }
     }
 
     @NonNull
@@ -55,10 +66,16 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
     public void onBindViewHolder(@NonNull TestHolder holder, final int position) {
         holder.resetDetails();
         final String inputWord = listOfInputWords.get(position);
+        final TestWord testWord = testWordList.get(position);
         holder.positionTextView.setText(Integer.toString(position + 1) + ".");
 
         holder.inputWordTextView.setText(inputWord);
         holder.inputWordDetailsTextView.setText(inputWord);
+
+        if (testWord.getResult() != null) {
+            holder.linearLayout_list_test_background.setBackgroundColor(mContext.getColor(testWord.getResult() ? R.color.md_green_400 : R.color.md_red_500));
+            holder.testStatusTextView.setText(testWord.getResult() ? R.string.accept : R.string.reject);
+        }
 
         holder.removeTestImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +113,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         private ImageButton moreImageButton;
         private TextView inputWordDetailsTextView;
         private LinearLayout detailsLayout;
+        private LinearLayout linearLayout_list_test_background;
 
         private TextView outputTestLabel;
         private TextView outputTest;
@@ -113,6 +131,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
             this.moreImageButton = itemView.findViewById(R.id.imageButton_list_test_more);
             this.inputWordDetailsTextView = itemView.findViewById(R.id.textView_list_test_word_details);
             this.detailsLayout = itemView.findViewById(R.id.linearlayout_test_details);
+            this.linearLayout_list_test_background = itemView.findViewById(R.id.linearLayout_list_test_background);
 
             this.outputTestLabel = itemView.findViewById(R.id.textview_output_word_test_label);
             this.outputTestLabel.setVisibility(View.GONE);
@@ -150,6 +169,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
     public void addNewTest(String inputWord) {
         int position = listOfInputWords.size();
         listOfInputWords.add(inputWord);
+        testWordList.add(new TestWord(inputWord, 0, null));
         this.notifyItemInserted(position);
         if (onDataSetChangedListener != null)
             onDataSetChangedListener.OnDataChanged();
@@ -157,6 +177,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
 
     public void deleteTest(int position) {
         listOfInputWords.remove(position);
+        testWordList.remove(position);
         this.notifyItemRemoved(position);
 
         int sizeOfList = listOfInputWords.size();
@@ -168,6 +189,24 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
 
     public void updateTest(String inputWord, int position) {
         listOfInputWords.set(position, inputWord);
+        testWordList.set(position, new TestWord(inputWord, 0, null));
         notifyItemChanged(position);
+    }
+
+    public void markTestResult(String inputWord, boolean result) {
+        for (int i = 0; i < listOfInputWords.size(); i++) {
+            final String word = listOfInputWords.get(i);
+            if (word.equals(inputWord)) {
+                for (TestWord testWord :
+                        testWordList) {
+                    if (testWord.getWord().equals(inputWord)) {
+                        testWord.setResult(true);
+                        notifyItemChanged(i);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
 }
