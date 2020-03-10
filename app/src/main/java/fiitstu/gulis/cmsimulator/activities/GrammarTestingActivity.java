@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -37,6 +38,13 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
     private LinearLayout emptyTests_LinearLayout;
     private RelativeLayout progress_RelativeLayout;
 
+    // INTENT EXTRA KEYS
+    public static final String SOLVE_MODE = "SOLVE_MODE";
+    public static final String CONFIGURATION_MODE = "CONFIGURATION_MODE";
+
+    private boolean solveMode = false;
+    private boolean configurationMode = false;
+
     // RecyclerView Adapter
     TestsAdapter adapter = null;
 
@@ -47,7 +55,36 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
 
         setActionBar();
         setUIElements();
+        handleIntentExtras();
         setRecyclerView();
+    }
+
+    private void handleIntentExtras() {
+        Intent intent = this.getIntent();
+        solveMode = intent.getBooleanExtra(SOLVE_MODE, false);
+        configurationMode = intent.getBooleanExtra(CONFIGURATION_MODE, false);
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        MenuItem addTest = menu.findItem(R.id.menu_add_test);
+        MenuItem addRegexTest = menu.findItem(R.id.menu_add_test_regex);
+        MenuItem configuration = menu.findItem(R.id.menu_bulk_test_configure);
+        MenuItem simulate = menu.findItem(R.id.menu_bulk_test_simulate);
+        MenuItem saveMachine = menu.findItem(R.id.menu_bulk_test_save_machine);
+        MenuItem testSpecification = menu.findItem(R.id.menu_bulk_test_specification);
+
+        configuration.setVisible(false);
+        simulate.setVisible(false);
+        saveMachine.setVisible(false);
+        testSpecification.setVisible(false);
+
+        if (solveMode) {
+            addRegexTest.setVisible(false);
+            addTest.setVisible(false);
+        }
+
+        return true;
     }
 
     private void setActionBar() {
@@ -131,7 +168,7 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
         dataSource.close();
 
         if (adapter == null) {
-            adapter = new TestsAdapter(this, tests);
+            adapter = new TestsAdapter(this, tests, solveMode);
             adapter.setOnDataSetChangedListener(new TestsAdapter.OnDataSetChangedListener() {
                 @Override
                 public void OnDataChanged() {

@@ -302,7 +302,6 @@ public class NewGrammarTaskActivity extends FragmentActivity {
                 !taskTextEditText.getText().toString().isEmpty() ||
                 hasTaskSet)
             return true;
-
         return false;
     }
 }

@@ -26,6 +26,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
     private Context mContext;
     private List<String> listOfInputWords = new ArrayList<>();
     private OnDataSetChangedListener onDataSetChangedListener = null;
+    private boolean solveMode = false;
 
     public interface OnDataSetChangedListener {
         void OnDataChanged();
@@ -35,9 +36,10 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         this.onDataSetChangedListener = onDataSetChangedListener;
     }
 
-    public TestsAdapter(Context mContext, List<String> listOfInputWords) {
+    public TestsAdapter(Context mContext, List<String> listOfInputWords, boolean solveMode) {
         this.mContext = mContext;
         this.listOfInputWords = listOfInputWords;
+        this.solveMode = solveMode;
     }
 
     @NonNull
@@ -128,6 +130,11 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
                     detailsLayout.setVisibility(detailsShown ? View.VISIBLE : View.GONE);
                 }
             });
+
+            if (solveMode) {
+                removeTestImageButton.setVisibility(View.GONE);
+                editTestImageButton.setVisibility(View.GONE);
+            }
         }
 
         public void resetDetails() {

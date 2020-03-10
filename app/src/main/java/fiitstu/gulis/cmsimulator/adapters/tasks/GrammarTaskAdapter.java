@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -149,6 +150,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
 
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
                                 grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
+                                grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
                                 mContext.startActivity(grammarActivityIntent);
                             }
                         });

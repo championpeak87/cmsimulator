@@ -45,6 +45,7 @@ import fiitstu.gulis.cmsimulator.dialogs.SaveGrammarDialog;
 import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
 import fiitstu.gulis.cmsimulator.elements.GrammarType;
+import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 
 /**
  * Grammar creation activity.
@@ -75,6 +76,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String EXAMPLE_NUMBER_KEY = "EXAMPLE_GRAMMAR_NUMBER";
     public static final String CONFIGURATION_GRAMMAR_KEY = "CONFIGURATION_GRAMMAR_KEY";
     public static final String TASK_SOLVE_GRAMMAR_KEY = "TASK_SOLVE_GRAMMAR_KEY";
+    public static final String HAS_TESTS_ENABLED_KEY = "HAS_TEST_ENABLED_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -87,13 +89,19 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private String filename;
     private int rulesTableSize = 15;
 
+    private boolean hasTestsEnabled = true;
     private boolean setGrammarTask = false;
     private boolean taskSolving = false;
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem tests = menu.findItem(R.id.menu_grammar_test);
-        tests.setVisible(setGrammarTask ? true : false);
+        if (setGrammarTask)
+            tests.setVisible(true);
+        if (taskSolving)
+            if (hasTestsEnabled)
+                tests.setVisible(true);
+            else tests.setVisible(false);
 
         return true;
     }
@@ -117,6 +125,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
         Intent thisIntent = this.getIntent();
         setGrammarTask = thisIntent.getBooleanExtra(CONFIGURATION_GRAMMAR_KEY, false);
+        hasTestsEnabled = thisIntent.getBooleanExtra(HAS_TESTS_ENABLED_KEY, true);
 
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
@@ -141,15 +150,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             prepareExmaple(grammarExampleToLoad);
         }
 
+        // IF TASK CONFIGURATION
         if (setGrammarTask) {
             loadTask();
         }
 
-        if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
-            taskSolving = true;
-            loadTask();
-            Toast.makeText(this, "TASK SOLVING", Toast.LENGTH_SHORT).show();
-        }
 
         //test
         Button grammarTestButton = findViewById(R.id.button_grammar_test);
@@ -203,6 +208,18 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             }
         });
 
+        // IF TASK SOLVING
+        if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
+            taskSolving = true;
+            loadTask();
+            grammarTestButton.setVisibility(View.GONE);
+            grammarTypeButton.setVisibility(View.GONE);
+        }
+
+        if (intent.getBooleanExtra(CONFIGURATION_GRAMMAR_KEY, false)) {
+            grammarTestButton.setVisibility(View.GONE);
+        }
+
         final Button pipeButton = findViewById(R.id.button_grammar_pipe);
         pipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +271,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 return true;
             case R.id.menu_grammar_test:
                 Intent grammarTest = new Intent(this, GrammarTestingActivity.class);
+                grammarTest.putExtra(GrammarTestingActivity.CONFIGURATION_MODE, setGrammarTask);
+                grammarTest.putExtra(GrammarTestingActivity.SOLVE_MODE, taskSolving);
                 startActivity(grammarTest);
                 return true;
             case R.id.menu_grammar_help:
@@ -336,13 +355,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         }
     }
 
-    private void saveRules()
-    {
+    private void saveRules() {
         List<GrammarRule> grammarRuleList = rulesAdapter.getGrammarRuleList();
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
-        for (GrammarRule rule : grammarRuleList)
-        {
+        for (GrammarRule rule : grammarRuleList) {
             dataSource.addGrammarRule(rule.getGrammarLeft(), rule.getGrammarRight());
         }
     }
