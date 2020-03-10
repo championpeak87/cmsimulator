@@ -200,7 +200,7 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
                 for (TestWord testWord :
                         testWordList) {
                     if (testWord.getWord().equals(inputWord)) {
-                        testWord.setResult(true);
+                        testWord.setResult(result);
                         notifyItemChanged(i);
                         break;
                     }
