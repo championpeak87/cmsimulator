@@ -37,8 +37,12 @@
             android:layout_height="match_parent"
             android:visibility="gone">
         <ProgressBar
+                android:id="@+id/progressBar_loading_tests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"/>
+        <ProgressBar android:id="@+id/progressBar_test_executing" android:layout_width="200dp" android:layout_height="wrap_content"
+                     android:layout_below="@id/progressBar_loading_tests" android:layout_centerHorizontal="true"
+                     style="?android:attr/progressBarStyleHorizontal" android:visibility="gone"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

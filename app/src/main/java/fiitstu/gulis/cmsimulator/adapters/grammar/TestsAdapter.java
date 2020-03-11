@@ -196,20 +196,11 @@ public class TestsAdapter extends RecyclerView.Adapter<TestsAdapter.TestHolder> 
         notifyItemChanged(position);
     }
 
-    public void markTestResult(String inputWord, boolean result) {
-        for (int i = 0; i < listOfInputWords.size(); i++) {
-            final String word = listOfInputWords.get(i);
-            if (word.equals(inputWord)) {
-                for (TestWord testWord :
-                        testWordList) {
-                    if (testWord.getWord().equals(inputWord)) {
-                        testWord.setResult(result);
-                        notifyItemChanged(i);
-                        break;
-                    }
-                }
-                break;
-            }
+    public void markTestResult(String inputWord, boolean result, int position) {
+        final TestWord currentTestWord = testWordList.get(position);
+        if (currentTestWord.getWord().equals(inputWord)) {
+            currentTestWord.setResult(result);
         }
+
     }
 }

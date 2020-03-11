@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +20,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.grammar.MultipleTestsAdapter;
 import fiitstu.gulis.cmsimulator.adapters.grammar.TestsAdapter;
@@ -142,31 +145,63 @@ public class GrammarTestingActivity extends FragmentActivity implements NewGramm
                 Intent optionIntent = new Intent(this, OptionsActivity.class);
                 startActivity(optionIntent);
             case R.id.menu_run_test:
-                List<String> stringList = adapter.getListOfInputWords();
-                List<TestWord> testWordList = new ArrayList<>();
-                for (String test : stringList) {
-                    testWordList.add(new TestWord(test, 0, false));
-                }
+                final ProgressBar executingTests = findViewById(R.id.progressBar_test_executing);
+                class ExecuteTestsAsync extends AsyncTask<Void, Integer, Void> {
+                    @Override
+                    protected void onPreExecute() {
+                        showLoadingScreen(true);
+                        executingTests.setVisibility(View.VISIBLE);
+                        recyclerView.setEnabled(false);
+                        executingTests.setMax(adapter.getListOfInputWords().size());
+                    }
 
-                String result;
-
-                for (int i = 0; i < testWordList.size(); i++) {
-                    TestWord testWord = testWordList.get(i);
-                    if (testWord.getWord() != null) {
-                        result = simulateGrammar(testWord.getWord(), grammarType);
-
-                        if (result.equals(getString(R.string.accept))) {
-                            testWord.setResult(true);
-                            adapter.markTestResult(testWord.getWord(), true);
-                        } else {
-                            testWord.setResult(false);
-                            adapter.markTestResult(testWord.getWord(), false);
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        List<String> stringList = adapter.getListOfInputWords();
+                        List<TestWord> testWordList = new ArrayList<>();
+                        for (String test : stringList) {
+                            testWordList.add(new TestWord(test, 0, false));
                         }
 
-                        testWordList.set(i, testWord);
-                        queue.clear();
+                        String result;
+
+                        for (int i = 0; i < testWordList.size(); i++) {
+                            TestWord testWord = testWordList.get(i);
+                            if (testWord.getWord() != null) {
+                                result = simulateGrammar(testWord.getWord(), grammarType);
+
+                                if (result.equals(getString(R.string.accept))) {
+                                    testWord.setResult(true);
+                                    adapter.markTestResult(testWord.getWord(), true, i);
+                                } else {
+                                    testWord.setResult(false);
+                                    adapter.markTestResult(testWord.getWord(), false, i);
+                                }
+
+                                testWordList.set(i, testWord);
+                                queue.clear();
+                            }
+                            publishProgress(i);
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        executingTests.setProgress(values[0]);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        showLoadingScreen(false);
+                        executingTests.setVisibility(View.GONE);
+                        recyclerView.setEnabled(true);
+                        adapter.notifyItemRangeChanged(0, adapter.getListOfInputWords().size());
                     }
                 }
+
+                new ExecuteTestsAsync().execute();
                 return true;
             case R.id.menu_bulk_test_help:
                 // TODO: IMPLEMENT HELP
