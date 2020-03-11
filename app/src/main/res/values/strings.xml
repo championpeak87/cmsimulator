@@ -1340,5 +1340,6 @@
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
+    <string name="accepted_tests">Accepted tests</string>
 
 </resources>

@@ -975,4 +975,5 @@
     <string name="testing">Testovanie</string>
     <string name="continue_task">Pokračovať</string>
     <string name="preview_task">Preview task</string>
+    <string name="accepted_tests">Accepted tests</string>
 </resources>

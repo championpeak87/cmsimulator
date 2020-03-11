@@ -39,12 +39,10 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.grammar.RulesAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
-import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
-import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.dialogs.SaveGrammarDialog;
-import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
+import fiitstu.gulis.cmsimulator.dialogs.*;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
 import fiitstu.gulis.cmsimulator.elements.GrammarType;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 
 /**
@@ -98,10 +96,16 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         MenuItem tests = menu.findItem(R.id.menu_grammar_test);
         if (setGrammarTask)
             tests.setVisible(true);
-        if (taskSolving)
+        if (taskSolving) {
+            MenuItem save = menu.findItem(R.id.menu_save_task);
+            MenuItem publish = menu.findItem(R.id.menu_submit_task);
+
+            save.setVisible(true);
+            publish.setVisible(true);
             if (hasTestsEnabled)
                 tests.setVisible(true);
             else tests.setVisible(false);
+        }
 
         return true;
     }
@@ -264,15 +268,32 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        DataSource dataSource = DataSource.getInstance();
+        dataSource.open();
+        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_save_task:
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            case R.id.menu_submit_task:
+                dataSource.open();
+                String grammarType = checkGrammarType(grammarRuleList);
+
+                SubmitGrammarTaskDialog submitGrammarTaskDialog = new SubmitGrammarTaskDialog(grammarType);
+                FragmentManager fragmentManager = this.getSupportFragmentManager();
+                submitGrammarTaskDialog.show(fragmentManager, TAG);
+                return true;
             case R.id.menu_grammar_test:
                 saveRules();
-                DataSource dataSource = DataSource.getInstance();
                 dataSource.open();
-                List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+
                 Intent grammarTest = new Intent(this, GrammarTestingActivity.class);
                 grammarTest.putExtra(GrammarTestingActivity.CONFIGURATION_MODE, setGrammarTask);
                 grammarTest.putExtra(GrammarTestingActivity.SOLVE_MODE, taskSolving);
