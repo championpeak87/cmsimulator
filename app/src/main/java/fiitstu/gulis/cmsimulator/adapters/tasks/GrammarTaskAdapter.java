@@ -149,9 +149,40 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                             public void onStart() {
                                 loadFile();
 
+                                if (selectedGrammarTask.getStatus() == Task.TASK_STATUS.NEW) {
+                                    class MarkTaskAsAsync extends AsyncTask<Void, Void, String> {
+                                        @Override
+                                        protected String doInBackground(Void... voids) {
+                                            ServerController serverController = new ServerController();
+                                            UrlManager urlManager = new UrlManager();
+                                            URL markTaskStatusURL = urlManager.getChangeGrammarTaskFlagURL(Task.TASK_STATUS.IN_PROGRESS, selectedGrammarTask.getTask_id(), TaskLoginActivity.loggedUser.getUser_id());
+                                            String output = null;
+                                            try {
+                                                output = serverController.getResponseFromServer(markTaskStatusURL);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            } finally {
+                                                return output;
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onPostExecute(String s) {
+                                            if (s != null && !s.isEmpty()) {
+                                                GrammarTaskAdapter.this.changeTaskStatus(selectedGrammarTask.getTask_id(), Task.TASK_STATUS.IN_PROGRESS);
+                                            } else {
+                                                Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    new MarkTaskAsAsync().execute();
+                                }
+
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
                                 grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
                                 grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
+                                grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());
                                 Time time = selectedGrammarTask.getAvailable_time();
                                 boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
                                 grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);

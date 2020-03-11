@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.elements.Timer;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
+import fiitstu.gulis.cmsimulator.network.grammar_tasks.UpdateTimerAsync;
 
 /**
  * Grammar creation activity.
@@ -81,6 +83,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String HAS_TESTS_ENABLED_KEY = "HAS_TEST_ENABLED_KEY";
     public static final String HAS_TIMER_ENABLED = "HAS_TIMER_ENABLED";
     public static final String TIMER_KEY = "TIMER_KEY";
+    public static final String TASK_ID_KEY = "TASK_ID_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -97,6 +100,9 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private boolean setGrammarTask = false;
     private boolean taskSolving = false;
     private boolean timerRunOut = false;
+    private boolean hasTimer = false;
+
+    private int task_id = -1;
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -221,7 +227,9 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         // IF TASK SOLVING
         if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
             taskSolving = true;
-            if (intent.getBooleanExtra(HAS_TIMER_ENABLED, false)) {
+            task_id = intent.getIntExtra(TASK_ID_KEY, -1);
+            hasTimer = intent.getBooleanExtra(HAS_TIMER_ENABLED, false);
+            if (hasTimer) {
                 Time time = (Time) intent.getSerializableExtra(TIMER_KEY);
                 Timer timer;
 
@@ -256,16 +264,21 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
                     @Override
                     public void onTimeRunOut() {
-                        GrammarActivity.this.finish();
-                        SimulationActivity.mContext.finish();
                         // TODO: HANDLE TIMER RUN OUT
                         //new ConfigurationActivity.MarkAsTimeRunOutAsync().execute();
                         //BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
-                        AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                        AlertDialog timeRunOutAlert = new AlertDialog.Builder(GrammarActivity.this)
                                 .setTitle(R.string.time_ran_out_title)
                                 .setMessage(R.string.time_ran_out_message)
-                                .setPositiveButton(android.R.string.ok, null)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        GrammarActivity.this.finish();
+                                    }
+                                })
+                                .setCancelable(false)
                                 .create();
+
 
                         timeRunOutAlert.show();
                     }
@@ -286,6 +299,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         pipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                handleTimer();
                 rulesAdapter.insertSpecialChar(PIPE);
             }
         });
@@ -294,6 +308,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         epsilonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                handleTimer();
                 rulesAdapter.insertSpecialChar(EPSILON);
             }
         });
@@ -302,11 +317,20 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         addRowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                handleTimer();
                 rulesAdapter.addRow();
             }
         });
 
         Log.i(TAG, "onCreate initialized");
+    }
+
+    private void handleTimer() {
+        if (hasTimer) {
+            Timer timer = Timer.getInstance(null);
+            Time time = timer.getCurrentTime();
+            new UpdateTimerAsync().execute(String.valueOf(task_id), String.valueOf(TaskLoginActivity.loggedUser.getUser_id()), time.toString());
+        }
     }
 
     private void loadTask() {
@@ -327,6 +351,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        handleTimer();
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
         List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
@@ -403,6 +428,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
+        handleTimer();
         if (!setGrammarTask) {
             TaskDialog.setStatusText(null);
             new AlertDialog.Builder(this)
@@ -781,46 +807,44 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         animator.start();
     }
 
-//    private void updateInnerViewsColor(int s_light, int t_light) {
-//        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
-//        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
-//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animation) {
-//                HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
-//                List<ImageButton> imageButtonList = new ArrayList<>();
-//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
-//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
-//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
-//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
-//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
-//
-//                final int currentColorValue = (int) animation.getAnimatedValue();
-//                tabs.setBackgroundColor(currentColorValue);
-//                for (ImageButton btn :
-//                        imageButtonList) {
-//                    int[][] states = new int[][]{
-//                            new int[]{0}
-//                    };
-//
-//                    int[] color = new int[]{
-//                            currentColorValue
-//                    };
-//                    ColorStateList list = new ColorStateList(states, color);
-//                    if (lastPressedImageButton != btn)
-//                        btn.setBackgroundTintList(list);
-//
-//                }
-//            }
-//        });
-//        animator.start();
-//    }
+    private void updateInnerViewsColor(int s_light, int t_light) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
+
+        final Button epsilon = findViewById(R.id.button_grammar_epsilon);
+        final Button pipe = findViewById(R.id.button_grammar_pipe);
+        final Button add = findViewById(R.id.button_grammar_add_row);
+
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+
+                final int currentColorValue = (int) animation.getAnimatedValue();
+
+                int[][] states = new int[][]{
+                        new int[]{0}
+                };
+
+                int[] color = new int[]{
+                        currentColorValue
+                };
+                ColorStateList list = new ColorStateList(states, color);
+
+                epsilon.getBackground().setColorFilter(currentColorValue, PorterDuff.Mode.MULTIPLY);
+                pipe.getBackground().setColorFilter(currentColorValue, PorterDuff.Mode.MULTIPLY);
+                add.getBackground().setColorFilter(currentColorValue, PorterDuff.Mode.MULTIPLY);
+
+            }
+        });
+        animator.start();
+    }
 
 
     private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light) {
         updateStatusBarColor(s_dark, t_dark);
         updateActionBarColor(s_normal, t_normal);
         updateNavigationBarColor(s_dark, t_dark);
-//        updateInnerViewsColor(s_light, t_light);
+        updateInnerViewsColor(s_light, t_light);
     }
 }

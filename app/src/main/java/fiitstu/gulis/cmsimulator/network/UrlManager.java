@@ -46,6 +46,8 @@ public class UrlManager {
     private final static String DELETE_GRAMMAR_TASK_PATH = "/api/grammarTasks/delete";
     private final static String CHANGE_GRAMMAR_TASK_FLAG_PATH = "/api/grammarTasks/changeFlag";
     private final static String DOWNLOAD_GRAMMAR_TASK_PATH = "/api/grammarTasks/download";
+    private final static String UPDATE_TIMER_GRAMMAR_TASK_PATH = "/api/grammarTask/updateTaskTimer";
+    private final static String SUBMIT_GRAMMAR_TASK_PATH = "/api/grammarTask/submit";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -113,6 +115,43 @@ public class UrlManager {
         } else {
             /* TODO: SET PUBLIC SERVER URI */
             URI = "http://cmserver.fiit.stuba.sk";
+        }
+    }
+
+    public URL getUpdateGrammarTimerURL(int user_id, int task_id, Time time) {
+        Uri uri = Uri.parse(URI + UPDATE_TIMER_GRAMMAR_TASK_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(TIME_KEY, time.toString())
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getSubmitGrammarTaskUrl(int user_id, int task_id, Task.TASK_STATUS status, Date submission_time) {
+        Uri uri = Uri.parse(URI + SUBMIT_GRAMMAR_TASK_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(TASK_STATUS_KEY, status.toString())
+                .appendQueryParameter(SUBMISSION_TIME, submission_time.toString())
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
         }
     }
 

@@ -1104,4 +1104,50 @@ app.get('/api/grammarTasks/download', (req, res) => {
   }
 })
 
+app.get('/api/grammarTasks/updateTaskTimer', (req, res) => {
+  const user_id = req.query.user_id;
+  const task_id = req.query.task_id;
+  const elapsed_time = req.query.elapsed_time;
+
+  pool.query('UPDATE grammar_task_results SET time_elapsed=\'$1\' WHERE user_id = $2 AND task_id = $3;', [elpased_time, user_id, task_id], (err, result) => {
+    if (error) { throw error }
+    if (result.rowCount > 0) {
+      res.status(HTTP_OK).send({
+        user_id: user_id,
+        task_id: task_id,
+        elapsed_time: elapsed_time,
+        updated: true
+      });
+    }
+  })
+})
+
+app.get('/api/grammarTasks/submit', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+  const task_status = req.query.task_status;
+  const submission_time = req.query.submission_time;
+
+  pool.query('SELECT * FROM grammar_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      pool.query('UPDATE grammar_task_results SET submitted=\'true\', submission_date=$1, task_status = $2 WHERE task_id = $3 AND user_id = $4;', [submission_time, task_status, task_id, user_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
+          res.status(HTTP_OK).send({
+            task_id: task_id,
+            user_id: user_id,
+            submitted: true
+          });
+        }
+      });
+    }
+  })
+})
+
+app.get('/', (req, res) =>
+{
+  res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');
+})
+
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))
