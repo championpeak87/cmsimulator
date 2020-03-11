@@ -49,6 +49,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +152,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
                                 grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
                                 grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
+                                Time time = selectedGrammarTask.getAvailable_time();
+                                boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
+                                grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);
+                                if (timerEnabled)
+                                    grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
                                 mContext.startActivity(grammarActivityIntent);
                             }
                         });

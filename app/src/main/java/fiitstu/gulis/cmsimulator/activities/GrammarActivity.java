@@ -1,12 +1,16 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -22,14 +26,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +42,8 @@ import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.*;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
 import fiitstu.gulis.cmsimulator.elements.GrammarType;
+import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.elements.Timer;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 
@@ -55,6 +57,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
     //log tag
     private static final String TAG = GrammarActivity.class.getName();
+
+    private static final int BACKGROUND_CHANGE_LENGTH = 1000;
 
     //strings
     private static final String GRAMMAR = "GRAMMAR";
@@ -75,6 +79,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String CONFIGURATION_GRAMMAR_KEY = "CONFIGURATION_GRAMMAR_KEY";
     public static final String TASK_SOLVE_GRAMMAR_KEY = "TASK_SOLVE_GRAMMAR_KEY";
     public static final String HAS_TESTS_ENABLED_KEY = "HAS_TEST_ENABLED_KEY";
+    public static final String HAS_TIMER_ENABLED = "HAS_TIMER_ENABLED";
+    public static final String TIMER_KEY = "TIMER_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -90,6 +96,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private boolean hasTestsEnabled = true;
     private boolean setGrammarTask = false;
     private boolean taskSolving = false;
+    private boolean timerRunOut = false;
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -123,7 +130,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         Log.v(TAG, "onCreate initialization started");
 
         //menu
-        ActionBar actionBar = this.getActionBar();
+        final ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.grammar_definition);
 
@@ -214,6 +221,58 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         // IF TASK SOLVING
         if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
             taskSolving = true;
+            if (intent.getBooleanExtra(HAS_TIMER_ENABLED, false)) {
+                Time time = (Time) intent.getSerializableExtra(TIMER_KEY);
+                Timer timer;
+
+                timer = Timer.getInstance(time);
+                timer.setOnTickListener(new Timer.OnTickListener() {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        int hours = (int) (millisUntilFinished / 3600000);
+                        int minutes = (int) ((millisUntilFinished - (hours * 3600000)) / 60000);
+                        int seconds = (int) ((millisUntilFinished - (hours * 3600000) - (minutes * 60000)) / 1000);
+
+                        if (hours == 0 && minutes <= 4 && !timerRunOut) {
+                            timerRunOut = true;
+
+                            final int s_dark = getColor(R.color.primary_color_dark);
+                            final int s_normal = getColor(R.color.primary_color);
+                            final int s_light = getColor(R.color.primary_color_light);
+
+                            final int t_dark = getColor(R.color.in_progress_dark);
+                            final int t_normal = getColor(R.color.in_progress_top_bar);
+                            final int t_light = getColor(R.color.in_progress_bottom_bar);
+
+                            changeActivityBackgroundColor(s_dark, s_normal, s_light, t_dark, t_normal, t_light);
+                        }
+
+
+                        String timerText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                        actionBar.setTitle(timerText);
+                    }
+                });
+                timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
+                    @Override
+                    public void onTimeRunOut() {
+                        GrammarActivity.this.finish();
+                        SimulationActivity.mContext.finish();
+                        // TODO: HANDLE TIMER RUN OUT
+                        //new ConfigurationActivity.MarkAsTimeRunOutAsync().execute();
+                        //BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
+                        AlertDialog timeRunOutAlert = new AlertDialog.Builder(BrowseAutomataTasksActivity.mContext)
+                                .setTitle(R.string.time_ran_out_title)
+                                .setMessage(R.string.time_ran_out_message)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .create();
+
+                        timeRunOutAlert.show();
+                    }
+                });
+                if (!Timer.isSet())
+                    timer.startTimer();
+            }
             loadTask();
             grammarTestButton.setVisibility(View.GONE);
             grammarTypeButton.setVisibility(View.GONE);
@@ -683,5 +742,85 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             dataSource.close();
             finish();
         }
+    }
+
+    private void updateStatusBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                GrammarActivity.this.getWindow().setStatusBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+    private void updateNavigationBarColor(int s_dark, int t_dark) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_dark, t_dark);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                GrammarActivity.this.getWindow().setNavigationBarColor((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+
+    private void updateActionBarColor(int s_normal, int t_normal) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_normal, t_normal);
+        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                GrammarActivity.this.getActionBar().setBackgroundDrawable(new ColorDrawable((int) animation.getAnimatedValue()));
+            }
+        });
+        animator.start();
+    }
+
+//    private void updateInnerViewsColor(int s_light, int t_light) {
+//        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), s_light, t_light);
+//        animator.setDuration(BACKGROUND_CHANGE_LENGTH);
+//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                HorizontalScrollView tabs = findViewById(R.id.tabview_configuration);
+//                List<ImageButton> imageButtonList = new ArrayList<>();
+//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_move));
+//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_state));
+//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_transition));
+//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_edit));
+//                imageButtonList.add((ImageButton) findViewById(R.id.imageButton_configuration_diagram_remove));
+//
+//                final int currentColorValue = (int) animation.getAnimatedValue();
+//                tabs.setBackgroundColor(currentColorValue);
+//                for (ImageButton btn :
+//                        imageButtonList) {
+//                    int[][] states = new int[][]{
+//                            new int[]{0}
+//                    };
+//
+//                    int[] color = new int[]{
+//                            currentColorValue
+//                    };
+//                    ColorStateList list = new ColorStateList(states, color);
+//                    if (lastPressedImageButton != btn)
+//                        btn.setBackgroundTintList(list);
+//
+//                }
+//            }
+//        });
+//        animator.start();
+//    }
+
+
+    private void changeActivityBackgroundColor(int s_dark, int s_normal, int s_light, int t_dark, int t_normal, int t_light) {
+        updateStatusBarColor(s_dark, t_dark);
+        updateActionBarColor(s_normal, t_normal);
+        updateNavigationBarColor(s_dark, t_dark);
+//        updateInnerViewsColor(s_light, t_light);
     }
 }
