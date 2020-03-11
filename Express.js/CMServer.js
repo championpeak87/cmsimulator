@@ -486,7 +486,7 @@ app.post('/api/tasks/upload', (req, res, next) => {
   const file = req.files.task;
   const file_name = req.query.file_name;
 
-  filesystem.mkdir("./uploads/",{ recursive: true }, (err) => {
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
     if (err) { throw err };
   });
   filesystem.mkdir("./uploads/automataTasks/", { recursive: true }, (err) => {
@@ -1104,20 +1104,46 @@ app.get('/api/grammarTasks/download', (req, res) => {
   }
 })
 
-app.get('/api/grammarTasks/updateTaskTimer', (req, res) => {
+app.get('/api/grammarTasks/updateTimer', (req, res) => {
   const user_id = req.query.user_id;
   const task_id = req.query.task_id;
-  const elapsed_time = req.query.elapsed_time;
+  const time_elapsed = req.query.time_elapsed;
 
-  pool.query('UPDATE grammar_task_results SET time_elapsed=\'$1\' WHERE user_id = $2 AND task_id = $3;', [elpased_time, user_id, task_id], (err, result) => {
-    if (error) { throw error }
-    if (result.rowCount > 0) {
-      res.status(HTTP_OK).send({
-        user_id: user_id,
-        task_id: task_id,
-        elapsed_time: elapsed_time,
-        updated: true
-      });
+  pool.query('SELECT count(*) from grammar_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rows[0].count > 0) {
+      pool.query('UPDATE grammar_task_results SET time_elapsed=$1 WHERE user_id = $2 AND task_id = $3;', [time_elapsed, user_id, task_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: true
+            }
+          );
+        } else {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              user_id: user_id,
+              time_elapsed: time_elapsed,
+              updated: false
+            }
+          );
+        }
+      })
+    }
+    else {
+      res.status(HTTP_OK).send(
+        {
+          task_id: task_id,
+          user_id: user_id,
+          time_elapsed: time_elapsed,
+          updated: true
+        }
+      );
     }
   })
 })
@@ -1145,8 +1171,7 @@ app.get('/api/grammarTasks/submit', (req, res) => {
   })
 })
 
-app.get('/', (req, res) =>
-{
+app.get('/', (req, res) => {
   res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');
 })
 

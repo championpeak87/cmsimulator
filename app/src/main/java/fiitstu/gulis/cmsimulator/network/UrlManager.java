@@ -46,7 +46,7 @@ public class UrlManager {
     private final static String DELETE_GRAMMAR_TASK_PATH = "/api/grammarTasks/delete";
     private final static String CHANGE_GRAMMAR_TASK_FLAG_PATH = "/api/grammarTasks/changeFlag";
     private final static String DOWNLOAD_GRAMMAR_TASK_PATH = "/api/grammarTasks/download";
-    private final static String UPDATE_TIMER_GRAMMAR_TASK_PATH = "/api/grammarTask/updateTaskTimer";
+    private final static String UPDATE_TIMER_GRAMMAR_TASK_PATH = "/api/grammarTasks/updateTimer";
     private final static String SUBMIT_GRAMMAR_TASK_PATH = "/api/grammarTask/submit";
 
     // LOGIN QUERY KEYS
@@ -122,7 +122,7 @@ public class UrlManager {
         Uri uri = Uri.parse(URI + UPDATE_TIMER_GRAMMAR_TASK_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
-                .appendQueryParameter(TIME_KEY, time.toString())
+                .appendQueryParameter(ELAPSED_TIME_KEY, time.toString())
                 .build();
 
         URL url = null;

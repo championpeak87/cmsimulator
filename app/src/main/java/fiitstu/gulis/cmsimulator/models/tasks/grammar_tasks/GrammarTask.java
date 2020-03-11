@@ -1,5 +1,7 @@
 package fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import fiitstu.gulis.cmsimulator.elements.Task;
 
 import java.util.Date;

@@ -64,6 +64,8 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
     private List<GrammarTask> grammarTaskList;
     private DatasetChangedListener datasetChangedListener = null;
 
+    public static GrammarTask runningTask = null;
+
     public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks) {
         this.mContext = mContext;
         this.grammarTaskList = grammarTasks;
@@ -183,12 +185,14 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                 grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
                                 grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
                                 grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());
-                                Time time = selectedGrammarTask.getAvailable_time();
+                                grammarActivityIntent.putExtra(GrammarActivity.AVAILABLE_TIME_KEY, selectedGrammarTask.getAvailable_time());
+                                Time time = selectedGrammarTask.getRemaining_time();
                                 boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
                                 grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);
                                 if (timerEnabled)
                                     grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
                                 mContext.startActivity(grammarActivityIntent);
+                                runningTask = selectedGrammarTask;
                             }
                         });
                         grammarTaskDialog.show(fragmentManager, TAG);

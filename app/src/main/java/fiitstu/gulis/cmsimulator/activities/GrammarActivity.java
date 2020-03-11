@@ -38,6 +38,7 @@ import java.util.Set;
 
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.grammar.RulesAdapter;
+import fiitstu.gulis.cmsimulator.adapters.tasks.GrammarTaskAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.*;
@@ -84,6 +85,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String HAS_TIMER_ENABLED = "HAS_TIMER_ENABLED";
     public static final String TIMER_KEY = "TIMER_KEY";
     public static final String TASK_ID_KEY = "TASK_ID_KEY";
+    public static final String AVAILABLE_TIME_KEY = "AVAILABLE_TIME_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -95,6 +97,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private RecyclerView recyclerView;
     private String filename;
     private int rulesTableSize = 15;
+    private Time availableTime;
 
     private boolean hasTestsEnabled = true;
     private boolean setGrammarTask = false;
@@ -230,6 +233,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
             task_id = intent.getIntExtra(TASK_ID_KEY, -1);
             hasTimer = intent.getBooleanExtra(HAS_TIMER_ENABLED, false);
             if (hasTimer) {
+                availableTime = (Time) intent.getSerializableExtra(AVAILABLE_TIME_KEY);
                 Time time = (Time) intent.getSerializableExtra(TIMER_KEY);
                 Timer timer;
 
@@ -265,7 +269,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                     @Override
                     public void onTimeRunOut() {
                         // TODO: HANDLE TIMER RUN OUT
-                        //new ConfigurationActivity.MarkAsTimeRunOutAsync().execute();
+                        handleTimer();
                         //BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
                         AlertDialog timeRunOutAlert = new AlertDialog.Builder(GrammarActivity.this)
                                 .setTitle(R.string.time_ran_out_title)
@@ -329,7 +333,21 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         if (hasTimer) {
             Timer timer = Timer.getInstance(null);
             Time time = timer.getCurrentTime();
-            new UpdateTimerAsync().execute(String.valueOf(task_id), String.valueOf(TaskLoginActivity.loggedUser.getUser_id()), time.toString());
+
+            long elapsed = (availableTime.getTime() - time.getTime());
+
+            int elapsedHours = (int) (elapsed / 3600000);
+            int elapsedMinutes = (int) ((elapsed - (elapsedHours * 3600000)) / 60000);
+            int elapsedSeconds = (int) ((elapsed - (elapsedHours * 3600000) - (elapsedMinutes * 60000)) / 1000);
+
+
+            final String sTime = String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+            final Time elapsedTime = Time.valueOf(sTime);
+
+            new UpdateTimerAsync().execute(String.valueOf(task_id), String.valueOf(TaskLoginActivity.loggedUser.getUser_id()), elapsedTime.toString());
+            if (GrammarTaskAdapter.runningTask != null) {
+                GrammarTaskAdapter.runningTask.setRemaining_time(time);
+            }
         }
     }
 
@@ -460,6 +478,15 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                         }
                     })
                     .show();
+
+            if (taskSolving) {
+                if (hasTimer) {
+                    Timer timer = Timer.getInstance(null);
+                    timer.pauseTimer();
+                    Timer.deleteTimer();
+
+                }
+            }
         } else {
             saveRules();
             super.onBackPressed();
