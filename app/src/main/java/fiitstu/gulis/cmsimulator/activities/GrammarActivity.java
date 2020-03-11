@@ -271,6 +271,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
         List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+        saveRules();
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -283,6 +284,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 }
                 return true;
             case R.id.menu_submit_task:
+
                 dataSource.open();
                 String grammarType = checkGrammarType(grammarRuleList);
 
@@ -291,7 +293,6 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 submitGrammarTaskDialog.show(fragmentManager, TAG);
                 return true;
             case R.id.menu_grammar_test:
-                saveRules();
                 dataSource.open();
 
                 Intent grammarTest = new Intent(this, GrammarTestingActivity.class);
@@ -384,8 +385,13 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         List<GrammarRule> grammarRuleList = rulesAdapter.getGrammarRuleList();
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
+        List<String> tests = dataSource.getGrammarTests();
+        dataSource.globalDrop();
         for (GrammarRule rule : grammarRuleList) {
             dataSource.addGrammarRule(rule.getGrammarLeft(), rule.getGrammarRight());
+        }
+        for (String test : tests) {
+            dataSource.addGrammarTest(test);
         }
     }
 
