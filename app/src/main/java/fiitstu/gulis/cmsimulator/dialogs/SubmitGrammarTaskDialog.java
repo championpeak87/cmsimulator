@@ -10,19 +10,29 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.activities.UsersManagmentActivity;
 import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
+import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.elements.TestWord;
 import fiitstu.gulis.cmsimulator.elements.UniqueQueue;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
@@ -32,6 +42,8 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
     private List<String> inputWordList;
     private UniqueQueue<String> queue = new UniqueQueue<>();
     private String grammarType;
+    private int task_id;
+    private Task.TASK_STATUS status;
 
     // UI ELEMENTS
     private ProgressBar progressBar_test_executing;
@@ -40,11 +52,12 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
     private ProgressBar progressBar_test_executing_values;
 
     @SuppressLint("ValidFragment")
-    public SubmitGrammarTaskDialog(String grammarType) {
+    public SubmitGrammarTaskDialog(String grammarType, int task_id) {
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
         this.inputWordList = dataSource.getGrammarTests();
         this.grammarType = grammarType;
+        this.task_id = task_id;
     }
 
     @NonNull
@@ -127,6 +140,7 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
                 positiveButton.setEnabled(true);
                 showLoadingScreen(false);
                 linearlayout_submit_warning_message.setVisibility(hasRejectedTests ? View.VISIBLE : View.GONE);
+                status = hasRejectedTests ? Task.TASK_STATUS.WRONG : Task.TASK_STATUS.CORRECT;
                 edittext_positive_test_results.setTextColor(getActivity().getColor(acceptedTests == numberOfTests ? R.color.md_green_400 : R.color.md_red_500));
             }
         }
@@ -135,11 +149,62 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataSource dataSource = DataSource.getInstance();
+                dataSource.open();
+                List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+                List<String> testsList = dataSource.getGrammarTests();
+
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
                 try {
-                    throw new NotImplementedException(getContext());
-                } catch (NotImplementedException e) {
+                    fileHandler.setData(grammarRuleList, testsList);
+                    fileHandler.writeFile(Integer.toString(task_id));
+                } catch (ParserConfigurationException | IOException | TransformerException e) {
                     e.printStackTrace();
                 }
+                final File file = new File(FileHandler.PATH + "/" + Integer.toString(task_id) + FileHandler.Format.CMSG.getExtension());
+
+                class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL url = urlManager.getSubmitGrammarTaskUrl(TaskLoginActivity.loggedUser.getUser_id(), task_id, status, Calendar.getInstance().getTime());
+                        String output = null;
+
+                        try {
+                            output = serverController.getResponseFromServer(url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        getDialog().dismiss();
+                        getActivity().finish();
+                    }
+                }
+                class SaveTaskAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL url = urlManager.getSaveGrammarURL(TaskLoginActivity.loggedUser.getUser_id(), Integer.toString(task_id) + FileHandler.Format.CMSG.getExtension());
+                        String output = null;
+
+                        output = serverController.doPostRequest(url, file);
+                        return output;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        new SubmitTaskAsync().execute();
+                    }
+                }
+
+                new SaveTaskAsync().execute();
             }
         });
     }

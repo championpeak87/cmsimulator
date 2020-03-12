@@ -1160,6 +1160,7 @@ app.get('/api/grammarTasks/submit', (req, res) => {
       pool.query('UPDATE grammar_task_results SET submitted=\'true\', submission_date=$1, task_status = $2 WHERE task_id = $3 AND user_id = $4;', [submission_time, task_status, task_id, user_id], (error, result) => {
         if (error) { throw error }
         if (result.rowCount > 0) {
+          console.log("SUBMITTED");
           res.status(HTTP_OK).send({
             task_id: task_id,
             user_id: user_id,

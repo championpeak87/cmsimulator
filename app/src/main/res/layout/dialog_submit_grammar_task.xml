@@ -23,7 +23,7 @@
                   android:layout_height="wrap_content" android:layout_weight="0.6"/>
         <EditText android:id="@+id/edittext_positive_test_results" android:enabled="false" android:layout_width="0dp"
                   android:layout_height="wrap_content" android:layout_weight="0.4" android:textAlignment="center"
-                  android:textStyle="bold"/>
+                  android:textStyle="bold" android:text="0 / 0" android:textColor="@color/md_green_400"/>
     </LinearLayout>
     <ProgressBar android:id="@+id/progressBar_test_executing" android:layout_width="wrap_content"
                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal"

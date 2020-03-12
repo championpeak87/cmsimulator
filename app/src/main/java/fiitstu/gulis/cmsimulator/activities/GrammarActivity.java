@@ -383,13 +383,13 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         dataSource.open();
         saveRules();
         List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+        List<String> testList = dataSource.getGrammarTests();
+        FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
             case R.id.menu_save_task:
-                List<String> testList = dataSource.getGrammarTests();
-                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
                 try {
                     fileHandler.setData(grammarRuleList, testList);
                     fileHandler.writeFile(Integer.toString(task_id));
@@ -426,11 +426,9 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
 
                 return true;
             case R.id.menu_submit_task:
-
-                dataSource.open();
                 String grammarType = checkGrammarType(grammarRuleList);
 
-                SubmitGrammarTaskDialog submitGrammarTaskDialog = new SubmitGrammarTaskDialog(grammarType);
+                SubmitGrammarTaskDialog submitGrammarTaskDialog = new SubmitGrammarTaskDialog(grammarType, task_id);
                 FragmentManager fragmentManager = this.getSupportFragmentManager();
                 submitGrammarTaskDialog.show(fragmentManager, TAG);
                 return true;
