@@ -47,7 +47,8 @@ public class UrlManager {
     private final static String CHANGE_GRAMMAR_TASK_FLAG_PATH = "/api/grammarTasks/changeFlag";
     private final static String DOWNLOAD_GRAMMAR_TASK_PATH = "/api/grammarTasks/download";
     private final static String UPDATE_TIMER_GRAMMAR_TASK_PATH = "/api/grammarTasks/updateTimer";
-    private final static String SUBMIT_GRAMMAR_TASK_PATH = "/api/grammarTask/submit";
+    private final static String SUBMIT_GRAMMAR_TASK_PATH = "/api/grammarTasks/submit";
+    private final static String SAVE_GRAMMAR_TASK_PATH = "/api/grammarTasks/save";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -115,6 +116,23 @@ public class UrlManager {
         } else {
             /* TODO: SET PUBLIC SERVER URI */
             URI = "http://cmserver.fiit.stuba.sk";
+        }
+    }
+
+    public URL getSaveGrammarURL(int user_id, String file_name) {
+        Uri uri = Uri.parse(URI + SAVE_GRAMMAR_TASK_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
         }
     }
 

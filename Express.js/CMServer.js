@@ -1171,8 +1171,38 @@ app.get('/api/grammarTasks/submit', (req, res) => {
   })
 })
 
+app.post('/api/grammarTasks/save', (req, res, next) => {
+  const user_id = req.query.user_id;
+  const file_name = req.query.file_name;
+  const file = req.files.task;
+  const makedirPath = "./uploads/" + user_id;
+  const path = "./uploads/" + user_id + "/" + file_name;
+
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir(makedirPath, { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  if (!file) {
+    console.log("FILE NOT SAVED!");
+  }
+  else {
+    file.mv(path, function (err, results) {
+      if (err) throw err;
+      res.status(HTTP_OK).send({
+        success: true,
+        message: "File uploaded!"
+      });
+      console.log([user_id], "TASK WAS SAVED!");
+    });
+  }
+});
+
+
 app.get('/', (req, res) => {
   res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');
 })
+
 
 app.listen(port, () => console.log(`CMServer server listening on port ${port}!`))

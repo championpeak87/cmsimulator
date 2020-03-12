@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -29,7 +30,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,7 +52,12 @@ import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.elements.Timer;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.network.grammar_tasks.UpdateTimerAsync;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * Grammar creation activity.
@@ -372,18 +381,49 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         handleTimer();
         DataSource dataSource = DataSource.getInstance();
         dataSource.open();
-        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
         saveRules();
+        List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
             case R.id.menu_save_task:
+                List<String> testList = dataSource.getGrammarTests();
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
                 try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
+                    fileHandler.setData(grammarRuleList, testList);
+                    fileHandler.writeFile(Integer.toString(task_id));
+                } catch (ParserConfigurationException | TransformerException | IOException e) {
                     e.printStackTrace();
                 }
+
+                String filePath = FileHandler.PATH + "/" + Integer.toString(task_id) + FileHandler.Format.CMSG.getExtension();
+                final File file = new File(filePath);
+
+                class SaveTaskAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL url = urlManager.getSaveGrammarURL(TaskLoginActivity.loggedUser.getUser_id(), Integer.toString(task_id) + FileHandler.Format.CMSG.getExtension());
+                        String output = null;
+
+                        output = serverController.doPostRequest(url, file);
+                        return output;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s == null || s.isEmpty()) {
+                            Toast.makeText(GrammarActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GrammarActivity.this, R.string.save_complete, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+                new SaveTaskAsync().execute();
+
                 return true;
             case R.id.menu_submit_task:
 
