@@ -24,6 +24,7 @@ import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
  * <p>
  * Created by Martin on 15. 4. 2017.
  */
+@SuppressLint("ValidFragment")
 public class SubmitTaskDialog extends DialogFragment {
     private LinearLayout message;
     private EditText positive_tests;

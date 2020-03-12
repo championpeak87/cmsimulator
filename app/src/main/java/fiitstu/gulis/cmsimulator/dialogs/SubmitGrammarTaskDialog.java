@@ -12,9 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.BrowseGrammarTasksActivity;
 import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
 import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.activities.UsersManagmentActivity;
+import fiitstu.gulis.cmsimulator.adapters.tasks.GrammarTaskAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
@@ -184,6 +186,8 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
                     protected void onPostExecute(String s) {
                         getDialog().dismiss();
                         getActivity().finish();
+
+                        GrammarTaskAdapter.instance.setSubmissionTask(status, task_id, Calendar.getInstance().getTime());
                     }
                 }
                 class SaveTaskAsync extends AsyncTask<Void, Void, String> {

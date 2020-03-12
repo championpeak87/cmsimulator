@@ -35,10 +35,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.adapters.grammar.RulesAdapter;
@@ -95,6 +92,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String TIMER_KEY = "TIMER_KEY";
     public static final String TASK_ID_KEY = "TASK_ID_KEY";
     public static final String AVAILABLE_TIME_KEY = "AVAILABLE_TIME_KEY";
+    public static final String ADAPTER_KEY = "ADAPTER_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;

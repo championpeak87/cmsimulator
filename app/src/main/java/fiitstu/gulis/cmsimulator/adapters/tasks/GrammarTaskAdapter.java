@@ -51,10 +51,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.ItemHolder> {
     private static final String TAG = "GrammarTaskAdapter";
+    public static GrammarTaskAdapter instance = null;
 
     public interface DatasetChangedListener {
         void onDataChange();
@@ -67,6 +69,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
     public static GrammarTask runningTask = null;
 
     public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks) {
+        instance = this;
         this.mContext = mContext;
         this.grammarTaskList = grammarTasks;
         if (datasetChangedListener != null)
@@ -498,6 +501,19 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setSubmissionTask(Task.TASK_STATUS status, int task_id, Date submission_date) {
+        for (GrammarTask task : grammarTaskList) {
+            if (task.getTask_id() == task_id) {
+                task.setStatus(status);
+                task.setSubmission_date(submission_date);
+                notifyItemChanged(grammarTaskList.indexOf(task));
+
+                break;
+            }
+
         }
     }
 }
