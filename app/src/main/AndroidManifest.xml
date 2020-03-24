@@ -71,12 +71,11 @@
 				android:configChanges="orientation|screenSize"/>
 		<activity
 				android:name=".activities.TaskLoginActivity"
-				android:theme="@style/LoginTheme"
-				android:fitsSystemWindows="true"
-				android:screenOrientation="portrait"/>
+				android:theme="@style/LoginTheme"/>
 		<activity
 				android:name=".activities.TaskSignUpActivity"
 				android:theme="@style/LoginTheme"
+				android:windowSoftInputMode="stateVisible|adjustPan"
 				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activities.HelpActivity"

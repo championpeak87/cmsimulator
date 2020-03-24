@@ -18,7 +18,6 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.app.CMSimulator;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.elements.TestScenario;
-import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.List;

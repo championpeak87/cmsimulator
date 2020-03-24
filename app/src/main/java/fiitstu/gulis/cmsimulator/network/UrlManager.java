@@ -20,7 +20,7 @@ public class UrlManager {
     private static String URI;
 
     // PATHS
-    private final static String LOGIN_PATH = "/api/login";
+    private final static String LOGIN_PATH = "/api/user/login";
     private final static String CHANGE_PASSWORD_PATH = "/api/user/changePassword";
     private final static String ADD_NEW_USER_PATH = "/api/user/signup";
     private final static String GET_ALL_USERS_PATH = "/api/user/getUsers";
@@ -30,7 +30,7 @@ public class UrlManager {
     private final static String GET_ALL_AUTOMATA_TASKS_PATH = "/api/tasks/getTasks";
     private final static String DELETE_USER_PATH = "/api/user/delete";
     private final static String UPDATE_USER_PATH = "/api/user/update";
-    private final static String GET_USER_SALT_PATH = "/api/login_salt";
+    private final static String GET_USER_SALT_PATH = "/api/user/login_salt";
     private final static String DELETE_AUTOMATA_TASK_PATH = "/api/tasks/delete";
     private final static String DOWNLOAD_AUTOMATA_TASK_PATH = "/api/tasks/download";
     private final static String SAVE_AUTOMATA_TASK_PATH = "/api/tasks/save";

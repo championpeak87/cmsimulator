@@ -22,7 +22,6 @@ import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.elements.RegexTest;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
-import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.List;
