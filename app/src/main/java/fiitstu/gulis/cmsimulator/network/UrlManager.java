@@ -114,8 +114,9 @@ public class UrlManager {
             // sudo apt install net-tools -y
             URI = "http://192.168.1.235:3000";
         } else {
-            /* TODO: SET PUBLIC SERVER URI */
-            URI = "http://cmserver.fiit.stuba.sk";
+            /* COMPLETED: SET PUBLIC SERVER URI */
+            // HOSTED ON GOOGLE CLOUD
+            URI = "http://cmsimulator.appspot.com";
         }
     }
 

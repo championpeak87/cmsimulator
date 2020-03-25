@@ -10,28 +10,21 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class ServerController {
-
-    public String getResponseFromServer(URL url) throws IOException
-    {
-        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-        try
-        {
+    public String getResponseFromServer(URL url) throws IOException {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        try {
             InputStream in = httpURLConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
             boolean hasInput = scanner.hasNext();
-            if (hasInput)
-            {
+            if (hasInput) {
                 return scanner.next();
-            }
-            else
-            {
+            } else {
                 return null;
             }
-        }
-        finally {
+        } finally {
             httpURLConnection.disconnect();
         }
     }
@@ -59,8 +52,6 @@ public class ServerController {
 
         return response.message();
     }
-
-
 
 
 }

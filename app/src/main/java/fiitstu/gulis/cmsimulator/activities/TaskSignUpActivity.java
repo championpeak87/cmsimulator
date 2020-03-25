@@ -165,14 +165,11 @@ public class TaskSignUpActivity extends FragmentActivity {
             User newUser = new Student(username, firstname, lastname, -1, password, generatedSalt);
 
             RadioButton adminButton = findViewById(R.id.radiobutton_usertype_admin);
-            RadioButton lectorButton = findViewById(R.id.radiobutton_usertype_lector);
             RadioButton studentButton = findViewById(R.id.radiobutton_usertype_student);
 
             final User.user_type userType;
             if (adminButton.isChecked())
                 userType = User.user_type.admin;
-            else if (lectorButton.isChecked())
-                userType = User.user_type.lector;
             else userType = User.user_type.student;
 
             // IMPLEMENT SIGN UP API CALL
