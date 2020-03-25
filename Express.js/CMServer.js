@@ -3,7 +3,7 @@ const filesystem = require('fs');
 const app = express();
 var fileuploader = require('express-fileupload');
 app.use(fileuploader());
-const port = 3000
+const port = 8080
 
 // HTTP STAVOVE KODY
 /// USPESNE
@@ -21,10 +21,11 @@ const HTTP_NOT_FOUND = 404
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
-  host: 'localhost',
+  host: '/cloudsql/cmsimulator:europe-west4:cmsimulator-postgresql',
   database: 'cmsimulator',
-  password: '6b7f8538234541e9af7c40559be2a508',
-  port: 5432,
+  password: '3656a5ec8d234e9cbab536bdd251b8cb',
+  name: 'cmsimulator',
+  connector: 'postgresql'
 })
 
 app.use(express.json());
@@ -106,7 +107,7 @@ app.get('/api/user/getCount', (req, res) => {
 
 
 // PRIHLASENIE
-app.get('/api/login', (req, res) => {
+app.get('/api/user/login', (req, res) => {
   const username = req.query.username;
   const password = req.query.auth_key;
 
@@ -132,7 +133,7 @@ app.get('/api/login', (req, res) => {
 })
 
 // ZISKANIE SALTU
-app.get('/api/login_salt', (req, res) => {
+app.get('/api/user/login_salt', (req, res) => {
   const username = req.query.username;
 
   pool.query('SELECT encode(salt::bytea, \'hex\') as salt FROM users WHERE username = $1;', [username], (error, results) => {

@@ -112,7 +112,7 @@ public class UrlManager {
             //
             // DEBIAN BASED SYSTEM "ifconfig installation"
             // sudo apt install net-tools -y
-            URI = "http://192.168.1.235:3000";
+            URI = "http://192.168.1.235:8080";
         } else {
             /* COMPLETED: SET PUBLIC SERVER URI */
             // HOSTED ON GOOGLE CLOUD
