@@ -1341,5 +1341,7 @@
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
     <string name="accepted_tests">Accepted tests</string>
+    <string name="find_automata_tasks">Find automata tasks</string>
+	<string name="find_grammar_tasks">Find grammar tasks</string>
 
 </resources>

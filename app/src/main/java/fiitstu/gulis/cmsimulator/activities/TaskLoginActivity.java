@@ -283,8 +283,6 @@ public class TaskLoginActivity extends FragmentActivity {
 
         if (user instanceof Admin) {
             showMainTaskActivity = new Intent(this, TasksAdminActivity.class);
-        } else if (user instanceof Lector) {
-            showMainTaskActivity = new Intent(this, TasksLectorActivity.class);
         } else if (user instanceof Student) {
             showMainTaskActivity = new Intent(this, TasksStudentActivity.class);
         }

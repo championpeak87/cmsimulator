@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
@@ -27,8 +29,14 @@ import fiitstu.gulis.cmsimulator.models.users.Admin;
 import fiitstu.gulis.cmsimulator.models.users.Lector;
 import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.models.users.User;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * A main-ish menu for task-related activities.
@@ -47,7 +55,216 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
 
     public static final int GAME_EXAMPLE_PREVIEW = 0;
 
+    private EditText edittext_automatas_new, edittext_automatas_in_progress, edittext_automatas_correct, edittext_automatas_wrong, edittext_automatas_too_late;
+    private EditText edittext_grammars_new, edittext_grammars_in_progress, edittext_grammars_correct, edittext_grammars_wrong, edittext_grammars_too_late;
+    private int automata_tasks_count = 0, grammar_tasks_count = 0;
+
     public static User loggedUser = null;
+
+    private void setData() {
+        new FetchAutomataTasksCountAsync().execute();
+        new FetchGrammarTasksCountAsync().execute();
+    }
+
+    class FetchUserResultsAsync extends AsyncTask<Integer, Void, String> {
+        @Override
+        protected String doInBackground(Integer... integers) {
+            ServerController serverController = new ServerController();
+            UrlManager urlManager = new UrlManager();
+            URL url = urlManager.getUserResultsOverviewURL(integers[0]);
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null || s.isEmpty()) {
+                Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    JSONArray array = new JSONArray(s);
+                    final int arraySize = array.length();
+
+                    int automatas_correct = 0, automatas_new = 0, automatas_in_progress = 0, automatas_wrong = 0, automatas_too_late = 0;
+                    for (int i = 0; i < arraySize; i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        String currentStatus = object.getString("task_status");
+
+                        switch (currentStatus) {
+                            case "new":
+                                automatas_new = object.getInt("count");
+                                break;
+                            case "in_progress":
+                                automatas_in_progress = object.getInt("count");
+                                break;
+                            case "correct":
+                                automatas_correct = object.getInt("count");
+                                break;
+                            case "wrong":
+                                automatas_wrong = object.getInt("count");
+                                break;
+                            case "too_late":
+                                automatas_too_late = object.getInt("count");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    edittext_automatas_new.setText(Integer.toString(automatas_new) + " / " + Integer.toString(automata_tasks_count));
+                    edittext_automatas_in_progress.setText(Integer.toString(automatas_in_progress) + " / " + Integer.toString(automata_tasks_count));
+                    edittext_automatas_correct.setText(Integer.toString(automatas_correct) + " / " + Integer.toString(automata_tasks_count));
+                    edittext_automatas_wrong.setText(Integer.toString(automatas_wrong) + " / " + Integer.toString(automata_tasks_count));
+                    edittext_automatas_too_late.setText(Integer.toString(automatas_too_late) + " / " + Integer.toString(automata_tasks_count));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+    }
+
+    class FetchGrammarResultsAsync extends AsyncTask<Integer, Void, String> {
+        @Override
+        protected String doInBackground(Integer... integers) {
+            ServerController serverController = new ServerController();
+            UrlManager urlManager = new UrlManager();
+            URL url = urlManager.getGrammarResultsOverviewURL(integers[0]);
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null || s.isEmpty()) {
+                Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    JSONArray array = new JSONArray(s);
+                    final int arraySize = array.length();
+
+                    int grammars_correct = 0, grammars_new = 0, grammars_in_progress = 0, grammars_wrong = 0, grammars_too_late = 0;
+                    for (int i = 0; i < arraySize; i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        String currentStatus = object.getString("task_status");
+
+                        switch (currentStatus) {
+                            case "new":
+                                grammars_new = object.getInt("count");
+                                break;
+                            case "in_progress":
+                                grammars_in_progress = object.getInt("count");
+                                break;
+                            case "correct":
+                                grammars_correct = object.getInt("count");
+                                break;
+                            case "wrong":
+                                grammars_wrong = object.getInt("count");
+                                break;
+                            case "too_late":
+                                grammars_too_late = object.getInt("count");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    edittext_grammars_new.setText(Integer.toString(grammars_new) + " / " + Integer.toString(grammar_tasks_count));
+                    edittext_grammars_in_progress.setText(Integer.toString(grammars_in_progress) + " / " + Integer.toString(grammar_tasks_count));
+                    edittext_grammars_correct.setText(Integer.toString(grammars_correct) + " / " + Integer.toString(grammar_tasks_count));
+                    edittext_grammars_wrong.setText(Integer.toString(grammars_wrong) + " / " + Integer.toString(grammar_tasks_count));
+                    edittext_grammars_too_late.setText(Integer.toString(grammars_too_late) + " / " + Integer.toString(grammar_tasks_count));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+    }
+
+    class FetchAutomataTasksCountAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            ServerController serverController = new ServerController();
+            UrlManager urlManager = new UrlManager();
+            URL url = urlManager.getAutomataTasksCountURL();
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null || s.isEmpty()) {
+                Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    JSONArray array = new JSONArray(s);
+                    JSONObject object = array.getJSONObject(0);
+                    automata_tasks_count = object.getInt("count");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+                new FetchUserResultsAsync().execute(TaskLoginActivity.loggedUser.getUser_id());
+            }
+        }
+    }
+
+    class FetchGrammarTasksCountAsync extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            ServerController serverController = new ServerController();
+            UrlManager urlManager = new UrlManager();
+            URL url = urlManager.getGrammarTasksCountURL();
+            String output = null;
+
+            try {
+                output = serverController.getResponseFromServer(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return output;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null || s.isEmpty()) {
+                Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    JSONArray array = new JSONArray(s);
+                    JSONObject object = array.getJSONObject(0);
+                    grammar_tasks_count = object.getInt("count");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TasksStudentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+            new FetchGrammarResultsAsync().execute(TaskLoginActivity.loggedUser.getUser_id());
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +294,20 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
         else if (user_type.equals(Admin_tag))
             loggedUser = new Student(username, first_name, last_name, user_id, authkey);
 
+        edittext_automatas_new = findViewById(R.id.edittext_automatas_new);
+        edittext_automatas_in_progress = findViewById(R.id.edittext_automatas_in_progress);
+        edittext_automatas_correct = findViewById(R.id.edittext_automatas_correct);
+        edittext_automatas_wrong = findViewById(R.id.edittext_automatas_wrong);
+        edittext_automatas_too_late = findViewById(R.id.edittext_automatas_too_late);
+
+        edittext_grammars_new = findViewById(R.id.edittext_grammars_new);
+        edittext_grammars_in_progress = findViewById(R.id.edittext_grammars_in_progress);
+        edittext_grammars_correct = findViewById(R.id.edittext_grammars_correct);
+        edittext_grammars_wrong = findViewById(R.id.edittext_grammars_wrong);
+        edittext_grammars_too_late = findViewById(R.id.edittext_grammars_too_late);
+
+        setData();
+
         TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
         fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());
 
@@ -88,16 +319,14 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
         actionBar.setTitle(R.string.tasks);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Button findAutomataTasks = findViewById(R.id.button_tasks_create_automata);
+        Button findAutomataTasks = findViewById(R.id.button_tasks_find_automata);
         findAutomataTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (loggedUser == null)
-                {
+                if (loggedUser == null) {
                     Toast.makeText(TasksStudentActivity.this, R.string.logged_out, Toast.LENGTH_LONG).show();
                     TasksStudentActivity.this.finish();
-                }
-                else {
+                } else {
                     Intent intent = new Intent(TasksStudentActivity.this, BrowseAutomataTasksActivity.class);
                     intent.putExtra("USER_ID", loggedUser.getUser_id());
                     intent.putExtra("AUTHKEY", loggedUser.getAuth_key());
@@ -106,58 +335,12 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
             }
         });
 
-        /*Button findTasksButton = findViewById(R.id.button_tasks_find);
-        findTasksButton.setOnClickListener(new View.OnClickListener() {
+        Button findGrammarButton = findViewById(R.id.button_tasks_find_grammar);
+        findGrammarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivityIntent = new Intent(TasksActivity.this, FindTasksActivity.class);
+                Intent nextActivityIntent = new Intent(TasksStudentActivity.this, BrowseGrammarTasksActivity.class);
                 startActivity(nextActivityIntent);
-            }
-        });
-
-        Button newTaskButton = findViewById(R.id.button_tasks_new);
-        newTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent nextActivityIntent = new Intent(TasksActivity.this, EditTaskActivity.class);
-                nextActivityIntent.putExtras(new Bundle());
-                startActivity(nextActivityIntent);
-            }
-        });
-
-        Button loadTaskButton = findViewById(R.id.button_tasks_load);
-        loadTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(TasksActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(TasksActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MainActivity.REQUEST_READ_STORAGE);
-                } else {
-                    loadTask();
-                }
-            }
-        });
-
-        Button exampleTaskButton = findViewById(R.id.button_tasks_examples);
-        exampleTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                ExampleTaskDialog exampleTaskDialog = ExampleTaskDialog.newInstance();
-                exampleTaskDialog.show(fm, EXAMPLE_DIALOG);
-
-            }
-        });*/
-
-        Button game = findViewById(R.id.button_tasks_games_automatas);
-        game.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                TasksGameDialog dialog = TasksGameDialog.newInstance();
-                dialog.show(fm, GAME_DIALOG);
             }
         });
 

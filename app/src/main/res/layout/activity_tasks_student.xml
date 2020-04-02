@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
 	<LinearLayout android:layout_width="match_parent"
-	              android:layout_height="match_parent"
-	              android:orientation="vertical">
+				  android:layout_height="match_parent"
+				  android:orientation="vertical">
 
 		<LinearLayout
 				android:layout_width="match_parent"
@@ -16,13 +16,13 @@
 				android:paddingTop="@dimen/activity_vertical_margin">
 
 			<TextView android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/logged_user"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="5dp"
-			          android:layout_marginBottom="5dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"/>
+					  android:layout_height="wrap_content"
+					  android:text="@string/logged_user"
+					  android:theme="@style/text_subheader"
+					  android:layout_marginTop="5dp"
+					  android:layout_marginBottom="5dp"
+					  android:layout_marginLeft="20dp"
+					  android:layout_marginRight="10dp"/>
 
 			<android.support.v7.widget.CardView
 					xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -34,14 +34,14 @@
 					android:elevation="20dp"
 					card_view:cardCornerRadius="4dp">
 				<LinearLayout android:layout_width="match_parent"
-				              android:layout_height="match_parent"
-				              android:orientation="vertical"
-				              android:layout_margin="10dp">
+							  android:layout_height="match_parent"
+							  android:orientation="vertical"
+							  android:layout_margin="10dp">
 
 					<LinearLayout android:layout_width="match_parent"
-					              android:layout_height="wrap_content"
-					              android:orientation="horizontal"
-					              android:layout_margin="10dp">
+								  android:layout_height="wrap_content"
+								  android:orientation="horizontal"
+								  android:layout_margin="10dp">
 
 
 						<Button
@@ -69,23 +69,23 @@
 								android:layout_marginLeft="10dp"/>
 					</LinearLayout>
 					<LinearLayout android:layout_width="match_parent"
-					              android:layout_height="wrap_content"
-					              android:orientation="horizontal"
-					              android:gravity="right">
+								  android:layout_height="wrap_content"
+								  android:orientation="horizontal"
+								  android:gravity="right">
 						<Button android:id="@+id/button_tasks_change_password"
-						        android:layout_width="wrap_content"
-						        android:layout_height="wrap_content"
-						        android:text="@string/change_password"
-						        android:onClick="changePassword"
-						        android:layout_gravity="right"
-						        style="?android:buttonBarButtonStyle"/>
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="@string/change_password"
+								android:onClick="changePassword"
+								android:layout_gravity="right"
+								style="?android:buttonBarButtonStyle"/>
 						<Button android:id="@+id/button_tasks_sign_out"
-						        android:layout_width="wrap_content"
-						        android:layout_height="wrap_content"
-						        android:text="@string/sign_out"
-						        android:onClick="signOut"
-						        android:layout_gravity="right"
-						        style="?android:buttonBarButtonStyle"/>
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="@string/sign_out"
+								android:onClick="signOut"
+								android:layout_gravity="right"
+								style="?android:buttonBarButtonStyle"/>
 					</LinearLayout>
 
 				</LinearLayout>
@@ -93,117 +93,157 @@
 
 			</android.support.v7.widget.CardView>
 
-			<TextView android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/automatas"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="20dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"/>
+			<ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+				<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+					<TextView android:layout_width="wrap_content"
+							  android:layout_height="wrap_content"
+							  android:text="@string/tasks"
+							  android:theme="@style/text_subheader"
+							  android:layout_marginTop="20dp"
+							  android:layout_marginLeft="20dp"
+							  android:layout_marginRight="10dp"/>
 
-			<LinearLayout android:layout_width="match_parent"
-			              android:layout_height="wrap_content"
-			              android:orientation="horizontal"
-			              android:layout_marginLeft="10dp"
-			              android:layout_marginTop="10dp"
-			              android:layout_marginBottom="10dp">
-<!--				<Button-->
-<!--						android:id="@+id/button_tasks_find_automata"-->
-<!--						android:text="@string/create_task"-->
-<!--						android:lines="2"-->
-<!--						android:layout_gravity="center_vertical"-->
-<!--						android:drawableTop="@drawable/baseline_add_box_24"-->
-<!--						android:onClick="createAutomataTasks"-->
-<!--						style="@style/mainMenuButtonStyle"/>-->
+					<LinearLayout android:layout_width="match_parent"
+								  android:layout_height="wrap_content"
+								  android:orientation="horizontal"
+								  android:layout_marginLeft="10dp"
+								  android:layout_marginTop="10dp"
+								  android:layout_marginBottom="10dp">
+						<Button
+								android:id="@+id/button_tasks_find_automata"
+								android:text="@string/find_automata_tasks"
+								android:lines="2"
+								android:layout_gravity="center_vertical"
+								android:drawableTop="@drawable/baseline_cloud_download_24"
+								style="@style/mainMenuButtonStyle"/>
+						<Button
+								android:id="@+id/button_tasks_find_grammar"
+								android:text="@string/find_grammar_tasks"
+								android:lines="2"
+								android:layout_gravity="center_vertical"
+								android:drawableTop="@drawable/baseline_cloud_download_24"
+								style="@style/mainMenuButtonStyle"/>
+					</LinearLayout>
+					<LinearLayout android:layout_height="match_parent" android:layout_width="match_parent"
+								  android:orientation="vertical">
+						<TextView android:layout_width="wrap_content"
+								  android:layout_height="wrap_content"
+								  style="@style/text_subheader"
+								  android:text="@string/achieved_results"
+								  android:layout_marginLeft="20dp"/>
 
-				<Button
-						android:id="@+id/button_tasks_create_automata"
-						android:text="@string/find_tasks"
-						android:lines="2"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_cloud_download_24"
-						style="@style/mainMenuButtonStyle"/>
 
-				<Button
-						android:id="@+id/button_tasks_results_automata"
-						android:text="@string/view_results"
-						android:lines="2"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_view_list_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
-			</LinearLayout>
-
-			<TextView android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/grammar"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="20dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"/>
-
-			<LinearLayout android:layout_width="match_parent"
-			              android:layout_height="wrap_content"
-			              android:orientation="horizontal"
-			              android:layout_marginLeft="10dp"
-			              android:layout_marginTop="10dp"
-			              android:layout_marginBottom="10dp">
-<!--				<Button-->
-<!--						android:id="@+id/button_tasks_create_grammar"-->
-<!--						android:text="@string/create_task"-->
-<!--						android:layout_gravity="center_vertical"-->
-<!--						android:drawableTop="@drawable/baseline_add_box_24"-->
-<!--						android:enabled="false"-->
-<!--						style="@style/mainMenuButtonStyle"/>-->
-
-				<Button
-						android:id="@+id/button_tasks_find_grammar"
-						android:text="@string/find_tasks"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_slideshow_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
-
-				<Button
-						android:id="@+id/button_tasks_results_gramamar"
-						android:text="@string/view_results"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_view_list_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
-			</LinearLayout>
-
-			<TextView android:layout_width="wrap_content"
-			          android:layout_height="wrap_content"
-			          android:text="@string/games"
-			          android:theme="@style/text_subheader"
-			          android:layout_marginTop="20dp"
-			          android:layout_marginLeft="20dp"
-			          android:layout_marginRight="10dp"/>
-
-			<LinearLayout android:layout_width="match_parent"
-			              android:layout_height="wrap_content"
-			              android:orientation="horizontal"
-			              android:layout_marginLeft="10dp"
-			              android:layout_marginTop="10dp"
-			              android:layout_marginBottom="10dp">
-				<Button
-						android:id="@+id/button_tasks_games_automatas"
-						android:text="@string/automatas"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_videogame_asset_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
-
-				<Button
-						android:id="@+id/button_tasks_games_grammars"
-						android:text="@string/grammars"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_videogame_asset_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
-
-			</LinearLayout>
+						<android.support.v7.widget.CardView android:layout_width="match_parent"
+															android:layout_height="wrap_content"
+															android:layout_margin="15dp"
+															android:elevation="15dp">
+							<LinearLayout android:layout_width="match_parent"
+										  android:layout_height="match_parent"
+										  android:orientation="vertical">
+								<TextView android:layout_width="wrap_content"
+										  android:layout_height="wrap_content"
+										  style="@style/text_subheader"
+										  android:text="@string/automatas"
+										  android:layout_margin="15dp"/>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_new" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_automatas_new" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_in_progress" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_automatas_in_progress" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_correct" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_automatas_correct" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_wrong" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_automatas_wrong" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp" android:layout_marginBottom="10dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_too_late" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_automatas_too_late" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+							</LinearLayout>
+						</android.support.v7.widget.CardView>
+						<android.support.v7.widget.CardView android:layout_width="match_parent"
+															android:layout_height="wrap_content"
+															android:layout_margin="15dp"
+															android:elevation="15dp">
+							<LinearLayout android:layout_width="match_parent"
+										  android:layout_height="match_parent"
+										  android:orientation="vertical">
+								<TextView android:layout_width="wrap_content"
+										  android:layout_height="wrap_content"
+										  style="@style/text_subheader"
+										  android:text="@string/grammars"
+										  android:layout_marginLeft="15dp"/>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_new" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_grammars_new" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_in_progress" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_grammars_in_progress" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_correct" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_grammars_correct" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_wrong" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_grammars_wrong" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false" android:gravity="center_horizontal"/>
+								</LinearLayout>
+								<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+											  android:orientation="horizontal" android:layout_marginLeft="25dp" android:layout_marginBottom="10dp"
+											  android:layout_marginRight="25dp">
+									<TextView android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:text="@string/task_too_late" android:layout_weight="0.6"/>
+									<EditText android:id="@+id/edittext_grammars_too_late" android:layout_width="0dp" android:layout_height="wrap_content"
+											  android:layout_weight="0.4" android:enabled="false"  android:gravity="center_horizontal"/>
+								</LinearLayout>
+							</LinearLayout>
+						</android.support.v7.widget.CardView>
+					</LinearLayout>
+				</LinearLayout>
+			</ScrollView>
 		</LinearLayout>
 	</LinearLayout>
 </ScrollView>
