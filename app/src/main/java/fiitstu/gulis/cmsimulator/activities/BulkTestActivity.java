@@ -172,11 +172,17 @@ public class BulkTestActivity extends FragmentActivity implements SaveMachineDia
 
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        MenuItem newTest = menu.findItem(R.id.menu_add_test);
+        MenuItem newRegexTest = menu.findItem(R.id.menu_add_test_regex);
         MenuItem taskInfoButton = menu.getItem(0);
         Bundle inputBundle = getIntent().getExtras();
 
         if (taskConfiguration != 0) {
             taskInfoButton.setVisible(true);
+        }
+        if (taskConfiguration == MainActivity.SOLVE_TASK) {
+            newTest.setVisible(false);
+            newRegexTest.setVisible(false);
         }
 
         return true;

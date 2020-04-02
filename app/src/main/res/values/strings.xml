@@ -1334,14 +1334,23 @@
 	<string name="context_sensitive_grammar">Context-sensitive grammar</string>
     <string name="wrong_input_word">This input word is incorrect!</string>
     <string name="not_implemented">This feature has not been implemented yet!</string>
-    <string name="last_known_version">LAST_KNOWN_VERSION</string>
+    <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
-	<string name="whats_new_content">- Bugfixes</string>
+	<string name="whats_new_content" translatable="false">- Bugfixes</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
     <string name="accepted_tests">Accepted tests</string>
     <string name="find_automata_tasks">Find automata tasks</string>
 	<string name="find_grammar_tasks">Find grammar tasks</string>
+	<string name="regex_help" formatted="true">
+		<b>*</b>       -> Repeats 0 - n times\n
+		<b>+</b>       -> Repeats 1 - n times\n
+		<b>?</b>       -> Repeats 0 to 1 times\n
+		<b>()</b>      -> Symbol grouping\n
+		<b>{n}</b>     -> Repeats n times\n
+		<b>{,n}</b>    -> Repeats at most n times\n
+		<b>{n,}</b>    -> Repeats at least n times\n
+		<b>{n,m}</b>   -> Repeats n to m times</string>
 
 </resources>

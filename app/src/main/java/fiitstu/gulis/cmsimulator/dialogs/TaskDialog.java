@@ -262,8 +262,11 @@ public class TaskDialog extends DialogFragment {
         } else if (mode == ENTERING) {
             Time remainingTime = task.getRemaining_time();
             Time outOfTime = Time.valueOf("00:00:00");
-            if (remainingTime.compareTo(outOfTime) > 0 || task.getAvailable_time().compareTo(Time.valueOf("00:00:00")) == 0)
-                alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
+            Task.TASK_STATUS status = task.getStatus();
+            if (status != Task.TASK_STATUS.CORRECT && status != Task.TASK_STATUS.WRONG) {
+                if (remainingTime.compareTo(outOfTime) > 0 || task.getAvailable_time().compareTo(Time.valueOf("00:00:00")) == 0)
+                    alertDialogBuilder.setPositiveButton(getResources().getString(R.string.solve), null);
+            }
         } else if (mode == EDITING) {
             alertDialogBuilder.setPositiveButton(R.string.back_to_task_edit, null);
         } else if (mode == PREVIEW) {

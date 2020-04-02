@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -177,6 +179,10 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
 
 
         recyclerView.setAdapter(adapter);
+
+        Animation showUpAnimation = AnimationUtils.loadAnimation(this, R.anim.item_show_animation);
+
+        recyclerView.setAnimation(showUpAnimation);
 
         final int orientation = Resources.getSystem().getConfiguration().orientation;
         recyclerView.setLayoutManager(new GridLayoutManager(this, orientation == Configuration.ORIENTATION_LANDSCAPE ? 4 : 2));

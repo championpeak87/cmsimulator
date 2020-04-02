@@ -30,17 +30,21 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
 import fiitstu.gulis.cmsimulator.adapters.simulation.*;
+import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
-import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
-import fiitstu.gulis.cmsimulator.dialogs.GuideFragment;
-import fiitstu.gulis.cmsimulator.dialogs.TaskDialog;
+import fiitstu.gulis.cmsimulator.dialogs.*;
 import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.machines.*;
 import fiitstu.gulis.cmsimulator.R;
@@ -48,14 +52,15 @@ import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.diagram.DiagramView;
 import fiitstu.gulis.cmsimulator.diagram.SimulationFlowView;
 import fiitstu.gulis.cmsimulator.diagram.VerticalSeekBar;
-import fiitstu.gulis.cmsimulator.dialogs.FormalSpecDialog;
-import fiitstu.gulis.cmsimulator.dialogs.SaveMachineDialog;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.views.AdaptiveRecyclerView;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * The activity for simulating machines.
@@ -83,6 +88,8 @@ public class SimulationActivity extends FragmentActivity
     public static final String EMPTY_INPUT_SYMBOL = "EMPTY_INPUT_SYMBOL";
     public static final String START_STACK_SYMBOL = "START_STACK_SYMBOL";
     public static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
+
+    private TestScenarioListAdapter testScenarioListAdapter;
 
     //dialog value
     public static final String SAVE_DIALOG = "SAVE_DIALOG";
@@ -236,6 +243,56 @@ public class SimulationActivity extends FragmentActivity
         return true;
     }
 
+    private int runTests(boolean negative) {
+        Log.v(TAG, "run tests method started");
+
+        int successfulTests = 0;
+        for (int i = 0; i < testScenarioListAdapter.getItemCount(); i++) {
+            final TestScenario testScenario = testScenarioListAdapter.getItem(i);
+            final MachineStep machine = task == null
+                    ? testScenario.prepareMachine(machineType, DataSource.getInstance())
+                    : testScenario.prepareMachine(machineType, DataSource.getInstance(), task.getMaxSteps());
+            machine.simulateFull();
+            final int index = i;
+            final TestScenarioListAdapter.Status status;
+            switch (machine.getNondeterministicMachineStatus()) {
+                case MachineStep.STUCK:
+                    if (testScenario.getOutputWord() != null && machine.getTape().matches(testScenario.getOutputWord())) {
+                        status = TestScenarioListAdapter.Status.CORRECT_OUTPUT_REJECTED;
+                        if (negative)
+                            successfulTests++;
+                    } else {
+                        status = TestScenarioListAdapter.Status.REJECT;
+                        if (negative)
+                            successfulTests++;
+                    }
+                    break;
+                case MachineStep.PROGRESS:
+                    status = TestScenarioListAdapter.Status.TOOK_TOO_LONG;
+                    if (negative)
+                        successfulTests++;
+                    break;
+                case MachineStep.DONE:
+                    if (testScenario.getOutputWord() == null
+                            || machine.matchTapeNondeterministic(testScenario.getOutputWord())) {
+                        status = TestScenarioListAdapter.Status.ACCEPT;
+                        if (!negative)
+                            successfulTests++;
+                    } else {
+                        status = TestScenarioListAdapter.Status.INCORRECT_OUTPUT;
+                        if (negative)
+                            successfulTests++;
+                    }
+                    break;
+                default:
+                    status = null;
+                    break;
+            }
+        }
+
+        return successfulTests;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -340,6 +397,193 @@ public class SimulationActivity extends FragmentActivity
                 nextActivityIntent.putExtras(outputBundle);
                 startActivity(nextActivityIntent);
                 Log.i(TAG, "bulk test activity intent executed");
+                return true;
+            case R.id.menu_save_task:
+                // COMPLETED: SAVE TASK TO CLOUD
+                final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
+                final int user_id = BrowseAutomataTasksActivity.user_id;
+                class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
+                    @Override
+                    protected String doInBackground(File... files) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL pushToCloudURL = urlManager.getSaveTaskURL(file_name, user_id);
+
+                        String output = null;
+                        try {
+                            output = serverController.doPostRequest(pushToCloudURL, files[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s.equalsIgnoreCase("OK"))
+                            Toast.makeText(SimulationActivity.this, R.string.save_complete, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+
+                File file = null;
+                try {
+                    DataSource dataSource = DataSource.getInstance();
+                    dataSource.open();
+                    fileHandler.setData(dataSource, machineType);
+                    task.setResultVersion(TaskResult.CURRENT_VERSION);
+                    fileHandler.writeTask(task);
+
+                    String taskDoc = fileHandler.writeToString();
+
+                    file = new File(this.getFilesDir(), task.getTitle() + ".cmst");
+                    FileOutputStream outputStream;
+
+                    outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
+                    outputStream.write(taskDoc.getBytes());
+                    outputStream.close();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                new SaveTaskToCloudAsync().execute(file);
+                return true;
+            case R.id.menu_submit_task:
+                testScenarioListAdapter = new TestScenarioListAdapter(this, false);
+                List<TestScenario> tests = dataSource.getTestFullExtract(false, DataSource.getInstance().getInputAlphabetFullExtract());
+                testScenarioListAdapter.setItems(tests);
+
+                int positiveTestCount = tests.size();
+                int positiveTestSuccessful = runTests(false);
+
+                tests = dataSource.getTestFullExtract(true, DataSource.getInstance().getInputAlphabetFullExtract());
+                testScenarioListAdapter.setItems(tests);
+
+                int negativeTestCount = tests.size();
+                int negativeTestSuccessful = runTests(true);
+
+                final Task.TASK_STATUS submittedStatus;
+                if (positiveTestCount == positiveTestSuccessful && negativeTestCount == negativeTestSuccessful)
+                    submittedStatus = Task.TASK_STATUS.CORRECT;
+                else
+                    submittedStatus = Task.TASK_STATUS.WRONG;
+
+                final File filesDir = this.getFilesDir();
+
+                SubmitTaskDialog submitTaskDialog = new SubmitTaskDialog(positiveTestCount, positiveTestSuccessful, negativeTestCount, negativeTestSuccessful);
+                submitTaskDialog.setOnClickListener(new SubmitTaskDialog.SubmitTaskDialogListener() {
+                    @Override
+                    public void submitTaskDialogClick() {
+                        final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
+                        final int user_id = BrowseAutomataTasksActivity.user_id;
+                        class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
+                            @Override
+                            protected String doInBackground(File... files) {
+                                UrlManager urlManager = new UrlManager();
+                                ServerController serverController = new ServerController();
+                                URL pushToCloudURL = urlManager.getSaveTaskURL(file_name, user_id);
+
+                                String output = null;
+                                try {
+                                    output = serverController.doPostRequest(pushToCloudURL, files[0]);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+                        }
+
+                        FileHandler fileHandler = new FileHandler(FileHandler.Format.CMST);
+
+                        File file = null;
+                        try {
+                            DataSource dataSource = DataSource.getInstance();
+                            dataSource.open();
+                            fileHandler.setData(dataSource, machineType);
+                            task.setResultVersion(TaskResult.CURRENT_VERSION);
+                            fileHandler.writeTask(task);
+
+                            String taskDoc = fileHandler.writeToString();
+
+                            file = new File(filesDir, task.getTitle() + ".cmst");
+                            FileOutputStream outputStream;
+
+                            outputStream = openFileOutput(task.getTitle() + ".cmst", Context.MODE_PRIVATE);
+                            outputStream.write(taskDoc.getBytes());
+                            outputStream.close();
+                        } catch (ParserConfigurationException e) {
+                            e.printStackTrace();
+                        } catch (TransformerException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        new SaveTaskToCloudAsync().execute(file);
+
+                        final int task_id = task.getTask_id();
+                        final Date currentTime = Calendar.getInstance().getTime();
+
+                        class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
+                            @Override
+                            protected String doInBackground(Void... voids) {
+                                UrlManager urlManager = new UrlManager();
+                                ServerController serverController = new ServerController();
+                                URL url = urlManager.getSubmitAutomataTaskUrl(user_id, task_id, submittedStatus, currentTime);
+
+                                String output = null;
+                                try {
+                                    output = serverController.getResponseFromServer(url);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    return output;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                super.onPostExecute(s);
+
+                                AutomataTaskAdapter adapter = BrowseAutomataTasksActivity.adapter;
+                                adapter.notifyStatusChange(task_id, submittedStatus);
+
+                                if (s == null || s.isEmpty()) {
+                                    Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                } else {
+                                    try {
+                                        JSONObject object = new JSONObject(s);
+                                        if (object.getBoolean("submitted")) {
+                                            Toast.makeText(SimulationActivity.this, R.string.submit_successful, Toast.LENGTH_LONG).show();
+                                            BrowseAutomataTasksActivity.adapter.setSubmissionTime(task, currentTime);
+                                        } else {
+                                            Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(SimulationActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                SimulationActivity.this.finish();
+                                dataSource.globalDrop();
+                                dataSource.close();
+                                Timer.deleteTimer();
+                            }
+                        }
+
+                        new SubmitTaskAsync().execute();
+                    }
+                });
+                submitTaskDialog.show(this.getSupportFragmentManager(), "HELLO");
                 return true;
         }
 
@@ -1255,6 +1499,7 @@ public class SimulationActivity extends FragmentActivity
         leaving = true;
         if (stateList != null) {
             for (State state : stateList) {
+                dataSource.open();
                 dataSource.updateState(state, state.getValue(), state.getPositionX(), state.getPositionY(), state.isInitialState(), state.isFinalState());
             }
         }

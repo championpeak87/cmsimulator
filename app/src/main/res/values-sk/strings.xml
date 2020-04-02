@@ -957,7 +957,7 @@
     <string name="regex_depth">Hĺbka kvantifikátorov regulárnych výrazov</string>
     <string name="testing_settings">Nastavenia testovania</string>
     <string name="regex_input_word">Vstupný regulárny výraz</string>
-    <string name="regex_output_word">Regex output word</string>
+    <string name="regex_output_word">Výstupný regulárny výraz</string>
     <string name="set_grammar_task">Nastaviť úlohu</string>
     <string name="minutes">Minúty</string>
     <string name="new_grammar_task">Nová úloha gramatiky</string>
@@ -974,8 +974,17 @@
     <string name="whats_new">Čo je nové</string>
     <string name="testing">Testovanie</string>
     <string name="continue_task">Pokračovať</string>
-    <string name="preview_task">Preview task</string>
-    <string name="accepted_tests">Accepted tests</string>
-    <string name="find_automata_tasks">Find automata tasks</string>
-    <string name="find_grammar_tasks">Find grammar tasks</string>
+    <string name="preview_task">Zobraziť úlohu</string>
+    <string name="accepted_tests">Akceptované testy</string>
+    <string name="find_automata_tasks">Vyhľadať automaty</string>
+    <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
+    <string name="regex_help" formatted="true">
+        <b>*</b>       -> Opakovanie 0 - n-krát\n
+        <b>+</b>       -> Opakovanie 1 - n-krát\n
+        <b>?</b>       -> Opakuje sa 0 až jedenkrát\n
+        <b>()</b>      -> Zgrupovanie symbolov\n
+        <b>{n}</b>     -> Opakuje sa n-krát\n
+        <b>{,n}</b>    -> Opakuje sa najviac n-krát\n
+        <b>{n,}</b>    -> Opakuje sa najmenej n-krát\n
+        <b>{n,m}</b>   -> Opakuje sa n až m-krát</string>
 </resources>
