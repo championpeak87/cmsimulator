@@ -21,11 +21,10 @@ const HTTP_NOT_FOUND = 404
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
-  host: '/cloudsql/cmsimulator:europe-west4:cmsimulator-postgresql',
+  host: 'localhost',
   database: 'cmsimulator',
   password: '3656a5ec8d234e9cbab536bdd251b8cb',
-  name: 'cmsimulator',
-  connector: 'postgresql'
+  port: 5432
 })
 
 app.use(express.json());
@@ -1200,6 +1199,42 @@ app.post('/api/grammarTasks/save', (req, res, next) => {
     });
   }
 });
+
+app.get('/api/tasks/results', (req, res) => {
+  const user_id = req.query.user_id;
+
+  pool.query('select case when atr.task_status IS NULL then \'new\' else atr.task_status end as task_status, count(*) from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id GROUP BY atr.task_status;', [user_id], (err, result) => {
+    if (result.rowCount > 0) {
+      res.status(HTTP_OK).send(result.rows);
+    }
+  })
+})
+
+app.get('/api/grammarTasks/results', (req, res) => {
+  const user_id = req.query.user_id;
+
+  pool.query('select case when gtr.task_status IS NULL then \'new\' else gtr.task_status end as task_status, count(*) from grammar_tasks as gt left join (SELECT * from grammar_task_results where user_id=$1) as gtr on gtr.task_id = gt.task_id GROUP BY gtr.task_status;', [user_id], (err, result) => {
+    if (result.rowCount > 0) {
+      res.status(HTTP_OK).send(result.rows);
+    }
+  })
+})
+
+app.get('/api/tasks/taskCount', (req, res) => {
+  pool.query('select count(*) from automata_tasks;', (err, results) => {
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(results.rows);
+    }
+  })
+})
+
+app.get('/api/grammarTasks/taskCount', (req, res) => {
+  pool.query('select count(*) from grammar_tasks;', (err, results) => {
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(results.rows);
+    }
+  })
+})
 
 
 app.get('/', (req, res) => {

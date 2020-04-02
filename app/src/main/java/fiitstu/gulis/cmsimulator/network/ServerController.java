@@ -1,7 +1,5 @@
 package fiitstu.gulis.cmsimulator.network;
 
-import android.app.DownloadManager;
-import android.view.View;
 import com.squareup.okhttp.*;
 
 import java.io.*;
@@ -24,7 +22,13 @@ public class ServerController {
             } else {
                 return null;
             }
-        } finally {
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
             httpURLConnection.disconnect();
         }
     }

@@ -163,6 +163,9 @@ public class TaskLoginActivity extends FragmentActivity {
                         e.printStackTrace();
                     }
 
+                    if (saltJson == null)
+                        return null;
+
                     UserParser userParser = new UserParser();
                     String salt = null;
                     try {

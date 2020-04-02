@@ -49,6 +49,10 @@ public class UrlManager {
     private final static String UPDATE_TIMER_GRAMMAR_TASK_PATH = "/api/grammarTasks/updateTimer";
     private final static String SUBMIT_GRAMMAR_TASK_PATH = "/api/grammarTasks/submit";
     private final static String SAVE_GRAMMAR_TASK_PATH = "/api/grammarTasks/save";
+    private final static String USER_RESULTS_OVERVIEW_PATH = "/api/tasks/results";
+    private final static String GET_AUTOMATA_TASKS_COUNT_PATH = "/api/tasks/taskCount";
+    private final static String GET_GRAMMAR_TASKS_COUNT_PATH = "/api/grammarTasks/taskCount";
+    private static final String GRAMMAR_RESULTS_OVERVIEW_PATH = "/api/grammarTasks/results";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -114,9 +118,69 @@ public class UrlManager {
             // sudo apt install net-tools -y
             URI = "http://192.168.1.235:8080";
         } else {
-            /* COMPLETED: SET PUBLIC SERVER URI */
-            // HOSTED ON GOOGLE CLOUD
-            URI = "http://cmsimulator.appspot.com";
+            URI = "http://147.175.150.53:8080";
+        }
+    }
+
+    public URL getAutomataTasksCountURL()
+    {
+        Uri uri = Uri.parse(URI + GET_AUTOMATA_TASKS_COUNT_PATH);
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getGrammarTasksCountURL()
+    {
+        Uri uri = Uri.parse(URI + GET_GRAMMAR_TASKS_COUNT_PATH);
+
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getGrammarResultsOverviewURL(int user_id)
+    {
+        Uri uri = Uri.parse(URI + GRAMMAR_RESULTS_OVERVIEW_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getUserResultsOverviewURL(int user_id)
+    {
+        Uri uri = Uri.parse(URI + USER_RESULTS_OVERVIEW_PATH).buildUpon()
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
         }
     }
 

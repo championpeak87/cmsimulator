@@ -955,7 +955,7 @@
     <string name="new_test_regex">Nový regex test</string>
     <string name="regex_contains_wrong_symbols">Regulárny výraz obsahuje nesprávne symboly!</string>
     <string name="regex_depth">Hĺbka kvantifikátorov regulárnych výrazov</string>
-    <string name="testing_settings">Nastavenia testovanie</string>
+    <string name="testing_settings">Nastavenia testovania</string>
     <string name="regex_input_word">Vstupný regulárny výraz</string>
     <string name="regex_output_word">Regex output word</string>
     <string name="set_grammar_task">Nastaviť úlohu</string>

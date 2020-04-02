@@ -87,6 +87,7 @@ public class ChangePasswordDialog extends DialogFragment {
                             boolean oldPasswordEmpty = oldPassword_passwd.isEmpty();
                             boolean newPasswordEmpty = newPassword_passwd.isEmpty();
                             boolean passwordsMatch = newPassword_passwd.equals(newPasswordCheck_passwd);
+                            boolean shortPassword = newPassword_passwd.length() < 6;
 
                             if (oldPasswordEmpty) {
                                 oldPassword.setError(getString(R.string.password_empty));
@@ -97,8 +98,11 @@ public class ChangePasswordDialog extends DialogFragment {
                             if (!passwordsMatch) {
                                 newPasswordCheck.setError(getString(R.string.passwords_dont_match));
                             }
+                            if (shortPassword) {
+                                newPassword.setError(getString(R.string.password_length_error));
+                            }
 
-                            if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch) {
+                            if (!oldPasswordEmpty && !newPasswordEmpty && passwordsMatch && !shortPassword) {
                                 final ServerController serverController = new ServerController();
                                 final UrlManager urlManager = new UrlManager();
                                 final int user_id = loggedUser.getUser_id();

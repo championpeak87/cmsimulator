@@ -28,8 +28,6 @@ public class TaskSignUpActivity extends FragmentActivity {
 
     private Button signUpButton, cancelButton;
 
-    private ImageView image;
-
     private int adminSwitchCounter = 0;
 
     private boolean signUpAdmin = false;
@@ -39,14 +37,11 @@ public class TaskSignUpActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_task_signup_portrait);
 
-        findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
-
         usernameEditText = findViewById(R.id.edittext_username);
         passwordEditText = findViewById(R.id.edittext_password);
         firstNameEditText = findViewById(R.id.edittext_firstname);
         lastNameEditText = findViewById(R.id.edittext_lastname);
         passwordConfirmEditText = findViewById(R.id.edittext_password_confirm);
-        image = findViewById(R.id.imageView_main_logo);
 
         signUpButton = findViewById(R.id.button_sign_up);
 
@@ -85,7 +80,6 @@ public class TaskSignUpActivity extends FragmentActivity {
         signUpAdmin = savedInstanceState.getBoolean("signup_admin");
         RadioGroup userTypeGroup = findViewById(R.id.radiogroup_usertype);
         userTypeGroup.setVisibility(View.VISIBLE);
-        image.setVisibility(View.GONE);
 
         adminSwitchCounter = signUpAdmin ? 6 : 0;
     }
@@ -118,14 +112,11 @@ public class TaskSignUpActivity extends FragmentActivity {
 //            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 //        }
 
-        findViewById(R.id.imageView_main_logo).setBackgroundTintMode(null);
-
         usernameEditText = findViewById(R.id.edittext_username);
         passwordEditText = findViewById(R.id.edittext_password);
         firstNameEditText = findViewById(R.id.edittext_firstname);
         lastNameEditText = findViewById(R.id.edittext_lastname);
         passwordConfirmEditText = findViewById(R.id.edittext_password_confirm);
-        image = findViewById(R.id.imageView_main_logo);
 
         signUpButton = findViewById(R.id.button_sign_up);
         cancelButton = findViewById(R.id.button_sign_up_cancel);
@@ -136,7 +127,6 @@ public class TaskSignUpActivity extends FragmentActivity {
             @Override
             public boolean onLongClick(View v) {
                 if (adminSwitchCounter == 6) {
-                    image.setVisibility(View.GONE);
                     RadioGroup usertypeGroup = findViewById(R.id.radiogroup_usertype);
                     usertypeGroup.setVisibility(View.VISIBLE);
                     Toast.makeText(TaskSignUpActivity.this, R.string.sign_up_admin, Toast.LENGTH_LONG).show();

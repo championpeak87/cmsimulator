@@ -8,23 +8,9 @@
               android:gravity="center_vertical"
               android:background="@drawable/login_background">
 
-
-	<ImageView
-			android:id="@+id/imageView_main_logo"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="0.2"
-			android:layout_marginTop="10dp"
-			android:layout_marginBottom="20dp"
-			android:contentDescription="@string/logo"
-			android:src="@drawable/logo_v1_light"
-			android:clickable="true"
-			android:onClick="adminOverride"
-	/>
-
-		<TextView android:id="@+id/textview_signup_header" android:layout_width="wrap_content" android:layout_height="wrap_content"
+	<TextView android:id="@+id/textview_signup_header" android:layout_width="wrap_content" android:layout_height="wrap_content"
 		          android:layout_gravity="center_horizontal" android:text="@string/sign_up_header" android:textSize="40sp"
-		          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300"
+		          android:shadowDx="8" android:shadowDy="8" android:shadowColor="@color/md_grey_300" android:onClick="adminOverride"
 		          android:shadowRadius="8" android:layout_marginBottom="40dp" android:textColor="@color/md_white_1000"/>
 
 	<android.support.design.widget.TextInputLayout android:layout_height="wrap_content"

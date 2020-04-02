@@ -133,6 +133,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                         intent.putExtra("USERNAME", username);
                         intent.putExtra("FULLNAME", fullname);
                         intent.putExtra("USER_TYPE", usertype);
+                        intent.putExtra("USER_ID", user_id);
                         mContext.startActivity(intent, options.toBundle());
                     }
                 });
