@@ -192,9 +192,7 @@ public class UsersManagementEditActivity extends FragmentActivity {
                 int spinnerPosition = userType.getSelectedItemPosition();
                 final String newType = adapter.getItem(spinnerPosition).toString();
                 Bundle updateBundle = new Bundle();
-                if (newType == getString(R.string.lector)) {
-                    updateBundle.putString("USER_TYPE", "lector");
-                } else if (newType == getString(R.string.student)) {
+                if (newType == getString(R.string.student)) {
                     updateBundle.putString("USER_TYPE", "student");
                 } else {
                     updateBundle.putString("USER_TYPE", "admin");

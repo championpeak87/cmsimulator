@@ -1271,7 +1271,6 @@
 
 	<string-array name="usertype_spinner">
 		<item>@string/student</item>
-		<item>@string/lector</item>
 		<item>@string/admin</item>
 	</string-array>
 	<string name="user_updated">User was updated!</string>
@@ -1352,5 +1351,6 @@
 		<b>{,n}</b>    -> Repeats at most n times\n
 		<b>{n,}</b>    -> Repeats at least n times\n
 		<b>{n,m}</b>   -> Repeats n to m times</string>
+    <string name="cancel_task">Are you sure you want to quit? Unsaved work won\'t be kept!</string>
 
 </resources>

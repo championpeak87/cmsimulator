@@ -987,4 +987,5 @@
         <b>{,n}</b>    -> Opakuje sa najviac n-krát\n
         <b>{n,}</b>    -> Opakuje sa najmenej n-krát\n
         <b>{n,m}</b>   -> Opakuje sa n až m-krát</string>
+    <string name="cancel_task">Ste si istý, že chcete ukončiť úlohu? Neuložená práca nebude uložená!</string>
 </resources>

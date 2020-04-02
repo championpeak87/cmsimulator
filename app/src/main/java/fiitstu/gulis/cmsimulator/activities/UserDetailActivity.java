@@ -106,6 +106,8 @@ public class UserDetailActivity extends FragmentActivity {
                     int automatas_correct = 0, automatas_new = 0, automatas_in_progress = 0, automatas_wrong = 0, automatas_too_late = 0;
                     for (int i = 0; i < arraySize; i++) {
                         JSONObject object = array.getJSONObject(i);
+                        if (object.has("found"))
+                            break;
                         String currentStatus = object.getString("task_status");
 
                         switch (currentStatus) {
@@ -171,6 +173,8 @@ public class UserDetailActivity extends FragmentActivity {
                     int grammars_correct = 0, grammars_new = 0, grammars_in_progress = 0, grammars_wrong = 0, grammars_too_late = 0;
                     for (int i = 0; i < arraySize; i++) {
                         JSONObject object = array.getJSONObject(i);
+                        if (object.has("found"))
+                            break;
                         String currentStatus = object.getString("task_status");
 
                         switch (currentStatus) {

@@ -1202,20 +1202,26 @@ app.post('/api/grammarTasks/save', (req, res, next) => {
 
 app.get('/api/tasks/results', (req, res) => {
   const user_id = req.query.user_id;
-
   pool.query('select case when atr.task_status IS NULL then \'new\' else atr.task_status end as task_status, count(*) from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id GROUP BY atr.task_status;', [user_id], (err, result) => {
+    if (err) {throw err;}
     if (result.rowCount > 0) {
       res.status(HTTP_OK).send(result.rows);
+    }
+    else {
+      res.status(HTTP_OK).send([{"found": false}]);
     }
   })
 })
 
 app.get('/api/grammarTasks/results', (req, res) => {
   const user_id = req.query.user_id;
-
   pool.query('select case when gtr.task_status IS NULL then \'new\' else gtr.task_status end as task_status, count(*) from grammar_tasks as gt left join (SELECT * from grammar_task_results where user_id=$1) as gtr on gtr.task_id = gt.task_id GROUP BY gtr.task_status;', [user_id], (err, result) => {
+    if (err) {throw err;}
     if (result.rowCount > 0) {
       res.status(HTTP_OK).send(result.rows);
+    }
+    else {
+      res.status(HTTP_OK).send([{"found": false}]);
     }
   })
 })

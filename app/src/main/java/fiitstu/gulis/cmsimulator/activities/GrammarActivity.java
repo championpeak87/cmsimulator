@@ -483,7 +483,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed method started");
         handleTimer();
-        if (!setGrammarTask) {
+        if (!setGrammarTask && !taskSolving) {
             TaskDialog.setStatusText(null);
             new AlertDialog.Builder(this)
                     .setTitle(R.string.warning)
@@ -515,14 +515,25 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                     })
                     .show();
 
-            if (taskSolving) {
-                if (hasTimer) {
-                    Timer timer = Timer.getInstance(null);
-                    timer.pauseTimer();
-                    Timer.deleteTimer();
 
-                }
-            }
+        } else if (taskSolving) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(android.R.string.cancel)
+                    .setMessage(R.string.cancel_task)
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (hasTimer) {
+                                Timer timer = Timer.getInstance(null);
+                                timer.pauseTimer();
+                                Timer.deleteTimer();
+                            }
+                            GrammarActivity.this.finish();
+                        }
+                    }).create();
+
+            alertDialog.show();
         } else {
             saveRules();
             super.onBackPressed();
