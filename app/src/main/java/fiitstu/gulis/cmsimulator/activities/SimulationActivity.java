@@ -929,6 +929,11 @@ public class SimulationActivity extends FragmentActivity
                             .setPositiveButton(android.R.string.ok, null)
                             .create();
 
+                    DataSource dataSource = DataSource.getInstance();
+                    dataSource.open();
+                    dataSource.globalDrop();
+                    dataSource.close();
+
                     timeRunOutAlert.show();
                 }
             });
