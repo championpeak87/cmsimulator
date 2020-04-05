@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:orientation="vertical">
+
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:paddingBottom="@dimen/activity_vertical_margin"
+				android:paddingLeft="@dimen/activity_horizontal_margin"
+				android:paddingRight="@dimen/activity_horizontal_margin"
+				android:paddingTop="@dimen/activity_vertical_margin">
+
+			<android.support.v7.widget.CardView
+					xmlns:card_view="http://schemas.android.com/apk/res-auto"
+					android:id="@+id/card_view"
+					android:layout_gravity="center"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="5dp"
+					android:elevation="20dp"
+					card_view:cardCornerRadius="4dp">
+				<LinearLayout android:layout_width="match_parent"
+							  android:layout_height="match_parent"
+							  android:orientation="vertical"
+							  android:layout_margin="10dp">
+
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader" android:text="@string/warning"/>
+					<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" android:text="@string/no_login_warning"/>
+
+				</LinearLayout>
+
+
+			</android.support.v7.widget.CardView>
+
+			<ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+				<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+					<TextView android:layout_width="wrap_content"
+							  android:layout_height="wrap_content"
+							  android:text="@string/tasks"
+							  android:theme="@style/text_subheader"
+							  android:layout_marginTop="20dp"
+							  android:layout_marginLeft="20dp"
+							  android:layout_marginRight="10dp"/>
+
+					<LinearLayout android:layout_width="match_parent"
+								  android:layout_height="wrap_content"
+								  android:orientation="horizontal"
+								  android:layout_marginLeft="10dp"
+								  android:layout_marginTop="10dp"
+								  android:layout_marginBottom="10dp">
+						<Button
+								android:id="@+id/button_tasks_find_automata"
+								android:text="@string/find_automata_tasks"
+								android:lines="2"
+								android:layout_gravity="center_vertical"
+								android:drawableTop="@drawable/baseline_cloud_download_24"
+								style="@style/mainMenuButtonStyle"/>
+						<Button
+								android:id="@+id/button_tasks_find_grammar"
+								android:text="@string/find_grammar_tasks"
+								android:lines="2"
+								android:layout_gravity="center_vertical"
+								android:drawableTop="@drawable/baseline_cloud_download_24"
+								style="@style/mainMenuButtonStyle"/>
+					</LinearLayout>
+				</LinearLayout>
+			</ScrollView>
+		</LinearLayout>
+	</LinearLayout>
+</ScrollView>

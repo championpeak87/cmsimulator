@@ -1335,7 +1335,9 @@
     <string name="not_implemented">This feature has not been implemented yet!</string>
     <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
-	<string name="whats_new_content" translatable="false">- Bugfixes</string>
+	<string name="whats_new_content">
+		<b>-</b> Fixed app crashing when task\'s timer runs out\n\n
+		<b>-</b> Fixed student\'s result not updating when returning to tasks screen</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
@@ -1352,5 +1354,6 @@
 		<b>{n,}</b>    -> Repeats at least n times\n
 		<b>{n,m}</b>   -> Repeats n to m times</string>
     <string name="cancel_task">Are you sure you want to quit? Unsaved work won\'t be kept!</string>
+	<string name="no_login_warning">If you want to store your work, you\'ll have to log in!</string>
 
 </resources>

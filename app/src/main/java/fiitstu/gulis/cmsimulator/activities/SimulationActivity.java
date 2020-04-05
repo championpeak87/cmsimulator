@@ -870,7 +870,8 @@ public class SimulationActivity extends FragmentActivity
             }
             if (configurationType == MainActivity.EDIT_TASK ||
                     (configurationType == MainActivity.SOLVE_TASK && task.getPublicInputs()) ||
-                    (configurationType == MainActivity.PREVIEW_TASK && task.getPublicInputs())) {
+                    (configurationType == MainActivity.PREVIEW_TASK && task.getPublicInputs()) ||
+                    (configurationType == MainActivity.LOAD_MACHINE && task.getPublicInputs())) {
                 menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
                 menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
                 menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);

@@ -97,6 +97,9 @@
 				android:name=".activities.EditTaskActivity"
 				android:configChanges="orientation|screenSize"/>
 		<activity
+				android:name=".activities.TasksPreviewActivity"
+				android:configChanges="orientation|screenSize"/>
+		<activity
 				android:name=".activities.GrammarActivity"
 				android:configChanges="orientation|screenSize"
 				android:screenOrientation="portrait"/>

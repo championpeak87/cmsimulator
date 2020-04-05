@@ -136,7 +136,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         }
         holder.automata_type.setText(automataType);
 
-        if (TaskLoginActivity.loggedUser instanceof Student) {
+        if (TaskLoginActivity.loggedUser == null || TaskLoginActivity.loggedUser instanceof Student) {
             holder.delete_task.setVisibility(View.GONE);
             holder.flag_task.setVisibility(View.GONE);
         }
@@ -262,7 +262,12 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
-                        URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id(), TaskLoginActivity.loggedUser.getUser_id());
+                        final int user_id;
+                        if (TaskLoginActivity.loggedUser == null)
+                            user_id = -1;
+                        else
+                            user_id = TaskLoginActivity.loggedUser.getUser_id();
+                        URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id(), user_id);
                         ServerController serverController = new ServerController();
                         String output = null;
                         try {
@@ -300,11 +305,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         if (AutomataTaskAdapter.this.view_results) {
                             TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.PREVIEW, machineType);
                             taskDialog.setAdapter(thisAdapter);
-                            taskDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), TASK_DIALOG);
+                            taskDialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), TASK_DIALOG);
                         } else {
                             TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
                             taskDialog.setAdapter(thisAdapter);
-                            taskDialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), TASK_DIALOG);
+                            taskDialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), TASK_DIALOG);
                         }
                     }
                 }

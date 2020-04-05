@@ -6,9 +6,9 @@ android {
         applicationId "fiitstu.gulis.cmsimulator"
         minSdkVersion 23
         targetSdkVersion 28
-        versionName '5.0.1'
+        versionName '5.0.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionCode 25
+        versionCode 26
     }
     buildTypes {
         release {

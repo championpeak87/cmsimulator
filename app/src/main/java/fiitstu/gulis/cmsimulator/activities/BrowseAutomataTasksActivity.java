@@ -81,8 +81,13 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
             actionbar.setTitle(actionBarTitle);
         } else {
             view_results = false;
-            user_id = TaskLoginActivity.loggedUser.getUser_id();
-            authkey = TaskLoginActivity.loggedUser.getAuth_key();
+            if (TaskLoginActivity.loggedUser != null) {
+                user_id = TaskLoginActivity.loggedUser.getUser_id();
+                authkey = TaskLoginActivity.loggedUser.getAuth_key();
+            } else {
+                user_id = -1;
+                authkey = null;
+            }
         }
 
         getListOfTasks();

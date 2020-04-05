@@ -307,19 +307,25 @@ public class TaskDialog extends DialogFragment {
                     Bundle outputBundle = new Bundle();
                     outputBundle.putBoolean(MainActivity.DEFAULT_FORMAT, true);
                     outputBundle.putString(MainActivity.FILE_NAME, getActivity().getApplicationInfo().dataDir + "/automataTask.cmst");
-                    if (mode == PREVIEW) {
-                        outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.PREVIEW_TASK);
-                    } else {
-                        outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
+                    if (TaskLoginActivity.loggedUser == null)
+                        outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
+                    else {
+                        if (mode == PREVIEW) {
+                            outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.PREVIEW_TASK);
+                        } else {
+                            outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.SOLVE_TASK);
+                        }
                     }
                     outputBundle.putInt(MainActivity.MACHINE_TYPE, machineType);
                     outputBundle.putSerializable(MainActivity.TASK, task);
 
                     final Task.TASK_STATUS currentStatus = task.getStatus();
-                    if (currentStatus == Task.TASK_STATUS.NEW && mode != PREVIEW) {
-                        markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
-                        int position = adapter.getListOfTasks().indexOf(task);
-                        adapter.notifyItemChanged(position);
+                    if (TaskLoginActivity.loggedUser != null) {
+                        if (currentStatus == Task.TASK_STATUS.NEW && mode != PREVIEW) {
+                            markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
+                            int position = adapter.getListOfTasks().indexOf(task);
+                            adapter.notifyItemChanged(position);
+                        }
                     }
 
                     intent.putExtras(outputBundle);

@@ -40,6 +40,7 @@ public class TaskLoginActivity extends FragmentActivity {
     private ProgressBar loginProgressBar;
 
     private EditText usernameEditText, passwordEditText;
+    private ImageButton imagebutton_sign_in_without_login;
 
     private Button signInButton, signUpButton;
 
@@ -106,16 +107,19 @@ public class TaskLoginActivity extends FragmentActivity {
         usernameEditText = findViewById(R.id.edittext_username);
         passwordEditText = findViewById(R.id.edittext_password);
 
+        imagebutton_sign_in_without_login = findViewById(R.id.imagebutton_sign_in_without_login);
+        imagebutton_sign_in_without_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TaskLoginActivity.this, TasksPreviewActivity.class);
+                startActivity(intent);
+            }
+        });
+
         signInButton = findViewById(R.id.button_sign_in);
         signUpButton = findViewById(R.id.button_sign_up);
 
         loginProgressBar = findViewById(R.id.progressbar_login);
-
-        // TODO: CHECK SOFT INPUT
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            Window w = getWindow();
-//            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        }
     }
 
     public void showPassword(View view) {
