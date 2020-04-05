@@ -61,6 +61,12 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
 
     public static User loggedUser = null;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setData();
+    }
+
     private void setData() {
         new FetchAutomataTasksCountAsync().execute();
         new FetchGrammarTasksCountAsync().execute();
@@ -309,8 +315,6 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
         edittext_grammars_correct = findViewById(R.id.edittext_grammars_correct);
         edittext_grammars_wrong = findViewById(R.id.edittext_grammars_wrong);
         edittext_grammars_too_late = findViewById(R.id.edittext_grammars_too_late);
-
-        setData();
 
         TextView fullnameTextView = findViewById(R.id.textview_tasks_fullname);
         fullnameTextView.setText(loggedUser.getLast_name() + ", " + loggedUser.getFirst_name());
