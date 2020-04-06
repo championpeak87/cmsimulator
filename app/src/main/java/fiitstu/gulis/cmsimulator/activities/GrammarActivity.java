@@ -237,6 +237,8 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         // IF TASK SOLVING
         if (intent.getBooleanExtra(TASK_SOLVE_GRAMMAR_KEY, false)) {
             taskSolving = true;
+            FrameLayout grammarDefinitions = findViewById(R.id.framelayout_grammar_definition);
+            grammarDefinitions.setVisibility(View.GONE);
             task_id = intent.getIntExtra(TASK_ID_KEY, -1);
             hasTimer = intent.getBooleanExtra(HAS_TIMER_ENABLED, false);
             if (hasTimer) {

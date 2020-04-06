@@ -1336,8 +1336,7 @@
     <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
 	<string name="whats_new_content">
-		<b>-</b> Fixed app crashing when task\'s timer runs out\n\n
-		<b>-</b> Fixed student\'s result not updating when returning to tasks screen</string>
+		<b>-</b> Tasks without login</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
