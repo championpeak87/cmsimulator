@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -226,7 +227,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                     Toast.makeText(GrammarActivity.this, R.string.grammar_missing_start, Toast.LENGTH_SHORT).show();
                 }
 
-                LinearLayout grammarMainLayout = findViewById(R.id.linearLayout_grammar);
+                ConstraintLayout grammarMainLayout = findViewById(R.id.linearLayout_grammar);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(grammarMainLayout.getWindowToken(), 0);
