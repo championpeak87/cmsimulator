@@ -39,6 +39,7 @@ import fiitstu.gulis.cmsimulator.dialogs.TaskStatusDialog;
 import fiitstu.gulis.cmsimulator.elements.GrammarRule;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
+import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import org.json.JSONException;
@@ -93,6 +94,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
         holder.setStatusColor(selectedGrammarTask.getStatus());
         holder.taskName_TextView.setText(grammarTaskList.get(position).getTitle());
 
+        if (TaskLoginActivity.loggedUser == null || TaskLoginActivity.loggedUser instanceof Student) {
+            holder.deleteTask_ImageButton.setVisibility(View.GONE);
+            holder.flagTask_ImageButton.setVisibility(View.GONE);
+        }
+
         selectedCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +111,8 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
-                        URL downloadURL = urlManager.getDownloadGrammarTaskURL(TaskLoginActivity.loggedUser.getUser_id(), selectedGrammarTask.getTask_id());
+                        final int user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
+                        URL downloadURL = urlManager.getDownloadGrammarTaskURL(user_id, selectedGrammarTask.getTask_id());
                         ServerController serverController = new ServerController();
                         String output = null;
 
@@ -154,7 +161,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                             public void onStart() {
                                 loadFile();
 
-                                if (selectedGrammarTask.getStatus() == Task.TASK_STATUS.NEW) {
+                                if (TaskLoginActivity.loggedUser != null && selectedGrammarTask.getStatus() == Task.TASK_STATUS.NEW) {
                                     class MarkTaskAsAsync extends AsyncTask<Void, Void, String> {
                                         @Override
                                         protected String doInBackground(Void... voids) {
@@ -185,15 +192,17 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                 }
 
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
-                                grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
-                                grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
-                                grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());
-                                grammarActivityIntent.putExtra(GrammarActivity.AVAILABLE_TIME_KEY, selectedGrammarTask.getAvailable_time());
-                                Time time = selectedGrammarTask.getRemaining_time();
-                                boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
-                                grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);
-                                if (timerEnabled)
-                                    grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
+                                if (TaskLoginActivity.loggedUser != null) {
+                                    grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
+                                    grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
+                                    grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());
+                                    grammarActivityIntent.putExtra(GrammarActivity.AVAILABLE_TIME_KEY, selectedGrammarTask.getAvailable_time());
+                                    Time time = selectedGrammarTask.getRemaining_time();
+                                    boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
+                                    grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);
+                                    if (timerEnabled)
+                                        grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
+                                }
                                 mContext.startActivity(grammarActivityIntent);
                                 runningTask = selectedGrammarTask;
                             }

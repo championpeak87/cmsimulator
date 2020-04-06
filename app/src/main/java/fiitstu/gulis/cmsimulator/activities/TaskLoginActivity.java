@@ -111,6 +111,7 @@ public class TaskLoginActivity extends FragmentActivity {
         imagebutton_sign_in_without_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loggedUser = null;
                 Intent intent = new Intent(TaskLoginActivity.this, TasksPreviewActivity.class);
                 startActivity(intent);
             }

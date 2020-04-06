@@ -124,7 +124,8 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
             @Override
             protected String doInBackground(Void... voids) {
                 UrlManager urlManager = new UrlManager();
-                URL fetchTasksURL = urlManager.getAllGrammarTasksUrl(TaskLoginActivity.loggedUser.getUser_id());
+                final int user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
+                URL fetchTasksURL = urlManager.getAllGrammarTasksUrl(user_id);
                 ServerController serverController = new ServerController();
                 String output = null;
 
