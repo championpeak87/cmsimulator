@@ -2,118 +2,121 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="fiitstu.gulis.cmsimulator">
 
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-	<application
-			android:name=".app.CMSimulator"
-			android:allowBackup="true"
-			android:icon="@mipmap/ic_launcher"
-			android:label="@string/app_name"
-			android:supportsRtl="true"
-			android:usesCleartextTraffic="true"
-			android:theme="@style/AppTheme">
-		<!-- <activity android:name=".activities.SplashActivity"> -->
-		<!-- </activity> -->
-		<activity
-				android:name=".activities.MainActivity"
-				android:configChanges="orientation|screenSize"
-				android:label="@string/app_name"
-				android:theme="@style/splashTheme">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-			<meta-data android:name="android.app.shortcuts"
-					   android:resource="@xml/shortcuts" />
-		</activity>
-		<activity android:name=".activities.BrowseGrammarTasksActivity"
-				  android:configChanges="screenSize|orientation"/>
-		<activity android:name=".activities.GrammarTestingActivity"
-				  android:configChanges="screenSize|orientation"/>
-		<activity android:name=".activities.GrammarTaskDetailsActivity"
-				  android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.ExampleGrammars"
-				  android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.NewGrammarTaskActivity"
-				  android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.TasksStudentActivity"
-				  android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.AutomataTaskDetailsActivity"
-				  android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.UsersManagementEditActivity"
-		          android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.UserDetailActivity"
-		          android:configChanges="orientation|screenSize"/>
-		<activity android:name=".activities.ExampleTaskDetailsActivity"
-		          android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.BrowseAutomataTasksActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.ExampleAutomatas"
-				android:configChanges="orientation|screenSize"/>
+    <application
+            android:name=".app.CMSimulator"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:usesCleartextTraffic="true"
+            android:theme="@style/AppTheme">
+        <!-- <activity android:name=".activities.SplashActivity"> -->
+        <!-- </activity> -->
         <activity
-				android:name=".activities.OptionsActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.TasksAdminActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.UsersManagmentActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.TaskLoginActivity"
-				android:windowSoftInputMode="stateVisible|adjustPan"
-				android:theme="@style/LoginTheme"/>
-		<activity
-				android:name=".activities.TaskSignUpActivity"
-				android:theme="@style/LoginTheme"
-				android:windowSoftInputMode="stateVisible|adjustPan"
-				android:screenOrientation="portrait"/>
-		<activity
-				android:name=".activities.HelpActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.ConfigurationActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.SimulationActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.BulkTestActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.TasksActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.FindTasksActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.EditTaskActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.TasksPreviewActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.GrammarActivity"
-				android:configChanges="orientation|screenSize"
-				android:screenOrientation="portrait"/>
-		<activity
-				android:name=".activities.SimulationGrammarActivity"
-				android:configChanges="orientation|screenSize"
-				android:screenOrientation="portrait"/>
-		<activity
-				android:name=".activities.LaunchedTaskActivity"
-				android:configChanges="orientation|screenSize"/>
-		<activity
-				android:name=".activities.MultipleTestsActivity"
-				android:configChanges="orientation|screenSize"
-				android:screenOrientation="portrait"/>
-	</application>
+                android:name=".activities.MainActivity"
+                android:configChanges="orientation|screenSize"
+                android:label="@string/app_name"
+                android:theme="@style/splashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data android:name="android.app.shortcuts"
+                       android:resource="@xml/shortcuts"/>
+        </activity>
+        <activity android:name=".activities.BrowseGrammarTasksActivity"
+                  android:configChanges="screenSize|orientation"/>
+        <activity android:name=".activities.GrammarTestingActivity"
+                  android:configChanges="screenSize|orientation"/>
+        <activity android:name=".activities.GrammarTaskDetailsActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.ExampleGrammars"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.NewGrammarTaskActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.TasksStudentActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.AutomataTaskDetailsActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.UsersManagementEditActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.UserDetailActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity android:name=".activities.ExampleTaskDetailsActivity"
+                  android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.BrowseAutomataTasksActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.ExampleAutomatas"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.OptionsActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.TasksAdminActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.UsersManagmentActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.TaskLoginActivity"
+                android:windowSoftInputMode="stateVisible|adjustPan"
+                android:theme="@style/LoginTheme"/>
+        <activity
+                android:name=".activities.TaskSignUpActivity"
+                android:theme="@style/LoginTheme"
+                android:windowSoftInputMode="stateVisible|adjustPan"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.HelpActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.ConfigurationActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.SimulationActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.BulkTestActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.TasksActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.FindTasksActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.EditTaskActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.AddNewGameActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.TasksPreviewActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.GrammarActivity"
+                android:configChanges="orientation|screenSize"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.SimulationGrammarActivity"
+                android:configChanges="orientation|screenSize"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activities.LaunchedTaskActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.MultipleTestsActivity"
+                android:configChanges="orientation|screenSize"
+                android:screenOrientation="portrait"/>
+    </application>
 
 </manifest>

@@ -157,51 +157,16 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
                 Intent nextActivityIntent = new Intent(TasksAdminActivity.this, BrowseGrammarTasksActivity.class);
                 startActivity(nextActivityIntent);
             }
-        });/*
-
-        Button newTaskButton = findViewById(R.id.button_tasks_new);
-        newTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent nextActivityIntent = new Intent(TasksActivity.this, EditTaskActivity.class);
-                nextActivityIntent.putExtras(new Bundle());
-                startActivity(nextActivityIntent);
-            }
         });
 
-        Button loadTaskButton = findViewById(R.id.button_tasks_load);
-        loadTaskButton.setOnClickListener(new View.OnClickListener() {
+        Button addGameButton = findViewById(R.id.button_tasks_games_add);
+        addGameButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT > 15
-                        && ContextCompat.checkSelfPermission(TasksActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(TasksActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MainActivity.REQUEST_READ_STORAGE);
-                } else {
-                    loadTask();
-                }
-            }
-        });
-
-        Button exampleTaskButton = findViewById(R.id.button_tasks_examples);
-        exampleTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                ExampleTaskDialog exampleTaskDialog = ExampleTaskDialog.newInstance();
-                exampleTaskDialog.show(fm, EXAMPLE_DIALOG);
-
-            }
-        });*/
-
-        Button game = findViewById(R.id.button_tasks_games_automatas);
-        game.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                TasksGameDialog dialog = TasksGameDialog.newInstance();
-                dialog.show(fm, GAME_DIALOG);
+                // COMPLETED: Add intent to add game activity
+                Intent addNewGameIntent = new Intent(TasksAdminActivity.this, AddNewGameActivity.class);
+                startActivity(addNewGameIntent);
             }
         });
 

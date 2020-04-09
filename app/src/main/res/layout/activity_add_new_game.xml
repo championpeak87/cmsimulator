@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="15dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader" android:text="@string/task_description"/>
+        <LinearLayout android:id="@+id/linearlayout_task_description" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="20dp" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.3" android:text="@string/name"/>
+                <EditText android:id="@+id/edittext_task_name" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.7" android:inputType="text"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.3" android:text="@string/task_text"/>
+                <EditText android:id="@+id/edittext_task_description" android:layout_width="0dp" android:layout_height="200dp" android:layout_weight="0.7" android:inputType="text"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader" android:text="@string/task_config"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+            <fiitstu.gulis.cmsimulator.views.ChessView android:id="@+id/chessview_task" android:layout_width="match_parent" android:layout_height="300dp" android:elevation="20dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_horizontal">
+                <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/zoom_in" android:drawableLeft="@drawable/baseline_zoom_in_24"/>
+                <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/baseline_zoom_out_24" android:text="@string/zoom_out"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

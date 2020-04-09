@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ChessView">
+        <attr name="fieldHeight" format="integer"/>
+        <attr name="fieldWidth" format="integer"/>
+        <attr name="minFieldHeight" format="integer"/>
+        <attr name="minFieldWidth" format="integer"/>
+        <attr name="maxFieldHeight" format="integer"/>
+        <attr name="maxFieldWidth" format="integer"/>
+        <attr name="activeFieldX" format="integer"/>
+        <attr name="activeFieldY" format="integer"/>
+        <attr name="activeFieldColor" format="color"/>
+        <attr name="darkFieldColor" format="color"/>
+        <attr name="lightFieldColor" format="color"/>
+        <attr name="animationDuration" format="integer"/>
+        <attr name="pathFieldLightColor" format="color"/>
+        <attr name="pathFieldDarkColor" format="color"/>
+    </declare-styleable>
+</resources>

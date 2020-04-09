@@ -1189,7 +1189,7 @@
 	<string name="logged_user">Logged user</string>
 	<string name="find_task">Find tasks</string>
 	<string name="create_task">Create task</string>
-	<string name="games">Games</string>
+	<string name="games">Chess</string>
 	<string name="change_password">Change password</string>
 	<string name="sign_out">Sign out</string>
 	<string name="old_password">Old password</string>
@@ -1354,5 +1354,8 @@
 		<b>{n,m}</b>   -> Repeats n to m times</string>
     <string name="cancel_task">Are you sure you want to quit? Unsaved work won\'t be kept!</string>
 	<string name="no_login_warning">If you want to store your work, you\'ll have to log in!</string>
+	<string name="add_new_game">Add new game</string>
+    <string name="zoom_in">Zoom in</string>
+    <string name="zoom_out">Zoom out</string>
 
 </resources>

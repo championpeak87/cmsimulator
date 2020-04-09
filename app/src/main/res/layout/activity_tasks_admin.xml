@@ -159,7 +159,7 @@
 						android:id="@+id/button_tasks_find_grammar"
 						android:text="@string/find_tasks"
 						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_slideshow_24"
+						android:drawableTop="@drawable/baseline_cloud_download_24"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
@@ -186,20 +186,20 @@
 			              android:layout_marginTop="10dp"
 			              android:layout_marginBottom="10dp">
 				<Button
-						android:id="@+id/button_tasks_games_automatas"
-						android:text="@string/automatas"
+						android:id="@+id/button_tasks_games_add"
+						android:text="@string/create_task"
 						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_videogame_asset_24"
-						android:enabled="false"
+						android:drawableTop="@drawable/baseline_add_box_24"
+						android:enabled="true"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
-						android:id="@+id/button_tasks_games_grammars"
-						android:text="@string/grammars"
-						android:layout_gravity="center_vertical"
-						android:drawableTop="@drawable/baseline_videogame_asset_24"
-						android:enabled="false"
-						style="@style/mainMenuButtonStyle"/>
+					android:id="@+id/button_tasks_games_find"
+					android:text="@string/find_tasks"
+					android:layout_gravity="center_vertical"
+					android:drawableTop="@drawable/baseline_cloud_download_24"
+					android:enabled="false"
+					style="@style/mainMenuButtonStyle"/>
 
 			</LinearLayout>
 		</LinearLayout>
