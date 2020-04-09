@@ -4,6 +4,12 @@
     <!-- google's material design colours from
     http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 
+    <color name="current_position">#FFC107</color>
+    <color name="start_dark">#7f0000</color>
+    <color name="start_light">#f05545</color>
+    <color name="finish_dark">#005005</color>
+    <color name="finish_light">#76FF03</color>
+
     <!--reds-->
     <color name="md_red_A700">#D50000</color>
     <color name="md_red_500">#F44336</color>

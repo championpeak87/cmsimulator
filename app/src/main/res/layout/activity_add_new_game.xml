@@ -17,11 +17,11 @@
             </LinearLayout>
         </LinearLayout>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader" android:text="@string/task_config"/>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
-            <fiitstu.gulis.cmsimulator.views.ChessView android:id="@+id/chessview_task" android:layout_width="match_parent" android:layout_height="300dp" android:elevation="20dp"/>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_horizontal">
-                <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/zoom_in" android:drawableLeft="@drawable/baseline_zoom_in_24"/>
-                <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/baseline_zoom_out_24" android:text="@string/zoom_out"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <fiitstu.gulis.cmsimulator.views.ChessView android:id="@+id/chessview_task" android:layout_width="match_parent" android:layout_height="300dp" android:elevation="20dp" android:background="@null" android:layout_margin="20dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_horizontal" android:layout_margin="20dp">
+                <Button android:id="@+id/button_zoom_in" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/zoom_in" android:drawableLeft="@drawable/baseline_zoom_in_24"/>
+                <Button android:id="@+id/button_zoom_out" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/baseline_zoom_out_24" android:text="@string/zoom_out"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_upload_task"
+          android:title="@string/upload_task"
+          android:showAsAction="ifRoom"
+          android:icon="@drawable/baseline_cloud_upload_24"
+          android:iconTint="@color/md_white_1000"
+          style="@style/dropDownMenuItemStyle"
+          tools:ignore="AppCompatResource"/>
+    <item
+            android:id="@+id/menu_settings"
+            android:title="@string/settings"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+    <item
+            android:id="@+id/menu_help"
+            android:title="@string/help"
+            app:showAsAction="never"
+            style="@style/dropDownMenuItemStyle" />
+
+</menu>
