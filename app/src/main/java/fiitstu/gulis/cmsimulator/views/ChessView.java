@@ -48,6 +48,10 @@ public class ChessView extends View {
     private static final int DEFAULT_LIGHT_FINISH_FIELD_COLOR = R.color.finish_light;
     private static final int DEFAULT_DARK_START_FIELD_COLOR = R.color.start_dark;
     private static final int DEFAULT_LIGHT_START_FIELD_COLOR = R.color.start_light;
+    private static final int DEFAULT_FINISH_FIELD_X = -1;
+    private static final int DEFAULT_FINISH_FIELD_Y = -1;
+    private static final int DEFAULT_START_FIELD_X = -1;
+    private static final int DEFAULT_START_FIELD_Y = -1;
     // VALUES
     private int ACTIVE_FIELD_COLOR;
     private int ANIMATED_ACTIVE_FIELD_COLOR;
@@ -125,12 +129,12 @@ public class ChessView extends View {
             final int activeFieldY = a.getInteger(R.styleable.ChessView_activeFieldY, DEFAULT_ACTIVE_FIELD_POSITION.second);
             ACTIVE_FIELD = new Pair<Integer, Integer>(activeFieldX, activeFieldY);
 
-            final int startFieldX = a.getInteger(R.styleable.ChessView_startFieldX, -1);
-            final int startFieldY = a.getInteger(R.styleable.ChessView_startFieldY, -1);
+            final int startFieldX = a.getInteger(R.styleable.ChessView_startFieldX, DEFAULT_START_FIELD_X);
+            final int startFieldY = a.getInteger(R.styleable.ChessView_startFieldY, DEFAULT_START_FIELD_Y);
             START_FIELD = new Pair<Integer, Integer>(startFieldX, startFieldY);
 
-            final int finishFieldX = a.getInteger(R.styleable.ChessView_finishFieldX, -1);
-            final int finishFieldY = a.getInteger(R.styleable.ChessView_activeFieldY, -1);
+            final int finishFieldX = a.getInteger(R.styleable.ChessView_finishFieldX, DEFAULT_FINISH_FIELD_X);
+            final int finishFieldY = a.getInteger(R.styleable.ChessView_activeFieldY, DEFAULT_FINISH_FIELD_Y);
             FINISH_FIELD = new Pair<Integer, Integer>(finishFieldX, finishFieldY);
 
             START_FIELD_LIGHT_COLOR = a.getColor(R.styleable.ChessView_startFieldLightColor, getContext().getColor(DEFAULT_LIGHT_START_FIELD_COLOR));
@@ -451,7 +455,12 @@ public class ChessView extends View {
 
     public void setStartField(Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field)) {
-            this.START_FIELD = field;
+            if (this.FINISH_FIELD == field)
+                this.FINISH_FIELD = new Pair<>(DEFAULT_FINISH_FIELD_X, DEFAULT_FINISH_FIELD_X);
+            if (this.START_FIELD == field)
+                this.START_FIELD = new Pair<>(DEFAULT_START_FIELD_X, DEFAULT_START_FIELD_Y);
+            else
+                this.START_FIELD = field;
             invalidate();
             requestLayout();
         }
@@ -459,7 +468,12 @@ public class ChessView extends View {
 
     public void setFinishField(Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field)) {
-            this.FINISH_FIELD = field;
+            if (this.START_FIELD == field)
+                this.START_FIELD = new Pair<>(DEFAULT_START_FIELD_X, DEFAULT_START_FIELD_Y);
+            if (this.FINISH_FIELD == field)
+                this.FINISH_FIELD = new Pair<>(DEFAULT_FINISH_FIELD_X, DEFAULT_FINISH_FIELD_Y);
+            else
+                this.FINISH_FIELD = field;
             invalidate();
             requestLayout();
         }
@@ -485,9 +499,14 @@ public class ChessView extends View {
         return rectCoord;
     }
 
+    public List<Pair<Integer, Integer>> getPath() {
+        return this.activeFieldsList;
+    }
+
     public void addFieldToPath(Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field) && !activeFieldsList.contains(field)) {
-            activeFieldsList.add(field);
+            if (START_FIELD != field && FINISH_FIELD != field)
+                activeFieldsList.add(field);
         }
 
         invalidate();
@@ -504,8 +523,7 @@ public class ChessView extends View {
     }
 
     public boolean isFieldInPath(Pair<Integer, Integer> field) throws OutOfChessFieldException {
-        if (checkIfCanFit(field))
-        {
+        if (checkIfCanFit(field)) {
             return activeFieldsList.contains(field);
         }
 

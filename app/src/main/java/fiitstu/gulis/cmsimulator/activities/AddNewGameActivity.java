@@ -205,10 +205,16 @@ public class AddNewGameActivity extends FragmentActivity {
     private boolean checkIfGameModified() {
         boolean taskNameModified;
         boolean taskDescriptionModified;
+        boolean hasStartField;
+        boolean hasFinishField;
+        boolean hasPath;
 
         taskNameModified = !edittext_task_name.getText().toString().isEmpty();
         taskDescriptionModified = !edittext_task_description.getText().toString().isEmpty();
+        hasStartField = chessview_task.getStartField().first != -1 || chessview_task.getStartField().second != -1;
+        hasFinishField = chessview_task.getFinishField().first != -1 || chessview_task.getFinishField().second != -1;
+        hasPath = chessview_task.getPath().size() > 0;
 
-        return taskNameModified || taskDescriptionModified;
+        return taskNameModified || taskDescriptionModified || hasStartField || hasFinishField || hasPath;
     }
 }
