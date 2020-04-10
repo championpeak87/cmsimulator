@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Pair;
 import fiitstu.gulis.cmsimulator.app.CMSimulator;
 import fiitstu.gulis.cmsimulator.elements.*;
 
@@ -161,6 +162,101 @@ public class DataSource {
             }
         }
         return symbol;
+    }
+
+    public void setStartField(Pair<Integer, Integer> field) {
+        Log.v(TAG, "setStartField method started");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.START_FIELD_X, field.first);
+        contentValues.put(DbOpenHelper.START_FIELD_Y, field.second);
+        Log.v(TAG, "contentValues prepared");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_START_FIELD, null, null);
+            database.insertOrThrow(DbOpenHelper.TABLE_CHESS_GAME_START_FIELD, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setFinishField(Pair<Integer, Integer> field) {
+        Log.v(TAG, "setFinishField method started");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.FINISH_FIELD_X, field.first);
+        contentValues.put(DbOpenHelper.FINISH_FIELD_Y, field.second);
+        Log.v(TAG, "contentValues prepared");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_FINISH_FIELD, null, null);
+            database.insertOrThrow(DbOpenHelper.TABLE_CHESS_GAME_FINISH_FIELD, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addPathField(Pair<Integer, Integer> field) {
+        Log.v(TAG, "addPathField method started");
+        Symbol symbol;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.PATH_FIELD_X, field.first);
+        contentValues.put(DbOpenHelper.PATH_FIELD_Y, field.second);
+        Log.v(TAG, "contentValues prepared");
+
+        try {
+            database.insertOrThrow(DbOpenHelper.TABLE_CHESS_GAME_PATH, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removePathField(Pair<Integer, Integer> field) {
+        Log.v(TAG, "removePathField method started");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_PATH, "PATH_FIELD_X == " + field.first + " AND PATH_FIELD_y == " + field.second, null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dropPathFields() {
+        Log.v(TAG, "dropPathFields method started");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_PATH, null, null);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setFieldSize(Pair<Integer, Integer> size) {
+        Log.v(TAG, "setFieldSize method started");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.FIELD_SIZE_X, size.first);
+        contentValues.put(DbOpenHelper.FIELD_SIZE_Y, size.second);
+        Log.v(TAG, "contentValues prepared");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_FIELD_SIZE, null, null);
+            database.insertOrThrow(DbOpenHelper.TABLE_CHESS_GAME_FIELD_SIZE, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMaxStates(int states) {
+        Log.v(TAG, "setMaxStates method started");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DbOpenHelper.MAX_STATES, states);
+        Log.v(TAG, "contentValues prepared");
+
+        try {
+            database.delete(DbOpenHelper.TABLE_CHESS_GAME_MAX_STATES, null, null);
+            database.insertOrThrow(DbOpenHelper.TABLE_CHESS_GAME_MAX_STATES, null, contentValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
     }
 
     //method to add input symbol into database, throws exception if not successful

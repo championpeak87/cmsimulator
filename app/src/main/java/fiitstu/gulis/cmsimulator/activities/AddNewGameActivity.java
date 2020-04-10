@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -12,9 +13,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.database.FileFormatException;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExitAddNewGameDialog;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
+import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.views.ChessView;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddNewGameActivity extends FragmentActivity {
     private static final String TAG = "AddNewGameActivity";
@@ -165,19 +177,38 @@ public class AddNewGameActivity extends FragmentActivity {
                 return true;
             case R.id.menu_upload_task:
                 // TODO: IMPLEMENT GAME UPLOADING
+                Pair<Integer, Integer> startField = new Pair<>(1, 1);
+                Pair<Integer, Integer> finishField = new Pair<>(3, 3);
+                List<Pair<Integer, Integer>> pathList = new ArrayList<>();
+                pathList.add(new Pair<>(1, 2));
+                pathList.add(new Pair<>(1, 3));
+                pathList.add(new Pair<>(2, 3));
+                Pair<Integer, Integer> fieldSize = new Pair<>(10, 10);
+
+                ChessGame chessGame = new ChessGame(startField, finishField, pathList, fieldSize, 10);
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
+                try {
+                    fileHandler.loadFile(FileHandler.PATH + "/prvySubor." + FileHandler.Format.CMSC.toString().toLowerCase());
+                    fileHandler.getData(DataSource.getInstance());
+                } catch (IOException | FileFormatException e) {
+                    e.printStackTrace();
+                }
+
+                /*if (!checkIfNameSet())
+                    Toast.makeText(this, R.string.name_not_set, Toast.LENGTH_SHORT).show();
+                else if (!checkIfDescriptionSet())
+                    Toast.makeText(this, R.string.description_not_set, Toast.LENGTH_SHORT).show();
+                else if (!checkIfGameSet())
+                    Toast.makeText(this, R.string.game_not_set, Toast.LENGTH_SHORT).show();
                 try {
                     throw new NotImplementedException(this);
                 } catch (NotImplementedException e) {
                     e.printStackTrace();
-                }
+                }*/
                 return true;
             case R.id.menu_settings:
-                // TODO: IMPLEMENT INTENT TO SETTINGS
-                try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
-                }
+                Intent settingsIntent = new Intent(this, OptionsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             case R.id.menu_help:
                 // TODO: SET HELP
@@ -205,16 +236,31 @@ public class AddNewGameActivity extends FragmentActivity {
     private boolean checkIfGameModified() {
         boolean taskNameModified;
         boolean taskDescriptionModified;
+        boolean hasGameSet = checkIfGameSet();
+
+        taskNameModified = !edittext_task_name.getText().toString().isEmpty();
+        taskDescriptionModified = !edittext_task_description.getText().toString().isEmpty();
+
+        return taskNameModified || taskDescriptionModified || hasGameSet;
+    }
+
+    private boolean checkIfGameSet() {
         boolean hasStartField;
         boolean hasFinishField;
         boolean hasPath;
 
-        taskNameModified = !edittext_task_name.getText().toString().isEmpty();
-        taskDescriptionModified = !edittext_task_description.getText().toString().isEmpty();
         hasStartField = chessview_task.getStartField().first != -1 || chessview_task.getStartField().second != -1;
         hasFinishField = chessview_task.getFinishField().first != -1 || chessview_task.getFinishField().second != -1;
         hasPath = chessview_task.getPath().size() > 0;
 
-        return taskNameModified || taskDescriptionModified || hasStartField || hasFinishField || hasPath;
+        return hasStartField || hasFinishField || hasPath;
+    }
+
+    private boolean checkIfNameSet() {
+        return !edittext_task_name.getText().toString().isEmpty();
+    }
+
+    private boolean checkIfDescriptionSet() {
+        return !edittext_task_description.getText().toString().isEmpty();
     }
 }

@@ -7,6 +7,9 @@ import android.sax.RootElement;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
+import android.util.Pair;
+import fiitstu.gulis.cmsimulator.BuildConfig;
+import fiitstu.gulis.cmsimulator.models.ChessGame;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.Parser;
@@ -80,6 +83,11 @@ public class FileHandler {
         CMST,
 
         /**
+         * CMSimulator game
+         */
+        CMSC,
+
+        /**
          * JFLAP automaton
          */
         JFF,
@@ -107,6 +115,9 @@ public class FileHandler {
                 case "cmsg":
                 case ".cmsg":
                     return CMSG;
+                case "cmsc":
+                case ".cmsc":
+                    return CMSC;
                 default:
                     return null;
             }
@@ -150,7 +161,7 @@ public class FileHandler {
      * 1.0 - the original version (number assigned retro-actively)
      * 2.0 - the version used by CMSimulator 3
      */
-    private static final String CURRENT_CMS_VERSION = "2.1";
+    private static final String CURRENT_CMS_VERSION = BuildConfig.VERSION_NAME;
 
     //xml tag names
     private static final String ROOT = "structure";
@@ -202,6 +213,16 @@ public class FileHandler {
     private static final String LEFT = "left";
     private static final String RIGHT = "right";
     private static final String PRODUCTION = "production";
+
+    // game attributes
+    private static final String CHESS_GAME = "chess_game";
+    private static final String START_FIELD = "start_field";
+    private static final String FINISH_FIELD = "finish_field";
+    private static final String PATH_FIELDS = "path_fields";
+    private static final String FIELD = "field";
+    private static final String CHESS_FIELD_SIZE = "chess_field_size";
+    private static final String MAX_STATE_COUNT = "max_state_count";
+    private static final String COUNT = "count";
 
     //variables
     private Long emptyInputSymbolId;
@@ -271,9 +292,97 @@ public class FileHandler {
             getDataCMS(dataSource);
         } else if (format == Format.CMSG) {
             getDataCMSG(dataSource);
+        } else if (format == Format.CMSC) {
+            getDataCMSC(dataSource);
         } else {
             getDataJFF(dataSource);
         }
+    }
+
+    private void getDataCMSC(DataSource dataSource) {
+        Log.v(TAG, "getDataCMSC method started");
+
+        dataSource.open();
+        dataSource.globalDrop();
+
+        // PATH_FIELDS
+        List<Pair<Integer, Integer>> pathList = new ArrayList<>();
+        NodeList nodeList = document.getElementsByTagName(PATH_FIELDS);
+        Node node = nodeList.item(0);
+        NodeList fields = node.getChildNodes();
+        final int fieldsSize = fields.getLength();
+        for (int i = 0; i < fieldsSize; i++) {
+            Node field = fields.item(i);
+            NamedNodeMap namedNodeMap = field.getAttributes();
+            if (namedNodeMap == null)
+                continue;
+            Node x = namedNodeMap.getNamedItem(X);
+            String s_x = x.getNodeValue();
+
+            Node y = namedNodeMap.getNamedItem(Y);
+            String s_y = y.getNodeValue();
+
+            Pair<Integer, Integer> currentField = new Pair<>(Integer.parseInt(s_x), Integer.parseInt(s_y));
+            pathList.add(currentField);
+        }
+
+        // START FIELD
+        NodeList startList = document.getElementsByTagName(START_FIELD);
+        Node startNode = startList.item(0);
+        NamedNodeMap startAttr = startNode.getAttributes();
+
+        Node startX = startAttr.getNamedItem(X);
+        Node startY = startAttr.getNamedItem(Y);
+
+        String startXS = startX.getNodeValue();
+        String startYS = startY.getNodeValue();
+
+        Pair<Integer, Integer> startField = new Pair<>(Integer.parseInt(startXS), Integer.parseInt(startYS));
+
+        // FINISH FIELD
+        NodeList finishList = document.getElementsByTagName(FINISH_FIELD);
+        Node finishNode = finishList.item(0);
+        NamedNodeMap finishAttr = finishNode.getAttributes();
+
+        Node finishX = finishAttr.getNamedItem(X);
+        Node finishY = finishAttr.getNamedItem(Y);
+
+        String finishXS = finishX.getNodeValue();
+        String finishYS = finishY.getNodeValue();
+
+        Pair<Integer, Integer> finishField = new Pair<>(Integer.parseInt(finishXS), Integer.parseInt(finishYS));
+
+        // CHESS FIELD SIZE
+        NodeList chessFieldList = document.getElementsByTagName(CHESS_FIELD_SIZE);
+        Node chessFieldNode = chessFieldList.item(0);
+        NamedNodeMap chessFieldAttr = chessFieldNode.getAttributes();
+
+        Node chessFieldX = chessFieldAttr.getNamedItem(X);
+        Node chessFieldY = chessFieldAttr.getNamedItem(Y);
+
+        String chessFieldXS = chessFieldX.getNodeValue();
+        String chessFieldYS = chessFieldY.getNodeValue();
+
+        Pair<Integer, Integer> chessFieldField = new Pair<>(Integer.parseInt(chessFieldXS), Integer.parseInt(chessFieldYS));
+
+        // MAX STATE COUNT
+        NodeList maxStateList = document.getElementsByTagName(MAX_STATE_COUNT);
+        Node maxStateNode = maxStateList.item(0);
+        NamedNodeMap maxStateAttr = maxStateNode.getAttributes();
+
+        Node maxStateCount = maxStateAttr.getNamedItem(COUNT);
+
+        String maxStateCountS = maxStateCount.getNodeValue();
+
+        int intMaxStateField = Integer.parseInt(maxStateCountS);
+
+        for (Pair<Integer, Integer> path : pathList)
+            dataSource.addPathField(path);
+        dataSource.setStartField(startField);
+        dataSource.setFinishField(finishField);
+        dataSource.setFieldSize(chessFieldField);
+        dataSource.setMaxStates(intMaxStateField);
+        dataSource.close();
     }
 
     /**
@@ -311,6 +420,52 @@ public class FileHandler {
             final String sTime = String.format("00:%02d:00", minutes);
             final Time time = Time.valueOf(sTime);
             return new Task(title, text, time, publicInputs, maxSteps, resultVersion);
+        }
+    }
+
+    public void writeGame(ChessGame game) throws ParserConfigurationException {
+        Element gameElement = document.createElement(CHESS_GAME);
+        document.appendChild(gameElement);
+
+        // PATH ADDING
+        Element path = document.createElement(PATH_FIELDS);
+        gameElement.appendChild(path);
+        for (Pair<Integer, Integer> field : game.getPathFields()) {
+            Element _field = document.createElement(FIELD);
+            _field.setAttribute(X, field.first.toString());
+            _field.setAttribute(Y, field.second.toString());
+            path.appendChild(_field);
+        }
+
+        // STARTING FIELD
+        {
+            Element starting_field = document.createElement(START_FIELD);
+            starting_field.setAttribute(X, game.getStartField().first.toString());
+            starting_field.setAttribute(Y, game.getStartField().second.toString());
+            gameElement.appendChild(starting_field);
+        }
+
+        // FINISH FIELD
+        {
+            Element finishing_field = document.createElement(FINISH_FIELD);
+            finishing_field.setAttribute(X, game.getFinishField().first.toString());
+            finishing_field.setAttribute(Y, game.getFinishField().second.toString());
+            gameElement.appendChild(finishing_field);
+        }
+
+        // CHESS FIELD SIZE
+        {
+            Element chess_field_size = document.createElement(CHESS_FIELD_SIZE);
+            chess_field_size.setAttribute(X, game.getFieldSize().first.toString());
+            chess_field_size.setAttribute(Y, game.getFieldSize().second.toString());
+            gameElement.appendChild(chess_field_size);
+        }
+
+        // MAX STATE COUNT
+        {
+            Element max_state_count = document.createElement(MAX_STATE_COUNT);
+            max_state_count.setAttribute(COUNT, Integer.toString(game.getMaxStateCount()));
+            gameElement.appendChild(max_state_count);
         }
     }
 
@@ -397,6 +552,12 @@ public class FileHandler {
         } else {
             setDataJFF(grammarRules);
         }
+    }
+
+    public void setData(ChessGame game) throws ParserConfigurationException {
+        if (document == null)
+            createDoc();
+        writeGame(game);
     }
 
     public void setData(List<GrammarRule> grammarRules) throws ParserConfigurationException {

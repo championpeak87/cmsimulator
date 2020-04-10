@@ -19,6 +19,18 @@ public class Symbol implements Serializable {
     public static final int RIGHT_BOUND = 0b100;
     public static final int STACK_BOTTOM = LEFT_BOUND; //stack has no left and right, so we can reuse
 
+    // GAME SYMBOLS ID
+    public static final int MOVEMENT_UP_ID = 0b1;
+    public static final int MOVEMENT_DOWN_ID = 0b10;
+    public static final int MOVEMENT_LEFT_ID = 0b100;
+    public static final int MOVEMENT_RIGHT_ID = 0b1000;
+
+    // GAME SYMBOLS VALUES
+    public static final String MOVEMENT_UP = "↑";
+    public static final String MOVEMENT_DOWN = "↓";
+    public static final String MOVEMENT_LEFT = "←";
+    public static final String MOVEMENT_RIGHT = "→";
+
     private long id;
     private String value;
     private int properties;

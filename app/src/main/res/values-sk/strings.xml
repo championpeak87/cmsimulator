@@ -979,7 +979,7 @@
     <string name="find_automata_tasks">Vyhľadať automaty</string>
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
-        <b>-</b> Prístup k úlohám bez prihlásenia</string>
+        <b>-</b> Prvotná implementácia hry s účelom</string>
     <string name="regex_help" formatted="true">
         <b>*</b>       -> Opakovanie 0 - n-krát\n
         <b>+</b>       -> Opakovanie 1 - n-krát\n
@@ -997,6 +997,9 @@
     <string name="game_field_size_exceeded">Prekročili ste veľkosť šachovnice!</string>
     <string name="exit">Ukončiť</string>
     <string name="dialog_exit_add_new_game_message">Naozaj chcete ukončiť vytváranie novej hry? Neuložená práca nebude zachovaná!</string>
-    <string name="set_as_start">Set as start</string>
-    <string name="set_as_finish">Set as finish</string>
+    <string name="set_as_start">Nastaviť ako začiatok</string>
+    <string name="set_as_finish">Nastaviť ako koniec</string>
+    <string name="name_not_set">Game\'s name is not set!</string>
+    <string name="description_not_set">Game\'s description is not set!</string>
+    <string name="game_not_set">Game is not set!</string>
 </resources>

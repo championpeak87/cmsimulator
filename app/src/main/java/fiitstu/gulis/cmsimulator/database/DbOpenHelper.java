@@ -84,6 +84,54 @@ class DbOpenHelper extends SQLiteOpenHelper {
     //table grammar tests
     static final String TABLE_GRAMMAR_TEST = "GRAMMAR_TESTS";
     static final String COLUMN_INPUT_WORD = "INPUT_WORD";
+    //table chess game path
+    static final String TABLE_CHESS_GAME_PATH = "CHESS_GAME_PATH";
+    static final String PATH_FIELD_X = "PATH_FIELD_X";
+    static final String PATH_FIELD_Y = "PATH_FIELD_Y";
+    // table chess game starting field
+    static final String TABLE_CHESS_GAME_START_FIELD = "CHESS_GAME_START_FIELD";
+    static final String START_FIELD_X = "START_FIELD_X";
+    static final String START_FIELD_Y = "START_FIELD_Y";
+    // table chess game finish field
+    static final String TABLE_CHESS_GAME_FINISH_FIELD = "CHESS_GAME_FINISH_FIELD";
+    static final String FINISH_FIELD_X = "FINISH_FIELD_X";
+    static final String FINISH_FIELD_Y = "FINISH_FIELD_Y";
+    // table chess game field size
+    static final String TABLE_CHESS_GAME_FIELD_SIZE = "CHESS_GAME_FIELD_SIZE";
+    static final String FIELD_SIZE_X = "FIELD_SIZE_X";
+    static final String FIELD_SIZE_Y = "FIELD_SIZE_Y";
+    // table chess game max states
+    static final String TABLE_CHESS_GAME_MAX_STATES = "CHESS_GAME_MAX_STATES";
+    static final String MAX_STATES = "MAX_STATES";
+
+    // create table chess_game_path
+    private static final String CREATE_TABLE_CHESS_GAME_PATH =
+            "CREATE TABLE " + TABLE_CHESS_GAME_PATH + " (" +
+                    PATH_FIELD_X + " INTEGER, " +
+                    PATH_FIELD_Y + " INTEGER )";
+
+    // create table chess_game_start_field
+    private static final String CREATE_TABLE_CHESS_GAME_START_FIELD =
+            "CREATE TABLE " + TABLE_CHESS_GAME_START_FIELD + " (" +
+                    START_FIELD_X + " INTEGER, " +
+                    START_FIELD_Y + " INTEGER )";
+
+    // create table chess_game_finish_field
+    private static final String CREATE_TABLE_CHESS_GAME_FINISH_FIELD =
+            "CREATE TABLE " + TABLE_CHESS_GAME_FINISH_FIELD + " (" +
+                    FINISH_FIELD_X + " INTEGER " +
+                    FINISH_FIELD_Y + "INTEGER )";
+
+    // create table chess_game_field_size
+    private static final String CREATE_TABLE_CHESS_GAME_FIELD_SIZE =
+            "CREATE TABLE " + TABLE_CHESS_GAME_FIELD_SIZE + " (" +
+                    FIELD_SIZE_X + " INTEGER " +
+                    FIELD_SIZE_Y + " INTEGER )";
+
+    // create table chess_game_max_states
+    private static final String CREATE_TABLE_CHESS_GAME_MAX_STATES =
+            "CREATE TABLE " + TABLE_CHESS_GAME_MAX_STATES + " (" +
+                    MAX_STATES + " INTEGER )";
 
     //create table input alphabet sqlite query
     private static final String TABLE_INPUT_ALPHABET_CREATE =
@@ -238,6 +286,21 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(TABLE_GRAMMAR_TEST_CREATE);
         Log.i(TAG, "GRAMMAR TEST table created (query command executed)");
+
+        db.execSQL(CREATE_TABLE_CHESS_GAME_PATH);
+        Log.i(TAG, "CHESS GAME PATH table created (query command executed)");
+
+        db.execSQL(CREATE_TABLE_CHESS_GAME_START_FIELD);
+        Log.i(TAG, "CHESS GAME START FIELD table created (query command executed)");
+
+        db.execSQL(CREATE_TABLE_CHESS_GAME_FINISH_FIELD);
+        Log.i(TAG, "CHESS GAME FINISH FIELD table created (query command executed)");
+
+        db.execSQL(CREATE_TABLE_CHESS_GAME_FIELD_SIZE);
+        Log.i(TAG, "CHESS GAME FIELD SIZE table created (query command executed)");
+
+        db.execSQL(CREATE_TABLE_CHESS_GAME_MAX_STATES);
+        Log.i(TAG, "CHESS GAME MAX STATES table created (query command executed)");
     }
 
     //method updates basic tables in sqlite database
@@ -287,6 +350,21 @@ class DbOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_GRAMMAR_TEST);
         Log.w(TAG, "GRAMMAR TEST table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_CHESS_GAME_PATH);
+        Log.w(TAG, "CHESS GAME PATH table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_CHESS_GAME_START_FIELD);
+        Log.w(TAG, "CHESS GAME START FIELD table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_CHESS_GAME_FINISH_FIELD);
+        Log.w(TAG, "CHESS GAME FINISH FIELD table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_CHESS_GAME_FIELD_SIZE);
+        Log.w(TAG, "CHESS GAME FIELD SIZE table dropped (query command executed)");
+
+        db.execSQL("DROP TABLE IF EXISTS " + DbOpenHelper.TABLE_CHESS_GAME_MAX_STATES);
+        Log.w(TAG, "CHESS GAME MAX STATES table dropped (query command executed)");
     }
 
     private void dropAllTables(SQLiteDatabase db) {

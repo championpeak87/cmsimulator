@@ -1336,7 +1336,7 @@
     <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
 	<string name="whats_new_content">
-		<b>-</b> Tasks without login</string>
+		<b>-</b> Initial game implementation</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
@@ -1364,5 +1364,8 @@
 	</string>
     <string name="set_as_start">Set as start</string>
 	<string name="set_as_finish">Set as finish</string>
+    <string name="name_not_set">Game\'s name is not set!</string>
+	<string name="description_not_set">Game\'s description is not set!</string>
+	<string name="game_not_set">Game is not set!</string>
 
 </resources>
