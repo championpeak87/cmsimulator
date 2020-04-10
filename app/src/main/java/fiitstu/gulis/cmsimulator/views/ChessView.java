@@ -41,13 +41,11 @@ public class ChessView extends View {
     private static final Pair<Integer, Integer> DEFAULT_ACTIVE_FIELD_POSITION = new Pair<Integer, Integer>(-1, -1);
     private static final int DEFAULT_DARK_FIELD_COLOR = R.color.colorPrimaryDark;
     private static final int DEFAULT_LIGHT_FIELD_COLOR = R.color.primary_color;
-    private static final int DEFAULT_VALUE_ANIMATOR_DURATION = 1000;
+    private static final int DEFAULT_VALUE_ANIMATOR_DURATION = 200;
     private static final int DEFAULT_LIGHT_PATH_FIELD_COLOR = Color.LTGRAY;
     private static final int DEFAULT_DARK_PATH_FIELD_COLOR = Color.DKGRAY;
-    private static final int DEFAULT_DARK_FINISH_FIELD_COLOR = R.color.finish_dark;
-    private static final int DEFAULT_LIGHT_FINISH_FIELD_COLOR = R.color.finish_light;
-    private static final int DEFAULT_DARK_START_FIELD_COLOR = R.color.start_dark;
-    private static final int DEFAULT_LIGHT_START_FIELD_COLOR = R.color.start_light;
+    private static final int DEFAULT_FINISH_FIELD_COLOR = R.color.finish_light;
+    private static final int DEFAULT_START_FIELD_COLOR = R.color.start_light;
     private static final int DEFAULT_FINISH_FIELD_X = -1;
     private static final int DEFAULT_FINISH_FIELD_Y = -1;
     private static final int DEFAULT_START_FIELD_X = -1;
@@ -58,10 +56,14 @@ public class ChessView extends View {
     private int CHESS_FIELD_HEIGHT;
     private int CHESS_FIELD_WIDTH;
     private int DARK_FIELD_COLOR;
+    private int ANIMATED_DARK_FIELD_COLOR;
     private int LIGHT_FIELD_COLOR;
+    private int ANIMATED_LIGHT_FIELD_COLOR;
     private int VALUE_ANIMATOR_DURATION;
     private int DARK_PATH_FIELD_COLOR;
+    private int ANIMATED_DARK_PATH_FIELD_COLOR;
     private int LIGHT_PATH_FIELD_COLOR;
+    private int ANIMATED_LIGHT_PATH_FIELD_COLOR;
     private int MAX_CHESS_FIELD_HEIGHT;
     private int MAX_CHESS_FIELD_WIDTH;
     private int MIN_CHESS_FIELD_HEIGHT;
@@ -69,12 +71,13 @@ public class ChessView extends View {
     private Pair<Integer, Integer> ACTIVE_FIELD;
     private Pair<Integer, Integer> START_FIELD;
     private Pair<Integer, Integer> FINISH_FIELD;
-    private int START_FIELD_LIGHT_COLOR;
-    private int START_FIELD_DARK_COLOR;
-    private int FINISH_FIELD_LIGHT_COLOR;
-    private int FINISH_FIELD_DARK_COLOR;
+    private int START_FIELD_COLOR;
+    private int ANIMATED_START_FIELD_COLOR;
+    private int FINISH_FIELD_COLOR;
+    private int ANIMATED_FINISH_FIELD_COLOR;
 
     private List<Pair<Integer, Integer>> activeFieldsList = new ArrayList<>();
+    private Pair<Integer, Integer> fieldToRedraw = new Pair<>(-1, -1);
 
     public enum FIELD_TYPE {
         BLANK,
@@ -137,13 +140,16 @@ public class ChessView extends View {
             final int finishFieldY = a.getInteger(R.styleable.ChessView_activeFieldY, DEFAULT_FINISH_FIELD_Y);
             FINISH_FIELD = new Pair<Integer, Integer>(finishFieldX, finishFieldY);
 
-            START_FIELD_LIGHT_COLOR = a.getColor(R.styleable.ChessView_startFieldLightColor, getContext().getColor(DEFAULT_LIGHT_START_FIELD_COLOR));
-            FINISH_FIELD_LIGHT_COLOR = a.getColor(R.styleable.ChessView_finishFieldLightColor, getContext().getColor(DEFAULT_LIGHT_FINISH_FIELD_COLOR));
-            START_FIELD_DARK_COLOR = a.getColor(R.styleable.ChessView_startFieldDarkColor, getContext().getColor(DEFAULT_DARK_START_FIELD_COLOR));
-            FINISH_FIELD_DARK_COLOR = a.getColor(R.styleable.ChessView_finishFieldDarkColor, getContext().getColor(DEFAULT_DARK_FINISH_FIELD_COLOR));
+            START_FIELD_COLOR = a.getColor(R.styleable.ChessView_startFieldColor, getContext().getColor(DEFAULT_START_FIELD_COLOR));
+            FINISH_FIELD_COLOR = a.getColor(R.styleable.ChessView_finishFieldColor, getContext().getColor(DEFAULT_FINISH_FIELD_COLOR));
 
 
+            ANIMATED_START_FIELD_COLOR = START_FIELD_COLOR;
+            ANIMATED_FINISH_FIELD_COLOR = FINISH_FIELD_COLOR;
             ANIMATED_ACTIVE_FIELD_COLOR = ACTIVE_FIELD_COLOR;
+
+            ANIMATED_DARK_PATH_FIELD_COLOR = DARK_PATH_FIELD_COLOR;
+            ANIMATED_LIGHT_PATH_FIELD_COLOR = LIGHT_PATH_FIELD_COLOR;
         } finally {
             a.recycle();
         }
@@ -161,11 +167,17 @@ public class ChessView extends View {
         else return FIELD_TYPE.BLANK;
     }
 
+    private boolean isDarkField(int x, int y) {
+        final int currentPosition = (y * CHESS_FIELD_WIDTH) + x;
+        return (currentPosition & 1) == 0;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         final Paint chessFieldPaint = new Paint();
+
         for (int y = 0; y < CHESS_FIELD_HEIGHT; y++) {
             int counter = y;
             for (int x = 0; x < CHESS_FIELD_WIDTH; x++) {
@@ -173,16 +185,22 @@ public class ChessView extends View {
                 switch (field_type) {
                     default:
                     case BLANK:
-                        chessFieldPaint.setColor((counter & 1) == 1 ? DARK_FIELD_COLOR : LIGHT_FIELD_COLOR);
+                        if (new Pair<>(x, y).equals(fieldToRedraw))
+                            chessFieldPaint.setColor((counter & 1) == 1 ? ANIMATED_DARK_FIELD_COLOR : ANIMATED_LIGHT_FIELD_COLOR);
+                        else
+                            chessFieldPaint.setColor((counter & 1) == 1 ? DARK_FIELD_COLOR : LIGHT_FIELD_COLOR);
                         break;
                     case START:
-                        chessFieldPaint.setColor((counter & 1) == 1 ? START_FIELD_DARK_COLOR : START_FIELD_LIGHT_COLOR);
+                        chessFieldPaint.setColor(ANIMATED_START_FIELD_COLOR);
                         break;
                     case FINISH:
-                        chessFieldPaint.setColor((counter & 1) == 1 ? FINISH_FIELD_DARK_COLOR : FINISH_FIELD_LIGHT_COLOR);
+                        chessFieldPaint.setColor(ANIMATED_FINISH_FIELD_COLOR);
                         break;
                     case PATH:
-                        chessFieldPaint.setColor((counter & 1) == 1 ? DARK_PATH_FIELD_COLOR : LIGHT_PATH_FIELD_COLOR);
+                        if (new Pair<>(x, y).equals(fieldToRedraw))
+                            chessFieldPaint.setColor((counter & 1) == 1 ? ANIMATED_DARK_PATH_FIELD_COLOR : ANIMATED_LIGHT_PATH_FIELD_COLOR);
+                        else
+                            chessFieldPaint.setColor((counter & 1) == 1 ? DARK_PATH_FIELD_COLOR : LIGHT_PATH_FIELD_COLOR);
                         break;
                     case CURRENT:
                         chessFieldPaint.setColor(ANIMATED_ACTIVE_FIELD_COLOR);
@@ -193,6 +211,7 @@ public class ChessView extends View {
                 canvas.drawRect(currentRect, chessFieldPaint);
             }
         }
+
     }
 
     private Rect getRect(int x, int y) {
@@ -250,7 +269,7 @@ public class ChessView extends View {
             valueAnimator.setIntValues(LIGHT_FIELD_COLOR, ACTIVE_FIELD_COLOR);
             valueAnimator.setEvaluator(new ArgbEvaluator());
 
-            valueAnimator.setDuration(200);
+            valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -459,8 +478,23 @@ public class ChessView extends View {
                 this.FINISH_FIELD = new Pair<>(DEFAULT_FINISH_FIELD_X, DEFAULT_FINISH_FIELD_X);
             if (this.START_FIELD == field)
                 this.START_FIELD = new Pair<>(DEFAULT_START_FIELD_X, DEFAULT_START_FIELD_Y);
-            else
+            else {
                 this.START_FIELD = field;
+                ValueAnimator valueAnimator = new ValueAnimator();
+                valueAnimator.setIntValues(LIGHT_FIELD_COLOR, START_FIELD_COLOR);
+                valueAnimator.setEvaluator(new ArgbEvaluator());
+                valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        ANIMATED_START_FIELD_COLOR = (int) animation.getAnimatedValue();
+                        invalidate();
+                        requestLayout();
+                    }
+                });
+
+                valueAnimator.start();
+            }
             invalidate();
             requestLayout();
         }
@@ -472,8 +506,23 @@ public class ChessView extends View {
                 this.START_FIELD = new Pair<>(DEFAULT_START_FIELD_X, DEFAULT_START_FIELD_Y);
             if (this.FINISH_FIELD == field)
                 this.FINISH_FIELD = new Pair<>(DEFAULT_FINISH_FIELD_X, DEFAULT_FINISH_FIELD_Y);
-            else
+            else {
                 this.FINISH_FIELD = field;
+                ValueAnimator valueAnimator = new ValueAnimator();
+                valueAnimator.setIntValues(LIGHT_FIELD_COLOR, FINISH_FIELD_COLOR);
+                valueAnimator.setEvaluator(new ArgbEvaluator());
+                valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        ANIMATED_FINISH_FIELD_COLOR = (int) animation.getAnimatedValue();
+                        invalidate();
+                        requestLayout();
+                    }
+                });
+
+                valueAnimator.start();
+            }
             invalidate();
             requestLayout();
         }
@@ -503,19 +552,70 @@ public class ChessView extends View {
         return this.activeFieldsList;
     }
 
-    public void addFieldToPath(Pair<Integer, Integer> field) throws OutOfChessFieldException {
+    public void addFieldToPath(final Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field) && !activeFieldsList.contains(field)) {
-            if (START_FIELD != field && FINISH_FIELD != field)
+            if (START_FIELD != field && FINISH_FIELD != field) {
                 activeFieldsList.add(field);
+                ValueAnimator valueAnimator = new ValueAnimator();
+                final boolean isDarkField = isDarkField(field.first, field.second);
+                valueAnimator.setIntValues(isDarkField ? DARK_FIELD_COLOR : LIGHT_FIELD_COLOR, isDarkField ? DARK_PATH_FIELD_COLOR : LIGHT_PATH_FIELD_COLOR);
+                valueAnimator.setEvaluator(new ArgbEvaluator());
+                valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        fieldToRedraw = field;
+                        if (isDarkField) {
+                            ANIMATED_DARK_PATH_FIELD_COLOR = (int) animation.getAnimatedValue();
+                            if (ANIMATED_DARK_PATH_FIELD_COLOR == DARK_PATH_FIELD_COLOR)
+                                fieldToRedraw = new Pair<>(-1, -1);
+                        } else {
+                            ANIMATED_LIGHT_PATH_FIELD_COLOR = (int) animation.getAnimatedValue();
+                            if (ANIMATED_LIGHT_PATH_FIELD_COLOR == LIGHT_PATH_FIELD_COLOR)
+                                fieldToRedraw = new Pair<>(-1, -1);
+                        }
+
+                        invalidate();
+                        requestLayout();
+                    }
+                });
+
+                valueAnimator.start();
+            }
         }
 
         invalidate();
         requestLayout();
     }
 
-    public void removeFieldFromPath(Pair<Integer, Integer> field) throws OutOfChessFieldException {
+    public void removeFieldFromPath(final Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field) && activeFieldsList.contains(field)) {
             activeFieldsList.remove(field);
+            ValueAnimator valueAnimator = new ValueAnimator();
+            final boolean isDarkField = isDarkField(field.first, field.second);
+            valueAnimator.setIntValues(isDarkField ? DARK_PATH_FIELD_COLOR : LIGHT_PATH_FIELD_COLOR, isDarkField ? DARK_FIELD_COLOR : LIGHT_FIELD_COLOR);
+            valueAnimator.setEvaluator(new ArgbEvaluator());
+            valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    fieldToRedraw = field;
+                    if (isDarkField) {
+                        ANIMATED_DARK_FIELD_COLOR = (int) animation.getAnimatedValue();
+                        if (ANIMATED_DARK_PATH_FIELD_COLOR == DARK_FIELD_COLOR)
+                            fieldToRedraw = new Pair<>(-1, -1);
+                    } else {
+                        ANIMATED_LIGHT_FIELD_COLOR = (int) animation.getAnimatedValue();
+                        if (ANIMATED_LIGHT_PATH_FIELD_COLOR == LIGHT_FIELD_COLOR)
+                            fieldToRedraw = new Pair<>(-1, -1);
+                    }
+
+                    invalidate();
+                    requestLayout();
+                }
+            });
+
+            valueAnimator.start();
         }
 
         invalidate();
@@ -530,8 +630,8 @@ public class ChessView extends View {
         return false;
     }
 
-    public Pair<Integer, Integer> getFieldSize(){
-        return new Pair<>(CHESS_FIELD_WIDTH,CHESS_FIELD_HEIGHT);
+    public Pair<Integer, Integer> getFieldSize() {
+        return new Pair<>(CHESS_FIELD_WIDTH, CHESS_FIELD_HEIGHT);
     }
 
     // EXCEPTIONS

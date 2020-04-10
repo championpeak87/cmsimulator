@@ -91,6 +91,12 @@
                 android:name=".activities.TasksActivity"
                 android:configChanges="orientation|screenSize"/>
         <activity
+                android:name=".activities.ChessGameActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name=".activities.BrowseGamesActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity
                 android:name=".activities.FindTasksActivity"
                 android:configChanges="orientation|screenSize"/>
         <activity

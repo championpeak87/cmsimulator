@@ -15,10 +15,8 @@
         <attr name="animationDuration" format="integer"/>
         <attr name="pathFieldLightColor" format="color"/>
         <attr name="pathFieldDarkColor" format="color"/>
-        <attr name="startFieldLightColor" format="color"/>
-        <attr name="finishFieldLightColor" format="color"/>
-        <attr name="startFieldDarkColor" format="color"/>
-        <attr name="finishFieldDarkColor" format="color"/>
+        <attr name="finishFieldColor" format="color"/>
+        <attr name="startFieldColor" format="color"/>
         <attr name="startFieldX" format="integer"/>
         <attr name="startFieldY" format="integer"/>
         <attr name="finishFieldX" format="integer"/>

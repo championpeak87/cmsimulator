@@ -190,7 +190,6 @@
 						android:text="@string/create_task"
 						android:layout_gravity="center_vertical"
 						android:drawableTop="@drawable/baseline_add_box_24"
-						android:enabled="true"
 						style="@style/mainMenuButtonStyle"/>
 
 				<Button
@@ -198,7 +197,6 @@
 					android:text="@string/find_tasks"
 					android:layout_gravity="center_vertical"
 					android:drawableTop="@drawable/baseline_cloud_download_24"
-					android:enabled="false"
 					style="@style/mainMenuButtonStyle"/>
 
 			</LinearLayout>

@@ -65,3 +65,13 @@ CREATE TABLE grammar_task_results
     submitted boolean not null default(false),
     submission_date timestamp
 );
+
+CREATE TABLE game_tasks
+(
+    task_id SERIAL NOT NULL UNIQUE,
+    assigner_id SERIAL NOT NULL REFERENCES users(user_id),
+    task_name text not null,
+    task_description text,
+    automata_type automata_type not null,
+    primary key (task_id)
+);

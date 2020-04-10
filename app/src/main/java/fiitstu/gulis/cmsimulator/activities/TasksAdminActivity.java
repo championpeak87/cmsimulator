@@ -170,6 +170,15 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             }
         });
 
+        Button findGameButton = findViewById(R.id.button_tasks_games_find);
+        findGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TasksAdminActivity.this, BrowseGamesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Log.i(TAG, "onCreate initialized");
     }
 
