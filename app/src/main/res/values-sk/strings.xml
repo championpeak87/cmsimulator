@@ -1004,4 +1004,5 @@
     <string name="game_not_set">Game is not set!</string>
     <string name="game">Game</string>
     <string name="available_games">Available games</string>
+    <string name="game_upload_successful">Game was successfully uploaded!</string>
 </resources>

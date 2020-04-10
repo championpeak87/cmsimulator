@@ -23,6 +23,12 @@
                 <Button android:id="@+id/button_zoom_in" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/zoom_in" android:drawableLeft="@drawable/baseline_zoom_in_24"/>
                 <Button android:id="@+id/button_zoom_out" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawableLeft="@drawable/baseline_zoom_out_24" android:text="@string/zoom_out"/>
             </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/text_subheader" android:text="@string/automata_type"/>
+            <RadioGroup android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                <RadioButton android:id="@+id/radiobutton_finite_automata" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/finite_state_automaton"/>
+                <RadioButton android:id="@+id/radiobutton_pushdown_automata" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pushdown_automaton"/>
+            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

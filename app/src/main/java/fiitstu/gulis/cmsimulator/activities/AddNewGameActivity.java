@@ -2,16 +2,15 @@ package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Pair;
 import android.view.*;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
+import com.aditya.filebrowser.fileoperations.Operations;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
@@ -19,12 +18,20 @@ import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.dialogs.ExitAddNewGameDialog;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.ServerResponseController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.views.ChessView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +45,8 @@ public class AddNewGameActivity extends FragmentActivity {
     ChessView chessview_task;
     Button button_zoom_in;
     Button button_zoom_out;
+    RadioButton radiobutton_finite_automata;
+    RadioButton radiobutton_pushdown_automata;
 
     private float[] touchCoordinates = {0, 0};
 
@@ -51,6 +60,13 @@ public class AddNewGameActivity extends FragmentActivity {
         setEvents();
     }
 
+    private automata_type getSelectedAutomataType() {
+        if (radiobutton_finite_automata.isChecked())
+            return automata_type.FINITE_AUTOMATA;
+        else
+            return automata_type.PUSHDOWN_AUTOMATA;
+    }
+
     private void setUIElements() {
         linearlayout_task_description = findViewById(R.id.linearlayout_task_description);
         edittext_task_name = findViewById(R.id.edittext_task_name);
@@ -58,6 +74,8 @@ public class AddNewGameActivity extends FragmentActivity {
         chessview_task = findViewById(R.id.chessview_task);
         button_zoom_in = findViewById(R.id.button_zoom_in);
         button_zoom_out = findViewById(R.id.button_zoom_out);
+        radiobutton_finite_automata = findViewById(R.id.radiobutton_finite_automata);
+        radiobutton_pushdown_automata = findViewById(R.id.radiobutton_pushdown_automata);
     }
 
     @Override
@@ -176,39 +194,103 @@ public class AddNewGameActivity extends FragmentActivity {
                 onBackPressed();
                 return true;
             case R.id.menu_upload_task:
-                // TODO: IMPLEMENT GAME UPLOADING
-                String gameName = edittext_task_name.getText().toString().trim();
-                String gameDescription = edittext_task_description.getText().toString().trim();
-                Pair<Integer, Integer> startField = chessview_task.getStartField();
-                Pair<Integer, Integer> finishField = chessview_task.getFinishField();
-                Pair<Integer, Integer> fieldSize = chessview_task.getFieldSize();
-                List<Pair<Integer, Integer>> pathList = chessview_task.getPath();
+                // COMPLETED: IMPLEMENT GAME UPLOADING
+                if (canUpload()) {
+                    final String gameName = edittext_task_name.getText().toString().trim();
+                    final String gameDescription = edittext_task_description.getText().toString().trim();
+                    final Pair<Integer, Integer> startField = chessview_task.getStartField();
+                    final Pair<Integer, Integer> finishField = chessview_task.getFinishField();
+                    final Pair<Integer, Integer> fieldSize = chessview_task.getFieldSize();
+                    final List<Pair<Integer, Integer>> pathList = chessview_task.getPath();
 
-                ChessGame chessGame = new ChessGame(
-                        startField,
-                        finishField,
-                        pathList,
-                        fieldSize,
-                        10
-                );
-                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
+                    final ChessGame chessGame = new ChessGame(
+                            startField,
+                            finishField,
+                            pathList,
+                            fieldSize,
+                            10
+                    );
+                    FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
 
-                try {
-                    fileHandler.setData(chessGame);
-                    fileHandler.writeFile("chessGame");
-                } catch (ParserConfigurationException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (TransformerException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        fileHandler.setData(chessGame);
+                        fileHandler.writeFile("chessGame");
+                    } catch (ParserConfigurationException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (TransformerException e) {
+                        e.printStackTrace();
+                    }
 
-                try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
-                }
+                    final File file = new File(FileHandler.PATH + "/" + "chessGame" + "." + FileHandler.Format.CMSC.toString().toLowerCase());
+
+                    class UploadGameAsync extends AsyncTask<Integer, Void, String> {
+                        @Override
+                        protected String doInBackground(Integer... integers) {
+                            UrlManager urlManager = new UrlManager();
+                            URL url = urlManager.getUploadGameURL(Integer.toString(integers[0]));
+                            ServerController serverController = new ServerController();
+                            String output = null;
+
+                            output = serverController.doPostRequest(url, file);
+
+                            return output;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if (s == null || s.isEmpty()) {
+                                Toast.makeText(AddNewGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (s.equals("OK")) {
+                                    Toast.makeText(AddNewGameActivity.this, R.string.game_upload_successful, Toast.LENGTH_SHORT).show();
+                                } else
+                                    Toast.makeText(AddNewGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+
+                                AddNewGameActivity.this.finish();
+                            }
+                        }
+                    }
+
+                    class AddGameToDatabaseAsync extends AsyncTask<Void, Void, String> {
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            UrlManager urlManager = new UrlManager();
+                            automata_type selectedAutomata = getSelectedAutomataType();
+                            URL url = urlManager.addGameToDatabaseURL(gameName, gameDescription, TaskLoginActivity.loggedUser.getUser_id(), selectedAutomata);
+                            ServerController serverController = new ServerController();
+                            String output = null;
+
+                            try {
+                                output = serverController.getResponseFromServer(url);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                return output;
+                            }
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if (s == null || s.isEmpty()) {
+                                Toast.makeText(AddNewGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                try {
+                                    JSONObject object = new JSONObject(s);
+                                    int task_id = object.getInt("task_id");
+
+                                    new UploadGameAsync().execute(task_id);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+                    }
+
+                    new AddGameToDatabaseAsync().execute();
+                } else Toast.makeText(this, R.string.task_not_set, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);
@@ -238,14 +320,16 @@ public class AddNewGameActivity extends FragmentActivity {
     }
 
     private boolean checkIfGameModified() {
-        boolean taskNameModified;
-        boolean taskDescriptionModified;
+        boolean taskNameModified = checkIfNameSet();
+        boolean taskDescriptionModified = checkIfDescriptionSet();
         boolean hasGameSet = checkIfGameSet();
+        boolean automataSet = checkIfAutomataSet();
 
-        taskNameModified = !edittext_task_name.getText().toString().isEmpty();
-        taskDescriptionModified = !edittext_task_description.getText().toString().isEmpty();
+        return taskNameModified || taskDescriptionModified || hasGameSet || automataSet;
+    }
 
-        return taskNameModified || taskDescriptionModified || hasGameSet;
+    private boolean checkIfAutomataSet() {
+        return (radiobutton_finite_automata.isChecked() || radiobutton_pushdown_automata.isChecked());
     }
 
     private boolean checkIfGameSet() {
@@ -266,5 +350,14 @@ public class AddNewGameActivity extends FragmentActivity {
 
     private boolean checkIfDescriptionSet() {
         return !edittext_task_description.getText().toString().isEmpty();
+    }
+
+    private boolean canUpload() {
+        boolean nameSet = checkIfNameSet();
+        boolean descriptionSet = checkIfDescriptionSet();
+        boolean gameSet = checkIfGameSet();
+        boolean automataSet = checkIfAutomataSet();
+
+        return nameSet && descriptionSet && gameSet && automataSet;
     }
 }

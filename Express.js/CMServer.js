@@ -1242,6 +1242,60 @@ app.get('/api/grammarTasks/taskCount', (req, res) => {
   })
 })
 
+app.get('/api/game/add', (req, res) => {
+  const task_name = req.query.task_name;
+  const task_description = req.query.task_description;
+  const assigner = req.query.assigner;
+  const automata_type = req.query.automata_type;
+
+
+  pool.query('INSERT INTO game_tasks(task_name, task_description, assigner_id, automata_type) VALUES ($1, $2, $3, $4);',
+    [task_name, task_description, assigner, automata_type], (err, results) => {
+      if (err) { throw err; }
+
+      if (results.rowCount > 0) {
+        pool.query('SELECT * FROM game_tasks WHERE assigner_id = $1 AND task_name = $2 AND task_description = $3;', [assigner, task_name, task_description], (error, result) => {
+          res.status(HTTP_OK).send(
+            {
+              task_id: result.rows[0].task_id,
+              task_name: task_name,
+              task_description: task_description,
+              assigner: assigner,
+              automata_type: automata_type
+            }
+          )
+        })
+      }
+    });
+})
+
+app.post('/api/game/upload', (req, res, next) => {
+  const file = req.files.task;
+  const file_name = req.query.file_name;
+
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir("./uploads/gameTasks/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  if (!file) {
+    console.log(req);
+    console.log("FILE NOT SAVED!");
+  }
+  else {
+    file.mv("./uploads/gameTasks/" + file_name + ".cmsc", function (err, results) {
+      if (err) throw err;
+      res.send({
+        success: true,
+        message: "File uploaded!"
+      });
+      console.log("NEW GAME UPLOADED!");
+    });
+  }
+
+});
+
 
 app.get('/', (req, res) => {
   res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');

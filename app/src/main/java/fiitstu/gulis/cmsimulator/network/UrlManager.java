@@ -4,6 +4,7 @@ import android.net.Uri;
 import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.activities.MainActivity;
 import fiitstu.gulis.cmsimulator.elements.Task;
+import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.models.tasks.grammar_tasks.GrammarTask;
 import fiitstu.gulis.cmsimulator.models.users.User;
@@ -53,6 +54,8 @@ public class UrlManager {
     private final static String GET_AUTOMATA_TASKS_COUNT_PATH = "/api/tasks/taskCount";
     private final static String GET_GRAMMAR_TASKS_COUNT_PATH = "/api/grammarTasks/taskCount";
     private static final String GRAMMAR_RESULTS_OVERVIEW_PATH = "/api/grammarTasks/results";
+    private static final String ADD_GAME_TO_DATABASE_PATH = "/api/game/add";
+    private static final String UPLOAD_GAME_PATH = "/api/game/upload";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -122,8 +125,44 @@ public class UrlManager {
         }
     }
 
-    public URL getAutomataTasksCountURL()
-    {
+    public URL addGameToDatabaseURL(String task_name, String task_description, int assigner_id, automata_type automata_type) {
+        Uri uri = Uri.parse(URI + ADD_GAME_TO_DATABASE_PATH).buildUpon()
+                .appendQueryParameter(TASK_NAME_KEY, task_name)
+                .appendQueryParameter(TASK_DESCRIPTION_KEY, task_description)
+                .appendQueryParameter(ASSIGNER_KEY, Integer.toString(assigner_id))
+                .appendQueryParameter(AUTOMATA_TYPE_KEY, automata_type.getApiKey())
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+    public URL getUploadGameURL(String file_name) {
+        Uri uri = Uri.parse(URI + UPLOAD_GAME_PATH).buildUpon()
+                .appendQueryParameter(FILE_NAME_KEY, file_name)
+                .build();
+
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+
+    public URL getAutomataTasksCountURL() {
         Uri uri = Uri.parse(URI + GET_AUTOMATA_TASKS_COUNT_PATH);
 
         URL url = null;
@@ -136,8 +175,7 @@ public class UrlManager {
         }
     }
 
-    public URL getGrammarTasksCountURL()
-    {
+    public URL getGrammarTasksCountURL() {
         Uri uri = Uri.parse(URI + GET_GRAMMAR_TASKS_COUNT_PATH);
 
         URL url = null;
@@ -150,8 +188,7 @@ public class UrlManager {
         }
     }
 
-    public URL getGrammarResultsOverviewURL(int user_id)
-    {
+    public URL getGrammarResultsOverviewURL(int user_id) {
         Uri uri = Uri.parse(URI + GRAMMAR_RESULTS_OVERVIEW_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .build();
@@ -167,8 +204,7 @@ public class UrlManager {
         }
     }
 
-    public URL getUserResultsOverviewURL(int user_id)
-    {
+    public URL getUserResultsOverviewURL(int user_id) {
         Uri uri = Uri.parse(URI + USER_RESULTS_OVERVIEW_PATH).buildUpon()
                 .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
                 .build();
