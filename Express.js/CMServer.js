@@ -1296,6 +1296,22 @@ app.post('/api/game/upload', (req, res, next) => {
 
 });
 
+app.get('/api/game/getGames', (req, res) => {
+  pool.query('SELECT * FROM game_tasks;', (err, results) => {
+
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      res.status(HTTP_OK).send(results.rows);
+      console.log(Date(), [user_id], 'has fetched games!');
+    }
+    else {
+      res.status(HTTP_NOT_FOUND).send({
+        not_found: true
+      });
+    }
+  })
+})
+
 
 app.get('/', (req, res) => {
   res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');
