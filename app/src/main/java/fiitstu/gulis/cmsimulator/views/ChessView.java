@@ -530,6 +530,10 @@ public class ChessView extends View {
         return false;
     }
 
+    public Pair<Integer, Integer> getFieldSize(){
+        return new Pair<>(CHESS_FIELD_WIDTH,CHESS_FIELD_HEIGHT);
+    }
+
     // EXCEPTIONS
     public class OutOfChessFieldException extends Exception {
 

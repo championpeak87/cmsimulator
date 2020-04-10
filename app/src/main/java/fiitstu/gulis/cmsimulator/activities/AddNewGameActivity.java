@@ -177,34 +177,38 @@ public class AddNewGameActivity extends FragmentActivity {
                 return true;
             case R.id.menu_upload_task:
                 // TODO: IMPLEMENT GAME UPLOADING
-                Pair<Integer, Integer> startField = new Pair<>(1, 1);
-                Pair<Integer, Integer> finishField = new Pair<>(3, 3);
-                List<Pair<Integer, Integer>> pathList = new ArrayList<>();
-                pathList.add(new Pair<>(1, 2));
-                pathList.add(new Pair<>(1, 3));
-                pathList.add(new Pair<>(2, 3));
-                Pair<Integer, Integer> fieldSize = new Pair<>(10, 10);
+                String gameName = edittext_task_name.getText().toString().trim();
+                String gameDescription = edittext_task_description.getText().toString().trim();
+                Pair<Integer, Integer> startField = chessview_task.getStartField();
+                Pair<Integer, Integer> finishField = chessview_task.getFinishField();
+                Pair<Integer, Integer> fieldSize = chessview_task.getFieldSize();
+                List<Pair<Integer, Integer>> pathList = chessview_task.getPath();
 
-                ChessGame chessGame = new ChessGame(startField, finishField, pathList, fieldSize, 10);
+                ChessGame chessGame = new ChessGame(
+                        startField,
+                        finishField,
+                        pathList,
+                        fieldSize,
+                        10
+                );
                 FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
+
                 try {
-                    fileHandler.loadFile(FileHandler.PATH + "/prvySubor." + FileHandler.Format.CMSC.toString().toLowerCase());
-                    fileHandler.getData(DataSource.getInstance());
-                } catch (IOException | FileFormatException e) {
+                    fileHandler.setData(chessGame);
+                    fileHandler.writeFile("chessGame");
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
                     e.printStackTrace();
                 }
 
-                /*if (!checkIfNameSet())
-                    Toast.makeText(this, R.string.name_not_set, Toast.LENGTH_SHORT).show();
-                else if (!checkIfDescriptionSet())
-                    Toast.makeText(this, R.string.description_not_set, Toast.LENGTH_SHORT).show();
-                else if (!checkIfGameSet())
-                    Toast.makeText(this, R.string.game_not_set, Toast.LENGTH_SHORT).show();
                 try {
                     throw new NotImplementedException(this);
                 } catch (NotImplementedException e) {
                     e.printStackTrace();
-                }*/
+                }
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);

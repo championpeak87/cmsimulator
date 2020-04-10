@@ -119,13 +119,13 @@ class DbOpenHelper extends SQLiteOpenHelper {
     // create table chess_game_finish_field
     private static final String CREATE_TABLE_CHESS_GAME_FINISH_FIELD =
             "CREATE TABLE " + TABLE_CHESS_GAME_FINISH_FIELD + " (" +
-                    FINISH_FIELD_X + " INTEGER " +
-                    FINISH_FIELD_Y + "INTEGER )";
+                    FINISH_FIELD_X + " INTEGER ," +
+                    FINISH_FIELD_Y + " INTEGER )";
 
     // create table chess_game_field_size
     private static final String CREATE_TABLE_CHESS_GAME_FIELD_SIZE =
             "CREATE TABLE " + TABLE_CHESS_GAME_FIELD_SIZE + " (" +
-                    FIELD_SIZE_X + " INTEGER " +
+                    FIELD_SIZE_X + " INTEGER ," +
                     FIELD_SIZE_Y + " INTEGER )";
 
     // create table chess_game_max_states

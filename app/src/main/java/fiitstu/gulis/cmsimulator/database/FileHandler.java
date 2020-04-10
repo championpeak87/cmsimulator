@@ -382,6 +382,11 @@ public class FileHandler {
         dataSource.setFinishField(finishField);
         dataSource.setFieldSize(chessFieldField);
         dataSource.setMaxStates(intMaxStateField);
+        List<Symbol> listOfSymbols = ChessGame.getListOfSymbols();
+        for (Symbol s : listOfSymbols) {
+            dataSource.addInputSymbol(s.getValue(), 0);
+        }
+
         dataSource.close();
     }
 
