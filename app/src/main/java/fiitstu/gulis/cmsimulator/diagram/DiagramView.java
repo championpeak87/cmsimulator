@@ -318,7 +318,22 @@ public class DiagramView extends View {
                                     (diagramTransitionCurve.getMachineSteps().get(index).indexOf(machineStep) + 1) * textPaint.measureText("<"),
                             textPosY - (int) (sign * index * (textPaint.descent() - textPaint.ascent())), textPaint);
                 }
-                textPaint.setColor(ContextCompat.getColor(getContext(), R.color.md_black_1000));
+                int colorId;
+                int nightModeFlags =
+                        getContext().getResources().getConfiguration().uiMode &
+                                Configuration.UI_MODE_NIGHT_MASK;
+                switch (nightModeFlags) {
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        colorId =  R.color.md_white_1000;
+                        break;
+
+                    default:
+                    case Configuration.UI_MODE_NIGHT_NO:
+                    case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                        colorId =  R.color.md_black_1000;
+                        break;
+                }
+                textPaint.setColor(ContextCompat.getColor(getContext(), colorId));
             }
             canvas.restore();
         }
@@ -578,9 +593,6 @@ public class DiagramView extends View {
         diagramStateNode.setPosition(state.getPositionX(), state.getPositionY(), cameraX, cameraY);
         findBounds();
         invalidate();
-
-        GameShowcase gs = new GameShowcase();
-        gs.showTutorial(ConfigurationActivity.gameNumber, ConfigurationActivity.activity);
     }
 
     public void removeState(State state) {
@@ -652,9 +664,6 @@ public class DiagramView extends View {
         diagramTransitionCurveList.add(diagramTransitionCurve);
         findNonDeterminism();
         invalidate();
-
-        GameShowcase gs = new GameShowcase();
-        gs.showTutorial(0, ConfigurationActivity.activity);
     }
 
     public void changeTransition(Transition transition, long oldFromStateId, long oldToStateId) {

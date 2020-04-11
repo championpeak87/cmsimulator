@@ -1,90 +1,39 @@
 package fiitstu.gulis.cmsimulator.activities;
 
-import android.Manifest;
-import android.animation.ArgbEvaluator;
 import android.animation.IntEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.database.sqlite.SQLiteConstraintException;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.Sampler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spanned;
-import android.transition.Fade;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.*;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.*;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import fiitstu.gulis.cmsimulator.adapters.bulktest.TestScenarioListAdapter;
-import fiitstu.gulis.cmsimulator.adapters.tasks.AutomataTaskAdapter;
-import fiitstu.gulis.cmsimulator.animation.AnimatedColor;
-import fiitstu.gulis.cmsimulator.app.CMSimulator;
+import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
+import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
-import fiitstu.gulis.cmsimulator.dialogs.*;
-import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.adapters.configuration.ConfigurationListAdapter;
 import fiitstu.gulis.cmsimulator.diagram.DiagramView;
-import fiitstu.gulis.cmsimulator.elements.*;
-import fiitstu.gulis.cmsimulator.machines.FiniteStateAutomatonStep;
-import fiitstu.gulis.cmsimulator.machines.MachineStep;
+import fiitstu.gulis.cmsimulator.dialogs.ChessGameStateDialog;
+import fiitstu.gulis.cmsimulator.dialogs.ChessGameTransitionDialog;
+import fiitstu.gulis.cmsimulator.dialogs.ConfigurationDialog;
+import fiitstu.gulis.cmsimulator.elements.FsaTransition;
+import fiitstu.gulis.cmsimulator.elements.State;
+import fiitstu.gulis.cmsimulator.elements.Symbol;
+import fiitstu.gulis.cmsimulator.elements.Transition;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.FiniteAutomataTask;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.LinearBoundedAutomataTask;
-import fiitstu.gulis.cmsimulator.models.tasks.automata_tasks.PushdownAutomataTask;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
-import fiitstu.gulis.cmsimulator.network.ServerController;
-import fiitstu.gulis.cmsimulator.network.TaskResultSender;
-import fiitstu.gulis.cmsimulator.network.UrlManager;
-import fiitstu.gulis.cmsimulator.util.ProgressWorker;
 import fiitstu.gulis.cmsimulator.views.ChessView;
-import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
-import io.blushine.android.ui.showcase.MaterialShowcaseView;
-import io.blushine.android.ui.showcase.ShowcaseListener;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
@@ -110,7 +59,29 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     private int machineType;
     private long emptyInputSymbolId;
     private long startStackSymbolId;
+    private int elementAction;
     private ChessGame chessGame;
+    private List<State> stateList = new ArrayList<>();
+    private List<Transition> transitions = new ArrayList<>();
+
+    //dialog value
+    private static final String CONFIGURATION_DIALOG = "CONFIGURATION_DIALOG";
+    private static final String SUPPORT_CONFIGURATION_DIALOG = "SUPPORT_CONFIGURATION_DIALOG";
+    private static final String TASK_DIALOG = "TASK_DIALOG";
+    private static final String HELP_DIALOG = "HELP_DIALOG";
+    public static final String TASK_CONFIGURATION = "TASK_CONFIGURATION";
+
+    //element actions
+    public static final int NEW = 0;
+    public static final int UPDATE = 1;
+
+    //element types
+    public static final int INPUT_SYMBOL = 0;
+    public static final int STACK_SYMBOL = 1;
+    public static final int STATE = 2;
+    public static final int FSA_TRANSITION = 3;
+    public static final int PDA_TRANSITION = 4;
+    public static final int TM_TRANSITION = 5;
 
     private DataSource dataSource = DataSource.getInstance();
     private ImageButton lastPressedImageButton;
@@ -133,17 +104,20 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chess_game_activity);
 
+        setActionBar();
+        setUIElements();
+        setEvents();
+        loadGame();
+        setChessField();
+
         // SET INPUT SYMBOLS
         List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
         dataSource.open();
         for (Symbol s : listOfSymbols) {
             dataSource.addInputSymbol(s.getValue(), 0);
         }
-
-        setActionBar();
-        setUIElements();
-        setEvents();
-        loadGame();
+        Symbol emptySymbol = dataSource.addInputSymbol("ε", Symbol.EMPTY);
+        emptyInputSymbolId = emptySymbol.getId();
     }
 
     private void setUIElements() {
@@ -170,7 +144,6 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 else
                     valueAnimator.setIntValues(0, DEFAULT_CHESS_FIELD_HEIGHT);
                 valueAnimator.setEvaluator(new IntEvaluator());
-                valueAnimator.setInterpolator(new AccelerateInterpolator());
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -261,7 +234,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
         dataSource.open();
 
-        diagramView_configuration.buildDiagram(false, 0, new ArrayList<State>(), new ArrayList<Transition>());
+        diagramView_configuration.buildDiagram(false, emptyInputSymbolId, new ArrayList<State>(), new ArrayList<Transition>());
         if (Build.VERSION.SDK_INT < 15) {
             imageButton_configuration_diagram_move.performClick();
         } else {
@@ -323,14 +296,60 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         }
     }
 
-    @Override
-    public void onAddState() {
-        Toast.makeText(this, "ADD STATE", Toast.LENGTH_SHORT).show();
+    private void showConfigurationDialog(int elementType, int elementAction) {
+        this.elementAction = elementAction;
+        FragmentManager fm = getSupportFragmentManager();
+        ConfigurationDialog configurationDialog = ConfigurationDialog.newInstance(elementType, elementAction);
+        configurationDialog.show(fm, CONFIGURATION_DIALOG);
     }
 
     @Override
-    public void onAddTransition(State fromState, State toState) {
-        Toast.makeText(this, "ADD TRANSITION", Toast.LENGTH_SHORT).show();
+    public void onAddState() {
+        Log.v(TAG, "onAddState from diagram noted");
+        ChessGameStateDialog chessGameStateDialog = new ChessGameStateDialog();
+        chessGameStateDialog.setStateChangeListener(new ChessGameStateDialog.StateChangeListener() {
+            @Override
+            public void onChange(Bundle output_bundle) {
+                final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
+                final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
+                final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
+                dataSource.open();
+                final int x = diagramView_configuration.getNewStatePositionX();
+                final int y = diagramView_configuration.getNewStatePositionY();
+                State state = dataSource.addState(stateName, x, y, isInitial, isFinal);
+                diagramView_configuration.addState(state);
+                stateList.add(state);
+                dataSource.close();
+            }
+        });
+
+        FragmentManager fm = this.getSupportFragmentManager();
+        chessGameStateDialog.show(fm, TAG);
+    }
+
+    @Override
+    public void onAddTransition(final State fromState, final State toState) {
+        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+        chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
+            @Override
+            public void OnChange(Bundle output_bundle) {
+                final String direction = output_bundle.getString(ChessGameTransitionDialog.DIRECTION_KEY);
+                dataSource.open();
+                List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
+                for (Symbol s : symbols) {
+                    if (s.getValue().equals(direction)) {
+                        FsaTransition transition = (FsaTransition)dataSource.addFsaTransition(fromState, s, toState, emptyInputSymbolId);
+                        diagramView_configuration.addTransition(transition);
+                        transitions.add(transition);
+                        break;
+                    }
+                }
+
+                dataSource.close();
+            }
+        });
+        FragmentManager fm = getSupportFragmentManager();
+        chessGameTransitionDialog.show(fm, TAG);
     }
 
     @Override
@@ -351,5 +370,28 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     @Override
     public void onRemoveTransition(List<Transition> transitionList) {
         Toast.makeText(this, "REMOVE TRANSITION", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setChessField() {
+        final Pair<Integer, Integer> startField = chessGame.getStartField();
+        final Pair<Integer, Integer> finishField = chessGame.getFinishField();
+        final List<Pair<Integer, Integer>> pathField = chessGame.getPathFields();
+        final Pair<Integer, Integer> fieldSize = chessGame.getFieldSize();
+
+        try {
+            chessview_field.setChessFieldWidth(fieldSize.first);
+            chessview_field.setChessFieldHeight(fieldSize.second);
+            chessview_field.setStartField(startField);
+            chessview_field.setFinishField(finishField);
+            for (Pair<Integer, Integer> field : pathField) {
+                chessview_field.addFieldToPath(field);
+            }
+        } catch (ChessView.OutOfChessFieldBoundariesException | ChessView.OutOfChessFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<State> getStateList() {
+        return stateList;
     }
 }

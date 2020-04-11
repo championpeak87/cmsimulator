@@ -1011,4 +1011,5 @@
     <string name="game_description">Popis hry</string>
     <string name="delete_game_message">Ste si istý, že chcete odstrániť túto hru?</string>
     <string name="chess_filed">Herné pole</string>
+    <string name="state_type">State type</string>
 </resources>
