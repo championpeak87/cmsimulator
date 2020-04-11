@@ -1,9 +1,14 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.activities.AutomataTaskDetailsActivity;
+import fiitstu.gulis.cmsimulator.activities.GameDetailsActivity;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.ChessGameModel;
@@ -56,7 +63,7 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final ChessGameModel currentItem = listOfGames.get(i);
 
         viewHolder.textview_task_name.setText(currentItem.getTask_name());
@@ -104,19 +111,33 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
 
             @Override
             public void onClick(View v) {
-                new DeleteGameAsync().execute();
+                AlertDialog deleteDialog = new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.delete_dialog_title)
+                        .setMessage(R.string.delete_game_message)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new DeleteGameAsync().execute();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
+                deleteDialog.show();
+
             }
         });
 
         viewHolder.button_help_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: IMPLEMENT GAME HELP
-                try {
-                    throw new NotImplementedException(mContext);
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
-                }
+                Intent detailsIntent = new Intent(mContext, GameDetailsActivity.class);
+                detailsIntent.putExtra(GameDetailsActivity.TASK_NAME_KEY, currentItem.getTask_name());
+                detailsIntent.putExtra(GameDetailsActivity.TASK_DESCRIPTION_KEY, currentItem.getTask_description());
+                detailsIntent.putExtra(GameDetailsActivity.AUTOMATA_TYPE_KEY, currentItem.getAutomata_type().toString());
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((FragmentActivity) mContext, viewHolder.cardview_task, ViewCompat.getTransitionName(viewHolder.cardview_task));
+
+                mContext.startActivity(detailsIntent, options.toBundle());
             }
         });
     }

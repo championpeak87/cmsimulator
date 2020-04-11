@@ -204,7 +204,8 @@ app.get('/api/user/delete', (req, res) => {
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND user_type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('DELETE FROM users WHERE user_id = $1;', [user_id], (error, result) => {
+      pool.query('DELETE FROM automata_tasks ')
+      pool.query('DELETE FROM users WHERE user_id = $1 CASCADE;', [user_id], (error, result) => {
         if (error) { throw error }
         if (result.rowCount > 0) {
           res.status(HTTP_OK).send(
@@ -1302,13 +1303,42 @@ app.get('/api/game/getGames', (req, res) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
       res.status(HTTP_OK).send(results.rows);
-      console.log(Date(), [user_id], 'has fetched games!');
     }
     else {
-      res.status(HTTP_NOT_FOUND).send({
+      res.status(HTTP_OK).send({
         not_found: true
       });
     }
+  })
+})
+
+app.get('/api/game/delete', (req, res) => {
+  const task_id = req.query.task_id;
+
+  pool.query('SELECT * FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+    if (err) { throw err }
+    if (result.rowCount > 0) {
+      const filename = "./uploads/gameTasks/" + result.rows[0].task_id + ".cmsc";
+      filesystem.exists(filename, (exists) => {
+        if (exists) {
+          filesystem.unlink(filename, (error) => {
+            if (error) {
+              throw error;
+            }
+          });
+        }
+        else {
+          console.log("GAME COULD NOT BE DELETED! FILE DOES NOT EXIST!");
+        }
+      });
+      pool.query('DELETE FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+
+      })
+    }
+    res.status(HTTP_OK).send({
+      success: true,
+      task_id: task_id
+    });
   })
 })
 

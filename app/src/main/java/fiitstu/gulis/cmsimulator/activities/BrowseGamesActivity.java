@@ -50,7 +50,6 @@ public class BrowseGamesActivity extends FragmentActivity {
         setActionBar();
         setUIElements();
         fetchGames();
-        //setRecyclerView();
     }
 
     private void setUIElements() {
@@ -132,8 +131,10 @@ public class BrowseGamesActivity extends FragmentActivity {
                 Toast.makeText(BrowseGamesActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
             } else {
                 try {
-                    listOfGames = ChessGameParser.getListOfChessGamesFromJSONArray(new JSONArray(s));
-                    setRecyclerView();
+                    if (!s.contains("not_found")) {
+                        listOfGames = ChessGameParser.getListOfChessGamesFromJSONArray(new JSONArray(s));
+                        setRecyclerView();
+                    }
                 } catch (JSONException e) {
                     Toast.makeText(BrowseGamesActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
                 }
