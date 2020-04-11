@@ -57,6 +57,7 @@ public class UrlManager {
     private static final String ADD_GAME_TO_DATABASE_PATH = "/api/game/add";
     private static final String UPLOAD_GAME_PATH = "/api/game/upload";
     private static final String FETCH_GAMES_PATH = "/api/game/getGames";
+    private static final String DELETE_GAME_PATH = "/api/game/delete";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -123,6 +124,23 @@ public class UrlManager {
             URI = "http://192.168.1.235:8080";
         } else {
             URI = "http://147.175.150.53:8080";
+        }
+    }
+
+    public URL getDeleteGameURL(int task_id)
+    {
+        Uri uri = Uri.parse(URI + DELETE_GAME_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
         }
     }
 

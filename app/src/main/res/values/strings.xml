@@ -1370,5 +1370,7 @@
     <string name="game">Game</string>
 	<string name="available_games">Available games</string>
     <string name="game_upload_successful">Game was successfully uploaded!</string>
+    <string name="no_games_available">No games available</string>
+    <string name="game_removed">Game was removed!</string>
 
 </resources>
