@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.Pair;
 import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.Parser;
@@ -299,6 +300,90 @@ public class FileHandler {
         }
     }
 
+    public ChessGame getChessGame() {
+        Pair<Integer, Integer> startField;
+        Pair<Integer, Integer> finishField;
+        List<Pair<Integer, Integer>> pathList = new ArrayList<>();
+        Pair<Integer, Integer> fieldSize;
+        int imaxStateCount;
+        automata_type automata_type;
+
+        NodeList nodeList = document.getElementsByTagName(PATH_FIELDS);
+        Node node = nodeList.item(0);
+        NodeList fields = node.getChildNodes();
+        final int fieldsSize = fields.getLength();
+        for (int i = 0; i < fieldsSize; i++) {
+            Node field = fields.item(i);
+            NamedNodeMap namedNodeMap = field.getAttributes();
+            if (namedNodeMap == null)
+                continue;
+            Node x = namedNodeMap.getNamedItem(X);
+            String s_x = x.getNodeValue();
+
+            Node y = namedNodeMap.getNamedItem(Y);
+            String s_y = y.getNodeValue();
+
+            Pair<Integer, Integer> currentField = new Pair<>(Integer.parseInt(s_x), Integer.parseInt(s_y));
+            pathList.add(currentField);
+        }
+
+        // START FIELD
+        NodeList startList = document.getElementsByTagName(START_FIELD);
+        Node startNode = startList.item(0);
+        NamedNodeMap startAttr = startNode.getAttributes();
+
+        Node startX = startAttr.getNamedItem(X);
+        Node startY = startAttr.getNamedItem(Y);
+
+        String startXS = startX.getNodeValue();
+        String startYS = startY.getNodeValue();
+
+        startField = new Pair<>(Integer.parseInt(startXS), Integer.parseInt(startYS));
+
+        // FINISH FIELD
+        NodeList finishList = document.getElementsByTagName(FINISH_FIELD);
+        Node finishNode = finishList.item(0);
+        NamedNodeMap finishAttr = finishNode.getAttributes();
+
+        Node finishX = finishAttr.getNamedItem(X);
+        Node finishY = finishAttr.getNamedItem(Y);
+
+        String finishXS = finishX.getNodeValue();
+        String finishYS = finishY.getNodeValue();
+
+        finishField = new Pair<>(Integer.parseInt(finishXS), Integer.parseInt(finishYS));
+
+        // CHESS FIELD SIZE
+        NodeList chessFieldList = document.getElementsByTagName(CHESS_FIELD_SIZE);
+        Node chessFieldNode = chessFieldList.item(0);
+        NamedNodeMap chessFieldAttr = chessFieldNode.getAttributes();
+
+        Node chessFieldX = chessFieldAttr.getNamedItem(X);
+        Node chessFieldY = chessFieldAttr.getNamedItem(Y);
+
+        String chessFieldXS = chessFieldX.getNodeValue();
+        String chessFieldYS = chessFieldY.getNodeValue();
+
+        fieldSize = new Pair<>(Integer.parseInt(chessFieldXS), Integer.parseInt(chessFieldYS));
+
+        // MAX STATE COUNT
+        NodeList maxStateList = document.getElementsByTagName(MAX_STATE_COUNT);
+        Node maxStateNode = maxStateList.item(0);
+        NamedNodeMap maxStateAttr = maxStateNode.getAttributes();
+
+        Node maxStateCount = maxStateAttr.getNamedItem(COUNT);
+
+        String maxStateCountS = maxStateCount.getNodeValue();
+        imaxStateCount = Integer.parseInt(maxStateCountS);
+
+        // TODO: AUTOMATA_TYPE
+        automata_type = fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA;
+
+        // CREATE CHESS GAME
+        ChessGame chessGame = new ChessGame(startField, finishField, pathList, fieldSize, imaxStateCount, automata_type);
+        return chessGame;
+    }
+
     private void getDataCMSC(DataSource dataSource) {
         Log.v(TAG, "getDataCMSC method started");
 
@@ -382,7 +467,7 @@ public class FileHandler {
         dataSource.setFinishField(finishField);
         dataSource.setFieldSize(chessFieldField);
         dataSource.setMaxStates(intMaxStateField);
-        List<Symbol> listOfSymbols = ChessGame.getListOfSymbols();
+        List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
         for (Symbol s : listOfSymbols) {
             dataSource.addInputSymbol(s.getValue(), 0);
         }

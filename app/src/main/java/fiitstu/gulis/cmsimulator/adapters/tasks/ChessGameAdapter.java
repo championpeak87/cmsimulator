@@ -1,13 +1,18 @@
 package fiitstu.gulis.cmsimulator.adapters.tasks;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +22,19 @@ import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.AutomataTaskDetailsActivity;
+import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
 import fiitstu.gulis.cmsimulator.activities.GameDetailsActivity;
+import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.ChessGameModel;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -70,17 +81,56 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
         viewHolder.cardview_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: IMPLEMENT GAME START
-                try {
-                    throw new NotImplementedException(mContext);
-                } catch (NotImplementedException e) {
-                    e.printStackTrace();
+                final int task_id = currentItem.getTask_id();
+                final int user_id;
+                if (TaskLoginActivity.loggedUser != null)
+                    user_id = TaskLoginActivity.loggedUser.getUser_id();
+                else user_id = -1;
+                class DownloadGameAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        URL url = urlManager.getDownloadGameURL(task_id, user_id);
+                        String output = null;
+
+                        try {
+                            output = serverController.getResponseFromServer(url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s == null || s.isEmpty()) {
+                            Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (!saveDownloadedFile(s)) {
+                                Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Intent intent = new Intent(mContext, ChessGameActivity.class);
+                                mContext.startActivity(intent);
+                            }
+
+                        }
+                    }
                 }
+                new DownloadGameAsync().execute();
+                // TODO: IMPLEMENT GAME START
+//                try {
+//                    throw new NotImplementedException(mContext);
+//                } catch (NotImplementedException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
         viewHolder.button_delete_task.setOnClickListener(new View.OnClickListener() {
             final int task_id = currentItem.getTask_id();
+
             class DeleteGameAsync extends AsyncTask<Void, Void, String> {
                 @Override
                 protected String doInBackground(Void... voids) {
@@ -169,6 +219,31 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
         notifyItemRangeChanged(0, count);
         if (onDataSetChangedListener != null)
             onDataSetChangedListener.onChange();
+    }
+
+    private boolean saveDownloadedFile(String input) {
+        String path = mContext.getApplicationInfo().dataDir;
+        File file = new File(path + "/cmsGame.cmsc");
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) mContext,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            return false;
+        } else {
+            BufferedWriter writer = null;
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                writer = new BufferedWriter(fileWriter);
+                writer.write(input);
+                writer.close();
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

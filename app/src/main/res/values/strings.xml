@@ -1375,5 +1375,6 @@
 	<string name="game_details">Game details</string>
     <string name="game_description">Game description</string>
 	<string name="delete_game_message">Are you sure you want to delete this game?</string>
+    <string name="chess_filed">Chess Field</string>
 
 </resources>

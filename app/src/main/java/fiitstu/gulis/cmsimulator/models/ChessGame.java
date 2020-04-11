@@ -4,6 +4,7 @@ import android.util.Pair;
 import fiitstu.gulis.cmsimulator.elements.State;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.elements.Transition;
+import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,11 @@ public class ChessGame {
     private int maxStateCount;
     private List<State> listOfStates;
     private List<Transition> listOfTransitions;
+    private automata_type automata_type;
+
     private static List<Symbol> listOfSymbols;
 
-    private List<Symbol> getMovementSymbolList()
+    public static List<Symbol> getMovementSymbolList()
     {
         List<Symbol> movementList = new ArrayList<>();
         movementList.add(new Symbol(Symbol.MOVEMENT_UP_ID, Symbol.MOVEMENT_UP));
@@ -29,18 +32,19 @@ public class ChessGame {
         return movementList;
     }
 
-    public ChessGame(Pair<Integer, Integer> startField, Pair<Integer, Integer> finishField, List<Pair<Integer, Integer>> pathFields, Pair<Integer, Integer> fieldSize, int maxStateCount) {
+    public ChessGame(Pair<Integer, Integer> startField, Pair<Integer, Integer> finishField, List<Pair<Integer, Integer>> pathFields, Pair<Integer, Integer> fieldSize, int maxStateCount, automata_type automata_type) {
         this.startField = startField;
         this.finishField = finishField;
         this.pathFields = pathFields;
         this.fieldSize = fieldSize;
         this.maxStateCount = maxStateCount;
+        this.automata_type = automata_type;
         listOfStates = new ArrayList<>();
         listOfTransitions = new ArrayList<>();
         listOfSymbols = getMovementSymbolList();
     }
 
-    public ChessGame(Pair<Integer, Integer> startField, Pair<Integer, Integer> finishField, List<Pair<Integer, Integer>> pathFields, Pair<Integer, Integer> fieldSize, int maxStateCount, List<State> listOfStates, List<Transition> listOfTransitions) {
+    public ChessGame(Pair<Integer, Integer> startField, Pair<Integer, Integer> finishField, List<Pair<Integer, Integer>> pathFields, Pair<Integer, Integer> fieldSize, int maxStateCount, List<State> listOfStates, List<Transition> listOfTransitions, fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
         this.startField = startField;
         this.finishField = finishField;
         this.pathFields = pathFields;
@@ -48,6 +52,7 @@ public class ChessGame {
         this.maxStateCount = maxStateCount;
         this.listOfStates = listOfStates;
         this.listOfTransitions = listOfTransitions;
+        this.automata_type = automata_type;
         listOfSymbols = getMovementSymbolList();
     }
 
@@ -107,7 +112,11 @@ public class ChessGame {
         this.listOfTransitions = listOfTransitions;
     }
 
-    public static List<Symbol> getListOfSymbols() {
-        return listOfSymbols;
+    public fiitstu.gulis.cmsimulator.models.tasks.automata_type getAutomata_type() {
+        return automata_type;
+    }
+
+    public void setAutomata_type(fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
+        this.automata_type = automata_type;
     }
 }

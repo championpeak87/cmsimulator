@@ -1342,6 +1342,73 @@ app.get('/api/game/delete', (req, res) => {
   })
 })
 
+app.get('/api/game/download', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+
+  if (!user_id) {
+    pool.query('SELECT * FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+      if (err) { throw err }
+      {
+        if (result.rowCount > 0) {
+          const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
+          res.status(HTTP_OK).download(filePath);
+        }
+        else {
+          res.status(HTTP_OK).send(
+            {
+              task_id: task_id,
+              found: false
+            }
+          );
+        }
+      }
+    })
+  }
+  else {
+    pool.query('SELECT * FROM game_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (error, results) => {
+      if (error) { throw error }
+      if (results.rowCount > 0) {
+        pool.query('SELECT task_id FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+          if (err) { throw err }
+          {
+            if (result.rowCount > 0) {
+              const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
+              res.status(HTTP_OK).download(filePath);
+            }
+            else {
+              res.status(HTTP_OK).send(
+                {
+                  task_id: task_id,
+                  found: false
+                }
+              );
+            }
+          }
+        })
+      }
+      else {
+        pool.query('SELECT task_id FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
+          if (err) { throw err }
+          {
+            if (result.rowCount > 0) {
+              const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
+              res.status(HTTP_OK).download(filePath);
+            }
+            else {
+              res.status(HTTP_OK).send(
+                {
+                  task_id: task_id,
+                  found: false
+                }
+              );
+            }
+          }
+        })
+      }
+    })
+  }
+})
 
 app.get('/', (req, res) => {
   res.status(HTTP_OK).redirect('https://github.com/klihan/cmsimulator/blob/master/README.md');

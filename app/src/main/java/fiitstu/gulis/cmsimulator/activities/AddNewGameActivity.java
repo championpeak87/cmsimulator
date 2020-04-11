@@ -202,13 +202,15 @@ public class AddNewGameActivity extends FragmentActivity {
                     final Pair<Integer, Integer> finishField = chessview_task.getFinishField();
                     final Pair<Integer, Integer> fieldSize = chessview_task.getFieldSize();
                     final List<Pair<Integer, Integer>> pathList = chessview_task.getPath();
+                    final automata_type automata_type = radiobutton_finite_automata.isChecked() ? fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA : radiobutton_pushdown_automata.isChecked() ? fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA : fiitstu.gulis.cmsimulator.models.tasks.automata_type.UNKNOWN;
 
                     final ChessGame chessGame = new ChessGame(
                             startField,
                             finishField,
                             pathList,
                             fieldSize,
-                            10
+                            10,
+                            automata_type
                     );
                     FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
 

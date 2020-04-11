@@ -58,6 +58,7 @@ public class UrlManager {
     private static final String UPLOAD_GAME_PATH = "/api/game/upload";
     private static final String FETCH_GAMES_PATH = "/api/game/getGames";
     private static final String DELETE_GAME_PATH = "/api/game/delete";
+    private static final String DOWNLOAD_GAME_PATH = "/api/game/download";
 
     // LOGIN QUERY KEYS
     private final static String USERNAME_QUERY_KEY = "username";
@@ -127,8 +128,25 @@ public class UrlManager {
         }
     }
 
-    public URL getDeleteGameURL(int task_id)
-    {
+    public URL getDownloadGameURL(int task_id, int user_id) {
+        Uri uri = Uri.parse(URI + DOWNLOAD_GAME_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .appendQueryParameter(USER_ID_KEY, Integer.toString(user_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
+
+    public URL getDeleteGameURL(int task_id) {
         Uri uri = Uri.parse(URI + DELETE_GAME_PATH).buildUpon()
                 .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
                 .build();
@@ -144,7 +162,7 @@ public class UrlManager {
         }
     }
 
-    public URL getFetchGamesURL(){
+    public URL getFetchGamesURL() {
         Uri uri = Uri.parse(URI + FETCH_GAMES_PATH).buildUpon().build();
 
         URL url = null;
