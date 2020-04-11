@@ -202,8 +202,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 }
                 lastPressedImageButton = imageButton_configuration_diagram_move;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(ChessGameActivity.this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-                // TODO: DIAGRAMVIEW
-                //diagramView.setAction(DiagramView.MOVE);
+                diagramView_configuration.setAction(DiagramView.MOVE);
             }
         });
 
@@ -215,8 +214,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 }
                 lastPressedImageButton = imageButton_configuration_diagram_state;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(ChessGameActivity.this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-                // TODO: DIAGRAMVIEW
-                //diagramView.setAction(DiagramView.MOVE);
+                diagramView_configuration.setAction(DiagramView.ADD_STATE);
             }
         });
 
@@ -228,8 +226,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 }
                 lastPressedImageButton = imageButton_configuration_diagram_transition;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(ChessGameActivity.this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-                // TODO: DIAGRAMVIEW
-                //diagramView.setAction(DiagramView.MOVE);
+                diagramView_configuration.setAction(DiagramView.ADD_TRANSITION);
             }
         });
 
@@ -241,8 +238,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 }
                 lastPressedImageButton = imageButton_configuration_diagram_edit;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(ChessGameActivity.this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-                // TODO: DIAGRAMVIEW
-                //diagramView.setAction(DiagramView.MOVE);
+                diagramView_configuration.setAction(DiagramView.EDIT);
             }
         });
 
@@ -254,8 +250,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 }
                 lastPressedImageButton = imageButton_configuration_diagram_remove;
                 lastPressedImageButton.getBackground().setColorFilter(ContextCompat.getColor(ChessGameActivity.this, R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-                // TODO: DIAGRAMVIEW
-                //diagramView.setAction(DiagramView.MOVE);
+                diagramView_configuration.setAction(DiagramView.REMOVE);
             }
         });
     }
@@ -330,31 +325,31 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     @Override
     public void onAddState() {
-
+        Toast.makeText(this, "ADD STATE", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAddTransition(State fromState, State toState) {
-
+        Toast.makeText(this, "ADD TRANSITION", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEditState(State stateEdit) {
-
+        Toast.makeText(this, "EDIT STATE", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEditTransition(List<Transition> transitionList) {
-
+        Toast.makeText(this, "EDIT TRANSITION", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRemoveState(State stateRemove) {
-
+        Toast.makeText(this, "REMOVE STATE", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRemoveTransition(List<Transition> transitionList) {
-
+        Toast.makeText(this, "REMOVE TRANSITION", Toast.LENGTH_SHORT).show();
     }
 }
