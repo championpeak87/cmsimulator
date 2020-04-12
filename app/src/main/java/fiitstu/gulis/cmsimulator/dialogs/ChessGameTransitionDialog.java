@@ -22,6 +22,9 @@ import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
 import fiitstu.gulis.cmsimulator.elements.State;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
+import fiitstu.gulis.cmsimulator.elements.Transition;
+
+import java.util.List;
 
 @SuppressLint("ValidFragment")
 public class ChessGameTransitionDialog extends DialogFragment {
@@ -50,6 +53,9 @@ public class ChessGameTransitionDialog extends DialogFragment {
             fromState,
             toState;
 
+    private Transition transition;
+    private List<Transition> transitionList;
+
     public interface TransitionChangeListener {
         void OnChange(Bundle output_bundle);
     }
@@ -65,8 +71,19 @@ public class ChessGameTransitionDialog extends DialogFragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ChessGameTransitionDialog(State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
+    public ChessGameTransitionDialog(List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
         this.dialog_type = dialog_type;
+        this.transitionList = transitions;
+        this.fromState = fromState;
+        this.toState = toState;
+        this.automata_type = automata_type;
+    }
+
+    @SuppressLint("ValidFragment")
+    public ChessGameTransitionDialog(Transition transition, List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
+        this.dialog_type = dialog_type;
+        this.transition = transition;
+        this.transitionList = transitions;
         this.fromState = fromState;
         this.toState = toState;
         this.automata_type = automata_type;
@@ -121,6 +138,50 @@ public class ChessGameTransitionDialog extends DialogFragment {
             }
         });
 
+        if (dialog_type == DIALOG_TYPE.EDIT) {
+            Symbol symbol = transition.getReadSymbol();
+            String symbolValue = symbol.getValue();
+
+            switch (symbolValue) {
+                case Symbol.MOVEMENT_UP:
+                    setDirectionButton(togglebutton_up);
+                    break;
+                case Symbol.MOVEMENT_DOWN:
+                    setDirectionButton(togglebutton_down);
+                    break;
+                case Symbol.MOVEMENT_RIGHT:
+                    setDirectionButton(togglebutton_right);
+                    break;
+                case Symbol.MOVEMENT_LEFT:
+                    setDirectionButton(togglebutton_left);
+                    break;
+            }
+        }
+
+        for (Transition t : transitionList) {
+            Symbol s = t.getReadSymbol();
+            String value = s.getValue();
+
+
+            if (t.equals(transition))
+                continue;
+
+            switch (value) {
+                case Symbol.MOVEMENT_UP:
+                    togglebutton_up.setEnabled(false);
+                    break;
+                case Symbol.MOVEMENT_DOWN:
+                    togglebutton_down.setEnabled(false);
+                    break;
+                case Symbol.MOVEMENT_RIGHT:
+                    togglebutton_right.setEnabled(false);
+                    break;
+                case Symbol.MOVEMENT_LEFT:
+                    togglebutton_left.setEnabled(false);
+                    break;
+            }
+        }
+
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
         switch (dialog_type) {
 
@@ -172,10 +233,14 @@ public class ChessGameTransitionDialog extends DialogFragment {
                     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
-                            togglebutton_up.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            togglebutton_down.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            togglebutton_left.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            togglebutton_right.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                            if (togglebutton_up.isEnabled())
+                                togglebutton_up.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                            if (togglebutton_down.isEnabled())
+                                togglebutton_down.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                            if (togglebutton_left.isEnabled())
+                                togglebutton_left.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                            if (togglebutton_right.isEnabled())
+                                togglebutton_right.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
                         }
                     });
 

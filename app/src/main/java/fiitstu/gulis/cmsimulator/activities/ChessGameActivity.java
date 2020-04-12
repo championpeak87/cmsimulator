@@ -35,6 +35,7 @@ import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.views.ChessView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     private long emptyInputSymbolId;
     private long startStackSymbolId;
     private int elementAction;
+    private boolean initialStateExits = false;
     private ChessGame chessGame;
     private List<State> stateList = new ArrayList<>();
     private List<Transition> transitions = new ArrayList<>();
@@ -315,6 +317,11 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             public void onChange(Bundle output_bundle) {
                 final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
                 final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
+                if (initialStateExits && isInitial) {
+                    Toast.makeText(ChessGameActivity.this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                initialStateExits = isInitial;
                 final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
                 dataSource.open();
                 final int x = diagramView_configuration.getNewStatePositionX();
@@ -332,7 +339,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     @Override
     public void onAddTransition(final State fromState, final State toState) {
-        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+        final List<Transition> transitionList = new ArrayList<>();
+        for (Transition t : transitions) {
+            if (t.getFromState().equals(fromState) && t.getToState().equals(toState))
+                transitionList.add(t);
+        }
+        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
             @Override
             public void OnChange(Bundle output_bundle) {
@@ -364,6 +376,8 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             public void onChange(Bundle output_bundle) {
                 final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
                 final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
+                if (stateEdit.isInitialState())
+                    initialStateExits = isInitial;
                 final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
                 dataSource.open();
                 dataSource.updateState(stateEdit, stateName, stateEdit.getPositionX(), stateEdit.getPositionY(), isInitial, isFinal);
@@ -404,7 +418,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         final Transition transition = transitionList.get(i);
                         final State fromState = transition.getFromState();
                         final State toState = transition.getToState();
-                        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+                        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transition, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
                         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
                             @Override
                             public void OnChange(Bundle output_bundle) {
@@ -444,6 +458,8 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dataSource.open();
+                        if (stateRemove.isInitialState())
+                            initialStateExits = false;
                         boolean hasTransitions = false;
                         for (Transition t : transitions) {
                             if (t.getToState().equals(stateRemove) || t.getFromState().equals(stateRemove)) {
