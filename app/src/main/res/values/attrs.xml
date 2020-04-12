@@ -21,5 +21,7 @@
         <attr name="startFieldY" format="integer"/>
         <attr name="finishFieldX" format="integer"/>
         <attr name="finishFieldY" format="integer"/>
+        <attr name="darkVisitedFieldColor" format="color"/>
+        <attr name="lightVisitedFieldColor" format="color"/>
     </declare-styleable>
 </resources>

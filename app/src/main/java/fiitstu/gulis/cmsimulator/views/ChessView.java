@@ -32,6 +32,8 @@ public class ChessView extends View {
 
     // DEFAULT VALUES
     private static final int DEFAULT_ACTIVE_FIELD_COLOR = R.color.current_position;
+    private static final int DEFAULT_DARK_VISITED_FIELD_COLOR = R.color.field_visited_dark;
+    private static final int DEFAULT_LIGHT_VISITED_FIELD_COLOR = R.color.field_visited_light;
     private static final int DEFAULT_CHESS_FIELD_HEIGHT = 8;
     private static final int DEFAULT_CHESS_FIELD_WIDTH = 8;
     private static final int DEFAULT_MAX_CHESS_FIELD_HEIGHT = 20;
@@ -71,16 +73,20 @@ public class ChessView extends View {
     private Pair<Integer, Integer> ACTIVE_FIELD;
     private Pair<Integer, Integer> START_FIELD;
     private Pair<Integer, Integer> FINISH_FIELD;
+    private List<Pair<Integer, Integer>> VISITED_FIELDS;
     private int START_FIELD_COLOR;
     private int ANIMATED_START_FIELD_COLOR;
     private int FINISH_FIELD_COLOR;
     private int ANIMATED_FINISH_FIELD_COLOR;
+    private int DARK_VISITED_FIELD_COLOR;
+    private int LIGHT_VISITED_FIELD_COLOR;
 
     private List<Pair<Integer, Integer>> activeFieldsList = new ArrayList<>();
     private Pair<Integer, Integer> fieldToRedraw = new Pair<>(-1, -1);
 
     public enum FIELD_TYPE {
         BLANK,
+        VISITED,
         START,
         FINISH,
         PATH,
@@ -150,6 +156,10 @@ public class ChessView extends View {
 
             ANIMATED_DARK_PATH_FIELD_COLOR = DARK_PATH_FIELD_COLOR;
             ANIMATED_LIGHT_PATH_FIELD_COLOR = LIGHT_PATH_FIELD_COLOR;
+
+            VISITED_FIELDS = new ArrayList<>();
+            DARK_VISITED_FIELD_COLOR = a.getColor(R.styleable.ChessView_darkVisitedFieldColor, getContext().getColor(DEFAULT_DARK_VISITED_FIELD_COLOR));
+            LIGHT_VISITED_FIELD_COLOR = a.getColor(R.styleable.ChessView_lightVisitedFieldColor, getContext().getColor(DEFAULT_LIGHT_VISITED_FIELD_COLOR));
         } finally {
             a.recycle();
         }
@@ -162,6 +172,8 @@ public class ChessView extends View {
             return FIELD_TYPE.START;
         else if (FINISH_FIELD.first == x && FINISH_FIELD.second == y)
             return FIELD_TYPE.FINISH;
+        else if (VISITED_FIELDS.contains(new Pair<Integer, Integer>(x, y)))
+            return FIELD_TYPE.VISITED;
         else if (activeFieldsList.contains(new Pair<Integer, Integer>(x, y)))
             return FIELD_TYPE.PATH;
         else return FIELD_TYPE.BLANK;
@@ -189,6 +201,9 @@ public class ChessView extends View {
                             chessFieldPaint.setColor((counter & 1) == 1 ? ANIMATED_DARK_FIELD_COLOR : ANIMATED_LIGHT_FIELD_COLOR);
                         else
                             chessFieldPaint.setColor((counter & 1) == 1 ? DARK_FIELD_COLOR : LIGHT_FIELD_COLOR);
+                        break;
+                    case VISITED:
+                        chessFieldPaint.setColor((counter & 1) == 1 ? DARK_VISITED_FIELD_COLOR : LIGHT_VISITED_FIELD_COLOR);
                         break;
                     case START:
                         chessFieldPaint.setColor(ANIMATED_START_FIELD_COLOR);
@@ -262,7 +277,19 @@ public class ChessView extends View {
         return rect;
     }
 
+    public void addFieldToVisited(Pair<Integer, Integer> field) throws OutOfChessFieldException {
+        if (checkIfCanFit(field)) {
+            if (!VISITED_FIELDS.contains(field)) {
+                VISITED_FIELDS.add(field);
+                invalidate();
+                requestLayout();
+            }
+        }
+    }
+
     public void setActiveField(int x, int y) throws OutOfChessFieldException {
+        if (ACTIVE_FIELD != null && !ACTIVE_FIELD.equals(new Pair<Integer, Integer>(-1, -1)))
+            addFieldToVisited(ACTIVE_FIELD);
         ACTIVE_FIELD = new Pair<Integer, Integer>(x, y);
         if (checkIfCanFit(ACTIVE_FIELD)) {
             ValueAnimator valueAnimator = new ValueAnimator();

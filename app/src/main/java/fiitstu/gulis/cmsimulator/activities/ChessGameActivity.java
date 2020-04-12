@@ -278,6 +278,14 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 return true;
             case R.id.menu_configuration_simulate:
                 // TODO: SIMULATION
+                if (!isFieldVisible)
+                    imagebutton_drop_up.callOnClick();
+                try {
+                    for (int i = 1; i < 6; i++)
+                        chessview_field.setActiveField(1, i);
+                } catch (ChessView.OutOfChessFieldException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);

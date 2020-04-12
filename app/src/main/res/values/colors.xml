@@ -9,6 +9,8 @@
     <color name="start_light">#f05545</color>
     <color name="finish_dark">#005005</color>
     <color name="finish_light">#76FF03</color>
+    <color name="field_visited_dark">#c79100</color>
+    <color name="field_visited_light">#fff350</color>
 
     <!--reds-->
     <color name="md_red_A700">#D50000</color>
