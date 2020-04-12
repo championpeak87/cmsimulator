@@ -280,12 +280,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 // TODO: SIMULATION
                 if (!isFieldVisible)
                     imagebutton_drop_up.callOnClick();
-                try {
-                    for (int i = 1; i < 6; i++)
-                        chessview_field.setActiveField(1, i);
-                } catch (ChessView.OutOfChessFieldException e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                runSimulation();
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);
@@ -581,11 +576,152 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 chessview_field.addFieldToPath(field);
             }
         } catch (ChessView.OutOfChessFieldBoundariesException | ChessView.OutOfChessFieldException e) {
-            e.printStackTrace();
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public List<State> getStateList() {
         return stateList;
+    }
+
+    private State getInitialState() {
+        for (State s : stateList) {
+            if (s.isInitialState())
+                return s;
+        }
+
+        return null;
+    }
+
+    private List<Transition> getStatesTransitions(State state) {
+        List<Transition> transitionList = new ArrayList<>();
+        for (Transition t : transitions) {
+            if (t.getFromState().equals(state))
+                transitionList.add(t);
+        }
+
+        return transitionList;
+    }
+
+    private void moveUp() {
+        final Pair<Integer, Integer> activeField = chessview_field.getActiveField();
+        Pair<Integer, Integer> targetField = new Pair<>(activeField.first, activeField.second - 1);
+
+        try {
+            chessview_field.setActiveField(targetField);
+        } catch (ChessView.OutOfChessFieldException e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveDown() {
+        final Pair<Integer, Integer> activeField = chessview_field.getActiveField();
+        Pair<Integer, Integer> targetField = new Pair<>(activeField.first, activeField.second + 1);
+
+        try {
+            chessview_field.setActiveField(targetField);
+        } catch (ChessView.OutOfChessFieldException e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveLeft() {
+        final Pair<Integer, Integer> activeField = chessview_field.getActiveField();
+        Pair<Integer, Integer> targetField = new Pair<>(activeField.first - 1, activeField.second);
+
+        try {
+            chessview_field.setActiveField(targetField);
+        } catch (ChessView.OutOfChessFieldException e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void moveRight() {
+        final Pair<Integer, Integer> activeField = chessview_field.getActiveField();
+        Pair<Integer, Integer> targetField = new Pair<>(activeField.first + 1, activeField.second);
+
+        try {
+            chessview_field.setActiveField(targetField);
+        } catch (ChessView.OutOfChessFieldException e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void runSimulation() {
+        final Pair<Integer, Integer> startField = chessview_field.getStartField();
+        final Pair<Integer, Integer> finishField = chessview_field.getFinishField();
+        final State initialState = getInitialState();
+        if (initialState == null) {
+            Toast.makeText(this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        State currentState = initialState;
+        List<Transition> currentStateTransitions = getStatesTransitions(currentState);
+
+        int stepCounter = 0;
+        try {
+            chessview_field.setActiveField(startField.first, startField.second);
+        } catch (ChessView.OutOfChessFieldException e) {
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
+        Pair<Integer, Integer> activeField = chessview_field.getActiveField();
+
+        while (!activeField.equals(finishField)) {
+            if (stepCounter++ > 100)
+            {
+                Toast.makeText(this, "AUTOMAT DLHO NESKONCIL", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            boolean
+                    up = chessview_field.canGoUp(),
+                    down = chessview_field.canGoDown(),
+                    left = chessview_field.canGoLeft(),
+                    right = chessview_field.canGoRight();
+
+            for (Transition t : currentStateTransitions) {
+                Symbol s = t.getReadSymbol();
+                String movement = s.getValue();
+
+                switch (movement) {
+                    case Symbol.MOVEMENT_UP:
+                        if (up) {
+                            moveUp();
+                            currentState = t.getToState();
+                            currentStateTransitions = getStatesTransitions(currentState);
+                            activeField = chessview_field.getActiveField();
+                        }
+                        break;
+                    case Symbol.MOVEMENT_DOWN:
+                        if (down) {
+                            moveDown();
+                            currentState = t.getToState();
+                            currentStateTransitions = getStatesTransitions(currentState);
+                            activeField = chessview_field.getActiveField();
+                        }
+                        break;
+                    case Symbol.MOVEMENT_LEFT:
+                        if (left) {
+                            moveLeft();
+                            currentState = t.getToState();
+                            currentStateTransitions = getStatesTransitions(currentState);
+                            activeField = chessview_field.getActiveField();
+                        }
+                        break;
+                    case Symbol.MOVEMENT_RIGHT:
+                        if (right) {
+                            moveRight();
+                            currentState = t.getToState();
+                            currentStateTransitions = getStatesTransitions(currentState);
+                            activeField = chessview_field.getActiveField();
+                        }
+                        break;
+                }
+            }
+        }
+
+        if (!currentState.isFinalState())
+            Toast.makeText(this, "SIMULACIA NESKONCILA V KONECNOM STAVE", Toast.LENGTH_SHORT).show();
+        else if (currentState.isFinalState() && activeField.equals(finishField))
+            Toast.makeText(this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
     }
 }

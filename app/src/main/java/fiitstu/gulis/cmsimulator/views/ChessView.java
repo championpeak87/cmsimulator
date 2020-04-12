@@ -651,7 +651,7 @@ public class ChessView extends View {
 
     public boolean isFieldInPath(Pair<Integer, Integer> field) throws OutOfChessFieldException {
         if (checkIfCanFit(field)) {
-            return activeFieldsList.contains(field);
+            return (activeFieldsList.contains(field) && !VISITED_FIELDS.contains(field)) || field.equals(FINISH_FIELD);
         }
 
         return false;
@@ -670,6 +670,10 @@ public class ChessView extends View {
             super(MESSAGE);
         }
 
+        @Override
+        public String getLocalizedMessage() {
+            return getContext().getString(R.string.run_out_chessfield);
+        }
     }
 
     public class OutOfChessFieldBoundariesException extends Exception {
@@ -680,7 +684,84 @@ public class ChessView extends View {
             super(MESSAGE);
         }
 
+        @Override
+        public String getLocalizedMessage() {
+            return getContext().getString(R.string.cannot_set_chessfield);
+        }
     }
 
+    public Pair<Integer, Integer> getActiveField() {
+        return ACTIVE_FIELD;
+    }
 
+    public boolean canGoUp() {
+        final Pair<Integer, Integer> targetField = new Pair<>(ACTIVE_FIELD.first, ACTIVE_FIELD.second - 1);
+
+        try {
+            if (isFieldInPath(targetField) && checkIfCanFit(targetField))
+                return true;
+            else return false;
+        } catch (OutOfChessFieldException e) {
+            return false;
+        }
+    }
+
+    public boolean canGoLeft() {
+        final Pair<Integer, Integer> targetField = new Pair<>(ACTIVE_FIELD.first - 1, ACTIVE_FIELD.second);
+
+        try {
+            if (isFieldInPath(targetField) && checkIfCanFit(targetField))
+                return true;
+            else return false;
+        } catch (OutOfChessFieldException e) {
+            return false;
+        }
+    }
+
+    public boolean canGoDown() {
+        final Pair<Integer, Integer> targetField = new Pair<>(ACTIVE_FIELD.first, ACTIVE_FIELD.second + 1);
+
+        try {
+            if (isFieldInPath(targetField) && checkIfCanFit(targetField))
+                return true;
+            else return false;
+        } catch (OutOfChessFieldException e) {
+            return false;
+        }
+    }
+
+    public boolean canGoRight() {
+        final Pair<Integer, Integer> targetField = new Pair<>(ACTIVE_FIELD.first + 1, ACTIVE_FIELD.second);
+
+        try {
+            if (isFieldInPath(targetField) && checkIfCanFit(targetField))
+                return true;
+            else return false;
+        } catch (OutOfChessFieldException e) {
+            return false;
+        }
+    }
+
+    public void setActiveField(Pair<Integer, Integer> field) throws OutOfChessFieldException{
+        if (ACTIVE_FIELD != null && !ACTIVE_FIELD.equals(new Pair<Integer, Integer>(-1, -1)))
+            addFieldToVisited(ACTIVE_FIELD);
+        ACTIVE_FIELD = field;
+        if (checkIfCanFit(ACTIVE_FIELD)) {
+            ValueAnimator valueAnimator = new ValueAnimator();
+            valueAnimator.setIntValues(LIGHT_FIELD_COLOR, ACTIVE_FIELD_COLOR);
+            valueAnimator.setEvaluator(new ArgbEvaluator());
+
+            valueAnimator.setDuration(DEFAULT_VALUE_ANIMATOR_DURATION);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    ANIMATED_ACTIVE_FIELD_COLOR = (int) animation.getAnimatedValue();
+                    invalidate();
+                    requestLayout();
+                }
+            });
+
+            valueAnimator.start();
+        }
+    }
 }

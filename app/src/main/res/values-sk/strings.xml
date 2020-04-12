@@ -1016,4 +1016,6 @@
     <string name="delete_state">Skutočne chcete vymazať stav %s?</string>
     <string name="state_has_transitions">Stav má prechody</string>
     <string name="exit_game">Naozaj chcete opustiť hru? Neuložená práca nebude uložená!</string>
+    <string name="cannot_set_chessfield">Can\'t set ChessField size!</string>
+    <string name="run_out_chessfield">You\'ve run out of ChessField!</string>
 </resources>
