@@ -9,16 +9,16 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Pair;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
@@ -420,7 +420,43 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     @Override
     public void onRemoveTransition(List<Transition> transitionList) {
-        Toast.makeText(this, "REMOVE TRANSITION", Toast.LENGTH_SHORT).show();
+        Log.v(TAG, "onRemoveTransition from diagram noted");
+        ArrayAdapter<Transition> adapter = new ArrayAdapter<Transition>(this,
+                android.R.layout.select_dialog_item, android.R.id.text1,
+                transitionList) {
+
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                // creates view
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view
+                        .findViewById(android.R.id.text1);
+                textView.setText(transitions.get(position).getDesc());
+                return view;
+            }
+        };
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.choose_transition)
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final Transition transition = transitions.get(i);
+                        try {
+                            dataSource.open();
+                            dataSource.deleteTransition(transition);
+                            transitions.remove(transition);
+                            diagramView_configuration.removeTransition(transition);
+                            dataSource.close();
+                        } catch (Exception e) {
+                            Toast.makeText(ChessGameActivity.this, R.string.transition_remove_error, Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "unknown error occurred while removing transition", e);
+                        }
+
+                    }
+                })
+                .setCancelable(true)
+                .show();
     }
 
     private void setChessField() {
