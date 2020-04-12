@@ -1377,5 +1377,8 @@
 	<string name="delete_game_message">Are you sure you want to delete this game?</string>
     <string name="chess_filed">Chess Field</string>
     <string name="state_type">State type</string>
+    <string name="state_no_name">State has no name!</string>
+    <string name="delete_state">Do you really want to delete state %s?</string>
+	<string name="state_has_transitions">State has transitions</string>
 
 </resources>

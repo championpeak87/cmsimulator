@@ -1012,4 +1012,7 @@
     <string name="delete_game_message">Ste si istý, že chcete odstrániť túto hru?</string>
     <string name="chess_filed">Herné pole</string>
     <string name="state_type">State type</string>
+    <string name="state_no_name">State has no name!</string>
+    <string name="delete_state">Do you really want to delete state %s?</string>
+    <string name="state_has_transitions">State has transitions</string>
 </resources>

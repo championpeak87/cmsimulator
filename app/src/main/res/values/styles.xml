@@ -14,7 +14,7 @@
         <item name="android:titleTextColor">@color/md_white_1000</item>
         <item name="android:tint">@color/md_white_1000</item>
         <item name="android:colorControlActivated">@color/primary_color</item>
-    </style>
+    </style>z
 
     <style name="LoginTextFields" parent="TextAppearance.AppCompat">
         <!-- Hint color and label color in FALSE state -->

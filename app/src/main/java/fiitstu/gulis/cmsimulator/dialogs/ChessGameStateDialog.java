@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import fiitstu.gulis.cmsimulator.R;
+import fiitstu.gulis.cmsimulator.elements.State;
+
+import java.nio.file.attribute.PosixFileAttributes;
 
 @SuppressLint("ValidFragment")
 public class ChessGameStateDialog extends DialogFragment {
@@ -30,9 +33,7 @@ public class ChessGameStateDialog extends DialogFragment {
 
     private DIALOG_STATE dialog_state;
 
-    private String state_name;
-    private boolean initalState;
-    private boolean finalState;
+    private State edit_state;
 
     private EditText edittext_state_name;
     private CheckBox checkBox_initial_state;
@@ -49,11 +50,9 @@ public class ChessGameStateDialog extends DialogFragment {
         this.dialog_state = DIALOG_STATE.ADD;
     }
 
-    public ChessGameStateDialog(String state_name, boolean initalState, boolean finalState) {
+    public ChessGameStateDialog(State edit_state) {
         this.dialog_state = DIALOG_STATE.EDIT;
-        this.state_name = state_name;
-        this.initalState = initalState;
-        this.finalState = finalState;
+        this.edit_state = edit_state;
     }
 
     @NonNull
@@ -74,15 +73,32 @@ public class ChessGameStateDialog extends DialogFragment {
             case EDIT:
                 alertBuilder.setTitle(R.string.edit_state);
 
+                String state_name = edit_state.getValue();
+                boolean isInitial = edit_state.isInitialState();
+                boolean isFinal = edit_state.isFinalState();
                 edittext_state_name.setText(state_name);
-                checkBox_initial_state.setChecked(initalState);
-                checkBox_final_state.setChecked(finalState);
+                checkBox_initial_state.setChecked(isInitial);
+                checkBox_final_state.setChecked(isFinal);
                 break;
         }
         alertBuilder.setView(view);
-        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        alertBuilder.setPositiveButton(android.R.string.yes, null);
+        alertBuilder.setNeutralButton(android.R.string.cancel, null);
+
+        AlertDialog dialog = alertBuilder.create();
+        return dialog;
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        AlertDialog alertDialog = (AlertDialog) getDialog();
+        Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 Bundle outputBundle = new Bundle();
 
                 final String stateName = edittext_state_name.getText().toString().trim();
@@ -92,15 +108,15 @@ public class ChessGameStateDialog extends DialogFragment {
                 outputBundle.putString(STATE_NAME_KEY, stateName);
                 outputBundle.putBoolean(INITIAL_STATE_KEY, isInitial);
                 outputBundle.putBoolean(FINAL_STATE_KEY, isFinal);
-                if (stateChangeListener != null)
+
+                if (stateName.isEmpty()) {
+                    edittext_state_name.setError(getContext().getString(R.string.state_no_name));
+                } else if (stateChangeListener != null) {
                     stateChangeListener.onChange(outputBundle);
+                    dismiss();
+                }
             }
         });
-        alertBuilder.setNeutralButton(android.R.string.cancel, null);
-
-        AlertDialog dialog = alertBuilder.create();
-        return dialog;
-
     }
 
     public void setStateChangeListener(StateChangeListener stateChangeListener) {

@@ -3,6 +3,9 @@ package fiitstu.gulis.cmsimulator.activities;
 import android.animation.IntEvaluator;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -152,12 +155,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         if (isFieldVisible) {
                             if ((int) animation.getAnimatedValue() == 0) {
                                 isFieldVisible = false;
-                                imagebutton_drop_up.setImageDrawable(getResources().getDrawable(R.drawable.baseline_arrow_drop_down_24));
+                                imagebutton_drop_up.setImageDrawable(getResources().getDrawable(R.drawable.baseline_arrow_drop_down_24, null));
                             }
                         } else {
                             if ((int) animation.getAnimatedValue() == DEFAULT_CHESS_FIELD_HEIGHT) {
                                 isFieldVisible = true;
-                                imagebutton_drop_up.setImageDrawable(getResources().getDrawable(R.drawable.baseline_arrow_drop_up_24));
+                                imagebutton_drop_up.setImageDrawable(getResources().getDrawable(R.drawable.baseline_arrow_drop_up_24, null));
                             }
                         }
                     }
@@ -338,7 +341,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
                 for (Symbol s : symbols) {
                     if (s.getValue().equals(direction)) {
-                        FsaTransition transition = (FsaTransition)dataSource.addFsaTransition(fromState, s, toState, emptyInputSymbolId);
+                        FsaTransition transition = (FsaTransition) dataSource.addFsaTransition(fromState, s, toState, emptyInputSymbolId);
                         diagramView_configuration.addTransition(transition);
                         transitions.add(transition);
                         break;
@@ -353,18 +356,66 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     }
 
     @Override
-    public void onEditState(State stateEdit) {
-        Toast.makeText(this, "EDIT STATE", Toast.LENGTH_SHORT).show();
+    public void onEditState(final State stateEdit) {
+        Log.v(TAG, "onAddState from diagram noted");
+        ChessGameStateDialog chessGameStateDialog = new ChessGameStateDialog(stateEdit);
+        chessGameStateDialog.setStateChangeListener(new ChessGameStateDialog.StateChangeListener() {
+            @Override
+            public void onChange(Bundle output_bundle) {
+                final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
+                final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
+                final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
+                dataSource.open();
+                dataSource.updateState(stateEdit, stateName, stateEdit.getPositionX(), stateEdit.getPositionY(), isInitial, isFinal);
+                diagramView_configuration.invalidate();
+                stateList.get(stateList.indexOf(stateEdit)).setValue(stateName);
+                stateList.get(stateList.indexOf(stateEdit)).setInitialState(isInitial);
+                stateList.get(stateList.indexOf(stateEdit)).setFinalState(isFinal);
+                dataSource.close();
+            }
+        });
+
+        FragmentManager fm = this.getSupportFragmentManager();
+        chessGameStateDialog.show(fm, TAG);
     }
 
     @Override
     public void onEditTransition(List<Transition> transitionList) {
-        Toast.makeText(this, "EDIT TRANSITION", Toast.LENGTH_SHORT).show();
+        // TODO: EDIT TRANSITION
     }
 
     @Override
-    public void onRemoveState(State stateRemove) {
-        Toast.makeText(this, "REMOVE STATE", Toast.LENGTH_SHORT).show();
+    public void onRemoveState(final State stateRemove) {
+        String message = getString(R.string.delete_state);
+        message = String.format(message, stateRemove.getValue());
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete)
+                .setMessage(message)
+                .setNeutralButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dataSource.open();
+                        boolean hasTransitions = false;
+                        for (Transition t : transitions) {
+                            if (t.getToState().equals(stateRemove) || t.getFromState().equals(stateRemove)) {
+                                hasTransitions = true;
+                                break;
+                            }
+                        }
+                        if (!hasTransitions) {
+                            dataSource.deleteState(stateRemove);
+                            stateList.remove(stateRemove);
+                            diagramView_configuration.removeState(stateRemove);
+                        } else
+                            Toast.makeText(ChessGameActivity.this, R.string.state_has_transitions, Toast.LENGTH_SHORT).show();
+                        dataSource.close();
+                    }
+                })
+                .create();
+
+        alertDialog.show();
     }
 
     @Override
