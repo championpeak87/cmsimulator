@@ -380,8 +380,55 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     }
 
     @Override
-    public void onEditTransition(List<Transition> transitionList) {
-        // TODO: EDIT TRANSITION
+    public void onEditTransition(final List<Transition> transitionList) {
+        Log.v(TAG, "onEditTransition from diagram noted");
+        ArrayAdapter<Transition> adapter = new ArrayAdapter<Transition>(this,
+                android.R.layout.select_dialog_item, android.R.id.text1,
+                transitionList) {
+
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                // creates view
+                View view = super.getView(position, convertView, parent);
+                TextView textView = view.findViewById(android.R.id.text1);
+                textView.setText(transitionList.get(position).getDesc());
+                return view;
+            }
+        };
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.choose_transition)
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialogInterface, int i) {
+                        final Transition transition = transitionList.get(i);
+                        final State fromState = transition.getFromState();
+                        final State toState = transition.getToState();
+                        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+                        chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
+                            @Override
+                            public void OnChange(Bundle output_bundle) {
+                                final String direction = output_bundle.getString(ChessGameTransitionDialog.DIRECTION_KEY);
+                                dataSource.open();
+                                List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
+                                for (Symbol s : symbols) {
+                                    if (s.getValue().equals(direction)) {
+                                        dataSource.updateFsaTransition((FsaTransition) transition, fromState, s, toState, emptyInputSymbolId);
+                                        transitions.get(transitions.indexOf(transition)).setReadSymbol(s);
+                                        diagramView_configuration.invalidate();
+                                        break;
+                                    }
+                                }
+
+                                dataSource.close();
+                            }
+                        });
+                        FragmentManager fm = getSupportFragmentManager();
+                        chessGameTransitionDialog.show(fm, TAG);
+                    }
+                })
+                .setCancelable(true)
+                .show();
     }
 
     @Override
@@ -419,7 +466,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     }
 
     @Override
-    public void onRemoveTransition(List<Transition> transitionList) {
+    public void onRemoveTransition(final List<Transition> transitionList) {
         Log.v(TAG, "onRemoveTransition from diagram noted");
         ArrayAdapter<Transition> adapter = new ArrayAdapter<Transition>(this,
                 android.R.layout.select_dialog_item, android.R.id.text1,
@@ -432,7 +479,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view
                         .findViewById(android.R.id.text1);
-                textView.setText(transitions.get(position).getDesc());
+                textView.setText(transitionList.get(position).getDesc());
                 return view;
             }
         };
@@ -441,7 +488,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 .setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final Transition transition = transitions.get(i);
+                        final Transition transition = transitionList.get(i);
                         try {
                             dataSource.open();
                             dataSource.deleteTransition(transition);
