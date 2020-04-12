@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -269,6 +270,22 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_save_task:
+                // TODO: SAVE GAME
+                return true;
+            case R.id.menu_submit_task:
+                // TODO: SUBMIT_TASK
+                return true;
+            case R.id.menu_configuration_simulate:
+                // TODO: SIMULATION
+                return true;
+            case R.id.menu_settings:
+                Intent settingsIntent = new Intent(this, OptionsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.menu_configuration_help:
+                // TODO: HELP
+                return true;
         }
     }
 
@@ -339,11 +356,18 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.exit)
+                .setMessage(R.string.exit_game)
+                .setNeutralButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ChessGameActivity.super.onBackPressed();
+                    }
+                }).create();
 
-        dataSource.open();
-        dataSource.globalDrop();
-        dataSource.close();
+        alertDialog.show();
     }
 
     @Override

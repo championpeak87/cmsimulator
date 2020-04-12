@@ -1015,4 +1015,5 @@
     <string name="state_no_name">Stav nemá meno!</string>
     <string name="delete_state">Skutočne chcete vymazať stav %s?</string>
     <string name="state_has_transitions">Stav má prechody</string>
+    <string name="exit_game">Naozaj chcete opustiť hru? Neuložená práca nebude uložená!</string>
 </resources>

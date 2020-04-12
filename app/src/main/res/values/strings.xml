@@ -1380,5 +1380,6 @@
     <string name="state_no_name">State has no name!</string>
     <string name="delete_state">Do you really want to delete state %s?</string>
 	<string name="state_has_transitions">State has transitions</string>
+	<string name="exit_game">Do you really want to exit this game? Unsaved work won\'t be saved!</string>
 
 </resources>
