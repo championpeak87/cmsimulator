@@ -764,4 +764,10 @@ public class ChessView extends View {
             valueAnimator.start();
         }
     }
+
+    public void reset()
+    {
+        this.VISITED_FIELDS = new ArrayList<>();
+        ACTIVE_FIELD = DEFAULT_ACTIVE_FIELD_POSITION;
+    }
 }

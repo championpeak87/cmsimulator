@@ -1336,7 +1336,7 @@
     <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
 	<string name="whats_new_content">
-		<b>-</b> Initial game implementation</string>
+		<b>-</b> Game preview (ADMIN)</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>

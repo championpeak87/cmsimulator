@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -280,7 +282,25 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 // TODO: SIMULATION
                 if (!isFieldVisible)
                     imagebutton_drop_up.callOnClick();
-                runSimulation();
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        runSimulationStep();
+                        Pair<Integer, Integer> cField = activeField;
+                        Pair<Integer, Integer> fField = finishField;
+                        if (!cField.equals(fField))
+                            handler.postDelayed(this, 500);
+                        else {
+                            startField = null;
+                            finishField = null;
+                            activeField = null;
+                            currentState = null;
+                        }
+                    }
+                }, 0);
+
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);
@@ -647,81 +667,90 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         }
     }
 
-    private void runSimulation() {
-        final Pair<Integer, Integer> startField = chessview_field.getStartField();
-        final Pair<Integer, Integer> finishField = chessview_field.getFinishField();
+    Pair<Integer, Integer> startField = null;
+    Pair<Integer, Integer> finishField = null;
+    State currentState = null;
+    Pair<Integer, Integer> activeField = null;
+
+
+    private void runSimulationStep() {
+        startField = chessview_field.getStartField();
+        finishField = chessview_field.getFinishField();
         final State initialState = getInitialState();
         if (initialState == null) {
             Toast.makeText(this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
             return;
         }
-        State currentState = initialState;
+
+        if (currentState == null)
+            currentState = initialState;
         List<Transition> currentStateTransitions = getStatesTransitions(currentState);
 
         int stepCounter = 0;
-        try {
-            chessview_field.setActiveField(startField.first, startField.second);
-        } catch (ChessView.OutOfChessFieldException e) {
-            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        }
-        Pair<Integer, Integer> activeField = chessview_field.getActiveField();
 
-        while (!activeField.equals(finishField)) {
-            if (stepCounter++ > 100)
-            {
-                Toast.makeText(this, "AUTOMAT DLHO NESKONCIL", Toast.LENGTH_SHORT).show();
-                return;
+        if (activeField == null)
+            try {
+                chessview_field.reset();
+                chessview_field.setActiveField(startField);
+
+            } catch (ChessView.OutOfChessFieldException e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
-            boolean
-                    up = chessview_field.canGoUp(),
-                    down = chessview_field.canGoDown(),
-                    left = chessview_field.canGoLeft(),
-                    right = chessview_field.canGoRight();
+        activeField = chessview_field.getActiveField();
 
-            for (Transition t : currentStateTransitions) {
-                Symbol s = t.getReadSymbol();
-                String movement = s.getValue();
+        //while (!activeField.equals(finishField)) {
+        if (stepCounter++ > 100) {
+            Toast.makeText(this, "AUTOMAT DLHO NESKONCIL", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        boolean
+                up = chessview_field.canGoUp(),
+                down = chessview_field.canGoDown(),
+                left = chessview_field.canGoLeft(),
+                right = chessview_field.canGoRight();
 
-                switch (movement) {
-                    case Symbol.MOVEMENT_UP:
-                        if (up) {
-                            moveUp();
-                            currentState = t.getToState();
-                            currentStateTransitions = getStatesTransitions(currentState);
-                            activeField = chessview_field.getActiveField();
-                        }
-                        break;
-                    case Symbol.MOVEMENT_DOWN:
-                        if (down) {
-                            moveDown();
-                            currentState = t.getToState();
-                            currentStateTransitions = getStatesTransitions(currentState);
-                            activeField = chessview_field.getActiveField();
-                        }
-                        break;
-                    case Symbol.MOVEMENT_LEFT:
-                        if (left) {
-                            moveLeft();
-                            currentState = t.getToState();
-                            currentStateTransitions = getStatesTransitions(currentState);
-                            activeField = chessview_field.getActiveField();
-                        }
-                        break;
-                    case Symbol.MOVEMENT_RIGHT:
-                        if (right) {
-                            moveRight();
-                            currentState = t.getToState();
-                            currentStateTransitions = getStatesTransitions(currentState);
-                            activeField = chessview_field.getActiveField();
-                        }
-                        break;
-                }
+        for (Transition t : currentStateTransitions) {
+            Symbol s = t.getReadSymbol();
+            String movement = s.getValue();
+
+            switch (movement) {
+                case Symbol.MOVEMENT_UP:
+                    if (up) {
+                        moveUp();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                    }
+                    break;
+                case Symbol.MOVEMENT_DOWN:
+                    if (down) {
+                        moveDown();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                    }
+                    break;
+                case Symbol.MOVEMENT_LEFT:
+                    if (left) {
+                        moveLeft();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                    }
+                    break;
+                case Symbol.MOVEMENT_RIGHT:
+                    if (right) {
+                        moveRight();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                    }
+                    break;
             }
         }
 
-        if (!currentState.isFinalState())
-            Toast.makeText(this, "SIMULACIA NESKONCILA V KONECNOM STAVE", Toast.LENGTH_SHORT).show();
-        else if (currentState.isFinalState() && activeField.equals(finishField))
+        else if (currentState.isFinalState() && activeField.equals(finishField)) {
             Toast.makeText(this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
+        }
     }
 }
