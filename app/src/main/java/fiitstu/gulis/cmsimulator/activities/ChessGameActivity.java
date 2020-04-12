@@ -290,9 +290,17 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         runSimulationStep();
                         Pair<Integer, Integer> cField = activeField;
                         Pair<Integer, Integer> fField = finishField;
-                        if (!cField.equals(fField))
+                        if (!simulationStuck)
                             handler.postDelayed(this, 500);
                         else {
+                            if (cField.equals(fField))
+                                if (currentState.isFinalState())
+                                    Toast.makeText(ChessGameActivity.this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(ChessGameActivity.this, "SIMULACIA SKONCILA ALE AUTOMAT NIE JE V KONCOVOM STAVE", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(ChessGameActivity.this, "AUTOMAT SA ZASEKOL", Toast.LENGTH_SHORT).show();
+                            simulationStuck = false;
                             startField = null;
                             finishField = null;
                             activeField = null;
@@ -671,6 +679,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     Pair<Integer, Integer> finishField = null;
     State currentState = null;
     Pair<Integer, Integer> activeField = null;
+    boolean simulationStuck = false;
 
 
     private void runSimulationStep() {
@@ -691,6 +700,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         if (activeField == null)
             try {
                 chessview_field.reset();
+                simulationStuck = false;
                 chessview_field.setActiveField(startField);
 
             } catch (ChessView.OutOfChessFieldException e) {
@@ -709,6 +719,14 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 left = chessview_field.canGoLeft(),
                 right = chessview_field.canGoRight();
 
+        if (!up && !down && !left && !right) {
+            simulationStuck = true;
+        }
+
+        if (currentStateTransitions.size() == 0)
+            simulationStuck = true;
+
+        int transitionsCount = currentStateTransitions.size();
         for (Transition t : currentStateTransitions) {
             Symbol s = t.getReadSymbol();
             String movement = s.getValue();
@@ -720,6 +738,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         currentState = t.getToState();
                         currentStateTransitions = getStatesTransitions(currentState);
                         activeField = chessview_field.getActiveField();
+                        return;
                     }
                     break;
                 case Symbol.MOVEMENT_DOWN:
@@ -728,6 +747,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         currentState = t.getToState();
                         currentStateTransitions = getStatesTransitions(currentState);
                         activeField = chessview_field.getActiveField();
+                        return;
                     }
                     break;
                 case Symbol.MOVEMENT_LEFT:
@@ -736,6 +756,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         currentState = t.getToState();
                         currentStateTransitions = getStatesTransitions(currentState);
                         activeField = chessview_field.getActiveField();
+                        return;
                     }
                     break;
                 case Symbol.MOVEMENT_RIGHT:
@@ -744,13 +765,14 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         currentState = t.getToState();
                         currentStateTransitions = getStatesTransitions(currentState);
                         activeField = chessview_field.getActiveField();
+                        return;
                     }
                     break;
             }
-        }
-
-        else if (currentState.isFinalState() && activeField.equals(finishField)) {
-            Toast.makeText(this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
+            if (--transitionsCount <= 0) {
+                simulationStuck = true;
+                return;
+            }
         }
     }
 }
