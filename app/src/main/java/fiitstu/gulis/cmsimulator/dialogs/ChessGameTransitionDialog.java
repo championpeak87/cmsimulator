@@ -55,6 +55,7 @@ public class ChessGameTransitionDialog extends DialogFragment {
 
     private Transition transition;
     private List<Transition> transitionList;
+    private List<Transition> fromTransitionList;
 
     public interface TransitionChangeListener {
         void OnChange(Bundle output_bundle);
@@ -71,8 +72,9 @@ public class ChessGameTransitionDialog extends DialogFragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ChessGameTransitionDialog(List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
+    public ChessGameTransitionDialog(List<Transition> fromTransitionList,List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
         this.dialog_type = dialog_type;
+        this.fromTransitionList = fromTransitionList;
         this.transitionList = transitions;
         this.fromState = fromState;
         this.toState = toState;
@@ -187,6 +189,29 @@ public class ChessGameTransitionDialog extends DialogFragment {
 
             case NEW:
                 alertBuilder.setTitle(R.string.new_transition);
+                for (Transition t : fromTransitionList) {
+                    Symbol s = t.getReadSymbol();
+                    String value = s.getValue();
+
+
+                    if (t.equals(transition))
+                        continue;
+
+                    switch (value) {
+                        case Symbol.MOVEMENT_UP:
+                            togglebutton_up.setEnabled(false);
+                            break;
+                        case Symbol.MOVEMENT_DOWN:
+                            togglebutton_down.setEnabled(false);
+                            break;
+                        case Symbol.MOVEMENT_RIGHT:
+                            togglebutton_right.setEnabled(false);
+                            break;
+                        case Symbol.MOVEMENT_LEFT:
+                            togglebutton_left.setEnabled(false);
+                            break;
+                    }
+                }
                 break;
             case EDIT:
                 alertBuilder.setTitle(R.string.edit_transition);

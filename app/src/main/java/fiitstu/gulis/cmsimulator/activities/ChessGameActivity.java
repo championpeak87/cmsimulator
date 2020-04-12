@@ -239,7 +239,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
         dataSource.open();
 
-        diagramView_configuration.buildDiagram(false, emptyInputSymbolId, new ArrayList<State>(), new ArrayList<Transition>());
+        diagramView_configuration.buildDiagram(false, emptyInputSymbolId, stateList, transitions);
         if (Build.VERSION.SDK_INT < 15) {
             imageButton_configuration_diagram_move.performClick();
         } else {
@@ -338,13 +338,25 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        dataSource.open();
+        dataSource.globalDrop();
+        dataSource.close();
+    }
+
+    @Override
     public void onAddTransition(final State fromState, final State toState) {
         final List<Transition> transitionList = new ArrayList<>();
+        final List<Transition> fromTransitionList = new ArrayList<>();
         for (Transition t : transitions) {
             if (t.getFromState().equals(fromState) && t.getToState().equals(toState))
                 transitionList.add(t);
+            if (t.getFromState().equals(fromState))
+                fromTransitionList.add(t);
         }
-        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
             @Override
             public void OnChange(Bundle output_bundle) {
