@@ -31,6 +31,8 @@ public class Symbol implements Serializable {
     public static final String MOVEMENT_LEFT = "←";
     public static final String MOVEMENT_RIGHT = "→";
 
+    public static final String EMPTY_SYMBOL = "ε";
+
     private long id;
     private String value;
     private int properties;

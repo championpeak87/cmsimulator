@@ -30,10 +30,7 @@ import fiitstu.gulis.cmsimulator.diagram.DiagramView;
 import fiitstu.gulis.cmsimulator.dialogs.ChessGameStateDialog;
 import fiitstu.gulis.cmsimulator.dialogs.ChessGameTransitionDialog;
 import fiitstu.gulis.cmsimulator.dialogs.ConfigurationDialog;
-import fiitstu.gulis.cmsimulator.elements.FsaTransition;
-import fiitstu.gulis.cmsimulator.elements.State;
-import fiitstu.gulis.cmsimulator.elements.Symbol;
-import fiitstu.gulis.cmsimulator.elements.Transition;
+import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.views.ChessView;
@@ -114,10 +111,10 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chess_game_activity);
 
+        loadGame();
         setActionBar();
         setUIElements();
         setEvents();
-        loadGame();
         setChessField();
 
         // SET INPUT SYMBOLS
@@ -254,7 +251,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     private void setActionBar() {
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("");
+        actionBar.setTitle(automata_type.toString());
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -419,18 +416,43 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
                 for (Symbol s : symbols) {
                     if (s.getValue().equals(direction)) {
-                        FsaTransition transition = (FsaTransition) dataSource.addFsaTransition(fromState, s, toState, emptyInputSymbolId);
-                        diagramView_configuration.addTransition(transition);
-                        transitions.add(transition);
-                        break;
+                        if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA) {
+                            FsaTransition transition = (FsaTransition) dataSource.addFsaTransition(fromState, s, toState, emptyInputSymbolId);
+                            diagramView_configuration.addTransition(transition);
+                            transitions.add(transition);
+                            break;
+                        } else {
+                            String popString = output_bundle.getString(ChessGameTransitionDialog.POP_KEY);
+                            String pushString = output_bundle.getString(ChessGameTransitionDialog.PUSH_KEY);
+                            Symbol pop = getSymbol(popString);
+                            Symbol push = getSymbol(pushString);
+
+                            List<Symbol> popList = new ArrayList<>();
+                            popList.add(pop);
+
+                            List<Symbol> pushList = new ArrayList<>();
+                            pushList.add(push);
+                            PdaTransition transition = (PdaTransition) dataSource.addPdaTransition(fromState, s, toState, emptyInputSymbolId, popList, pushList);
+                            transitions.add(transition);
+                            diagramView_configuration.addTransition(transition);
+                        }
                     }
                 }
-
                 dataSource.close();
             }
         });
         FragmentManager fm = getSupportFragmentManager();
         chessGameTransitionDialog.show(fm, TAG);
+    }
+
+    private Symbol getSymbol(String value) {
+        List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
+        for (Symbol s : symbols) {
+            if (s.getValue().equals(value))
+                return s;
+        }
+
+        return null;
     }
 
     @Override
@@ -484,7 +506,18 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         final Transition transition = transitionList.get(i);
                         final State fromState = transition.getFromState();
                         final State toState = transition.getToState();
-                        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transition, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+
+                        final List<Transition> transitionList = new ArrayList<>();
+                        final List<Transition> fromTransitionList = new ArrayList<>();
+                        for (Transition t : transitions) {
+                            if (t.getFromState().equals(fromState) && t.getToState().equals(toState))
+                                transitionList.add(t);
+                            if (t.getFromState().equals(fromState))
+                                fromTransitionList.add(t);
+                        }
+
+                        final ChessGameTransitionDialog.AUTOMATA_TYPE type = automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA ? ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE : ChessGameTransitionDialog.AUTOMATA_TYPE.PUSHDOWN;
+                        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transition, fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, type);
                         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
                             @Override
                             public void OnChange(Bundle output_bundle) {
@@ -493,10 +526,30 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                                 List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
                                 for (Symbol s : symbols) {
                                     if (s.getValue().equals(direction)) {
-                                        dataSource.updateFsaTransition((FsaTransition) transition, fromState, s, toState, emptyInputSymbolId);
-                                        transitions.get(transitions.indexOf(transition)).setReadSymbol(s);
-                                        diagramView_configuration.invalidate();
-                                        break;
+                                        if (type == ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE) {
+                                            dataSource.updateFsaTransition((FsaTransition) transition, fromState, s, toState, emptyInputSymbolId);
+                                            transitions.get(transitions.indexOf(transition)).setReadSymbol(s);
+                                            diagramView_configuration.invalidate();
+                                            break;
+                                        } else {
+                                            // TODO: PUSHDOWN EDIT
+                                            String popString = output_bundle.getString(ChessGameTransitionDialog.POP_KEY);
+                                            String pushString = output_bundle.getString(ChessGameTransitionDialog.PUSH_KEY);
+                                            Symbol pop = getSymbol(popString);
+                                            Symbol push = getSymbol(pushString);
+
+                                            List<Symbol> popList = new ArrayList<>();
+                                            popList.add(pop);
+
+                                            List<Symbol> pushList = new ArrayList<>();
+                                            pushList.add(push);
+                                            dataSource.updatePdaTransition((PdaTransition) transition, fromState, s, toState, emptyInputSymbolId, popList, pushList);
+                                            PdaTransition t = (PdaTransition) transitions.get(transitions.indexOf(transition));
+                                            t.setPopSymbolList(popList);
+                                            t.setPushSymbolList(pushList);
+                                            t.setReadSymbol(s);
+                                            diagramView_configuration.invalidate();
+                                        }
                                     }
                                 }
 
@@ -727,6 +780,101 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
         int transitionsCount = currentStateTransitions.size();
         for (Transition t : currentStateTransitions) {
+            Symbol s = t.getReadSymbol();
+            String movement = s.getValue();
+
+            switch (movement) {
+                case Symbol.MOVEMENT_UP:
+                    if (up) {
+                        moveUp();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                        return;
+                    }
+                    break;
+                case Symbol.MOVEMENT_DOWN:
+                    if (down) {
+                        moveDown();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                        return;
+                    }
+                    break;
+                case Symbol.MOVEMENT_LEFT:
+                    if (left) {
+                        moveLeft();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                        return;
+                    }
+                    break;
+                case Symbol.MOVEMENT_RIGHT:
+                    if (right) {
+                        moveRight();
+                        currentState = t.getToState();
+                        currentStateTransitions = getStatesTransitions(currentState);
+                        activeField = chessview_field.getActiveField();
+                        return;
+                    }
+                    break;
+            }
+            if (--transitionsCount <= 0) {
+                simulationStuck = true;
+                return;
+            }
+        }
+    }
+
+    private void runSimulationStepWithStack() {
+        startField = chessview_field.getStartField();
+        finishField = chessview_field.getFinishField();
+        final State initialState = getInitialState();
+        if (initialState == null) {
+            Toast.makeText(this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (currentState == null)
+            currentState = initialState;
+        List<Transition> currentStateTransitions = getStatesTransitions(currentState);
+
+        int stepCounter = 0;
+
+        if (activeField == null)
+            try {
+                chessview_field.reset();
+                simulationStuck = false;
+                chessview_field.setActiveField(startField);
+
+            } catch (ChessView.OutOfChessFieldException e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        activeField = chessview_field.getActiveField();
+
+        //while (!activeField.equals(finishField)) {
+        if (stepCounter++ > 100) {
+            Toast.makeText(this, "AUTOMAT DLHO NESKONCIL", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        boolean
+                up = chessview_field.canGoUp(),
+                down = chessview_field.canGoDown(),
+                left = chessview_field.canGoLeft(),
+                right = chessview_field.canGoRight();
+
+        if (!up && !down && !left && !right) {
+            simulationStuck = true;
+        }
+
+        if (currentStateTransitions.size() == 0)
+            simulationStuck = true;
+
+        int transitionsCount = currentStateTransitions.size();
+        for (Transition t : currentStateTransitions) {
+            PdaTransition currentTransition = (PdaTransition) t;
             Symbol s = t.getReadSymbol();
             String movement = s.getValue();
 

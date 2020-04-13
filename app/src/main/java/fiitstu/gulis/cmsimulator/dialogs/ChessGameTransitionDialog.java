@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
+import fiitstu.gulis.cmsimulator.elements.PdaTransition;
 import fiitstu.gulis.cmsimulator.elements.State;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.elements.Transition;
@@ -32,6 +33,8 @@ public class ChessGameTransitionDialog extends DialogFragment {
     private static final String TAG = "ChessGameTransitionDial";
 
     public static final String DIRECTION_KEY = "DIRECTION";
+    public static final String POP_KEY = "POP_KEY";
+    public static final String PUSH_KEY = "PUSH_KEY";
 
     private AUTOMATA_TYPE automata_type;
     private DIALOG_TYPE dialog_type;
@@ -98,6 +101,17 @@ public class ChessGameTransitionDialog extends DialogFragment {
     }
 
     @SuppressLint("ValidFragment")
+    public ChessGameTransitionDialog(Transition transition, List<Transition> fromTransitionList, List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
+        this.dialog_type = dialog_type;
+        this.transition = transition;
+        this.fromTransitionList = fromTransitionList;
+        this.transitionList = transitions;
+        this.fromState = fromState;
+        this.toState = toState;
+        this.automata_type = automata_type;
+    }
+
+    @SuppressLint("ValidFragment")
     public ChessGameTransitionDialog(Transition transition, List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
         this.dialog_type = dialog_type;
         this.transition = transition;
@@ -155,26 +169,6 @@ public class ChessGameTransitionDialog extends DialogFragment {
                 setDirectionButton(togglebutton_right);
             }
         });
-
-        if (dialog_type == DIALOG_TYPE.EDIT) {
-            Symbol symbol = transition.getReadSymbol();
-            String symbolValue = symbol.getValue();
-
-            switch (symbolValue) {
-                case Symbol.MOVEMENT_UP:
-                    setDirectionButton(togglebutton_up);
-                    break;
-                case Symbol.MOVEMENT_DOWN:
-                    setDirectionButton(togglebutton_down);
-                    break;
-                case Symbol.MOVEMENT_RIGHT:
-                    setDirectionButton(togglebutton_right);
-                    break;
-                case Symbol.MOVEMENT_LEFT:
-                    setDirectionButton(togglebutton_left);
-                    break;
-            }
-        }
 
         if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
             linearlayout_pushdown_config = view.findViewById(R.id.linearlayou_pushdown_config);
@@ -248,7 +242,76 @@ public class ChessGameTransitionDialog extends DialogFragment {
             });
         }
 
-        for (Transition t : transitionList) {
+        if (dialog_type == DIALOG_TYPE.EDIT) {
+            Symbol symbol = transition.getReadSymbol();
+            String symbolValue = symbol.getValue();
+
+            switch (symbolValue) {
+                case Symbol.MOVEMENT_UP:
+                    setDirectionButton(togglebutton_up);
+                    break;
+                case Symbol.MOVEMENT_DOWN:
+                    setDirectionButton(togglebutton_down);
+                    break;
+                case Symbol.MOVEMENT_RIGHT:
+                    setDirectionButton(togglebutton_right);
+                    break;
+                case Symbol.MOVEMENT_LEFT:
+                    setDirectionButton(togglebutton_left);
+                    break;
+            }
+
+            if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
+                PdaTransition t = (PdaTransition) transition;
+                List<Symbol> popSymbol = t.getPopSymbolList();
+                List<Symbol> pushSymbol = t.getPushSymbolList();
+
+                String popString = popSymbol.get(0).getValue();
+                String pushString = pushSymbol.get(0).getValue();
+
+                switch (popString) {
+                    case Symbol.MOVEMENT_UP:
+                        setDirectionPopButton(togglebutton_pop_up);
+                        break;
+                    case Symbol.MOVEMENT_DOWN:
+                        setDirectionPopButton(togglebutton_pop_down);
+                        break;
+                    case Symbol.MOVEMENT_RIGHT:
+                        setDirectionPopButton(togglebutton_pop_right);
+                        break;
+                    case Symbol.MOVEMENT_LEFT:
+                        setDirectionPopButton(togglebutton_pop_left);
+                        break;
+                }
+
+                switch (pushString) {
+                    case Symbol.MOVEMENT_UP:
+                        setDirectionPushButton(togglebutton_push_up);
+                        break;
+                    case Symbol.MOVEMENT_DOWN:
+                        setDirectionPushButton(togglebutton_push_down);
+                        break;
+                    case Symbol.MOVEMENT_RIGHT:
+                        setDirectionPushButton(togglebutton_push_right);
+                        break;
+                    case Symbol.MOVEMENT_LEFT:
+                        setDirectionPushButton(togglebutton_push_left);
+                        break;
+                }
+            }
+        }
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        switch (dialog_type) {
+
+            case NEW:
+                alertBuilder.setTitle(R.string.new_transition);
+                break;
+            case EDIT:
+                alertBuilder.setTitle(R.string.edit_transition);
+                break;
+        }
+        for (Transition t : fromTransitionList) {
             Symbol s = t.getReadSymbol();
             String value = s.getValue();
 
@@ -272,39 +335,6 @@ public class ChessGameTransitionDialog extends DialogFragment {
             }
         }
 
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-        switch (dialog_type) {
-
-            case NEW:
-                alertBuilder.setTitle(R.string.new_transition);
-                for (Transition t : fromTransitionList) {
-                    Symbol s = t.getReadSymbol();
-                    String value = s.getValue();
-
-
-                    if (t.equals(transition))
-                        continue;
-
-                    switch (value) {
-                        case Symbol.MOVEMENT_UP:
-                            togglebutton_up.setEnabled(false);
-                            break;
-                        case Symbol.MOVEMENT_DOWN:
-                            togglebutton_down.setEnabled(false);
-                            break;
-                        case Symbol.MOVEMENT_RIGHT:
-                            togglebutton_right.setEnabled(false);
-                            break;
-                        case Symbol.MOVEMENT_LEFT:
-                            togglebutton_left.setEnabled(false);
-                            break;
-                    }
-                }
-                break;
-            case EDIT:
-                alertBuilder.setTitle(R.string.edit_transition);
-                break;
-        }
         alertBuilder.setView(view);
         alertBuilder.setNeutralButton(android.R.string.cancel, null);
         alertBuilder.setPositiveButton(android.R.string.yes, null);
@@ -332,6 +362,35 @@ public class ChessGameTransitionDialog extends DialogFragment {
                         output_bundle.putString(DIRECTION_KEY, Symbol.MOVEMENT_LEFT);
                     else if (selected_button.equals(togglebutton_right))
                         output_bundle.putString(DIRECTION_KEY, Symbol.MOVEMENT_RIGHT);
+                }
+
+                if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
+
+                    // POP
+                    if (selected_pop_button != null) {
+                        if (selected_pop_button.equals(togglebutton_pop_up))
+                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_UP);
+                        else if (selected_pop_button.equals(togglebutton_pop_down))
+                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_DOWN);
+                        else if (selected_pop_button.equals(togglebutton_pop_left))
+                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_LEFT);
+                        else if (selected_pop_button.equals(togglebutton_pop_right))
+                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_RIGHT);
+
+                    } else output_bundle.putString(POP_KEY, Symbol.EMPTY_SYMBOL);
+
+                    // PUSH
+                    if (selected_push_button != null) {
+                        if (selected_push_button.equals(togglebutton_push_up))
+                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_UP);
+                        else if (selected_push_button.equals(togglebutton_push_down))
+                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_DOWN);
+                        else if (selected_push_button.equals(togglebutton_push_left))
+                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_LEFT);
+                        else if (selected_push_button.equals(togglebutton_push_right))
+                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_RIGHT);
+
+                    } else output_bundle.putString(PUSH_KEY, Symbol.EMPTY_SYMBOL);
                 }
 
 
