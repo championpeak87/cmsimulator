@@ -1336,7 +1336,7 @@
     <string name="last_known_version" translatable="false">LAST_KNOWN_VERSION</string>
 	<string name="whats_new">What\'s new</string>
 	<string name="whats_new_content">
-		<b>-</b> Game preview (ADMIN)</string>
+		<b>-</b> Game preview, without save and submission</string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
     <string name="preview_task">Preview task</string>
@@ -1385,5 +1385,13 @@
 	<string name="run_out_chessfield">You\'ve run out of ChessField!</string>
 	<string name="max_state_exceeded">You have exceeded max count of states!</string>
 	<string name="max_state_count">Max state count</string>
+    <string name="game_simulation_successful">Simulation has run successfully!</string>
+	<string name="game_simulation_successful_stack_not_empty">Simulation has run successfully, however stack is not
+		empty!
+	</string>
+	<string name="game_simulation_not_in_final_state">Simulation has ended in finish, however not in final state!
+	</string>
+	<string name="game_simulation_stuck">Simulation is stuck!</string>
+    <string name="find_games">Find games</string>
 
 </resources>

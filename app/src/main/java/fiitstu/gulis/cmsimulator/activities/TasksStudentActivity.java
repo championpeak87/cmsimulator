@@ -352,6 +352,16 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
             }
         });
 
+        Button button_tasks_find_game = findViewById(R.id.button_tasks_find_game);
+        button_tasks_find_game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gameIntent = new Intent(TasksStudentActivity.this, BrowseGamesActivity.class);
+                startActivity(gameIntent);
+            }
+        });
+
+
         Log.i(TAG, "onCreate initialized");
     }
 

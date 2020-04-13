@@ -91,6 +91,15 @@ public class TasksPreviewActivity extends FragmentActivity {
             }
         });
 
+        Button findGameButton = findViewById(R.id.button_tasks_find_game);
+        findGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivityIntent = new Intent(TasksPreviewActivity.this, BrowseGamesActivity.class);
+                startActivity(nextActivityIntent);
+            }
+        });
+
         Log.i(TAG, "onCreate initialized");
     }
 

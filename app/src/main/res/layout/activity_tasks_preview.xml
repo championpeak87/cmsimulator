@@ -67,6 +67,13 @@
 								android:layout_gravity="center_vertical"
 								android:drawableTop="@drawable/baseline_cloud_download_24"
 								style="@style/mainMenuButtonStyle"/>
+						<Button
+								android:id="@+id/button_tasks_find_game"
+								android:text="@string/find_games"
+								android:lines="2"
+								android:layout_gravity="center_vertical"
+								android:drawableTop="@drawable/baseline_cloud_download_24"
+								style="@style/mainMenuButtonStyle"/>
 					</LinearLayout>
 				</LinearLayout>
 			</ScrollView>

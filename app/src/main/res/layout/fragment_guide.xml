@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/previous"
                 android:background="@null"
+                android:tint="@color/bootstrap_gray"
                 android:layout_alignParentLeft="true"
                 android:contentDescription="@string/previous_page"/>
         <ImageButton
@@ -37,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/next"
                 android:background="@null"
+                android:tint="@color/bootstrap_gray"
                 android:layout_alignParentRight="true"
                 android:contentDescription="@string/next_page"/>
     </RelativeLayout>

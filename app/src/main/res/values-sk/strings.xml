@@ -979,7 +979,7 @@
     <string name="find_automata_tasks">Vyhľadať automaty</string>
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
-        <b>-</b> Ukážka funkčnej hry (ADMIN)</string>
+        <b>-</b> Ukážka funkčnej hry, bez možnosti ukladania a odovzdania</string>
     <string name="regex_help" formatted="true">
         <b>*</b>       -> Opakovanie 0 - n-krát\n
         <b>+</b>       -> Opakovanie 1 - n-krát\n
@@ -1018,6 +1018,13 @@
     <string name="exit_game">Naozaj chcete opustiť hru? Neuložená práca nebude uložená!</string>
     <string name="cannot_set_chessfield">Nemôžem nastaviť veľkosť hernej plochy!</string>
     <string name="run_out_chessfield">Ste mimo hernej plochy!</string>
-    <string name="max_state_exceeded">You have exceeded max count of states!</string>
-    <string name="max_state_count">Max state count</string>
+    <string name="max_state_exceeded">Prekročili ste maximálny počet stavov!</string>
+    <string name="max_state_count">Maximálny počet stavov</string>
+    <string name="game_simulation_successful">Simulácia skončila v cieli!</string>
+    <string name="game_simulation_successful_stack_not_empty">Simulácia skončila v cieli, avšak zásobník nie je prázdny
+    </string>
+    <string name="game_simulation_not_in_final_state">Simulácia skončila v cieli, avšak nie v koncovom stave!
+    </string>
+    <string name="game_simulation_stuck">Simulácia sa zasekla!</string>
+    <string name="find_games">Vyhľadať hry</string>
 </resources>

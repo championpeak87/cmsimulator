@@ -103,7 +103,8 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
 
         final TextView grammarType = holder.grammar_type;
         final CardView cardView = holder.cardView;
-        holder.help_button.setOnClickListener(new View.OnClickListener()
+        holder.help_button.setVisibility(View.INVISIBLE);
+        /*holder.help_button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
@@ -117,7 +118,7 @@ public class ExampleGrammarAdapter extends RecyclerView.Adapter<ExampleGrammarAd
 
                 mContext.startActivity(hintIntent, options.toBundle());
             }
-        });
+        });*/
         
         holder.cardView.setOnClickListener(new View.OnClickListener()
         {

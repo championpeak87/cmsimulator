@@ -31,6 +31,7 @@ import fiitstu.gulis.cmsimulator.dialogs.ChessGameStateDialog;
 import fiitstu.gulis.cmsimulator.dialogs.ChessGameTransitionDialog;
 import fiitstu.gulis.cmsimulator.dialogs.ConfigurationDialog;
 import fiitstu.gulis.cmsimulator.elements.*;
+import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 import fiitstu.gulis.cmsimulator.views.ChessView;
@@ -273,50 +274,60 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 return true;
             case R.id.menu_save_task:
                 // TODO: SAVE GAME
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
                 return true;
             case R.id.menu_submit_task:
                 // TODO: SUBMIT_TASK
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
                 return true;
             case R.id.menu_configuration_simulate:
-                // TODO: SIMULATION
-                if (!isFieldVisible)
-                    imagebutton_drop_up.callOnClick();
-                stack = new ArrayList<>();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA)
-                            runSimulationStep();
-                        else
-                            runSimulationStepWithStack();
-                        Pair<Integer, Integer> cField = activeField;
-                        Pair<Integer, Integer> fField = finishField;
-                        if (!simulationStuck)
-                            handler.postDelayed(this, 500);
-                        else {
-                            if (cField.equals(fField))
-                                if (currentState.isFinalState()) {
-                                    if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
-                                        if (stack.isEmpty())
-                                            Toast.makeText(ChessGameActivity.this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
-                                        else
-                                            Toast.makeText(ChessGameActivity.this, "SIMULACIA PREBEHLA USPESNE ALE ZASOBNIK NIE JE PRAZDNY", Toast.LENGTH_SHORT).show();
-                                    } else
-                                        Toast.makeText(ChessGameActivity.this, "SIMULACIA PREBEHLA USPESNE", Toast.LENGTH_SHORT).show();
-                                } else
-                                    Toast.makeText(ChessGameActivity.this, "SIMULACIA SKONCILA ALE AUTOMAT NIE JE V KONCOVOM STAVE", Toast.LENGTH_SHORT).show();
+                if (getInitialState() != null) {
+                    if (!isFieldVisible)
+                        imagebutton_drop_up.callOnClick();
+                    stack = new ArrayList<>();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA)
+                                runSimulationStep();
                             else
-                                Toast.makeText(ChessGameActivity.this, "AUTOMAT SA ZASEKOL", Toast.LENGTH_SHORT).show();
-                            simulationStuck = false;
-                            startField = null;
-                            finishField = null;
-                            activeField = null;
-                            currentState = null;
+                                runSimulationStepWithStack();
+                            Pair<Integer, Integer> cField = activeField;
+                            Pair<Integer, Integer> fField = finishField;
+                            if (!simulationStuck)
+                                handler.postDelayed(this, 500);
+                            else {
+                                if (cField.equals(fField))
+                                    if (currentState.isFinalState()) {
+                                        if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
+                                            if (stack.isEmpty())
+                                                Toast.makeText(ChessGameActivity.this, R.string.game_simulation_successful, Toast.LENGTH_LONG).show();
+                                            else
+                                                Toast.makeText(ChessGameActivity.this, R.string.game_simulation_successful_stack_not_empty, Toast.LENGTH_LONG).show();
+                                        } else
+                                            Toast.makeText(ChessGameActivity.this, R.string.game_simulation_successful, Toast.LENGTH_LONG).show();
+                                    } else
+                                        Toast.makeText(ChessGameActivity.this, R.string.game_simulation_not_in_final_state, Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(ChessGameActivity.this, R.string.game_simulation_stuck, Toast.LENGTH_LONG).show();
+                                simulationStuck = false;
+                                startField = null;
+                                finishField = null;
+                                activeField = null;
+                                currentState = null;
+                            }
                         }
-                    }
-                }, 0);
-
+                    }, 0);
+                } else Toast.makeText(this, R.string.initial_state_error, Toast.LENGTH_LONG).show();
                 return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, OptionsActivity.class);
@@ -324,6 +335,11 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 return true;
             case R.id.menu_configuration_help:
                 // TODO: HELP
+                try {
+                    throw new NotImplementedException(this);
+                } catch (NotImplementedException e) {
+                    e.printStackTrace();
+                }
                 return true;
         }
     }
