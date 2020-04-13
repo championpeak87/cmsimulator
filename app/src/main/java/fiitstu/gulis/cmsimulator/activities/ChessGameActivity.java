@@ -355,6 +355,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 @Override
                 public void onChange(Bundle output_bundle) {
                     final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
+                    for (State s : stateList) {
+                        if (s.getValue().equals(stateName)) {
+                            Toast.makeText(ChessGameActivity.this, R.string.state_duplicity, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
                     final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
                     if (initialStateExits && isInitial) {
                         Toast.makeText(ChessGameActivity.this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
