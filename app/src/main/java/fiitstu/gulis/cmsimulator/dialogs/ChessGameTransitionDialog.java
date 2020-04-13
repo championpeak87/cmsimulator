@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
 import fiitstu.gulis.cmsimulator.elements.State;
@@ -45,9 +46,24 @@ public class ChessGameTransitionDialog extends DialogFragment {
             togglebutton_up,
             togglebutton_left,
             togglebutton_right,
-            togglebutton_down;
+            togglebutton_down,
 
-    private ImageButton selected_button;
+    togglebutton_push_up,
+            togglebutton_push_left,
+            togglebutton_push_right,
+            togglebutton_push_down,
+
+    togglebutton_pop_up,
+            togglebutton_pop_left,
+            togglebutton_pop_right,
+            togglebutton_pop_down;
+
+    private ImageButton
+            selected_button = null,
+            selected_push_button = null,
+            selected_pop_button = null;
+
+    private LinearLayout linearlayout_pushdown_config;
 
     private State
             fromState,
@@ -72,7 +88,7 @@ public class ChessGameTransitionDialog extends DialogFragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ChessGameTransitionDialog(List<Transition> fromTransitionList,List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
+    public ChessGameTransitionDialog(List<Transition> fromTransitionList, List<Transition> transitions, State fromState, State toState, DIALOG_TYPE dialog_type, AUTOMATA_TYPE automata_type) {
         this.dialog_type = dialog_type;
         this.fromTransitionList = fromTransitionList;
         this.transitionList = transitions;
@@ -158,6 +174,78 @@ public class ChessGameTransitionDialog extends DialogFragment {
                     setDirectionButton(togglebutton_left);
                     break;
             }
+        }
+
+        if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
+            linearlayout_pushdown_config = view.findViewById(R.id.linearlayou_pushdown_config);
+            linearlayout_pushdown_config.setVisibility(View.VISIBLE);
+
+            togglebutton_pop_up = view.findViewById(R.id.togglebutton_pop_up);
+            togglebutton_pop_down = view.findViewById(R.id.togglebutton_pop_down);
+            togglebutton_pop_left = view.findViewById(R.id.togglebutton_pop_left);
+            togglebutton_pop_right = view.findViewById(R.id.togglebutton_pop_right);
+
+            togglebutton_push_up = view.findViewById(R.id.togglebutton_push_up);
+            togglebutton_push_down = view.findViewById(R.id.togglebutton_push_down);
+            togglebutton_push_left = view.findViewById(R.id.togglebutton_push_left);
+            togglebutton_push_right = view.findViewById(R.id.togglebutton_push_right);
+
+            togglebutton_pop_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPopButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_pop_down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPopButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_pop_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPopButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_pop_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPopButton((ImageButton) v);
+                }
+            });
+
+
+            togglebutton_push_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPushButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_push_down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPushButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_push_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPushButton((ImageButton) v);
+                }
+            });
+
+            togglebutton_push_right.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setDirectionPushButton((ImageButton) v);
+                }
+            });
         }
 
         for (Transition t : transitionList) {
@@ -281,5 +369,35 @@ public class ChessGameTransitionDialog extends DialogFragment {
             this.selected_button.getBackground().clearColorFilter();
         this.selected_button = selected_button;
         selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+    }
+
+    private void setDirectionPushButton(ImageButton selected_button) {
+        if (this.selected_push_button != null) {
+            if (this.selected_push_button.equals(selected_button)) {
+                this.selected_push_button.getBackground().clearColorFilter();
+                this.selected_push_button = null;
+                return;
+            } else {
+                this.selected_push_button.getBackground().clearColorFilter();
+                this.selected_push_button = selected_button;
+            }
+        }
+        selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+        selected_push_button = selected_button;
+    }
+
+    private void setDirectionPopButton(ImageButton selected_button) {
+        if (this.selected_pop_button != null) {
+            if (this.selected_pop_button.equals(selected_button)) {
+                this.selected_pop_button.getBackground().clearColorFilter();
+                this.selected_pop_button = null;
+                return;
+            } else {
+                this.selected_pop_button.getBackground().clearColorFilter();
+                this.selected_pop_button = selected_button;
+            }
+        }
+        selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+        selected_pop_button = selected_button;
     }
 }

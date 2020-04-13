@@ -45,6 +45,7 @@ public class FileHandler {
      * Contains the file names of the built-in example machines
      */
     public static class Examples {
+
         public static final String DFSA = "FSA.cms";
         public static final String DFSA_AN = "FSA_a^n.cms";
         public static final String NFSA = "NFSA.cms";
@@ -61,6 +62,7 @@ public class FileHandler {
      * Contains the file names of the built-in example grammars
      */
     public static class GrammarExamples {
+
         public static final String GREG_AN = "Greg_a^n.cmsg";
         public static final String GREG_3KPlus1 = "Greg_3k+1.cmsg";
         public static final String GREG_End01Or10 = "Greg_End01Or10.cmsg";
@@ -123,12 +125,14 @@ public class FileHandler {
                     return null;
             }
         }
+
     }
 
     /**
      * A simple class to represent version of the file
      */
     private class Version {
+
         //might as well be public, since they are final and the class itself is private
         public final int major;
         public final int minor;
@@ -149,6 +153,7 @@ public class FileHandler {
                 minor = versionNumbers.length > 1 ? Integer.parseInt(versionNumbers[1]) : 0;
             }
         }
+
     }
 
     //log tag
@@ -177,6 +182,8 @@ public class FileHandler {
     private static final String Y = "y";
     private static final String INITIAL = "initial";
     private static final String FINAL = "final";
+    private static final String AUTOMATA_TYPE = "automataType";
+    private static final String VALUE = "value";
 
     private static final String TRANSITION = "transition";
     private static final String FROM = "from";
@@ -376,8 +383,18 @@ public class FileHandler {
         String maxStateCountS = maxStateCount.getNodeValue();
         imaxStateCount = Integer.parseInt(maxStateCountS);
 
-        // TODO: AUTOMATA_TYPE
-        automata_type = fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA;
+        // AUTOMATA TYPE
+        NodeList automataTypeNodeList = document.getElementsByTagName(AUTOMATA_TYPE);
+        Node automataTypeNode = automataTypeNodeList.item(0);
+        NamedNodeMap automataTypeNamedNodeMap = automataTypeNode.getAttributes();
+
+        Node valueNode = automataTypeNamedNodeMap.getNamedItem(VALUE);
+        String automataTypeString = valueNode.getNodeValue();
+
+        if (automataTypeString.equals(fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA.getApiKey()))
+            automata_type = fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA;
+        else
+            automata_type = fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA;
 
         // CREATE CHESS GAME
         ChessGame chessGame = new ChessGame(startField, finishField, pathList, fieldSize, imaxStateCount, automata_type);
@@ -556,6 +573,45 @@ public class FileHandler {
             Element max_state_count = document.createElement(MAX_STATE_COUNT);
             max_state_count.setAttribute(COUNT, Integer.toString(game.getMaxStateCount()));
             gameElement.appendChild(max_state_count);
+        }
+
+        // AUTOMATA_TYPE
+        {
+            Element automataType = document.createElement(AUTOMATA_TYPE);
+            automataType.setAttribute(VALUE, game.getAutomata_type().getApiKey());
+            gameElement.appendChild(automataType);
+        }
+
+        // STATES
+        {
+            Element states = document.createElement(STATES);
+            List<State> stateList = game.getListOfStates();
+
+            for (State s : stateList) {
+                Element state = document.createElement(STATE);
+                state.setAttribute(ID, Long.toString(s.getId()));
+                state.setAttribute(NAME, s.getValue());
+                state.setAttribute(INITIAL, Boolean.toString(s.isInitialState()));
+                state.setAttribute(FINAL, Boolean.toString(s.isFinalState()));
+                state.setAttribute(X, Integer.toString(s.getPositionX()));
+                state.setAttribute(Y, Integer.toString(s.getPositionY()));
+                states.appendChild(state);
+            }
+        }
+
+        // TRANSITIONS
+        {
+            Element transitions = document.createElement(TRANSITIONS);
+            List<Transition> transitionList = game.getListOfTransitions();
+
+            for (Transition t : transitionList) {
+                Element transition = document.createElement(TRANSITION);
+                transition.setAttribute(ID, Long.toString(t.getId()));
+                transition.setAttribute(FROM, Long.toString(t.getFromState().getId()));
+                transition.setAttribute(TO, Long.toString(t.getToState().getId()));
+                transition.setAttribute(READ, t.getReadSymbol().getValue());
+                transition.appendChild(transition);
+            }
         }
     }
 

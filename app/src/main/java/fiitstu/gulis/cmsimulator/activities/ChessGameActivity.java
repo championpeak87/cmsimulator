@@ -63,7 +63,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     private static final int SHOW_UP_DURATION = 400;
 
     private boolean isFieldVisible = false;
-    private int machineType;
+    private automata_type automata_type;
     private long emptyInputSymbolId;
     private long startStackSymbolId;
     private int elementAction;
@@ -326,19 +326,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
             fileHandler.loadFile(filename);
             chessGame = fileHandler.getChessGame();
-            automata_type automata_type = chessGame.getAutomata_type();
-            switch (automata_type) {
-
-                case FINITE_AUTOMATA:
-                    machineType = MainActivity.FINITE_STATE_AUTOMATON;
-                    break;
-                case PUSHDOWN_AUTOMATA:
-                    machineType = MainActivity.PUSHDOWN_AUTOMATON;
-                    break;
-                default:
-                    machineType = -1;
-                    break;
-            }
+            automata_type = chessGame.getAutomata_type();
             fileHandler.getData(dataSource);
         } catch (Exception e) {
             Log.e(TAG, "File was not loaded", e);
@@ -411,7 +399,8 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             if (t.getFromState().equals(fromState))
                 fromTransitionList.add(t);
         }
-        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE);
+        ChessGameTransitionDialog.AUTOMATA_TYPE type = automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA ? ChessGameTransitionDialog.AUTOMATA_TYPE.FINITE : ChessGameTransitionDialog.AUTOMATA_TYPE.PUSHDOWN;
+        ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, type);
         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
             @Override
             public void OnChange(Bundle output_bundle) {

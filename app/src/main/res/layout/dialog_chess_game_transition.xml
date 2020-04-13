@@ -1,56 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:padding="20dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:orientation="horizontal">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/from_state"
-                  android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
-        <EditText android:id="@+id/edittext_start_state" android:layout_width="0dp" android:layout_height="50dp"
-                  android:layout_weight="0.7" android:enabled="false" android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:orientation="horizontal" android:paddingTop="20dp" android:paddingBottom="20dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/direction"
-                  android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.7"
-                      android:orientation="vertical">
-            <ImageButton android:id="@+id/togglebutton_up" android:layout_width="50dp" android:layout_height="50dp"
-                         style="?android:buttonBarButtonStyle"
-                         android:background="@drawable/baseline_arrow_upward_24"
-                         android:foreground="?android:attr/selectableItemBackground"
-                         android:layout_gravity="center_horizontal"/>
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:orientation="horizontal" android:layout_gravity="center">
-                <ImageButton android:id="@+id/togglebutton_left" android:layout_width="50dp"
-                             android:layout_height="50dp" style="?android:buttonBarButtonStyle"
-                             android:background="@drawable/baseline_arrow_back_24"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:padding="20dp"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/from_state"
+                      android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
+            <EditText android:id="@+id/edittext_start_state" android:layout_width="0dp" android:layout_height="50dp"
+                      android:layout_weight="0.7" android:enabled="false" android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+              android:background="@color/bootstrap_gray"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal" android:paddingTop="20dp" android:paddingBottom="20dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/direction"
+                      android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="0.7"
+                          android:orientation="vertical">
+                <ImageButton android:id="@+id/togglebutton_up" android:layout_width="50dp" android:layout_height="50dp"
+                             style="?android:buttonBarButtonStyle"
+                             android:background="@drawable/baseline_arrow_upward_24"
                              android:foreground="?android:attr/selectableItemBackground"
                              android:layout_gravity="center_horizontal"/>
-                <View android:layout_width="50dp" android:layout_height="50dp"/>
-                <ImageButton android:id="@+id/togglebutton_right" android:layout_width="50dp"
-                             android:layout_height="50dp" style="?android:buttonBarButtonStyle"
-                             android:background="@drawable/baseline_arrow_forward_24"
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              android:orientation="horizontal" android:layout_gravity="center">
+                    <ImageButton android:id="@+id/togglebutton_left" android:layout_width="50dp"
+                                 android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_back_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                    <View android:layout_width="50dp" android:layout_height="50dp"/>
+                    <ImageButton android:id="@+id/togglebutton_right" android:layout_width="50dp"
+                                 android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_forward_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+                <ImageButton android:id="@+id/togglebutton_down" android:layout_width="50dp"
+                             android:layout_height="50dp"
+                             style="?android:buttonBarButtonStyle"
+                             android:background="@drawable/baseline_arrow_downward_24"
                              android:foreground="?android:attr/selectableItemBackground"
                              android:layout_gravity="center_horizontal"/>
             </LinearLayout>
-            <ImageButton android:id="@+id/togglebutton_down" android:layout_width="50dp" android:layout_height="50dp"
-                         style="?android:buttonBarButtonStyle"
-                         android:background="@drawable/baseline_arrow_downward_24"
-                         android:foreground="?android:attr/selectableItemBackground"
-                         android:layout_gravity="center_horizontal"/>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:orientation="horizontal">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/to_state"
-                  android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
-        <EditText android:id="@+id/edittext_finish_state" android:layout_width="0dp" android:layout_height="50dp"
-                  android:layout_weight="0.7" android:enabled="false" android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:id="@+id/linearlayou_pushdown_config" android:orientation="vertical"
+                      android:visibility="gone">
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                  android:background="@color/bootstrap_gray"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="horizontal" android:paddingTop="10dp" android:paddingBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                          android:text="@string/PUSH_symbol"
+                          android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                              android:layout_weight="0.7"
+                              android:orientation="vertical">
+                    <ImageButton android:id="@+id/togglebutton_push_up" android:layout_width="50dp"
+                                 android:layout_height="50dp"
+                                 style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_upward_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                  android:orientation="horizontal" android:layout_gravity="center">
+                        <ImageButton android:id="@+id/togglebutton_push_left" android:layout_width="50dp"
+                                     android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                     android:background="@drawable/baseline_arrow_back_24"
+                                     android:foreground="?android:attr/selectableItemBackground"
+                                     android:layout_gravity="center_horizontal"/>
+                        <View android:layout_width="50dp" android:layout_height="50dp"/>
+                        <ImageButton android:id="@+id/togglebutton_push_right" android:layout_width="50dp"
+                                     android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                     android:background="@drawable/baseline_arrow_forward_24"
+                                     android:foreground="?android:attr/selectableItemBackground"
+                                     android:layout_gravity="center_horizontal"/>
+                    </LinearLayout>
+                    <ImageButton android:id="@+id/togglebutton_push_down" android:layout_width="50dp"
+                                 android:layout_height="50dp"
+                                 style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_downward_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                  android:background="@color/bootstrap_gray"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="horizontal" android:paddingTop="10dp" android:paddingBottom="10dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                          android:text="@string/POP_symbol"
+                          android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                              android:layout_weight="0.7"
+                              android:orientation="vertical">
+                    <ImageButton android:id="@+id/togglebutton_pop_up" android:layout_width="50dp"
+                                 android:layout_height="50dp"
+                                 style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_upward_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                  android:orientation="horizontal" android:layout_gravity="center">
+                        <ImageButton android:id="@+id/togglebutton_pop_left" android:layout_width="50dp"
+                                     android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                     android:background="@drawable/baseline_arrow_back_24"
+                                     android:foreground="?android:attr/selectableItemBackground"
+                                     android:layout_gravity="center_horizontal"/>
+                        <View android:layout_width="50dp" android:layout_height="50dp"/>
+                        <ImageButton android:id="@+id/togglebutton_pop_right" android:layout_width="50dp"
+                                     android:layout_height="50dp" style="?android:buttonBarButtonStyle"
+                                     android:background="@drawable/baseline_arrow_forward_24"
+                                     android:foreground="?android:attr/selectableItemBackground"
+                                     android:layout_gravity="center_horizontal"/>
+                    </LinearLayout>
+                    <ImageButton android:id="@+id/togglebutton_pop_down" android:layout_width="50dp"
+                                 android:layout_height="50dp"
+                                 style="?android:buttonBarButtonStyle"
+                                 android:background="@drawable/baseline_arrow_downward_24"
+                                 android:foreground="?android:attr/selectableItemBackground"
+                                 android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+              android:background="@color/bootstrap_gray"/>
 
-</LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="@string/to_state"
+                      android:layout_weight="0.3" android:layout_gravity="center_vertical"/>
+            <EditText android:id="@+id/edittext_finish_state" android:layout_width="0dp" android:layout_height="50dp"
+                      android:layout_weight="0.7" android:enabled="false" android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
