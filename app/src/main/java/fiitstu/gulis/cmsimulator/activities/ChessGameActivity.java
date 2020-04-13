@@ -106,6 +106,8 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             imageButton_configuration_diagram_remove;
     private DiagramView diagramView_configuration;
 
+    private List<Symbol> stack = new ArrayList<>();
+
     //onCreate method
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -347,30 +349,32 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     @Override
     public void onAddState() {
         Log.v(TAG, "onAddState from diagram noted");
-        ChessGameStateDialog chessGameStateDialog = new ChessGameStateDialog();
-        chessGameStateDialog.setStateChangeListener(new ChessGameStateDialog.StateChangeListener() {
-            @Override
-            public void onChange(Bundle output_bundle) {
-                final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
-                final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
-                if (initialStateExits && isInitial) {
-                    Toast.makeText(ChessGameActivity.this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
-                    return;
+        if (stateList.size() < chessGame.getMaxStateCount()) {
+            ChessGameStateDialog chessGameStateDialog = new ChessGameStateDialog();
+            chessGameStateDialog.setStateChangeListener(new ChessGameStateDialog.StateChangeListener() {
+                @Override
+                public void onChange(Bundle output_bundle) {
+                    final String stateName = output_bundle.getString(ChessGameStateDialog.STATE_NAME_KEY);
+                    final boolean isInitial = output_bundle.getBoolean(ChessGameStateDialog.INITIAL_STATE_KEY);
+                    if (initialStateExits && isInitial) {
+                        Toast.makeText(ChessGameActivity.this, R.string.error_initial_state, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    initialStateExits = isInitial;
+                    final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
+                    dataSource.open();
+                    final int x = diagramView_configuration.getNewStatePositionX();
+                    final int y = diagramView_configuration.getNewStatePositionY();
+                    State state = dataSource.addState(stateName, x, y, isInitial, isFinal);
+                    diagramView_configuration.addState(state);
+                    stateList.add(state);
+                    dataSource.close();
                 }
-                initialStateExits = isInitial;
-                final boolean isFinal = output_bundle.getBoolean(ChessGameStateDialog.FINAL_STATE_KEY);
-                dataSource.open();
-                final int x = diagramView_configuration.getNewStatePositionX();
-                final int y = diagramView_configuration.getNewStatePositionY();
-                State state = dataSource.addState(stateName, x, y, isInitial, isFinal);
-                diagramView_configuration.addState(state);
-                stateList.add(state);
-                dataSource.close();
-            }
-        });
+            });
 
-        FragmentManager fm = this.getSupportFragmentManager();
-        chessGameStateDialog.show(fm, TAG);
+            FragmentManager fm = this.getSupportFragmentManager();
+            chessGameStateDialog.show(fm, TAG);
+        } else Toast.makeText(this, R.string.max_state_exceeded, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -764,4 +768,22 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             }
         }
     }
+
+    private Symbol popSymbol() {
+        final int lastIndex = stack.size() - 1;
+        if (lastIndex >= 0)
+            return stack.get(lastIndex);
+        return null;
+    }
+
+    private void pushSymbol(Symbol s) {
+        stack.add(s);
+    }
+
+    private boolean isStackEmpty() {
+        final int stackSize = stack.size();
+
+        return stackSize == 0;
+    }
+
 }

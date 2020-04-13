@@ -1383,5 +1383,7 @@
 	<string name="exit_game">Do you really want to exit this game? Unsaved work won\'t be saved!</string>
     <string name="cannot_set_chessfield">Can\'t set ChessField size!</string>
 	<string name="run_out_chessfield">You\'ve run out of ChessField!</string>
+	<string name="max_state_exceeded">You have exceeded max count of states!</string>
+	<string name="max_state_count">Max state count</string>
 
 </resources>

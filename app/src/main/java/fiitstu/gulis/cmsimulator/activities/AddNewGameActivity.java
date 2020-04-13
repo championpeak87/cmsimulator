@@ -38,6 +38,9 @@ import java.util.List;
 public class AddNewGameActivity extends FragmentActivity {
     private static final String TAG = "AddNewGameActivity";
 
+    private static final int MAX_ALLOWED_STATES = 20;
+    private static final int MIN_ALLOWED_STATES = 1;
+
     // UI ELEMENTS
     LinearLayout linearlayout_task_description;
     EditText edittext_task_name;
@@ -47,6 +50,7 @@ public class AddNewGameActivity extends FragmentActivity {
     Button button_zoom_out;
     RadioButton radiobutton_finite_automata;
     RadioButton radiobutton_pushdown_automata;
+    NumberPicker numberpicker_max_state_count;
 
     private float[] touchCoordinates = {0, 0};
 
@@ -76,6 +80,10 @@ public class AddNewGameActivity extends FragmentActivity {
         button_zoom_out = findViewById(R.id.button_zoom_out);
         radiobutton_finite_automata = findViewById(R.id.radiobutton_finite_automata);
         radiobutton_pushdown_automata = findViewById(R.id.radiobutton_pushdown_automata);
+        numberpicker_max_state_count = findViewById(R.id.numberpicker_max_state_count);
+
+        numberpicker_max_state_count.setMinValue(MIN_ALLOWED_STATES);
+        numberpicker_max_state_count.setMaxValue(MAX_ALLOWED_STATES);
     }
 
     @Override
@@ -202,6 +210,7 @@ public class AddNewGameActivity extends FragmentActivity {
                     final Pair<Integer, Integer> finishField = chessview_task.getFinishField();
                     final Pair<Integer, Integer> fieldSize = chessview_task.getFieldSize();
                     final List<Pair<Integer, Integer>> pathList = chessview_task.getPath();
+                    final int max_allowed_states = numberpicker_max_state_count.getValue();
                     final automata_type automata_type = radiobutton_finite_automata.isChecked() ? fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA : radiobutton_pushdown_automata.isChecked() ? fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA : fiitstu.gulis.cmsimulator.models.tasks.automata_type.UNKNOWN;
 
                     final ChessGame chessGame = new ChessGame(
@@ -209,7 +218,7 @@ public class AddNewGameActivity extends FragmentActivity {
                             finishField,
                             pathList,
                             fieldSize,
-                            10,
+                            max_allowed_states,
                             automata_type
                     );
                     FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);

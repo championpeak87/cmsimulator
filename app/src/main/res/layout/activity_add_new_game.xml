@@ -29,6 +29,9 @@
                 <RadioButton android:id="@+id/radiobutton_finite_automata" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/finite_state_automaton"/>
                 <RadioButton android:id="@+id/radiobutton_pushdown_automata" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/pushdown_automaton"/>
             </RadioGroup>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent" style="@style/text_subheader" android:text="@string/max_state_count"/>
+            <NumberPicker android:id="@+id/numberpicker_max_state_count" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

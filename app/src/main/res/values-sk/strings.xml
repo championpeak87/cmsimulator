@@ -1018,4 +1018,6 @@
     <string name="exit_game">Naozaj chcete opustiť hru? Neuložená práca nebude uložená!</string>
     <string name="cannot_set_chessfield">Nemôžem nastaviť veľkosť hernej plochy!</string>
     <string name="run_out_chessfield">Ste mimo hernej plochy!</string>
+    <string name="max_state_exceeded">You have exceeded max count of states!</string>
+    <string name="max_state_count">Max state count</string>
 </resources>
