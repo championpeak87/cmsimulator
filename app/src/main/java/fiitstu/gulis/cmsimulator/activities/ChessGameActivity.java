@@ -34,11 +34,21 @@ import fiitstu.gulis.cmsimulator.elements.*;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
+import fiitstu.gulis.cmsimulator.network.ServerController;
+import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.views.ChessView;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceConfigurationError;
+
+import static fiitstu.gulis.cmsimulator.database.FileHandler.PATH;
 
 /**
  * The activity for editing the state diagram, the alphabet, the states and tre transitions.
@@ -92,6 +102,8 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     private DataSource dataSource = DataSource.getInstance();
     private ImageButton lastPressedImageButton;
 
+    private int task_id;
+    public static final String TASK_ID_KEY = "TASK_ID";
 
     // UI ELEMENTS
     private ImageButton imagebutton_drop_up;
@@ -117,6 +129,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         setUIElements();
         setEvents();
         setChessField();
+
+        Intent intent = this.getIntent();
+        task_id = intent.getIntExtra(TASK_ID_KEY, -1);
 
         // SET INPUT SYMBOLS
         List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
@@ -273,19 +288,188 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 onBackPressed();
                 return true;
             case R.id.menu_save_task:
-                // TODO: SAVE GAME
+                // COMPLETED: SAVE GAME
+                FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
+                chessGame.setListOfStates(stateList);
+                chessGame.setListOfTransitions(transitions);
                 try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
+                    fileHandler.setData(chessGame);
+                    fileHandler.writeFile(Integer.toString(task_id));
+                    final File file = new File(PATH + "/" + Integer.toString(task_id) + ".cmsc");
+
+                    class UploadSaveFileAsync extends AsyncTask<Void, Void, String> {
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            UrlManager urlManager = new UrlManager();
+                            ServerController serverController = new ServerController();
+                            String output = null;
+                            int logged_user_id = TaskLoginActivity.loggedUser.getUser_id();
+                            URL url = urlManager.getSaveGameURL(logged_user_id, task_id);
+
+                            try {
+                                output = serverController.doPostRequest(url, file);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            return output;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if (s == null || s.isEmpty())
+                                Toast.makeText(ChessGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(ChessGameActivity.this, R.string.game_saved_successfully, Toast.LENGTH_SHORT).show();
+                            file.delete();
+                        }
+                    }
+
+                    new UploadSaveFileAsync().execute();
+                } catch (ParserConfigurationException | IOException | TransformerException e) {
                     e.printStackTrace();
                 }
                 return true;
             case R.id.menu_submit_task:
-                // TODO: SUBMIT_TASK
+                // COMPLETED: SUBMIT_TASK
+                final boolean correct[] = {false};
+                FileHandler fileHandler1 = new FileHandler(FileHandler.Format.CMSC);
+                chessGame.setListOfTransitions(transitions);
+                chessGame.setListOfStates(stateList);
                 try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
+                    fileHandler1.setData(chessGame);
+                    fileHandler1.writeFile(Integer.toString(task_id));
+                } catch (ParserConfigurationException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
+
+                final File file2 = new File(PATH + "/" + Integer.toString(task_id) + ".cmsc");
+
+                class SubmitTaskAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        String output = null;
+                        int logged_user_id = TaskLoginActivity.loggedUser.getUser_id();
+                        URL url = urlManager.getSubmitGameURL(task_id, logged_user_id, correct[0] ? Task.TASK_STATUS.CORRECT : Task.TASK_STATUS.WRONG);
+
+                        try {
+                            output = serverController.getResponseFromServer(url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            return output;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s == null || s.isEmpty())
+                            Toast.makeText(ChessGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(ChessGameActivity.this, R.string.game_successfully_submitted, Toast.LENGTH_SHORT).show();
+                        ChessGameActivity.this.finish();
+                    }
+                }
+
+                class UploadSaveFileAsync extends AsyncTask<Void, Void, String> {
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        UrlManager urlManager = new UrlManager();
+                        ServerController serverController = new ServerController();
+                        String output = null;
+                        int logged_user_id = TaskLoginActivity.loggedUser.getUser_id();
+                        URL url = urlManager.getSaveGameURL(logged_user_id, task_id);
+
+                        try {
+                            output = serverController.doPostRequest(url, file2);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        return output;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if (s == null || s.isEmpty())
+                            Toast.makeText(ChessGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
+                        else
+                            new SubmitTaskAsync().execute();
+                        file2.delete();
+                    }
+                }
+
+                final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setTitle(R.string.submit_game)
+                        .setMessage(correct[0] ? R.string.submit_game_message : R.string.submit_game_message_negative)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new UploadSaveFileAsync().execute();
+                            }
+                        })
+                        .create();
+
+
+                if (getInitialState() != null) {
+                    if (!isFieldVisible)
+                        imagebutton_drop_up.callOnClick();
+                    stack = new ArrayList<>();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.FINITE_AUTOMATA)
+                                runSimulationStep();
+                            else
+                                runSimulationStepWithStack();
+                            Pair<Integer, Integer> cField = activeField;
+                            Pair<Integer, Integer> fField = finishField;
+                            if (!simulationStuck)
+                                handler.postDelayed(this, 0);
+                            else {
+                                if (cField.equals(fField))
+                                    if (currentState.isFinalState()) {
+                                        if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
+                                            if (stack.isEmpty()) {
+                                                correct[0] = true;
+                                                alertDialog.setMessage(getString(R.string.submit_game_message));
+                                                alertDialog.show();
+                                            } else {
+                                                correct[0] = false;
+                                                alertDialog.show();
+                                            }
+                                        } else {
+                                            correct[0] = true;
+                                            alertDialog.setMessage(getString(R.string.submit_game_message));
+                                            alertDialog.show();
+                                        }
+                                    } else {
+                                        correct[0] = false;
+                                        alertDialog.show();
+                                    }
+                                else {
+                                    correct[0] = false;
+                                    alertDialog.show();
+                                }
+                                simulationStuck = false;
+                                startField = null;
+                                finishField = null;
+                                activeField = null;
+                                currentState = null;
+                            }
+                        }
+                    }, 0);
+                } else {
+                    correct[0] = false;
+                    alertDialog.show();
                 }
                 return true;
             case R.id.menu_configuration_simulate:

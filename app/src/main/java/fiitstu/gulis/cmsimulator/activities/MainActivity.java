@@ -190,60 +190,70 @@ public class MainActivity extends FragmentActivity
 
         final int textColor = getColor(R.color.introContentText);
 
-        MaterialShowcaseSequence firstLaunchSequence = new MaterialShowcaseSequence(this);
-        MaterialShowcaseView firstLaunchMessage = new MaterialShowcaseView.Builder(this)
-                .renderOverNavigationBar()
-                .setTitleText(getString(R.string.welcome))
-                .setContentTextColor(textColor)
-                .setContentText(getString(R.string.welcome_message))
-                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                .setDismissText(R.string.understood)
-                .setDelay(500)
-                .build();
+        MaterialShowcaseSequence firstLaunchSequence = null;
+        MaterialShowcaseView firstLaunchMessage = null;
+        try {
+            firstLaunchSequence = new MaterialShowcaseSequence(this);
+            firstLaunchMessage = new MaterialShowcaseView.Builder(this)
+                    .renderOverNavigationBar()
+                    .setTitleText(getString(R.string.welcome))
+                    .setContentTextColor(textColor)
+                    .setContentText(getString(R.string.welcome_message))
+                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                    .setDismissText(R.string.understood)
+                    .setDelay(500)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Button newAutomata = findViewById(R.id.button_main_new),
                 newGrammar = findViewById(R.id.button_main_grammar),
                 tasks = findViewById(R.id.button_main_tasks);
 
-        MaterialShowcaseView newAutomataMessage = new MaterialShowcaseView.Builder(this)
-                .renderOverNavigationBar()
-                .setTarget(newAutomata)
-                .setContentTextColor(textColor)
-                .setTitleText(getString(R.string.automatas))
-                .setContentText(getString(R.string.automata_message))
-                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                .setDismissText(R.string.understood)
-                .setDelay(500)
-                .build();
+        try {
+            MaterialShowcaseView newAutomataMessage = new MaterialShowcaseView.Builder(this)
+                    .renderOverNavigationBar()
+                    .setTarget(newAutomata)
+                    .setContentTextColor(textColor)
+                    .setTitleText(getString(R.string.automatas))
+                    .setContentText(getString(R.string.automata_message))
+                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                    .setDismissText(R.string.understood)
+                    .setDelay(500)
+                    .build();
 
-        MaterialShowcaseView newGrammarMessage = new MaterialShowcaseView.Builder(this)
-                .renderOverNavigationBar()
-                .setTarget(newGrammar)
-                .setTitleText(getString(R.string.grammar))
-                .setContentTextColor(textColor)
-                .setContentText(getString(R.string.grammar_message))
-                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                .setDismissText(R.string.understood)
-                .setDelay(500)
-                .build();
+            MaterialShowcaseView newGrammarMessage = new MaterialShowcaseView.Builder(this)
+                    .renderOverNavigationBar()
+                    .setTarget(newGrammar)
+                    .setTitleText(getString(R.string.grammar))
+                    .setContentTextColor(textColor)
+                    .setContentText(getString(R.string.grammar_message))
+                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                    .setDismissText(R.string.understood)
+                    .setDelay(500)
+                    .build();
 
-        MaterialShowcaseView tasksMessage = new MaterialShowcaseView.Builder(this)
-                .renderOverNavigationBar()
-                .setTarget(tasks)
-                .setTitleText(getString(R.string.tasks))
-                .setContentTextColor(textColor)
-                .setContentText(getString(R.string.tasks_message))
-                .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                .setDismissText(R.string.understood)
-                .setDelay(500)
-                .build();
+            MaterialShowcaseView tasksMessage = new MaterialShowcaseView.Builder(this)
+                    .renderOverNavigationBar()
+                    .setTarget(tasks)
+                    .setTitleText(getString(R.string.tasks))
+                    .setContentTextColor(textColor)
+                    .setContentText(getString(R.string.tasks_message))
+                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
+                    .setDismissText(R.string.understood)
+                    .setDelay(500)
+                    .build();
 
-        firstLaunchSequence.addSequenceItem(firstLaunchMessage);
-        firstLaunchSequence.addSequenceItem(newAutomataMessage);
-        firstLaunchSequence.addSequenceItem(newGrammarMessage);
-        firstLaunchSequence.addSequenceItem(tasksMessage);
-        firstLaunchSequence.setSingleUse(FIRST_LAUNCH);
-        firstLaunchSequence.show();
+            firstLaunchSequence.addSequenceItem(firstLaunchMessage);
+            firstLaunchSequence.addSequenceItem(newAutomataMessage);
+            firstLaunchSequence.addSequenceItem(newGrammarMessage);
+            firstLaunchSequence.addSequenceItem(tasksMessage);
+            firstLaunchSequence.setSingleUse(FIRST_LAUNCH);
+            firstLaunchSequence.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         int nightModeFlags =
                 getContext().getResources().getConfiguration().uiMode &

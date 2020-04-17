@@ -1,5 +1,6 @@
 package fiitstu.gulis.cmsimulator.models;
 
+import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.models.tasks.automata_type;
 
 public class ChessGameModel {
@@ -8,6 +9,7 @@ public class ChessGameModel {
     private String task_name;
     private String task_description;
     private automata_type automata_type;
+    private Task.TASK_STATUS status;
 
     public ChessGameModel(int task_id, int assigner_id, String task_name, String task_description, fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
         this.task_id = task_id;
@@ -15,6 +17,16 @@ public class ChessGameModel {
         this.task_name = task_name;
         this.task_description = task_description;
         this.automata_type = automata_type;
+        this.status = Task.TASK_STATUS.NEW;
+    }
+
+    public ChessGameModel(int task_id, int assigner_id, String task_name, String task_description, fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type, Task.TASK_STATUS status) {
+        this.task_id = task_id;
+        this.assigner_id = assigner_id;
+        this.task_name = task_name;
+        this.task_description = task_description;
+        this.automata_type = automata_type;
+        this.status = status;
     }
 
     public int getTask_id() {
@@ -55,5 +67,13 @@ public class ChessGameModel {
 
     public void setAutomata_type(fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
         this.automata_type = automata_type;
+    }
+
+    public Task.TASK_STATUS getStatus() {
+        return status;
+    }
+
+    public void setStatus(Task.TASK_STATUS status) {
+        this.status = status;
     }
 }

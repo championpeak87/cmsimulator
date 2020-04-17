@@ -112,7 +112,11 @@ public class BrowseGamesActivity extends FragmentActivity {
         @Override
         protected String doInBackground(Void... voids) {
             UrlManager urlManager = new UrlManager();
-            URL url = urlManager.getFetchGamesURL();
+            URL url;
+            if (TaskLoginActivity.loggedUser != null)
+                url = urlManager.getFetchGamesURL(TaskLoginActivity.loggedUser.getUser_id());
+            else
+                url = urlManager.getFetchGamesURL();
             ServerController serverController = new ServerController();
             String output = null;
 

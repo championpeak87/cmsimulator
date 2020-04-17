@@ -26,6 +26,7 @@ import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
 import fiitstu.gulis.cmsimulator.activities.GameDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
+import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.ChessGameModel;
@@ -112,6 +113,8 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
                                 Toast.makeText(mContext, R.string.generic_error, Toast.LENGTH_SHORT).show();
                             } else {
                                 Intent intent = new Intent(mContext, ChessGameActivity.class);
+                                intent.putExtra(ChessGameActivity.TASK_ID_KEY, task_id);
+                                ChessGameAdapter.this.changeTaskStatus(task_id, Task.TASK_STATUS.IN_PROGRESS);
                                 mContext.startActivity(intent);
                             }
 
@@ -119,12 +122,6 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
                     }
                 }
                 new DownloadGameAsync().execute();
-                // TODO: IMPLEMENT GAME START
-//                try {
-//                    throw new NotImplementedException(mContext);
-//                } catch (NotImplementedException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -177,6 +174,40 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
 
             }
         });
+
+        Task.TASK_STATUS currentStatus = currentItem.getStatus();
+        int primary, light_primary;
+        switch (currentStatus) {
+
+            case WRONG:
+                primary = mContext.getColor(R.color.wrong_answer_top_bar);
+                light_primary = mContext.getColor(R.color.wrong_answer_bottom_bar);
+                break;
+
+            case IN_PROGRESS:
+                primary = mContext.getColor(R.color.in_progress_top_bar);
+                light_primary = mContext.getColor(R.color.in_progress_bottom_bar);
+                break;
+
+            case CORRECT:
+                primary = mContext.getColor(R.color.correct_answer_top_bar);
+                light_primary = mContext.getColor(R.color.correct_answer_bottom_bar);
+                break;
+
+            case TOO_LATE:
+                primary = mContext.getColor(R.color.too_late_answer_top_bar);
+                light_primary = mContext.getColor(R.color.too_late_answer_bottom_bar);
+                break;
+
+            case NEW:
+            default:
+                primary = mContext.getColor(R.color.primary_color);
+                light_primary = mContext.getColor(R.color.primary_color_light);
+                break;
+        }
+
+        viewHolder.topBar.setBackgroundColor(primary);
+        viewHolder.bottomBar.setBackgroundColor(light_primary);
 
         viewHolder.button_help_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,6 +277,16 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
         return false;
     }
 
+    private void changeTaskStatus(int task_id, Task.TASK_STATUS status) {
+        for (ChessGameModel m : listOfGames) {
+            if (m.getTask_id() == task_id) {
+                m.setStatus(status);
+                notifyItemChanged(listOfGames.indexOf(m));
+                break;
+            }
+        }
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardview_task;
         private FrameLayout framelayout_context;
@@ -253,6 +294,8 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
         private ImageButton button_help_task;
         private ProgressBar progressbar_task_loading;
         private TextView textview_task_name;
+        private LinearLayout bottomBar;
+        private TextView topBar;
 
         private int task_id;
 
@@ -265,6 +308,8 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
             button_help_task = itemView.findViewById(R.id.button_help_task);
             progressbar_task_loading = itemView.findViewById(R.id.progressbar_task_loading);
             textview_task_name = itemView.findViewById(R.id.textview_task_name);
+            topBar = itemView.findViewById(R.id.textview_top_bar);
+            bottomBar = itemView.findViewById(R.id.task_bottom_bar);
         }
     }
 }

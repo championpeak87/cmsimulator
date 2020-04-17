@@ -1393,5 +1393,11 @@
 	</string>
 	<string name="game_simulation_stuck">Simulation is stuck!</string>
     <string name="find_games">Find games</string>
+	<string name="game_saved_successfully">Game saved successfully</string>
+    <string name="game_successfully_submitted">Game was successfully submitted</string>
+	<string name="submit_game_message">Do you really want to submit this game?</string>
+	<string name="submit_game">Submit game</string>
+	<string name="submit_game_message_negative">Do you really want to submit this game? Simulation wasn\'t successful!
+	</string>
 
 </resources>

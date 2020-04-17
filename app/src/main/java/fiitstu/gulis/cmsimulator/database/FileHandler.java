@@ -597,6 +597,8 @@ public class FileHandler {
                 state.setAttribute(Y, Integer.toString(s.getPositionY()));
                 states.appendChild(state);
             }
+
+            gameElement.appendChild(states);
         }
 
         // TRANSITIONS
@@ -606,12 +608,25 @@ public class FileHandler {
 
             for (Transition t : transitionList) {
                 Element transition = document.createElement(TRANSITION);
-                transition.setAttribute(ID, Long.toString(t.getId()));
-                transition.setAttribute(FROM, Long.toString(t.getFromState().getId()));
-                transition.setAttribute(TO, Long.toString(t.getToState().getId()));
-                transition.setAttribute(READ, t.getReadSymbol().getValue());
-                transition.appendChild(transition);
+                if (game.getAutomata_type() == automata_type.PUSHDOWN_AUTOMATA) {
+                    PdaTransition trans = (PdaTransition) t;
+
+                    transition.setAttribute(ID, Long.toString(t.getId()));
+                    transition.setAttribute(FROM, Long.toString(t.getFromState().getId()));
+                    transition.setAttribute(TO, Long.toString(t.getToState().getId()));
+                    transition.setAttribute(READ, t.getReadSymbol().getValue());
+                    transition.setAttribute(POP, trans.getPopSymbolList().get(0).getValue());
+                    transition.setAttribute(PUSH, trans.getPushSymbolList().get(0).getValue());
+                } else if (game.getAutomata_type() == automata_type.FINITE_AUTOMATA) {
+                    transition.setAttribute(ID, Long.toString(t.getId()));
+                    transition.setAttribute(FROM, Long.toString(t.getFromState().getId()));
+                    transition.setAttribute(TO, Long.toString(t.getToState().getId()));
+                    transition.setAttribute(READ, t.getReadSymbol().getValue());
+                }
+
+                transitions.appendChild(transition);
             }
+            gameElement.appendChild(transitions);
         }
     }
 

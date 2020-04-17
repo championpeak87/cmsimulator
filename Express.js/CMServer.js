@@ -1204,12 +1204,12 @@ app.post('/api/grammarTasks/save', (req, res, next) => {
 app.get('/api/tasks/results', (req, res) => {
   const user_id = req.query.user_id;
   pool.query('select case when atr.task_status IS NULL then \'new\' else atr.task_status end as task_status, count(*) from automata_tasks as at left join (SELECT * from automata_task_results where user_id=$1) as atr on atr.task_id = at.task_id GROUP BY atr.task_status;', [user_id], (err, result) => {
-    if (err) {throw err;}
+    if (err) { throw err; }
     if (result.rowCount > 0) {
       res.status(HTTP_OK).send(result.rows);
     }
     else {
-      res.status(HTTP_OK).send([{"found": false}]);
+      res.status(HTTP_OK).send([{ "found": false }]);
     }
   })
 })
@@ -1217,12 +1217,12 @@ app.get('/api/tasks/results', (req, res) => {
 app.get('/api/grammarTasks/results', (req, res) => {
   const user_id = req.query.user_id;
   pool.query('select case when gtr.task_status IS NULL then \'new\' else gtr.task_status end as task_status, count(*) from grammar_tasks as gt left join (SELECT * from grammar_task_results where user_id=$1) as gtr on gtr.task_id = gt.task_id GROUP BY gtr.task_status;', [user_id], (err, result) => {
-    if (err) {throw err;}
+    if (err) { throw err; }
     if (result.rowCount > 0) {
       res.status(HTTP_OK).send(result.rows);
     }
     else {
-      res.status(HTTP_OK).send([{"found": false}]);
+      res.status(HTTP_OK).send([{ "found": false }]);
     }
   })
 })
@@ -1298,18 +1298,36 @@ app.post('/api/game/upload', (req, res, next) => {
 });
 
 app.get('/api/game/getGames', (req, res) => {
-  pool.query('SELECT * FROM game_tasks;', (err, results) => {
+  const user_id = req.query.user_id;
 
-    if (err) { throw err }
-    if (results.rowCount > 0) {
-      res.status(HTTP_OK).send(results.rows);
-    }
-    else {
-      res.status(HTTP_OK).send({
-        not_found: true
-      });
-    }
-  })
+  if (!user_id) {
+    pool.query('SELECT * FROM game_tasks;', (err, results) => {
+
+      if (err) { throw err }
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(results.rows);
+      }
+      else {
+        res.status(HTTP_OK).send({
+          not_found: true
+        });
+      }
+    })
+  }
+  else {
+    pool.query('select gt.*, gtr.task_status from game_tasks as gt left join (SELECT * from game_task_results where user_id=$1) as gtr on gtr.task_id = gt.task_id;', [user_id], (err, results) => {
+
+      if (err) { throw err }
+      if (results.rowCount > 0) {
+        res.status(HTTP_OK).send(results.rows);
+      }
+      else {
+        res.status(HTTP_OK).send({
+          not_found: true
+        });
+      }
+    })
+  }
 })
 
 app.get('/api/game/delete', (req, res) => {
@@ -1346,68 +1364,91 @@ app.get('/api/game/download', (req, res) => {
   const task_id = req.query.task_id;
   const user_id = req.query.user_id;
 
-  if (!user_id) {
+  if (user_id) {
     pool.query('SELECT * FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
       if (err) { throw err }
-      {
-        if (result.rowCount > 0) {
-          const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
-          res.status(HTTP_OK).download(filePath);
-        }
-        else {
-          res.status(HTTP_OK).send(
-            {
-              task_id: task_id,
-              found: false
-            }
-          );
-        }
+      if (result.rowCount > 0) {
+        pool.query('SELECT * FROM game_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (errx, results) => {
+          if (results.rowCount > 0) {
+            const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
+            res.status(HTTP_OK).download(filePath);
+          }
+          else {
+            filesystem.mkdir("./uploads/" + user_id + "/", { recursive: true }, (error4) => { });
+            const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
+            const userPath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
+            filesystem.copyFile(filePath, userPath, (error3) => {
+              if (error3) { throw error3 }
+            });
+            pool.query('INSERT INTO game_task_results (user_id, task_id, task_status) VALUES ($1, $2, $3);', [user_id, task_id, "in_progress"], (err2, result2) => { });
+            res.status(HTTP_OK).download(userPath);
+          }
+        });
+      }
+      else {
+        res.status(HTTP_OK).send(
+          {
+            task_id: task_id,
+            found: false
+          }
+        );
       }
     })
   }
   else {
-    pool.query('SELECT * FROM game_task_results WHERE user_id = $1 AND task_id = $2;', [user_id, task_id], (error, results) => {
-      if (error) { throw error }
-      if (results.rowCount > 0) {
-        pool.query('SELECT task_id FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
-          if (err) { throw err }
-          {
-            if (result.rowCount > 0) {
-              const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
-              res.status(HTTP_OK).download(filePath);
-            }
-            else {
-              res.status(HTTP_OK).send(
-                {
-                  task_id: task_id,
-                  found: false
-                }
-              );
-            }
-          }
-        })
-      }
-      else {
-        pool.query('SELECT task_id FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
-          if (err) { throw err }
-          {
-            if (result.rowCount > 0) {
-              const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
-              res.status(HTTP_OK).download(filePath);
-            }
-            else {
-              res.status(HTTP_OK).send(
-                {
-                  task_id: task_id,
-                  found: false
-                }
-              );
-            }
-          }
-        })
-      }
-    })
+    const filePath = "./uploads/gameTasks/" + task_id + ".cmsc";
+    res.status(HTTP_OK).download(filePath);
   }
+})
+
+app.post('/api/game/save', (req, res, next) => {
+  const user_id = req.query.user_id;
+  const file_name = req.query.file_name;
+  const file = req.files.task;
+  const makedirPath = "./uploads/" + user_id;
+  const path = "./uploads/" + user_id + "/" + file_name;
+
+  filesystem.mkdir("./uploads/", { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  filesystem.mkdir(makedirPath, { recursive: true }, (err) => {
+    if (err) { throw err };
+  });
+  if (!file) {
+    console.log("FILE NOT SAVED!");
+  }
+  else {
+    file.mv(path, function (err, results) {
+      if (err) throw err;
+      res.status(HTTP_OK).send({
+        success: true,
+        message: "File uploaded!"
+      });
+      console.log([user_id], "TASK WAS SAVED!");
+    });
+  }
+});
+
+app.get('/api/game/submit', (req, res) => {
+  const task_id = req.query.task_id;
+  const user_id = req.query.user_id;
+  const task_status = req.query.task_status;
+
+  pool.query('SELECT * FROM game_task_results WHERE user_id = $1 AND task_id = $2 LIMIT 1;', [user_id, task_id], (err, results) => {
+    if (err) { throw err }
+    if (results.rowCount > 0) {
+      pool.query('UPDATE game_task_results SET submitted=\'true\', task_status = $1 WHERE task_id = $2 AND user_id = $3;', [task_status, task_id, user_id], (error, result) => {
+        if (error) { throw error }
+        if (result.rowCount > 0) {
+          res.status(HTTP_OK).send({
+            task_id: task_id,
+            user_id: user_id,
+            submitted: true
+          });
+        }
+      });
+    }
+  })
 })
 
 app.get('/', (req, res) => {
