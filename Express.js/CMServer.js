@@ -1349,9 +1349,8 @@ app.get('/api/game/delete', (req, res) => {
           console.log("GAME COULD NOT BE DELETED! FILE DOES NOT EXIST!");
         }
       });
-      pool.query('DELETE FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {
-
-      })
+      pool.query('DELETE FROM game_task_results WHERE task_id = $1;', [task_id], (err, result) => {})
+      pool.query('DELETE FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {})
     }
     res.status(HTTP_OK).send({
       success: true,
@@ -1369,6 +1368,7 @@ app.get('/api/game/download', (req, res) => {
       if (err) { throw err }
       if (result.rowCount > 0) {
         pool.query('SELECT * FROM game_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (errx, results) => {
+          if (errx) { throw errx}
           if (results.rowCount > 0) {
             const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
             res.status(HTTP_OK).download(filePath);
@@ -1381,7 +1381,7 @@ app.get('/api/game/download', (req, res) => {
               if (error3) { throw error3 }
             });
             pool.query('INSERT INTO game_task_results (user_id, task_id, task_status) VALUES ($1, $2, $3);', [user_id, task_id, "in_progress"], (err2, result2) => { });
-            res.status(HTTP_OK).download(userPath);
+            res.status(HTTP_OK).download(filePath);
           }
         });
       }

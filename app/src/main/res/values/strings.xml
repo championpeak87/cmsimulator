@@ -1399,5 +1399,6 @@
 	<string name="submit_game">Submit game</string>
 	<string name="submit_game_message_negative">Do you really want to submit this game? Simulation wasn\'t successful!
 	</string>
+    <string name="game_submitted_cant_open">Game was already submitted! No changes are allowed!</string>
 
 </resources>

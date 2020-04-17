@@ -82,6 +82,11 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
         viewHolder.cardview_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentItem.getStatus() == Task.TASK_STATUS.WRONG || currentItem.getStatus() == Task.TASK_STATUS.CORRECT) {
+                    Toast.makeText(mContext, R.string.game_submitted_cant_open, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 final int task_id = currentItem.getTask_id();
                 final int user_id;
                 if (TaskLoginActivity.loggedUser != null)
@@ -114,7 +119,8 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
                             } else {
                                 Intent intent = new Intent(mContext, ChessGameActivity.class);
                                 intent.putExtra(ChessGameActivity.TASK_ID_KEY, task_id);
-                                ChessGameAdapter.this.changeTaskStatus(task_id, Task.TASK_STATUS.IN_PROGRESS);
+                                if (currentItem.getStatus() == Task.TASK_STATUS.NEW)
+                                    ChessGameAdapter.this.changeTaskStatus(task_id, Task.TASK_STATUS.IN_PROGRESS);
                                 mContext.startActivity(intent);
                             }
 

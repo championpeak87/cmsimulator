@@ -603,7 +603,7 @@ public class FileHandler {
 
                 State fromState = stateMap.get(Long.parseLong(s_from));
                 State toState = stateMap.get(Long.parseLong(s_to));
-                Symbol readSymbol = getSymbol(s_read, ChessGame.getMovementSymbolList());
+                Symbol readSymbol = getSymbol(s_read, dataSource.getInputAlphabetFullExtract());
 
                 Node pop, push;
                 String s_pop, s_push;

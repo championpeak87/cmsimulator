@@ -52,6 +52,7 @@ public class BrowseGamesActivity extends FragmentActivity {
         fetchGames();
     }
 
+
     private void setUIElements() {
         linearlayout_empty_games = findViewById(R.id.linearLayout_empty_games);
         progressbar_games = findViewById(R.id.progressbar_games);

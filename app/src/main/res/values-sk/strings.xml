@@ -1027,10 +1027,11 @@
     </string>
     <string name="game_simulation_stuck">Simulácia sa zasekla!</string>
     <string name="find_games">Vyhľadať hry</string>
-    <string name="game_saved_successfully">Game saved successfully</string>
-    <string name="game_successfully_submitted">Game was successfully submitted</string>
-    <string name="submit_game_message">Do you really want to submit this game?</string>
-    <string name="submit_game">Submit game</string>
-    <string name="submit_game_message_negative">Do you really want to submit this game? Simulation wasn\'t successful!
+    <string name="game_saved_successfully">Hra bola uložená</string>
+    <string name="game_successfully_submitted">Hra bola odovzdaná</string>
+    <string name="submit_game_message">Skutočne chcete odovzdať?</string>
+    <string name="submit_game">Odovzdať hru</string>
+    <string name="submit_game_message_negative">Skutočne chcete odovzdať hru? Simulácia nebola úspešná
     </string>
+    <string name="game_submitted_cant_open">Hra bola odovzdaná! Nie sú povolené žiadne zmeny1</string>
 </resources>

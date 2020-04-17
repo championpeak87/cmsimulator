@@ -144,6 +144,16 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (TaskLoginActivity.loggedUser == null) {
+            menu.findItem(R.id.menu_save_task).setVisible(false);
+            menu.findItem(R.id.menu_submit_task).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     private void setUIElements() {
         imagebutton_drop_up = findViewById(R.id.imagebutton_drop_up);
         chessview_field = findViewById(R.id.chessview_field);
@@ -374,6 +384,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             Toast.makeText(ChessGameActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(ChessGameActivity.this, R.string.game_successfully_submitted, Toast.LENGTH_SHORT).show();
+                        dataSource.open();
+                        dataSource.globalDrop();
+                        dataSource.close();
                         ChessGameActivity.this.finish();
                     }
                 }
