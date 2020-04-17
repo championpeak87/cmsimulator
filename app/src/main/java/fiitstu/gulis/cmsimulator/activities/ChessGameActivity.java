@@ -124,6 +124,15 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chess_game_activity);
 
+        // SET INPUT SYMBOLS
+        List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
+        dataSource.open();
+        for (Symbol s : listOfSymbols) {
+            dataSource.addInputSymbol(s.getValue(), 0);
+        }
+        Symbol emptySymbol = dataSource.addInputSymbol("ε", Symbol.EMPTY);
+        emptyInputSymbolId = emptySymbol.getId();
+
         loadGame();
         setActionBar();
         setUIElements();
@@ -133,14 +142,6 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         Intent intent = this.getIntent();
         task_id = intent.getIntExtra(TASK_ID_KEY, -1);
 
-        // SET INPUT SYMBOLS
-        List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
-        dataSource.open();
-        for (Symbol s : listOfSymbols) {
-            dataSource.addInputSymbol(s.getValue(), 0);
-        }
-        Symbol emptySymbol = dataSource.addInputSymbol("ε", Symbol.EMPTY);
-        emptyInputSymbolId = emptySymbol.getId();
     }
 
     private void setUIElements() {
@@ -536,6 +537,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             chessGame = fileHandler.getChessGame();
             automata_type = chessGame.getAutomata_type();
             fileHandler.getData(dataSource);
+            dataSource.open();
+            stateList = dataSource.getStateFullExtract();
+            transitions = fileHandler.getGameTransitions(automata_type);
         } catch (Exception e) {
             Log.e(TAG, "File was not loaded", e);
             Toast.makeText(this, getResources().getString(R.string.file_not_loaded), Toast.LENGTH_SHORT).show();

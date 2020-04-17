@@ -315,6 +315,7 @@ public class FileHandler {
         int imaxStateCount;
         automata_type automata_type;
 
+        // PATH
         NodeList nodeList = document.getElementsByTagName(PATH_FIELDS);
         Node node = nodeList.item(0);
         NodeList fields = node.getChildNodes();
@@ -401,6 +402,8 @@ public class FileHandler {
         return chessGame;
     }
 
+    LongSparseArray<State> stateMap = new LongSparseArray<>();
+
     private void getDataCMSC(DataSource dataSource) {
         Log.v(TAG, "getDataCMSC method started");
 
@@ -408,88 +411,252 @@ public class FileHandler {
         dataSource.globalDrop();
 
         // PATH_FIELDS
-        List<Pair<Integer, Integer>> pathList = new ArrayList<>();
-        NodeList nodeList = document.getElementsByTagName(PATH_FIELDS);
-        Node node = nodeList.item(0);
-        NodeList fields = node.getChildNodes();
-        final int fieldsSize = fields.getLength();
-        for (int i = 0; i < fieldsSize; i++) {
-            Node field = fields.item(i);
-            NamedNodeMap namedNodeMap = field.getAttributes();
-            if (namedNodeMap == null)
-                continue;
-            Node x = namedNodeMap.getNamedItem(X);
-            String s_x = x.getNodeValue();
 
-            Node y = namedNodeMap.getNamedItem(Y);
-            String s_y = y.getNodeValue();
+        {
+            List<Pair<Integer, Integer>> pathList = new ArrayList<>();
+            NodeList nodeList = document.getElementsByTagName(PATH_FIELDS);
+            Node node = nodeList.item(0);
+            NodeList fields = node.getChildNodes();
+            final int fieldsSize = fields.getLength();
+            for (int i = 0; i < fieldsSize; i++) {
+                Node field = fields.item(i);
+                NamedNodeMap namedNodeMap = field.getAttributes();
+                if (namedNodeMap == null)
+                    continue;
+                Node x = namedNodeMap.getNamedItem(X);
+                String s_x = x.getNodeValue();
 
-            Pair<Integer, Integer> currentField = new Pair<>(Integer.parseInt(s_x), Integer.parseInt(s_y));
-            pathList.add(currentField);
+                Node y = namedNodeMap.getNamedItem(Y);
+                String s_y = y.getNodeValue();
+
+                Pair<Integer, Integer> currentField = new Pair<>(Integer.parseInt(s_x), Integer.parseInt(s_y));
+                dataSource.addPathField(currentField);
+                pathList.add(currentField);
+            }
         }
 
         // START FIELD
-        NodeList startList = document.getElementsByTagName(START_FIELD);
-        Node startNode = startList.item(0);
-        NamedNodeMap startAttr = startNode.getAttributes();
+        {
+            NodeList startList = document.getElementsByTagName(START_FIELD);
+            Node startNode = startList.item(0);
+            NamedNodeMap startAttr = startNode.getAttributes();
 
-        Node startX = startAttr.getNamedItem(X);
-        Node startY = startAttr.getNamedItem(Y);
+            Node startX = startAttr.getNamedItem(X);
+            Node startY = startAttr.getNamedItem(Y);
 
-        String startXS = startX.getNodeValue();
-        String startYS = startY.getNodeValue();
+            String startXS = startX.getNodeValue();
+            String startYS = startY.getNodeValue();
 
-        Pair<Integer, Integer> startField = new Pair<>(Integer.parseInt(startXS), Integer.parseInt(startYS));
+            Pair<Integer, Integer> startField = new Pair<>(Integer.parseInt(startXS), Integer.parseInt(startYS));
+            dataSource.setStartField(startField);
+        }
 
         // FINISH FIELD
-        NodeList finishList = document.getElementsByTagName(FINISH_FIELD);
-        Node finishNode = finishList.item(0);
-        NamedNodeMap finishAttr = finishNode.getAttributes();
+        {
+            NodeList finishList = document.getElementsByTagName(FINISH_FIELD);
+            Node finishNode = finishList.item(0);
+            NamedNodeMap finishAttr = finishNode.getAttributes();
 
-        Node finishX = finishAttr.getNamedItem(X);
-        Node finishY = finishAttr.getNamedItem(Y);
+            Node finishX = finishAttr.getNamedItem(X);
+            Node finishY = finishAttr.getNamedItem(Y);
 
-        String finishXS = finishX.getNodeValue();
-        String finishYS = finishY.getNodeValue();
+            String finishXS = finishX.getNodeValue();
+            String finishYS = finishY.getNodeValue();
 
-        Pair<Integer, Integer> finishField = new Pair<>(Integer.parseInt(finishXS), Integer.parseInt(finishYS));
+            Pair<Integer, Integer> finishField = new Pair<>(Integer.parseInt(finishXS), Integer.parseInt(finishYS));
+            dataSource.setFinishField(finishField);
+        }
 
         // CHESS FIELD SIZE
-        NodeList chessFieldList = document.getElementsByTagName(CHESS_FIELD_SIZE);
-        Node chessFieldNode = chessFieldList.item(0);
-        NamedNodeMap chessFieldAttr = chessFieldNode.getAttributes();
+        {
+            NodeList chessFieldList = document.getElementsByTagName(CHESS_FIELD_SIZE);
+            Node chessFieldNode = chessFieldList.item(0);
+            NamedNodeMap chessFieldAttr = chessFieldNode.getAttributes();
 
-        Node chessFieldX = chessFieldAttr.getNamedItem(X);
-        Node chessFieldY = chessFieldAttr.getNamedItem(Y);
+            Node chessFieldX = chessFieldAttr.getNamedItem(X);
+            Node chessFieldY = chessFieldAttr.getNamedItem(Y);
 
-        String chessFieldXS = chessFieldX.getNodeValue();
-        String chessFieldYS = chessFieldY.getNodeValue();
+            String chessFieldXS = chessFieldX.getNodeValue();
+            String chessFieldYS = chessFieldY.getNodeValue();
 
-        Pair<Integer, Integer> chessFieldField = new Pair<>(Integer.parseInt(chessFieldXS), Integer.parseInt(chessFieldYS));
+            Pair<Integer, Integer> chessFieldField = new Pair<>(Integer.parseInt(chessFieldXS), Integer.parseInt(chessFieldYS));
+            dataSource.setFieldSize(chessFieldField);
+        }
 
         // MAX STATE COUNT
-        NodeList maxStateList = document.getElementsByTagName(MAX_STATE_COUNT);
-        Node maxStateNode = maxStateList.item(0);
-        NamedNodeMap maxStateAttr = maxStateNode.getAttributes();
+        {
+            NodeList maxStateList = document.getElementsByTagName(MAX_STATE_COUNT);
+            Node maxStateNode = maxStateList.item(0);
+            NamedNodeMap maxStateAttr = maxStateNode.getAttributes();
 
-        Node maxStateCount = maxStateAttr.getNamedItem(COUNT);
+            Node maxStateCount = maxStateAttr.getNamedItem(COUNT);
 
-        String maxStateCountS = maxStateCount.getNodeValue();
+            String maxStateCountS = maxStateCount.getNodeValue();
 
-        int intMaxStateField = Integer.parseInt(maxStateCountS);
+            int intMaxStateField = Integer.parseInt(maxStateCountS);
 
-        for (Pair<Integer, Integer> path : pathList)
-            dataSource.addPathField(path);
-        dataSource.setStartField(startField);
-        dataSource.setFinishField(finishField);
-        dataSource.setFieldSize(chessFieldField);
-        dataSource.setMaxStates(intMaxStateField);
-        List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
-        for (Symbol s : listOfSymbols) {
-            dataSource.addInputSymbol(s.getValue(), 0);
+
+            dataSource.setMaxStates(intMaxStateField);
+        }
+
+        // INPUT SYMBOLS
+        {
+            List<Symbol> listOfSymbols = ChessGame.getMovementSymbolList();
+            for (Symbol s : listOfSymbols) {
+                dataSource.addInputSymbol(s.getValue(), 0);
+            }
+            Symbol empty = dataSource.addInputSymbol(Symbol.EMPTY_SYMBOL, Symbol.EMPTY);
+            emptyInputSymbolId = empty.getId();
+        }
+
+        // AUTOMATA_TYPE
+        automata_type autotype = null;
+        {
+            NodeList automataTypeNodeList = document.getElementsByTagName(AUTOMATA_TYPE);
+            Node automataTypeNode = automataTypeNodeList.item(0);
+            NamedNodeMap map = automataTypeNode.getAttributes();
+            final int size = map.getLength();
+            for (int i = 0; i < size; i++) {
+                Node type = map.getNamedItem(VALUE);
+                String s_type = type.getNodeValue();
+
+                switch (s_type) {
+                    case "pushdown_automata":
+                        autotype = automata_type.PUSHDOWN_AUTOMATA;
+                        break;
+                    default:
+                    case "finite_automata":
+                        autotype = automata_type.FINITE_AUTOMATA;
+                        break;
+                }
+            }
+        }
+
+
+        // STATES
+        List<State> stateList = new ArrayList<>();
+        {
+            NodeList statesNodeList = document.getElementsByTagName(STATES);
+            Node StateNode = statesNodeList.item(0);
+            NodeList states = null;
+            try {
+                states = StateNode.getChildNodes();
+            } catch (Exception e) {
+                e.printStackTrace();
+                dataSource.close();
+                return;
+            }
+            final int statesSize = states.getLength();
+            for (int i = 0; i < statesSize; i++) {
+                Node field = states.item(i);
+                NamedNodeMap namedNodeMap = field.getAttributes();
+                if (namedNodeMap == null)
+                    continue;
+                Node x = namedNodeMap.getNamedItem(X);
+                String s_x = x.getNodeValue();
+
+                Node y = namedNodeMap.getNamedItem(Y);
+                String s_y = y.getNodeValue();
+
+                Node initial = namedNodeMap.getNamedItem(INITIAL);
+                String s_initial = initial.getNodeValue();
+
+                Node finalState = namedNodeMap.getNamedItem(FINAL);
+                String s_final = finalState.getNodeValue();
+
+                Node name = namedNodeMap.getNamedItem(NAME);
+                String s_name = name.getNodeValue();
+
+                State state = dataSource.addState(s_name, Integer.parseInt(s_x), Integer.parseInt(s_y), Boolean.parseBoolean(s_initial), Boolean.parseBoolean(s_final));
+                stateMap.append(state.getId(), state);
+                stateList.add(state);
+            }
+        }
+
+
+        // TRANSITION
+        {
+
         }
 
         dataSource.close();
+    }
+
+    public List<Transition> getGameTransitions(automata_type autotype) {
+        List<Transition> transitionList = new ArrayList<>();
+        NodeList statesNodeList = document.getElementsByTagName(TRANSITIONS);
+        Node StateNode = statesNodeList.item(0);
+        NodeList states = null;
+        try {
+            states = StateNode.getChildNodes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        final int statesSize = states.getLength();
+        for (int i = 0; i < statesSize; i++) {
+            Node field = states.item(i);
+            NamedNodeMap namedNodeMap = field.getAttributes();
+            if (namedNodeMap == null)
+                continue;
+            Node id = namedNodeMap.getNamedItem(ID);
+            String s_id = id.getNodeValue();
+
+            Node from = namedNodeMap.getNamedItem(FROM);
+            String s_from = from.getNodeValue();
+
+            Node to = namedNodeMap.getNamedItem(TO);
+            String s_to = to.getNodeValue();
+
+            Node read = namedNodeMap.getNamedItem(READ);
+            String s_read = read.getNodeValue();
+
+            State fromState = stateMap.get(Long.parseLong(s_from));
+            State toState = stateMap.get(Long.parseLong(s_to));
+            Symbol readSymbol = getSymbol(s_read, ChessGame.getMovementSymbolList());
+
+            Node pop, push;
+            String s_pop, s_push;
+            if (autotype == automata_type.PUSHDOWN_AUTOMATA) {
+                pop = namedNodeMap.getNamedItem(POP);
+                s_pop = pop.getNodeValue();
+
+                push = namedNodeMap.getNamedItem(PUSH);
+                s_push = push.getNodeValue();
+
+                List<Symbol> popList = new ArrayList<>();
+                List<Symbol> pushList = new ArrayList<>();
+
+                popList.add(getSymbol(s_pop, DataSource.getInstance().getInputAlphabetFullExtract()));
+                pushList.add(getSymbol(s_push, DataSource.getInstance().getInputAlphabetFullExtract()));
+
+                PdaTransition t = new PdaTransition(Long.parseLong(s_id), fromState, readSymbol, toState, popList, pushList);
+                transitionList.add(t);
+            } else {
+                FsaTransition f = new FsaTransition(Long.parseLong(s_id), fromState, readSymbol, toState);
+                transitionList.add(f);
+            }
+        }
+
+        return transitionList;
+    }
+
+    private State getState(int id, List<State> stateList) {
+        for (State s : stateList) {
+            if (s.getId() == id)
+                return s;
+        }
+
+        return null;
+    }
+
+    private Symbol getSymbol(String value, List<Symbol> symbolList) {
+        for (Symbol s : symbolList) {
+            if (s.getValue().equals(value))
+                return s;
+        }
+
+        return null;
     }
 
     /**
