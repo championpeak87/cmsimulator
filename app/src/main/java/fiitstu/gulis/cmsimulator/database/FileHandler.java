@@ -3,6 +3,7 @@ package fiitstu.gulis.cmsimulator.database;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.sax.RootElement;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
@@ -402,8 +403,6 @@ public class FileHandler {
         return chessGame;
     }
 
-    LongSparseArray<State> stateMap = new LongSparseArray<>();
-
     private void getDataCMSC(DataSource dataSource) {
         Log.v(TAG, "getDataCMSC method started");
 
@@ -535,6 +534,7 @@ public class FileHandler {
 
         // STATES
         List<State> stateList = new ArrayList<>();
+        LongSparseArray<State> stateMap = new LongSparseArray<>();
         {
             NodeList statesNodeList = document.getElementsByTagName(STATES);
             Node StateNode = statesNodeList.item(0);
@@ -576,69 +576,62 @@ public class FileHandler {
 
         // TRANSITION
         {
+            List<Transition> transitionList = new ArrayList<>();
+            NodeList statesNodeList = document.getElementsByTagName(TRANSITIONS);
+            Node StateNode = statesNodeList.item(0);
+            NodeList states = null;
+            try {
+                states = StateNode.getChildNodes();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+            final int statesSize = states.getLength();
+            for (int i = 0; i < statesSize; i++) {
+                Node field = states.item(i);
+                NamedNodeMap namedNodeMap = field.getAttributes();
+                if (namedNodeMap == null)
+                    continue;
+                Node from = namedNodeMap.getNamedItem(FROM);
+                String s_from = from.getNodeValue();
 
-        }
+                Node to = namedNodeMap.getNamedItem(TO);
+                String s_to = to.getNodeValue();
 
-        dataSource.close();
-    }
+                Node read = namedNodeMap.getNamedItem(READ);
+                String s_read = read.getNodeValue();
 
-    public List<Transition> getGameTransitions(automata_type autotype) {
-        List<Transition> transitionList = new ArrayList<>();
-        NodeList statesNodeList = document.getElementsByTagName(TRANSITIONS);
-        Node StateNode = statesNodeList.item(0);
-        NodeList states = null;
-        try {
-            states = StateNode.getChildNodes();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        final int statesSize = states.getLength();
-        for (int i = 0; i < statesSize; i++) {
-            Node field = states.item(i);
-            NamedNodeMap namedNodeMap = field.getAttributes();
-            if (namedNodeMap == null)
-                continue;
-            Node id = namedNodeMap.getNamedItem(ID);
-            String s_id = id.getNodeValue();
+                State fromState = stateMap.get(Long.parseLong(s_from));
+                State toState = stateMap.get(Long.parseLong(s_to));
+                Symbol readSymbol = getSymbol(s_read, ChessGame.getMovementSymbolList());
 
-            Node from = namedNodeMap.getNamedItem(FROM);
-            String s_from = from.getNodeValue();
+                Node pop, push;
+                String s_pop, s_push;
+                if (autotype == automata_type.PUSHDOWN_AUTOMATA) {
+                    pop = namedNodeMap.getNamedItem(POP);
+                    s_pop = pop.getNodeValue();
 
-            Node to = namedNodeMap.getNamedItem(TO);
-            String s_to = to.getNodeValue();
+                    push = namedNodeMap.getNamedItem(PUSH);
+                    s_push = push.getNodeValue();
 
-            Node read = namedNodeMap.getNamedItem(READ);
-            String s_read = read.getNodeValue();
+                    List<Symbol> popList = new ArrayList<>();
+                    List<Symbol> pushList = new ArrayList<>();
+                    List<Symbol> inputAlphabet = DataSource.getInstance().getInputAlphabetFullExtract();
+                    popList.add(getSymbol(s_pop, inputAlphabet));
+                    pushList.add(getSymbol(s_push, inputAlphabet));
 
-            State fromState = stateMap.get(Long.parseLong(s_from));
-            State toState = stateMap.get(Long.parseLong(s_to));
-            Symbol readSymbol = getSymbol(s_read, ChessGame.getMovementSymbolList());
-
-            Node pop, push;
-            String s_pop, s_push;
-            if (autotype == automata_type.PUSHDOWN_AUTOMATA) {
-                pop = namedNodeMap.getNamedItem(POP);
-                s_pop = pop.getNodeValue();
-
-                push = namedNodeMap.getNamedItem(PUSH);
-                s_push = push.getNodeValue();
-
-                List<Symbol> popList = new ArrayList<>();
-                List<Symbol> pushList = new ArrayList<>();
-
-                popList.add(getSymbol(s_pop, DataSource.getInstance().getInputAlphabetFullExtract()));
-                pushList.add(getSymbol(s_push, DataSource.getInstance().getInputAlphabetFullExtract()));
-
-                PdaTransition t = new PdaTransition(Long.parseLong(s_id), fromState, readSymbol, toState, popList, pushList);
-                transitionList.add(t);
-            } else {
-                FsaTransition f = new FsaTransition(Long.parseLong(s_id), fromState, readSymbol, toState);
-                transitionList.add(f);
+                    dataSource.open();
+                    PdaTransition t = (PdaTransition) dataSource.addPdaTransition(fromState, readSymbol, toState, emptyInputSymbolId, popList, pushList);
+                    transitionList.add(t);
+                } else {
+                    dataSource.open();
+                    FsaTransition f = (FsaTransition) dataSource.addFsaTransition(fromState, readSymbol, toState, emptyInputSymbolId);
+                    transitionList.add(f);
+                }
             }
         }
 
-        return transitionList;
+        dataSource.close();
     }
 
     private State getState(int id, List<State> stateList) {

@@ -539,7 +539,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             fileHandler.getData(dataSource);
             dataSource.open();
             stateList = dataSource.getStateFullExtract();
-            transitions = fileHandler.getGameTransitions(automata_type);
+            List<Symbol> inputAlphabet = dataSource.getInputAlphabetFullExtract();
+            if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
+                transitions = dataSource.getPdaTransitionFullExtract(inputAlphabet, inputAlphabet, stateList);
+            } else
+                transitions = dataSource.getFsaTransitionFullExtract(inputAlphabet, stateList);
+
         } catch (Exception e) {
             Log.e(TAG, "File was not loaded", e);
             Toast.makeText(this, getResources().getString(R.string.file_not_loaded), Toast.LENGTH_SHORT).show();
