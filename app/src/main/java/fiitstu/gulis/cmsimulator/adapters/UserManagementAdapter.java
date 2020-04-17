@@ -43,6 +43,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     private Context mContext;
     private List<User> listOfUsers;
     private boolean view_results;
+    private boolean view_grammar_results;
 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_LOADING = 1;
@@ -59,10 +60,11 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
         this.onBottomReachedListener = onBottomReachedListener;
     }
 
-    public UserManagementAdapter(Context mContext, List<User> listOfUsers, boolean view_results) {
+    public UserManagementAdapter(Context mContext, List<User> listOfUsers, boolean view_results, boolean view_grammar_results) {
         this.mContext = mContext;
         this.listOfUsers = listOfUsers;
         this.view_results = view_results;
+        this.view_grammar_results = view_grammar_results;
     }
 
     @NonNull
@@ -115,6 +117,21 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                     @Override
                     public void onClick(View v) {
                         Intent nextActivityIntent = new Intent(UserManagementAdapter.this.mContext, BrowseAutomataTasksActivity.class);
+                        Bundle outputBundle = new Bundle();
+                        outputBundle.putString("AUTHKEY", currentUser.getAuth_key());
+                        outputBundle.putInt("USER_ID", currentUser.getUser_id());
+                        outputBundle.putString("USER_LAST_NAME", currentUser.getLast_name());
+                        outputBundle.putString("USER_FIRST_NAME", currentUser.getFirst_name());
+                        nextActivityIntent.putExtra("BUNDLE", outputBundle);
+                        UserManagementAdapter.this.mContext.startActivity(nextActivityIntent);
+                    }
+                });
+            } else if (view_grammar_results) {
+                UsersManagmentActivity.context.setActionBarTitle();
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent nextActivityIntent = new Intent(UserManagementAdapter.this.mContext, BrowseGrammarTasksActivity.class);
                         Bundle outputBundle = new Bundle();
                         outputBundle.putString("AUTHKEY", currentUser.getAuth_key());
                         outputBundle.putInt("USER_ID", currentUser.getUser_id());

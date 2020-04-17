@@ -51,6 +51,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     public static UsersManagmentActivity context;
     InfiniteScrollListener infiniteScrollListener;
     private boolean view_automata_task_results = false;
+    private boolean view_grammar_task_results = false;
 
     @Override
     public void onLoadMore() {
@@ -104,6 +105,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         mContext = this;
 
         view_automata_task_results = getIntent().getBooleanExtra("VIEW_AUTOMATA_RESULTS", false);
+        view_grammar_task_results = getIntent().getBooleanExtra("VIEW_GRAMMAR_RESULTS", false);
 
         new FetchUsersCountAsync().execute();
 
@@ -196,7 +198,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                 protected void onPostExecute(List<User> users) {
                                     super.onPostExecute(users);
 
-                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results);
+                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results, view_grammar_task_results);
                                     setAdapter(adapter);
                                     showLoadScreen(false);
                                     setUserList(users);
@@ -280,7 +282,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             super.onPostExecute(users);
 
             showLoadScreen(false);
-            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results);
+            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results, view_grammar_task_results);
             if (users.size() != userCount)
                 adapter.addNullData();
             setAdapter(adapter);
@@ -311,7 +313,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                 filterUsers();
                 return true;
             case R.id.menu_find_users:
-                // TODO: pridat vyhladavanie
                 searchUsers();
                 return true;
         }
@@ -398,7 +399,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                     UserParser userParser = new UserParser();
                                     try {
                                         List<User> orderedUsers = userParser.getListOfUsers(s);
-                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers, view_automata_task_results);
+                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers, view_automata_task_results, view_grammar_task_results);
                                         setAdapter(adapter);
                                         showLoadScreen(false);
                                         setUserList(orderedUsers);

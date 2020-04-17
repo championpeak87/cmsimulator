@@ -179,6 +179,16 @@ public class TasksAdminActivity extends FragmentActivity implements ExampleTaskD
             }
         });
 
+        Button viewGrammarResults = findViewById(R.id.button_tasks_results_gramamar);
+        viewGrammarResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivityIntent = new Intent(TasksAdminActivity.this, UsersManagmentActivity.class);
+                nextActivityIntent.putExtra("VIEW_GRAMMAR_RESULTS", true);
+                startActivity(nextActivityIntent);
+            }
+        });
+
         Log.i(TAG, "onCreate initialized");
     }
 

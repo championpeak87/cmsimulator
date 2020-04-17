@@ -5,11 +5,11 @@
               android:layout_height="match_parent">
     <TextView
             style="@style/guide_heading"
-            android:text="@string/guide_title_bulk_test_activity" />
+            android:text="@string/guide_title_bulk_test_activity"/>
 
     <TextView
             style="@style/guide_paragraph"
-            android:text="@string/guide_bulk_test_introduction" />
+            android:text="@string/guide_bulk_test_introduction"/>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -19,25 +19,25 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/ic_menu_white_with_background_48dp"/>
+                android:src="@drawable/ic_menu_white_with_background_48dp" android:tint="@null"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/guide_bulk_test_menu" />
+                android:text="@string/guide_bulk_test_menu"/>
     </LinearLayout>
 
     <TextView
             style="@style/guide_paragraph"
-            android:text="@string/guide_bulk_test_results" />
+            android:text="@string/guide_bulk_test_results"/>
 
     <TextView
             style="@style/guide_paragraph"
-            android:text="@string/guide_bulk_test_to_simulation" />
+            android:text="@string/guide_bulk_test_to_simulation"/>
 
     <TextView
             style="@style/guide_paragraph"
-            android:text="@string/guide_bulk_test_buttons" />
+            android:text="@string/guide_bulk_test_buttons"/>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -47,12 +47,12 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/edit"/>
+                android:src="@drawable/edit" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/guide_bulk_test_edit_button" />
+                android:text="@string/guide_bulk_test_edit_button"/>
     </LinearLayout>
 
     <LinearLayout
@@ -63,47 +63,49 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/remove"/>
+                android:src="@drawable/remove" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/guide_bulk_test_remove_button" />
+                android:text="@string/guide_bulk_test_remove_button"/>
     </LinearLayout>
 
     <TextView
-            style="@style/guide_see_also" />
+            style="@style/guide_see_also"/>
 
     <LinearLayout
             android:id="@+id/linearLayout_guide_settings_link"
             style="@style/guide_content_container">
         <ImageView
-                style="@style/guide_content_bullet" />
+                style="@style/guide_content_bullet"
+        android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 style="@style/guide_content_text"
-                android:text="@string/guide_title_settings" />
+                android:text="@string/guide_title_settings"/>
     </LinearLayout>
 
     <LinearLayout
             android:id="@+id/linearLayout_guide_tasks_link"
             style="@style/guide_content_container">
         <ImageView
-                style="@style/guide_content_bullet" />
+                style="@style/guide_content_bullet"
+                android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 style="@style/guide_content_text"
-                android:text="@string/guide_title_tasks" />
+                android:text="@string/guide_title_tasks"/>
     </LinearLayout>
 
     <LinearLayout
             android:id="@+id/linearLayout_guide_simulation_link"
             style="@style/guide_content_container">
         <ImageView
-                style="@style/guide_content_bullet" />
+                style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 style="@style/guide_content_text"
-                android:text="@string/guide_title_simulation_activity" />
+                android:text="@string/guide_title_simulation_activity"/>
     </LinearLayout>
 </LinearLayout>

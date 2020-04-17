@@ -26,10 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import fiitstu.gulis.cmsimulator.R;
-import fiitstu.gulis.cmsimulator.activities.BrowseAutomataTasksActivity;
-import fiitstu.gulis.cmsimulator.activities.GrammarActivity;
-import fiitstu.gulis.cmsimulator.activities.GrammarTaskDetailsActivity;
-import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.activities.*;
 import fiitstu.gulis.cmsimulator.adapters.grammar.RulesAdapter;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileFormatException;
@@ -66,13 +63,15 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
     private Context mContext;
     private List<GrammarTask> grammarTaskList;
     private DatasetChangedListener datasetChangedListener = null;
+    private boolean view_results = false;
 
     public static GrammarTask runningTask = null;
 
-    public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks) {
+    public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks, boolean view_results) {
         instance = this;
         this.mContext = mContext;
         this.grammarTaskList = grammarTasks;
+        this.view_results = view_results;
         if (datasetChangedListener != null)
             datasetChangedListener.onDataChange();
     }
@@ -101,7 +100,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
 
         selectedCard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 class DownloadGrammarTaskAsync extends AsyncTask<Void, Void, String> {
                     @Override
                     protected void onPreExecute() {
@@ -111,7 +110,11 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                     @Override
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
-                        final int user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
+                        final int user_id;
+                        if (view_results)
+                            user_id = ((BrowseGrammarTasksActivity) mContext).getUser_id();
+                        else
+                            user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
                         URL downloadURL = urlManager.getDownloadGrammarTaskURL(user_id, selectedGrammarTask.getTask_id());
                         ServerController serverController = new ServerController();
                         String output = null;
@@ -155,6 +158,8 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                 style = GrammarTaskDialog.DialogStyle.NEW_TASK_ENTERING;
                                 break;
                         }
+                        if (view_results)
+                            style = GrammarTaskDialog.DialogStyle.PREVIEW_TASK_ENTERING;
                         GrammarTaskDialog grammarTaskDialog = new GrammarTaskDialog(selectedGrammarTask, style);
                         grammarTaskDialog.setOnTaskStartListener(new GrammarTaskDialog.OnTaskStartListener() {
                             @Override
@@ -192,7 +197,9 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                 }
 
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
-                                if (TaskLoginActivity.loggedUser != null) {
+                                if (view_results) {
+                                    grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
+                                } else if (TaskLoginActivity.loggedUser != null) {
                                     grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
                                     grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
                                     grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());

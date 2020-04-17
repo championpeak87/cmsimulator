@@ -979,7 +979,7 @@
     <string name="find_automata_tasks">Vyhľadať automaty</string>
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
-        <b>-</b> Ukážka funkčnej hry, bez možnosti ukladania a odovzdania</string>
+        <b>-</b> Implementácia hry</string>
     <string name="regex_help" formatted="true">
         <b>*</b>       -> Opakovanie 0 - n-krát\n
         <b>+</b>       -> Opakovanie 1 - n-krát\n

@@ -80,5 +80,6 @@ CREATE TABLE game_task_results
 (
     user_id SERIAL NOT NULL references users(user_id),
     task_id SERIAL NOT NULL references game_tasks(task_id),
-    task_status task_status NOT NULL default('new')
+    task_status task_status NOT NULL default('new'),
+    submitted boolean not null default false
 );

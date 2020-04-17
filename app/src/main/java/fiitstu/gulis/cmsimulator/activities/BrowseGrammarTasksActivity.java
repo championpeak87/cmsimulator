@@ -1,6 +1,7 @@
 package fiitstu.gulis.cmsimulator.activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -41,6 +42,12 @@ import java.util.List;
 public class BrowseGrammarTasksActivity extends FragmentActivity {
     private static final String TAG = "BrowseGrammarTasksActiv";
 
+    private boolean view_results = false;
+    private String authkey;
+    private int user_id;
+    private String first_name;
+    private String last_name;
+
     // RECYCLERVIEW ADAPTER
     private GrammarTaskAdapter adapter = null;
     private List<GrammarTask> grammarTaskList = new ArrayList<>();
@@ -55,6 +62,16 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_browse_grammar_tasks);
+
+        Intent intent = this.getIntent();
+        if (intent.hasExtra("BUNDLE")) {
+            view_results = true;
+            Bundle inputBundle = this.getIntent().getBundleExtra("BUNDLE");
+            authkey = inputBundle.getString("AUTHKEY");
+            user_id = inputBundle.getInt("USER_ID");
+            first_name = inputBundle.getString("USER_FIRST_NAME");
+            last_name = inputBundle.getString("USER_LAST_NAME");
+        }
 
         setActionBar();
         setUIElements();
@@ -102,7 +119,12 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
     private void setActionBar() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.available_tasks);
+        if (view_results) {
+            String titleBarText = getString(R.string.users_tasks).replace("{0}", last_name + ", " + first_name);
+            actionBar.setTitle(titleBarText);
+        } else {
+            actionBar.setTitle(R.string.available_tasks);
+        }
     }
 
     private void setUIElements() {
@@ -124,7 +146,10 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
             @Override
             protected String doInBackground(Void... voids) {
                 UrlManager urlManager = new UrlManager();
-                final int user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
+                final int userid;
+                if (view_results)
+                    userid = user_id;
+                else userid = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
                 URL fetchTasksURL = urlManager.getAllGrammarTasksUrl(user_id);
                 ServerController serverController = new ServerController();
                 String output = null;
@@ -166,7 +191,7 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
 
     private void setRecyclerView() {
         if (adapter == null)
-            adapter = new GrammarTaskAdapter(this, grammarTaskList);
+            adapter = new GrammarTaskAdapter(this, grammarTaskList, view_results);
 
         adapter.setDatasetChangedListener(new GrammarTaskAdapter.DatasetChangedListener() {
             @Override
@@ -198,5 +223,9 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
     private void showEmptyScreen(boolean value) {
         this.recyclerView.setVisibility(value ? View.GONE : View.VISIBLE);
         this.empty_LinearLayout.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
+    public int getUser_id() {
+        return user_id;
     }
 }

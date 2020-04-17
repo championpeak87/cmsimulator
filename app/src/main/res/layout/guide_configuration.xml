@@ -21,7 +21,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/menu"
-                android:src="@drawable/ic_menu_white_with_background_48dp"/>
+                android:src="@drawable/ic_menu_white_with_background_48dp" android:tint="@null"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/move"
-                android:src="@drawable/ic_open_with_black_48dp"/>
+                android:src="@drawable/ic_open_with_black_48dp" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -62,7 +62,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/add_state"
-                android:src="@drawable/ic_add_circle_outline_black_48dp"/>
+                android:src="@drawable/ic_add_circle_outline_black_48dp" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -79,7 +79,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/add_transition"
-                android:src="@drawable/ic_redo_black_48dp"/>
+                android:src="@drawable/ic_redo_black_48dp" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/edit"
-                android:src="@drawable/ic_edit_black_48dp"/>
+                android:src="@drawable/ic_edit_black_48dp" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -113,7 +113,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/remove"
-                android:src="@drawable/ic_delete_black_48dp"/>
+                android:src="@drawable/ic_delete_black_48dp" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -137,7 +137,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/edit"
-                android:src="@drawable/edit"/>
+                android:src="@drawable/edit" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -154,7 +154,7 @@
         <ImageView
                 style="@style/guide_image"
                 android:contentDescription="@string/remove"
-                android:src="@drawable/remove"/>
+                android:src="@drawable/remove" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -169,7 +169,7 @@
             android:id="@+id/linearLayout_guide_special_symbols_link"
             style="@style/guide_content_container">
         <ImageView
-                style="@style/guide_content_bullet" />
+                style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 style="@style/guide_content_text"
@@ -180,7 +180,7 @@
             android:id="@+id/linearLayout_guide_save_load_link"
             style="@style/guide_content_container">
         <ImageView
-            style="@style/guide_content_bullet" />
+            style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
 
         <TextView
             style="@style/guide_content_text"
