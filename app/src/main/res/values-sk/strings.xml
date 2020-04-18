@@ -86,23 +86,113 @@
     <!--Popup Main Activity examples-->
     <string name="finite_state_automaton_example1">3k+1</string>
     <string name="finite_state_automaton_example2">končiace 01 alebo 10</string>
-    <string name="finite_state_automaton_example3">a<sup><small>N</small></sup></string>
-    <string name="pushdown_automaton_example1">wcw<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example2">ww<sup><small>R</small></sup></string>
-    <string name="pushdown_automaton_example3">a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example1">a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
-    <string name="linear_bounded_automaton_example2">1<sup><small>N</small></sup>, kde N nie je prvočíslo</string>
+    <string name="finite_state_automaton_example3">a
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
+    <string name="pushdown_automaton_example1">wcw
+        <sup>
+            <small>R</small>
+        </sup>
+    </string>
+    <string name="pushdown_automaton_example2">ww
+        <sup>
+            <small>R</small>
+        </sup>
+    </string>
+    <string name="pushdown_automaton_example3">a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
+    <string name="linear_bounded_automaton_example1">a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        c
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
+    <string name="linear_bounded_automaton_example2">1
+        <sup>
+            <small>N</small>
+        </sup>
+        , kde N nie je prvočíslo
+    </string>
     <string name="turing_machine_example1">násobenie dvoch čísel v unárnej sústave</string>
-    <string name="turing_machine_example2">w<sub><small>1</small></sub>$w<sub><small>2</small></sub>, kde w<sub><small>2</small></sub> je podslovo w<sub><small>1</small></sub></string>
+    <string name="turing_machine_example2">w
+        <sub>
+            <small>1</small>
+        </sub>
+        $w
+        <sub>
+            <small>2</small>
+        </sub>
+        , kde w
+        <sub>
+            <small>2</small>
+        </sub>
+        je podslovo w
+        <sub>
+            <small>1</small>
+        </sub>
+    </string>
 
     <!--Popup Main Activity grammar examples-->
-    <string name="example_grammar1">a<sup><small>N</small></sup></string>
+    <string name="example_grammar1">a
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
     <string name="example_grammar2">3k+1</string>
     <string name="example_grammar3">končiace 01 alebo 10</string>
-    <string name="example_grammar4">a<sup><small>N</small></sup>b<sup><small>N</small></sup></string>
-    <string name="example_grammar5">a<sup><small>N</small></sup>b<sup><small>N</small></sup> v Chomského normálnom tvare</string>
-    <string name="example_grammar6">ww<sup><small>R</small></sup></string>
-    <string name="example_grammar7">a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup></string>
+    <string name="example_grammar4">a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
+    <string name="example_grammar5">a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        v Chomského normálnom tvare
+    </string>
+    <string name="example_grammar6">ww
+        <sup>
+            <small>R</small>
+        </sup>
+    </string>
+    <string name="example_grammar7">a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        c
+        <sup>
+            <small>N</small>
+        </sup>
+    </string>
 
     <!--Options Activity-->
     <string name="simulation_settings">Nastavenia simulácie</string>
@@ -126,21 +216,38 @@
     <string name="machine_tape">Páska automatu</string>
     <string name="stack_tape">Zásobník</string>
     <string name="tape_element_save_error">Nastala neznáma chyba pri tvorbe nového symbolu pásky!</string>
-    <string name="exit_confirmation">Naozaj chcete ukončiť prácu so simulátorom? Všetok neuložený obsah bude stratený.</string>
+    <string name="exit_confirmation">Naozaj chcete ukončiť prácu so simulátorom? Všetok neuložený obsah bude stratený.
+    </string>
     <string name="choose_action">Zvoľte operáciu</string>
     <string name="set_initial">Nastaviť ako počiatočný symbol pásky</string>
     <string name="set_ordinary">Nastaviť ako obyčajný symbol pásky</string>
     <string name="place_breakpoint">Umiestniť breakpoint</string>
     <string name="remove_breakpoint">Odstrániť breakpoint</string>
     <string name="remove_tape_element">Naozaj chcete odstrániť tento symbol pásky?</string>
-    <string name="initial_tape_element_exists_error">Nie je možne nastaviť ako počiatočný symbol pásky. Počiatočný symbol pásky už existuje.</string>
-    <string name="initial_state_error">Nie je možné spustiť simuláciu, pretože počiatočný stav neexistuje. Vytvorte počiatočný stav v konfiguračnej obrazovke a skúste znovu.</string>
-    <string name="final_state_error">Nie je možné spustiť simuláciu, pretože konečný stav neexistuje. Vytvorte konečný stav v konfiguračnej obrazovke a skúste znovu.</string>
-    <string name="both_states_error">Nie je možné spustiť simuláciu, pretože počiatočný a konečný stav neexistuje. Vytvorte počiatočný a konečný stav v konfiguračnej obrazovke a skúste znovu.</string>
-    <string name="initial_tape_element_error">Nie je možne spustiť simuláciu. Počiatočný vstupný symbol nebol definovaný.</string>
-    <string name="initial_tape_symbol_error">Nie je možne spustiť simuláciu. Počiatočný vstupný symbol nesmie byť prázdny symbol.</string>
-    <string name="simulation_incomplete_tape_error">Nie je možne spustiť simuláciu. Vstupná páska musí obsahovať súvislú postupnosť neprázdnych symbolov.</string>
-    <string name="unable_simulation">Nie je možné vykonať zvolenú operáciu. Je potrebné najprv zastaviť prebiehajúcu siuláciu.</string>
+    <string name="initial_tape_element_exists_error">Nie je možne nastaviť ako počiatočný symbol pásky. Počiatočný
+        symbol pásky už existuje.
+    </string>
+    <string name="initial_state_error">Nie je možné spustiť simuláciu, pretože počiatočný stav neexistuje. Vytvorte
+        počiatočný stav v konfiguračnej obrazovke a skúste znovu.
+    </string>
+    <string name="final_state_error">Nie je možné spustiť simuláciu, pretože konečný stav neexistuje. Vytvorte konečný
+        stav v konfiguračnej obrazovke a skúste znovu.
+    </string>
+    <string name="both_states_error">Nie je možné spustiť simuláciu, pretože počiatočný a konečný stav neexistuje.
+        Vytvorte počiatočný a konečný stav v konfiguračnej obrazovke a skúste znovu.
+    </string>
+    <string name="initial_tape_element_error">Nie je možne spustiť simuláciu. Počiatočný vstupný symbol nebol
+        definovaný.
+    </string>
+    <string name="initial_tape_symbol_error">Nie je možne spustiť simuláciu. Počiatočný vstupný symbol nesmie byť
+        prázdny symbol.
+    </string>
+    <string name="simulation_incomplete_tape_error">Nie je možne spustiť simuláciu. Vstupná páska musí obsahovať súvislú
+        postupnosť neprázdnych symbolov.
+    </string>
+    <string name="unable_simulation">Nie je možné vykonať zvolenú operáciu. Je potrebné najprv zastaviť prebiehajúcu
+        siuláciu.
+    </string>
     <string name="simulation_needed">Simulácia ešte nezačala.</string>
     <string name="simulation_stopped">Simulácia bola zastavená.</string>
     <string name="all_stuck">Všetky simulačné vlákna sú zaseknuté.</string>
@@ -177,7 +284,8 @@
     <string name="remove_symbol">Naozaj chcete odstrániť tento symbol?</string>
     <string name="remove_state">Naozaj chcete odstrániť tento stav?</string>
     <string name="remove_transition">Naozaj chcete odstrániť tento prechod?</string>
-    <string name="convert_error_no_initial_state">Nie je možné konvertovať automat, pretože neexistuje počiatočný stav</string>
+    <string name="convert_error_no_initial_state">Nie je možné konvertovať automat, pretože neexistuje počiatočný stav
+    </string>
 
     <!--Popup Symbol Configuration Activity-->
     <string name="new_symbol">Nový symbol</string>
@@ -256,7 +364,8 @@
     <string name="input_word">Vstupné slovo</string>
     <string name="output_word">Výstupné slovo</string>
     <string name="set_output_word">Nastaviť výstupné slovo</string>
-    <string name="bulk_incomplete_tape_error">Vstupná páska musí obsahovať súvislú postupnosť neprázdnych symbolov.</string>
+    <string name="bulk_incomplete_tape_error">Vstupná páska musí obsahovať súvislú postupnosť neprázdnych symbolov.
+    </string>
 
     <!--Tasks Activity-->
     <string name="find_tasks">Vyhľadať úlohy</string>
@@ -286,14 +395,17 @@
     <string name="grammar_simulation_result">Výsledok:</string>
     <string name="grammar_simulation_step">Krok</string>
     <string name="grammar_simulation_step_back">Krok späť</string>
-    <string name="grammar_simulation_tree_constraint">Derivačný strom je dostupný iba pre regulárne a bezkontextové gramatiky</string>
+    <string name="grammar_simulation_tree_constraint">Derivačný strom je dostupný iba pre regulárne a bezkontextové
+        gramatiky
+    </string>
     <string name="grammar_simulation_end">Simulácia sa skončila.</string>
 
     <!--Grammar Multiple Tests-->
     <string name="grammar_multiple_tests">Hromadné testovanie</string>
     <string name="grammar_multiple_tests_test_all">Otestovať všetky</string>
     <string name="grammar_multiple_tests_clear">Zmazať</string>
-    <string name="grammar_multiple_tests_hint">Zapíšte slová do tabuľky a označte ktoré patria do jazyka a ktoré nie!</string>
+    <string name="grammar_multiple_tests_hint">Zapíšte slová do tabuľky a označte ktoré patria do jazyka a ktoré nie!
+    </string>
 
     <!--Derivation Table Fragment-->
     <string name="production">Odvodenie</string>
@@ -311,8 +423,8 @@
     <string name="task_example_asset3">TM_task_sk.cmst</string>
 
     <!--Task dialog-->
-    <string name="remaining_time" >Zostávajúci čas:</string>
-    <string name="available_time" >Čas na riešenie:</string>
+    <string name="remaining_time">Zostávajúci čas:</string>
+    <string name="available_time">Čas na riešenie:</string>
     <string name="turn_in">Odovzdať</string>
     <string name="solve">Riešiť</string>
     <string name="back_to_task_edit">Späť na úpravu úlohy</string>
@@ -346,16 +458,17 @@
     <string name="error">Chyba</string>
     <string name="bind_socket_error">Aplikácia nemôže vyhľadať úlohy, pretože sa nepodarilo\
         získať sieťový socket. Je možné, že socket je už používaný inou aplikáciou. Skúste\
-        pozatváráť ostatne aplikácie, ktoré môžu pristupovať k sieti, a skúste znovu.</string>
+        pozatváráť ostatne aplikácie, ktoré môžu pristupovať k sieti, a skúste znovu.
+    </string>
     <string name="unknown_socket_error">Aplikácia nemôže vyhľadať úlohy, pretože sa nepodarilo\
         otvoriť sieťový socket. Skúste reštartovať aplikáciu. Ak problém pretrváva, nahláste\
-        ho, prosím, vývojárovi.</string>
+        ho, prosím, vývojárovi.
+    </string>
     <string name="sending_result_error">Nepodarilo sa odoslať výsledky zadávateľovi.</string>
 
     <!--Task popups-->
     <string name="task_leave_warning">Chystáte sa opustiť aktivitu bez toho, aby ste odovzdali úlohu. Ak budete
-        pokračovať, vaše riešenie bude stratené! Určite chcete pokračovať? (Pre odovzdanie úlohy ťuknite na červený
-        výkričník v hornom panely)
+        pokračovať, vaše riešenie bude stratené!
     </string>
     <string name="task_no_longer_available">Úloha už nie je dostupná (ak by mala byť, mohli sa vyskytnuť problémy so
         sieťovým spojením)
@@ -389,62 +502,131 @@
 
     <!--About-->
     <string name="guide_title_about">O aplikácii</string>
-    <string name="guide_about_desc1">CMSimulator je aplikácia, ktorá slúži na lepšie pochopenie štyroch najznámejších formálnych
+    <string name="guide_about_desc1">CMSimulator je aplikácia, ktorá slúži na lepšie pochopenie štyroch najznámejších
+        formálnych
         výpočtových strojov – konečný automat, zásobníkový automat, lineárne ohraničený automat a Turingov stroj.
         Aplikácia umožňuje vytvoriť nový, alebo načítať existujúci stroj a tiež obsahuje aj hotové vzory
-        (jeden deterministický a jeden nedeterministický pre každý typ výpočtového stroja).</string>
-    <string name="guide_about_desc2">Je možné vytvoriť zoznam symbolov, stavov, prechodov a tiež zvoliť počiatočný a koncové stavy.
+        (jeden deterministický a jeden nedeterministický pre každý typ výpočtového stroja).
+    </string>
+    <string name="guide_about_desc2">Je možné vytvoriť zoznam symbolov, stavov, prechodov a tiež zvoliť počiatočný a
+        koncové stavy.
         Po vyplnení vstupnej pásky je možné simuláciu krokovať alebo spustiť až do konca. Tiež je možné
         označiť prvok pásky ako breakpoint na zastavenie simulácie, keď je tento breakpoint
-        dosiahnutý.</string>
+        dosiahnutý.
+    </string>
     <string name="guide_about_desc3">Aplikácia podporuje aj nedeterministické stroje a riešenia.</string>
     <string name="guide_about_desc4">Od verzie 3 aplikácia umožňuje tiež vytváranie a riešenie interaktívnych zadaní
-        cez lokálnu sieť.</string>
+        cez lokálnu sieť.
+    </string>
     <string name="guide_about_desc5">Aplikácia bola vyvíjaná ako súčasť niekoľkých bakalárskych projektov
         študentami Fakulty informatiky a informačných technológií Slovenskej technickej univerzity v Bratislave.
     </string>
     <string name="guide_about_desc6">Od verzie 4 aplikácia je rozšírená o simuláciu a vizualizáciu formálnych gramatík
-        z Chomského hierarchie. V CMSimulátori môžete vytvoriť, analyzovať a testovať Regulárne, Bezkontextové, Kontextové
-        a Frázové gramatiky. Aplikácia podporuje uloženie a načítanie existujúcich gramatík a 4 rôzne druhy vizualizácie -
-        Derivačná tabuľka, Derivačný strom, Lineárne odvodenie a Odvodenie na mieste.</string>
+        z Chomského hierarchie. V CMSimulátori môžete vytvoriť, analyzovať a testovať Regulárne, Bezkontextové,
+        Kontextové
+        a Frázové gramatiky. Aplikácia podporuje uloženie a načítanie existujúcich gramatík a 4 rôzne druhy vizualizácie
+        -
+        Derivačná tabuľka, Derivačný strom, Lineárne odvodenie a Odvodenie na mieste.
+    </string>
 
     <!--Getting Started-->
     <string name="guide_title_getting_started">Začíname</string>
     <string name="guide_getting_started_new_machine">Pre vytvorenie nového automatu, ťuknite na tlačidlo
-        <b>Nový automat</b> v hlavnom menu, potom zvoľte typ automatu, ktorý chcete vytvoriť. Budete prenesení
-        do Konfiguračnej obrazovky, kde môžete svoj nový automat upravovať a uložiť.</string>
+        <b>Nový automat</b>
+        v hlavnom menu, potom zvoľte typ automatu, ktorý chcete vytvoriť. Budete prenesení
+        do Konfiguračnej obrazovky, kde môžete svoj nový automat upravovať a uložiť.
+    </string>
     <string name="guide_getting_started_example_machine">Ak si chcete pozrieť vzorový automat vytvorený v aplikácii
         CMSimulator, ťuknite na tlačidlo <b>Vzorové automaty</b> v hlavnom menu a vyberte, ktorý automat chcete otvoriť.
         Budete prenesení do Simulačnej obrazovky, kde si automat môžete hneď odskúšať.
     </string>
     <string name="guide_getting_started_example_grammar">Ak si chcete pozrieť vzorovú gramatiku vytvorenú v aplikácii
-        CMSimulator, ťuknite na tlačidlo <b>Vzorové gramatiky</b> v hlavnom menu a vyberte, ktorú gramatiku chcete otvoriť.
+        CMSimulator, ťuknite na tlačidlo <b>Vzorové gramatiky</b> v hlavnom menu a vyberte, ktorú gramatiku chcete
+        otvoriť.
         Budete prenesení do obrazovky pre gramatiky, kde si gramatiku môžete hneď odskúšať.
     </string>
     <string name="guide_getting_started_example_machine_list">Dostupné vzorové automaty sú:\n
         \t \u2022 Deterministický konečný automat akceptujúci slová pozostávajúce z 3k+1 znakov\n
-        \t \u2022 Deterministický konečný automat akceptujúci slová v tvare a<sup><small>N</small></sup>\n
+        \t \u2022 Deterministický konečný automat akceptujúci slová v tvare a
+        <sup>
+            <small>N</small>
+        </sup>
+        \n
         \t \u2022 Nedeterministický konečný automat akceptujúci slová končiace "01" alebo "10"\n
         \t \u2022 Deterministický zásobníkový automat akceptujúci palindrómy s označeným stredom\n
-        \t \u2022 Deterministický zásobníkový automat akceptujúci slová v tvare a<sup><small>N</small></sup>b<sup><small>N</small></sup>\n
+        \t \u2022 Deterministický zásobníkový automat akceptujúci slová v tvare a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        \n
         \t \u2022 Nedeterministický zásobníkový automat akceptujúci palindrómy párnej dĺžky\n
         \t \u2022 Deterministický lineárne ohraničený automat akceptujúci slová v tvare
-        a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup>\n
+        a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        c
+        <sup>
+            <small>N</small>
+        </sup>
+        \n
         \t \u2022 Nedeterministický lineárne ohraničený automat akceptujúci čísla v jednotkovej
         sústave, ktoré nie sú prvočíslami\n
         \t \u2022 Deterministický Turingov stroj, ktorý násobí dve čísla v jednotkovej sústave\n
         \t \u2022 Nedeterministický Turingov stroj, ktorý zisťuje, či je slovo podslovom druhého slova
     </string>
     <string name="guide_getting_started_example_grammar_list">Dostupné vzorové gramatiky sú:\n
-        \t \u2022 Regulárna gramatika akceptujúca slová v tvare a<sup><small>N</small></sup> \n
+        \t \u2022 Regulárna gramatika akceptujúca slová v tvare a
+        <sup>
+            <small>N</small>
+        </sup>
+        \n
         \t \u2022 Regulárna gramatika akceptujúca slová pozostávajúce z 3k+1 znakov\n
         \t \u2022 Regulárna gramatika akceptujúca slová končiace "01" alebo "10"\n
-        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare a<sup><small>N</small></sup>b<sup><small>N</small></sup>\n
-        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare a<sup><small>N</small></sup>b<sup><small>N</small></sup>
+        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        \n
+        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
         v Chomského normálnom tvare\n
-        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare ww<sup><small>R</small></sup>\n
+        \t \u2022 Bezkontextová gramatika akceptujúca slová v tvare ww
+        <sup>
+            <small>R</small>
+        </sup>
+        \n
         \t \u2022 Kontextová gramatika akceptujúca slová v tvare
-        a<sup><small>N</small></sup>b<sup><small>N</small></sup>c<sup><small>N</small></sup>
+        a
+        <sup>
+            <small>N</small>
+        </sup>
+        b
+        <sup>
+            <small>N</small>
+        </sup>
+        c
+        <sup>
+            <small>N</small>
+        </sup>
     </string>
     <string name="guide_getting_started_load_machine">Pre načítanie už vytvoreného automatu, ťuknite na
         tlačidlo <b>Načítať automat</b> v hlavnom menu, potom zvoľte súbor, ktorý chcete otvoriť.
@@ -455,11 +637,14 @@
         môžete zadať ostatným, ťuknite na tlačidlo <b>Vytvoriť úlohu</b>. Pre načítanie úlohy, ktorú ste si
         predtým pripravili, ťuknite na tlačidlo <b>Načítať úlohu</b>.
     </string>
-    <string name="guide_getting_started_grammar">Pre vstup do menu pre gramatiky ťuknite na tlačidlo <b>Gramatika</b>
+    <string name="guide_getting_started_grammar">Pre vstup do menu pre gramatiky ťuknite na tlačidlo
+        <b>Gramatika</b>
         v hlavnom menu. Zobrazí sa obrazovka pre definovanie gramatiky, kde môžete zapísať alebo načítať gramatiku s
-        ktorou chcete pracovať.</string>
+        ktorou chcete pracovať.
+    </string>
     <string name="guide_getting_started_settings">Pre zobrazenie alebo úpravu nastavení aplikácie ťuknite na
-        tlačidlo <b>Nastavenia</b> v hlavnom menu.</string>
+        tlačidlo <b>Nastavenia</b> v hlavnom menu.
+    </string>
 
     <!--Configuration Guide-->
     <string name="guide_title_configuration_activity">Konfiguračná obrazovka</string>
@@ -475,28 +660,46 @@
         diagram automatu. V dolnom paneli si môžete zvoliť nástroj na úpravu diagramu.\n\
         Diagram môžete priblížiť alebo oddialiť posúvaním dvoch prstov k sebe alebo od seba v ploche diagramu.
     </string>
-    <string name="guide_configuration_move"><b>Posunúť -</b> keď je zvolený tento nástroj, môžete stavy posúvať.
+    <string name="guide_configuration_move">
+        <b>Posunúť -</b>
+        keď je zvolený tento nástroj, môžete stavy posúvať.
         Ťahom prsta v prázdnom priestore okolo stavov môžete posunúť celý diagram.
     </string>
-    <string name="guide_configuration_new_state"><b>Nový stav -</b> ťuknite na miesto v ploche diagramu, kde
+    <string name="guide_configuration_new_state">
+        <b>Nový stav -</b>
+        ťuknite na miesto v ploche diagramu, kde
         chcete pridať nový stav.
     </string>
-    <string name="guide_configuration_new_transition"><b>Nový prechod -</b> dotknite sa počiatočného stavu prechodu
+    <string name="guide_configuration_new_transition">
+        <b>Nový prechod -</b>
+        dotknite sa počiatočného stavu prechodu
         a ťahajte ku konečnému stavu prechodu. Objaví sa dialógové okno, kde môžete špecifikovať ostatné vlastnosti
         prechodu, ako napríklad prečítaný symbol.
     </string>
-    <string name="guide_configuration_edit"><b>Upraviť -</b> ťuknite na stav alebo prechod, ktorý chcete upraviť.</string>
-    <string name="guide_configuration_remove"><b>Odstrániť -</b> ťuknite na stav alebo prechod, ktorý chcete odstrániť.
+    <string name="guide_configuration_edit">
+        <b>Upraviť -</b>
+        ťuknite na stav alebo prechod, ktorý chcete upraviť.
+    </string>
+    <string name="guide_configuration_remove">
+        <b>Odstrániť -</b>
+        ťuknite na stav alebo prechod, ktorý chcete odstrániť.
     </string>
 
     <string name="guide_title_other_tabs">Ostatné záložky</string>
     <string name="guide_configuration_other_tabs">Ostatné záložky vám umožňujú individuálne definovať rôzne
-        vlastnosti automatu. Každý automat má záložku pre <b>vstupnú abecedu</b>, <b>stavy</b>
+        vlastnosti automatu. Každý automat má záložku pre <b>vstupnú abecedu</b>,
+        <b>stavy</b>
         a <b>prechody</b>. Zásobníkové automaty majú tiež záložku pre <b>zásobníkovú abecedu</b>. Nové prvky
         môžete pridať ťuknutím na tlačidlo naspodku obrazovky.
     </string>
-    <string name="guide_configuration_edit_button"><b>Upraviť -</b> upraviť prvok.</string>
-    <string name="guide_configuration_remove_button"><b>Odstrániť -</b> odstrániť prvok.</string>
+    <string name="guide_configuration_edit_button">
+        <b>Upraviť -</b>
+        upraviť prvok.
+    </string>
+    <string name="guide_configuration_remove_button">
+        <b>Odstrániť -</b>
+        odstrániť prvok.
+    </string>
 
     <!--Special Symbols Guide-->
     <string name="guide_title_special_symbols">Špeciálne symboly</string>
@@ -504,7 +707,9 @@
         symboly sú automaticky pridané do abecedy pri vytvorení automatu a nemôžu byť odstránené. Niektoré z nich
         však môžete upraviť.
     </string>
-    <string name="guide_special_symbols_epsilon"><b>ε (epsilon) -</b> prázdny znak pre konečné automaty a zásobníkové
+    <string name="guide_special_symbols_epsilon">
+        <b>ε (epsilon) -</b>
+        prázdny znak pre konečné automaty a zásobníkové
         automaty. Keď je epsilon vstupným symbolom prechodu, znamená to, že prechod môže byť vykonaný bez toho, aby
         sa vôbec nejaký symbol prečítal. Epsilonové prechody sú od prírody nedeterministické - automat ich môže ale
         nemusí vykonať (zásobníkový automat však môže byť donútený zvoliť si taký prechod ak je to jediný možný
@@ -512,18 +717,26 @@
         Epsilon je s podobným významom použitý tiež ako zásobníkový symbol - PUSH epsilonu znamená, že do zásobníka sa
         nič nevloží a POP epsilonu znamená, že sa z neho nič nevyberie.
     </string>
-    <string name="guide_special_symbols_blank"><b># (prázdny symbol pásky) -</b> predvolený symbol na páskach lineárne
+    <string name="guide_special_symbols_blank">
+        <b># (prázdny symbol pásky) -</b>
+        predvolený symbol na páskach lineárne
         ohraničených automatov a Turingových strojov. Tento symbol môže byť upravený.
     </string>
-    <string name="guide_special_symbols_stack_start"><b>Z (začiatok zásobníka) -</b> symbol, ktorý je automaticky položený
+    <string name="guide_special_symbols_stack_start">
+        <b>Z (začiatok zásobníka) -</b>
+        symbol, ktorý je automaticky položený
         naspodok zásobníka predtým, ako začne simulácia. Tento symbol môže byť upravený.
     </string>
-    <string name="guide_special_symbols_left_end"><b>|&lt; (ľavý koniec) -</b> označuje ľavý koniec pásky lineárne
+    <string name="guide_special_symbols_left_end">
+        <b>|&lt; (ľavý koniec) -</b>
+        označuje ľavý koniec pásky lineárne
         ohraničeného automatu. Na pásku je vložený tesne pred začiatkom simulácie a pre účely "očakávaného výstupu"
         v <b>Obrazovke hromadného testovania</b> je ignorovaný. Môže byť použitý ako vstupný symbol v prechodoch,
         ale nemôže byť prepísaný a hlava stroja sa nemôže posunúť naľavo od neho. Tento symbol môže byť upravený.
     </string>
-    <string name="guide_special_symbols_right_end"><b>&gt;| (pravý koniec) -</b> označuje pravý koniec pásky lineárne
+    <string name="guide_special_symbols_right_end">
+        <b>&gt;| (pravý koniec) -</b>
+        označuje pravý koniec pásky lineárne
         ohraničeného automatu. Na pásku je vložený tesne pred začiatkom simulácie a pre účely "očakávaného výstupu"
         v <b>Obrazovke hromadného testovania</b> je ignorovaný. Môže byť použitý ako vstupný symbol v prechodoch,
         ale nemôže byť prepísaný a hlava stroja sa nemôže posunúť napravo od neho. Tento symbol môže byť upravený.
@@ -548,10 +761,14 @@
     <string name="guide_simulation_tape">Páska je zobrazená vo vrchnej časti obrazovky. Môžete s ňou manipulovať
         iba kým neprebieha simulácia.
     </string>
-    <string name="guide_simulation_add_tape_element"><b>Pridať prvok pásky -</b> ťuknutím na toto tlačidlo pridáte
+    <string name="guide_simulation_add_tape_element">
+        <b>Pridať prvok pásky -</b>
+        ťuknutím na toto tlačidlo pridáte
         nový prvok na príslušný koniec pásky.
     </string>
-    <string name="guide_simulation_tape_element"><b>Prvok pásky -</b> ťuknutím na prvok pásky môžete nastaviť symbol
+    <string name="guide_simulation_tape_element">
+        <b>Prvok pásky -</b>
+        ťuknutím na prvok pásky môžete nastaviť symbol
         na ňom. Dlhým podržaním otvoríte kontextové menu.
     </string>
     <string name="guide_simulation_tape_element_context_menu">Kontextové menu prvku pásky vám poskytuje
@@ -564,13 +781,26 @@
     </string>
 
     <string name="guide_title_controls">Ovládanie</string>
-    <string name="guide_simulation_step_back"><b>Krok späť -</b> vráti späť posledný vykonaný krok simulácie.</string>
-    <string name="guide_simulation_step_forward"><b>Krok vpred -</b> odsimuluje jeden krok automatu.</string>
-    <string name="guide_simulation_simulate_fully"><b>Simulovať úplne -</b> odsimuluje automat kým nezastaví, alebo
+    <string name="guide_simulation_step_back">
+        <b>Krok späť -</b>
+        vráti späť posledný vykonaný krok simulácie.
+    </string>
+    <string name="guide_simulation_step_forward">
+        <b>Krok vpred -</b>
+        odsimuluje jeden krok automatu.
+    </string>
+    <string name="guide_simulation_simulate_fully">
+        <b>Simulovať úplne -</b>
+        odsimuluje automat kým nezastaví, alebo
         kým nevykoná maximálny počet krokov (predvolene 100, môže byť zmenené v Nastaveniach).
     </string>
-    <string name="guide_simulation_stop"><b>Zastaviť -</b> zastaví simuláciu a umožní vám upraviť obsah pásky.</string>
-    <string name="guide_simulation_remove_breakpoints"><b>Odstrániť breakpointy -</b> odstráni všetky breakpointy.
+    <string name="guide_simulation_stop">
+        <b>Zastaviť -</b>
+        zastaví simuláciu a umožní vám upraviť obsah pásky.
+    </string>
+    <string name="guide_simulation_remove_breakpoints">
+        <b>Odstrániť breakpointy -</b>
+        odstráni všetky breakpointy.
         Viď sekciu "Breakpointy" pre viac informácií.
     </string>
 
@@ -579,7 +809,8 @@
         bode bez toho, aby ste museli celú simuláciu púšťať po krokoch. Keď "simulujete úplne," automat sa zastaví
         tesne pred prečítaním symbolu označeného breakpointom. Nedeterministický automat sa zastaví ak ktorákoľvek
         z jeho vetiev narazí na breakpoint. V simulácii môžete pokračovať opätovným stlačením tlačidla
-        <b>Simulovať úplne</b> (stroj znova zastaví na ďalšom breakpointe), alebo môžete pokračovať krok po
+        <b>Simulovať úplne</b>
+        (stroj znova zastaví na ďalšom breakpointe), alebo môžete pokračovať krok po
         kroku.\nBreakpointy sú na páske označené červenou farbou.
     </string>
 
@@ -596,15 +827,20 @@
         špecifikáciu, alebo sa presunúť do Konfiguračnej obrazovky, Simulačnej obrazovky, alebo Nastavení.
     </string>
     <string name="guide_bulk_test_results">Pri testovaní vstupu môže nastať jeden z nasledujúcich výsledkov:\n
-        <b>Akceptované</b> - vstup bol akceptovaný a ak ste nastavili očakávaný výstup,
+        <b>Akceptované</b>
+        - vstup bol akceptovaný a ak ste nastavili očakávaný výstup,
         výstup bol tiež správny.\n
-        <b>Stroj dlho nezastavil</b> - stroj bol zastavený po vykonaní maximálneho
+        <b>Stroj dlho nezastavil</b>
+        - stroj bol zastavený po vykonaní maximálneho
         počtu krokov (predvolene 100, môže byť zmenené v Nastaveniach).\n
-        <b>Správny výstup, odmietnuté</b> - vstup bol odmietnutý, ale výstup sa
+        <b>Správny výstup, odmietnuté</b>
+        - vstup bol odmietnutý, ale výstup sa
         zhoduje s očakávaným. Tento výsledok sa objaví len ak ste nastavili výstupné slovo.\n
-        <b>Odmietnuté</b> - vstup bol odmietnutý. Ak je nastavené výstupné slovo, výstup
+        <b>Odmietnuté</b>
+        - vstup bol odmietnutý. Ak je nastavené výstupné slovo, výstup
         je tiež nesprávny.\n
-        <b>Nesprávny výstup</b> - vstup bol akceptovaný, ale výstup sa nezhoduje s
+        <b>Nesprávny výstup</b>
+        - vstup bol akceptovaný, ale výstup sa nezhoduje s
         očakávaným. Tento výsledok sa objaví len ak ste nastavili výstupné slovo.
     </string>
     <string name="guide_bulk_test_to_simulation">Ak chcete podrobnejšie sledovať ako sa automat správa pri
@@ -613,8 +849,14 @@
     <string name="guide_bulk_test_buttons">Pre vytvorenie nového testovacieho vstupu ťuknite na tlačidlo
         <b>Pridať nový test</b>. Pre spustenie testov ťuknite na tlačidlo <b>Spustiť Testy</b>.
     </string>
-    <string name="guide_bulk_test_edit_button"><b>Upraviť -</b> upraviť testovací scenár.</string>
-    <string name="guide_bulk_test_remove_button"><b>Odstrániť -</b> odstrániť testovací scenár.</string>
+    <string name="guide_bulk_test_edit_button">
+        <b>Upraviť -</b>
+        upraviť testovací scenár.
+    </string>
+    <string name="guide_bulk_test_remove_button">
+        <b>Odstrániť -</b>
+        odstrániť testovací scenár.
+    </string>
 
     <!--Saving and loading Guide-->
     <string name="guide_title_save_load">Ukladanie a načitavanie automatov a úloh</string>
@@ -651,25 +893,32 @@
     <!--Solve Tasks Guide-->
     <string name="guide_title_solving_tasks">Vyhľadávanie a riešenie úloh</string>
     <string name="guide_solving_tasks_introduction">Pre vyhľadanie dostupných úloh ťuknite na tlačidlo
-        <b>Vyhľadať úlohy</b> v Menu úloh. Aplikácia sa automaticky pripojí na okolité zariadenia a vypíše
+        <b>Vyhľadať úlohy</b>
+        v Menu úloh. Aplikácia sa automaticky pripojí na okolité zariadenia a vypíše
         zoznam dostupných úloh. Ak sa vám nezobrazuje úloha, ktorá by mala byť dostupná, skúste úlohy znovu
         načítať pomocou tlačidla <b>Obnoviť</b>.
     </string>
-    <string name="guide_solving_arrow_button"><b>Detail -</b> ukáže detaily o úlohe a ponúkne vám možnosť riešiť ju.
+    <string name="guide_solving_arrow_button">
+        <b>Detail -</b>
+        ukáže detaily o úlohe a ponúkne vám možnosť riešiť ju.
     </string>
     <string name="guide_title_solving_task">Riešenie úlohy</string>
     <string name="guide_solving_task_menu">Ak vám je umožnené prezerať si vyhodnocovacie vstupy, možnosť Hromadné
         testovanie v menu bude nahradená dvoma možnosťami - <b>Správne vstupy</b> a <b>Nesprávne vstupy</b>.
         Tieto testy si môžete prezerať a spúšťať, ale nemôžete ich upraviť alebo odstrániť.
     </string>
-    <string name="guide_solving_tasks_task_button"><b>Informácie o úlohe -</b> po ťuknutí na toto tlačidlo sa zobrazí
-        dialógové okno, v ktorom si môžete znova prečítať zadanie, skontrolovať, koľko času vám ostáva, a odovzdať úlohu.
+    <string name="guide_solving_tasks_task_button">
+        <b>Informácie o úlohe -</b>
+        po ťuknutí na toto tlačidlo sa zobrazí
+        dialógové okno, v ktorom si môžete znova prečítať zadanie, skontrolovať, koľko času vám ostáva, a odovzdať
+        úlohu.
     </string>
 
     <!--Create Tasks Guide-->
     <string name="guide_title_creating_tasks">Vytváranie úloh</string>
     <string name="guide_creating_tasks_introduction">Pre vytvorenie novej úlohy ťuknite na tlačidlo <b>Vytvoriť
-        úlohu</b> v Menu úloh. Pre načítanie uloženej úlohy ťuknite na tlačidlo <b>Načítať úlohu</b>. Budete prenesení
+        úlohu
+    </b> v Menu úloh. Pre načítanie uloženej úlohy ťuknite na tlačidlo <b>Načítať úlohu</b>. Budete prenesení
         do Obrazovky úpravy úlohy, kde môžete nastaviť vlastnosti úlohy a upraviť s ňou spojený automat.
     </string>
 
@@ -677,182 +926,254 @@
 
     <string name="guide_edit_task_activty">V Obrazovke úpravy úlohy môžete nastaviť názov úlohy, zadanie, časový limit
         a to, či chcete testovacie vstupy zdieľať s riešiteľmi. Ťuknutím na tlačidlo <b>Nastaviť testovacie vstupy
-            a automat</b> môžete nastaviť testovacie vstupy a s úlohou spojený automat.
+            a automat
+        </b> môžete nastaviť testovacie vstupy a s úlohou spojený automat.
     </string>
 
     <string name="guide_edit_task_menu">Menu v tejto obrazovke vám umožňuje uložiť úlohu, zobraziť Pomoc, alebo
         sa preniesť do Nastavení.
     </string>
 
-    <string name="guide_creating_task_launch">Ťuknutím na tlačidlo <b>Spustiť úlohu</b> spustíte úlohu, čím
-        umožníte používateľom v miestnej sieti aby ju vyhľadali a začali riešiť. Postupne uvidíte mená riešiteľov,
-        ktorí úlohu odovzdali, spolu s počtom pozitívnych a negatívnych testov, ktoré ich automat splnil. Ťuknutím
-        na tlačidlo <b>Zastaviť úlohu</b> zabránite ľuďom vyhľadať si vašu úlohu alebo ju odovzdať. Zobrazený časovač
-        má čisto informatívny charakter - dodržanie časového limitu je zabezpečené aplikáciou na strane riešiteľa.\n
-        Zobrazené výsledky môžete uložiť ako textový súbor prostredníctvom menu.
+    <string name="guide_creating_task_launch">Ťuknutím na tlačidlo <b>Nahrať úlohu</b> sa vytvorená úloha nahrá na
+        server, čím
+        sa sprístupní používateľom aby ju vyhľadali a začali riešiť. Po úspešnom nahraní úlohy ste presunutý sa hlavnú
+        obrazovku.
     </string>
 
     <string name="guide_title_creating_tasks_machine">Úprava automatu</string>
 
-    <string name="guide_creating_tasks_machine_menu">Keď upravujete automat spojený s úlohou, možnosť Hromadné testovanie
+    <string name="guide_creating_tasks_machine_menu">Keď upravujete automat spojený s úlohou, možnosť Hromadné
+        testovanie
         v menu bude nahradená dvoma možnosťami - <b>Správne vstupy</b> a <b>Nesprávne vstupy</b>, kde môžete nastaviť
         testovacie vstupy, ktoré budú použité na ohodnotenie riešení.
     </string>
 
-    <string name="guide_creating_tasks_task_button"><b>Informácie o úlohe -</b> po ťuknutí na toto tlačidlo sa zobrazí
-        dialógové okno, v ktorom si môžete skontrolovať zadanie a vrátiť sa do Obrazovky úpravy úlohy.
+    <string name="guide_creating_tasks_task_button">Po nakonfigurovaní úlohy a testovacích vstupov sa vrátim k nahraniu
+        úlohy stlačením tlačidla späť.
     </string>
 
     <!--Settings Guide-->
     <string name="guide_title_settings">Nastavenia</string>
-    <string name="guide_settings_max_steps"><b>Maximálny počet automaticky simulovaných krokov -</b> maximálny počet
+    <string name="guide_settings_max_steps">
+        <b>Maximálny počet automaticky simulovaných krokov -</b>
+        maximálny počet
         krokov, ktorý sa vykoná po stlačení tlačidla <b>simulovať úplne</b> v <b>Obrazovke simulácie</b>, tiež
         maximálny počet krokov, ktorý sa odsimuluje pre každý vstup pri hromadnom testovaní.
     </string>
-    <string name="guide_settings_mark_nondeterminism"><b>Označuj nedeterministické prechody -</b> všetky
+    <string name="guide_settings_mark_nondeterminism">
+        <b>Označuj nedeterministické prechody -</b>
+        všetky
         nedeterministické prechody v prechodových diagramoch v obrazovkách konfigurácie a simulácie budú
         zobrazené v červenej farbe.
     </string>
-    <string name="guide_settings_colors"><b>Farby automatov -</b> môžete upraviť farby, ktoré budú pridelené
+    <string name="guide_settings_colors">
+        <b>Farby automatov -</b>
+        môžete upraviť farby, ktoré budú pridelené
         automatom počas simulácie.
     </string>
 
     <!--Grammar Guide-->
     <string name="guide_title_grammar_definition">Definícia gramatiky</string>
-    <string name="guide_grammar_definition_instruction">Na obrazovke pre definíciu gramatiky môžete definovať pravidlá vlastnej gramatiky alebo
-    alternatívne ich načítať z externého súboru vo formáte .CMSG alebo .JFF. Po zadefinovaní gramatiky, možete zistiť rôzne informácie o nej a
-    pokračovať na testovanie vstupov.</string>
-    <string name="guide_grammar_definition_menu">Menu v tejto aktivite umožní vytvorenie novej gramatiky, uložiť a načítať existujúcu a otvoriť
-    obrazovku pre pomoc.</string>
+    <string name="guide_grammar_definition_instruction">Na obrazovke pre definíciu gramatiky môžete definovať pravidlá
+        vlastnej gramatiky alebo
+        alternatívne ich načítať z externého súboru vo formáte .CMSG alebo .JFF. Po zadefinovaní gramatiky, možete
+        zistiť rôzne informácie o nej a
+        pokračovať na testovanie vstupov.
+    </string>
+    <string name="guide_grammar_definition_menu">Menu v tejto aktivite umožní vytvorenie novej gramatiky, uložiť a
+        načítať existujúcu a otvoriť
+        obrazovku pre pomoc.
+    </string>
     <string name="guide_title_grammar_input_table">Tabuľka pre pravidlá</string>
-    <string name="guide_grammar_input_table_instruction">V tejto tabuľke môžete zadať pravidlá svojej gramatiky napísaním pravidiel do ľavého stĺpca
-    a odvodenie do pravého stĺpca. Ak jedno pravidlo generuje viacero odvodení, jednotlivé odvodenia môžete rozdeliť pomocou symbolu <b>pipe</b>
-        <i>(Pozri Špeciálne symboly pre gramatiku)</i>. Ak chcete zadať prázdne slovo, prosím použite znak <b>epsilon</b> <i>(Pozri Špreciálne symboly pre gramatiku)</i>.
-        Keďže tieto znaky sú nezvyčajné na Androidových klávesniciach, možete ich zadávať pomocou tlačidiel na obrazovke. Ak potrebujete viac riadkov v tabuľke,
-        môžete pridať ďalšie pomocou tlačidla <b>Pridať riadok</b>.</string>
+    <string name="guide_grammar_input_table_instruction">V tejto tabuľke môžete zadať pravidlá svojej gramatiky
+        napísaním pravidiel do ľavého stĺpca
+        a odvodenie do pravého stĺpca. Ak jedno pravidlo generuje viacero odvodení, jednotlivé odvodenia môžete rozdeliť
+        pomocou symbolu
+        <b>pipe</b>
+        <i>(Pozri Špeciálne symboly pre gramatiku)</i>. Ak chcete zadať prázdne slovo, prosím použite znak <b>epsilon
+        </b>
+        <i>(Pozri Špreciálne symboly pre gramatiku)</i>.
+        Keďže tieto znaky sú nezvyčajné na Androidových klávesniciach, možete ich zadávať pomocou tlačidiel na
+        obrazovke. Ak potrebujete viac riadkov v tabuľke,
+        môžete pridať ďalšie pomocou tlačidla <b>Pridať riadok</b>.
+    </string>
     <string name="guide_title_grammar_definition_table">Tabuľka pre definíciu gramatiky</string>
-    <string name="guide_grammar_definition_table_instructions">V tabuľke pre definíciu grmatiky vidíte rôzne informácie o zadanej gramatike ako napríklad
-    typ gramatiky v rámci Chomského hierarchie, formálnu definíciu a použité terminálne resp. neterminálne symboly.</string>
+    <string name="guide_grammar_definition_table_instructions">V tabuľke pre definíciu grmatiky vidíte rôzne informácie
+        o zadanej gramatike ako napríklad
+        typ gramatiky v rámci Chomského hierarchie, formálnu definíciu a použité terminálne resp. neterminálne symboly.
+    </string>
 
     <!--Grammar Simulation Guide-->
     <string name="guide_title_grammar_simulation">Simulácia gramatiky</string>
-    <string name="guide_grammar_simulation_instruction">Na obrazovke pre simuláciu gramatiky môžete testovať, simulovať a vizualizovať odvodenie
-    slov zo zadaných pravadiel gramatiky. Môžete testovať slová, či patria do definovaného jazyka a vizualizovať odvodenie pomocou derivačnej tabuľky,
-    derivačného stromu, lineárneho odvodenia alebo odvodenia na mieste. Navyše môžete analyzovať celú postupnosť odvodenia krokovaním dopredu a naspäť.
+    <string name="guide_grammar_simulation_instruction">Na obrazovke pre simuláciu gramatiky môžete testovať, simulovať
+        a vizualizovať odvodenie
+        slov zo zadaných pravadiel gramatiky. Môžete testovať slová, či patria do definovaného jazyka a vizualizovať
+        odvodenie pomocou derivačnej tabuľky,
+        derivačného stromu, lineárneho odvodenia alebo odvodenia na mieste. Navyše môžete analyzovať celú postupnosť
+        odvodenia krokovaním dopredu a naspäť.
     </string>
-    <string name="guide_grammar_simulation_menu">Menu tejto aktivity umožňuje prepínanie medzi štyrmi druhmi vizualizácie a otvoriť obrazovku pre pomoc.</string>
+    <string name="guide_grammar_simulation_menu">Menu tejto aktivity umožňuje prepínanie medzi štyrmi druhmi
+        vizualizácie a otvoriť obrazovku pre pomoc.
+    </string>
     <string name="guide_title_grammar_input_testing">Testovanie vstupu</string>
-    <string name="guide_grammar_input_testing_instruction">Pri testovaní vstupu zadajte slovo na vyhradené miesto a môžete otestovať, či slovo patrí
-        do zadefinovaného jazyka zvolením tlačidla <b>Otestuj vstup</b>. Môžete použiť tlačidlo <b>Zmazať</b> na vymazanie obsahu textového poľa. Ak by ste chceli
-    otestovať prázdne slovo, nechajde textove pole prázdne.</string>
+    <string name="guide_grammar_input_testing_instruction">Pri testovaní vstupu zadajte slovo na vyhradené miesto a
+        môžete otestovať, či slovo patrí
+        do zadefinovaného jazyka zvolením tlačidla <b>Otestuj vstup</b>. Môžete použiť tlačidlo <b>Zmazať</b> na
+        vymazanie obsahu textového poľa. Ak by ste chceli
+        otestovať prázdne slovo, nechajde textove pole prázdne.
+    </string>
     <string name="guide_title_grammar_stepping">Krokovanie</string>
-    <string name="guide_grammar_stepping_instruction">Počas simulačného procesu, môžete krokovať dopredu a naspäť stlačením vhodných tlačidiel
-    na spodnej časti obrazovky. Vždy keď jedno tlačidlo je zvolené, iný krok simulácie je zobrazený na obrazovke.</string>
-    <string name="guide_grammar_derivation_tree_instruction">Derivačný strom vizualizuje simuláciu vykreslením vrcholov pre každý znak pre každé odvodenie
-    a spájaním ich hranami. Každý krok simulácie je reprezentovaný novou hĺbkou stromu. Neterminálne symboly sú zafarbené žltou farbou a terminálne zelenou
-    farbou. Na konci simulácie zelené vrcholy ukazujú výsledok.</string>
-    <string name="guide_grammar_derivation_table_instruction">Derivačná tabuľka vizualizuje simuláciu zapísaním použitého pravidla a výstupného slova
-    vedľa seba v každom kroku simulácie.</string>
-    <string name="guide_grammar_derivation_linear_instruction">Lineárne odvodenie vizualizuje simuláciu zobrazením zoznamu odvodených slov v jednom
-    riadku v každom kroku simulácie. Nahradená časť slova je zafarbená žltou farbou a nová časť slova zelenou farbou. Na konci simulácie výsledok je
-    podčiarknutý s hrubými písmenami.</string>
-    <string name="guide_grammar_derivation_fixed_instruction">Odvodenie na mieste vizualizuje simuláciu zobrazením aktuálneho slova na jednom mieste
-    v každom kroku simulácie. Okrem toho je zobrazený zoznam všetkých použitých pravidiel pod aktuálnym slovom. V každom kroku simulácie nová časť
-    slova je zvýraznená zelenou farbou a na konci simulácie výsledok je podčarknutý s hrubými písmenami.</string>
+    <string name="guide_grammar_stepping_instruction">Počas simulačného procesu, môžete krokovať dopredu a naspäť
+        stlačením vhodných tlačidiel
+        na spodnej časti obrazovky. Vždy keď jedno tlačidlo je zvolené, iný krok simulácie je zobrazený na obrazovke.
+    </string>
+    <string name="guide_grammar_derivation_tree_instruction">Derivačný strom vizualizuje simuláciu vykreslením vrcholov
+        pre každý znak pre každé odvodenie
+        a spájaním ich hranami. Každý krok simulácie je reprezentovaný novou hĺbkou stromu. Neterminálne symboly sú
+        zafarbené žltou farbou a terminálne zelenou
+        farbou. Na konci simulácie zelené vrcholy ukazujú výsledok.
+    </string>
+    <string name="guide_grammar_derivation_table_instruction">Derivačná tabuľka vizualizuje simuláciu zapísaním
+        použitého pravidla a výstupného slova
+        vedľa seba v každom kroku simulácie.
+    </string>
+    <string name="guide_grammar_derivation_linear_instruction">Lineárne odvodenie vizualizuje simuláciu zobrazením
+        zoznamu odvodených slov v jednom
+        riadku v každom kroku simulácie. Nahradená časť slova je zafarbená žltou farbou a nová časť slova zelenou
+        farbou. Na konci simulácie výsledok je
+        podčiarknutý s hrubými písmenami.
+    </string>
+    <string name="guide_grammar_derivation_fixed_instruction">Odvodenie na mieste vizualizuje simuláciu zobrazením
+        aktuálneho slova na jednom mieste
+        v každom kroku simulácie. Okrem toho je zobrazený zoznam všetkých použitých pravidiel pod aktuálnym slovom. V
+        každom kroku simulácie nová časť
+        slova je zvýraznená zelenou farbou a na konci simulácie výsledok je podčarknutý s hrubými písmenami.
+    </string>
 
     <!--Multiple Tests Guide-->
     <string name="guide_title_multiple_tests">Hromadné Testovanie Gramatiky</string>
-    <string name="guide_multiple_tests_instruction">Na tejto obrazovke môžete testovať viacero slov naraz, či patria do zadefinovaného jazyka.
-    Okrem toho môžete vyjadriť svoj názor vybraním ktoré slová podľa vás patria do jazyka a ktoré nie.</string>
+    <string name="guide_multiple_tests_instruction">Na tejto obrazovke môžete testovať viacero slov naraz, či patria do
+        zadefinovaného jazyka.
+        Okrem toho môžete vyjadriť svoj názor vybraním ktoré slová podľa vás patria do jazyka a ktoré nie.
+    </string>
     <string name="guide_multiple_tests_menu">Menu tejto aktivity umožňuje otvoriť obrazovku pre pomoc.</string>
     <string name="guide_title_multiple_tests_table">Tabuľka pre hromadné testovanie</string>
-    <string name="guide_multiple_test_table_instruction">Tabuľka pre hromadné testovanie je rozdelená do dvoch častí. V ľavom stĺpci môžete zadávať
-    slová, ktoré chcete otestovať. V pravom stĺpci môžete zadať váš odhad pre každé slovo. Predvolene výberové okienko je nastavené na prázdnu hodnotu.
-    Ak na to kliknete raz, zobrazí sa fajka čo znamená, že slovo by malo patriť do jazyka. Ak kliknete dvakrát, tým vyberiete možnosť, že si nemyslíte,
-    že slovo patrí do jazyka. Ak kliknete ešte raz, výberové okienko sa znovu nastaví na predvolený stav. Kliknutím na tlačidlo <b>Zmazať</b> odstránite
-    všetky hodnoty z tabuľky.</string>
+    <string name="guide_multiple_test_table_instruction">Tabuľka pre hromadné testovanie je rozdelená do dvoch častí. V
+        ľavom stĺpci môžete zadávať
+        slová, ktoré chcete otestovať. V pravom stĺpci môžete zadať váš odhad pre každé slovo. Predvolene výberové
+        okienko je nastavené na prázdnu hodnotu.
+        Ak na to kliknete raz, zobrazí sa fajka čo znamená, že slovo by malo patriť do jazyka. Ak kliknete dvakrát, tým
+        vyberiete možnosť, že si nemyslíte,
+        že slovo patrí do jazyka. Ak kliknete ešte raz, výberové okienko sa znovu nastaví na predvolený stav. Kliknutím
+        na tlačidlo <b>Zmazať</b> odstránite
+        všetky hodnoty z tabuľky.
+    </string>
     <string name="guide_title_multiple_tests_evaluation">Evaluácia</string>
-    <string name="guide_multiple_tests_evaluation_instruction">Zvolením tlačidla <b>Otestuj všetky</b>, všetky zadané slová a odhady sú vyhodnotené,
-    a výsledok je zobrazený na obrazovke. V ľavom stľpci tabuľky, každý riadok je primerane zafarbený, ak zadané slovo patrí do jazyka, pozadie
-    dostane zelenú farbu, a keď nepatrí tak červenú farbu. Vaše odhady sú tiež vyhodnotené a v každom riadku sa zobrazí jeden z nasledujúcich
-    možností:</string>
+    <string name="guide_multiple_tests_evaluation_instruction">Zvolením tlačidla <b>Otestuj všetky</b>, všetky zadané
+        slová a odhady sú vyhodnotené,
+        a výsledok je zobrazený na obrazovke. V ľavom stľpci tabuľky, každý riadok je primerane zafarbený, ak zadané
+        slovo patrí do jazyka, pozadie
+        dostane zelenú farbu, a keď nepatrí tak červenú farbu. Vaše odhady sú tiež vyhodnotené a v každom riadku sa
+        zobrazí jeden z nasledujúcich
+        možností:
+    </string>
     <string name="guide_multiple_tests_accept_right">Vybrali ste, že slovo patrí do jazyka a mali ste pravdu.</string>
     <string name="guide_multiple_tests_accept_wrong">Vybrali ste, že slovo patrí do jazyka a nemali ste pravdu.</string>
     <string name="guide_multiple_tests_reject_right">Vybrali ste, že slovo nepatrí do jazyka a mali ste pravdu.</string>
-    <string name="guide_multiple_tests_reject_wrong">Vybrali ste, že slovo nepatrí do jazyka a nemali ste pravdu.</string>
+    <string name="guide_multiple_tests_reject_wrong">Vybrali ste, že slovo nepatrí do jazyka a nemali ste pravdu.
+    </string>
     <string name="guide_multiple_tests_default_wrong">Nič ste nevybrali, takže ste nemali pravdu o výsledku.</string>
 
     <!--Grammar Special Symbols Guide-->
     <string name="guide_title_grammar_special_symbols">Špeciálne symboly pre gramatiku</string>
-    <string name="guide_grammar_special_symbols_instruction">Pri práci s gramatikami možete používať 2 špeciálne symboly na rôzne účely,
-    symbol <b>Pipe</b> a symbol <b>Epsilon</b></string>
+    <string name="guide_grammar_special_symbols_instruction">Pri práci s gramatikami možete používať 2 špeciálne symboly
+        na rôzne účely,
+        symbol <b>Pipe</b> a symbol
+        <b>Epsilon</b>
+    </string>
     <string name="guide_title_grammar_special_symbols_pipe">Pipe - |</string>
-    <string name="guide_pipe_instruction">Použitím symbolu <b>Pipe</b> môžete oddeliť odvodenia, ktoré patria rovnakému pravidlu, tým pádom
-    rýchlejšie viete zadať gramatiku.\n Gramatiky v nasledujúcom príklade sú ekvivalentné:\n
-    \t S -> aS | ε \n \n
-    \t S -> aS \n
-    \t S -> ε</string>
+    <string name="guide_pipe_instruction">Použitím symbolu <b>Pipe</b> môžete oddeliť odvodenia, ktoré patria rovnakému
+        pravidlu, tým pádom
+        rýchlejšie viete zadať gramatiku.\n Gramatiky v nasledujúcom príklade sú ekvivalentné:\n
+        \t S -> aS | ε \n \n
+        \t S -> aS \n
+        \t S -> ε
+    </string>
     <string name="guide_title_grammar_special_symbols_epsilon">Epsilon - ε</string>
-    <string name="guide_epsilon_instruction">Symbol <b>Epsilon</b> znamená prázdne slovo. <b>Epsilon</b> je často použité ako ukončovací znak
-    v gramatike, a niektoré jazyky akceptujú prázdne slovo ako validný vstup. Na obrazovke pre definovanie gramatiky môžete zadať prázdne slovo
-    zvolením tlačidla <b>Epsilon</b> na obrazovke. Počas simulácie gramatiky, ak chcete otestovať prázdne slovo, nechajte pole pre vstup prázdny
-    a znak <b>Epsilon</b> sa pridá automaticky.</string>
+    <string name="guide_epsilon_instruction">Symbol <b>Epsilon</b> znamená prázdne slovo. <b>Epsilon</b> je často
+        použité ako ukončovací znak
+        v gramatike, a niektoré jazyky akceptujú prázdne slovo ako validný vstup. Na obrazovke pre definovanie gramatiky
+        môžete zadať prázdne slovo
+        zvolením tlačidla <b>Epsilon</b> na obrazovke. Počas simulácie gramatiky, ak chcete otestovať prázdne slovo,
+        nechajte pole pre vstup prázdny
+        a znak <b>Epsilon</b> sa pridá automaticky.
+    </string>
 
     <!--Grammar Load/save Guide-->
     <string name="guide_title_grammar_load_save">Uloženie a načitanie gramatiky</string>
-    <string name="guide_grammar_load_save_instruction">Môžete uložiť existujúce gramatiky do súboru alebo načítať existujúce z externých zdrojov.</string>
-    <string name="guide_grammar_load_instruction">Načítať gramatiku môžete v rámci menu na obrazovke pre definíciu gramatiky vybraním tlačidla
-    <b>Načítať gramatiku</b>. Aplikácia podporuje 2 typy súborov, .cmsg čo je predvolený formát aplikácie CMSimulator a .jff, čo je formát používaný
-    v desktopovom simulátore JFLAP. Tým pádom môžete načítať gramatiky vytvorené v simulátore JFLAP a pracovať s nimi v simulátore CMSimulator.</string>
-    <string name="guide_grammar_save_instruction">Uložiť gramatiku môžete v rámci menu na obrazovke pre definíciu gramatiky vybraním tlačidla
-    <b>Uložiť gramatiku</b>. Následne zadajte meno súboru a vyberte jeden z dvoch dostupných formátov .cmsg a .jff. Ak si zvolíte .jff môžete
-    otvoriť vytvorený súbor v simulátore JFLAP. Vytvorený súbor bude uložený do priečinku CMSolutions vo vašom zariadení.</string>
-	<string name="task_description">Popis úlohy</string>
+    <string name="guide_grammar_load_save_instruction">Môžete uložiť existujúce gramatiky do súboru alebo načítať
+        existujúce z externých zdrojov.
+    </string>
+    <string name="guide_grammar_load_instruction">Načítať gramatiku môžete v rámci menu na obrazovke pre definíciu
+        gramatiky vybraním tlačidla
+        <b>Načítať gramatiku</b>. Aplikácia podporuje 2 typy súborov, .cmsg čo je predvolený formát aplikácie
+        CMSimulator a .jff, čo je formát používaný
+        v desktopovom simulátore JFLAP. Tým pádom môžete načítať gramatiky vytvorené v simulátore JFLAP a pracovať s
+        nimi v simulátore CMSimulator.
+    </string>
+    <string name="guide_grammar_save_instruction">Uložiť gramatiku môžete v rámci menu na obrazovke pre definíciu
+        gramatiky vybraním tlačidla
+        <b>Uložiť gramatiku</b>. Následne zadajte meno súboru a vyberte jeden z dvoch dostupných formátov .cmsg a .jff.
+        Ak si zvolíte .jff môžete
+        otvoriť vytvorený súbor v simulátore JFLAP. Vytvorený súbor bude uložený do priečinku CMSolutions vo vašom
+        zariadení.
+    </string>
+    <string name="task_description">Popis úlohy</string>
     <string name="task_config">Konfigurácia úlohy</string>
-	<string name="welcome">Vitaj</string>
+    <string name="welcome">Vitaj</string>
     <string name="welcome_message">Tento simulátor ti pomôže so simuláciou formálnych gramatík a jazykov na rôznych
         automatoch
     </string>
     <string name="understood">Rozumiem</string>
-	<string name="automata_message">Kliknutím na toto tlačidlo môžeš vytvoriť nový automat</string>
+    <string name="automata_message">Kliknutím na toto tlačidlo môžeš vytvoriť nový automat</string>
     <string name="grammar_message">Toto tlačidlo ti umožní zadefinovať novú gramatiku</string>
     <string name="tasks_message">Tu môžeš nájsť úlohy, ktoré môžeš vyriešiť</string>
-	<string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
-	<string name="select_task">Vyber úlohu</string>
-	<string name="generic_error">Niečo sa pokazilo</string>
-	<string name="game_create_state">Teraz si vytvoríme nový stav</string>
+    <string name="tasks_game">Hra (EXPERIMENTÁLNE)</string>
+    <string name="select_task">Vyber úlohu</string>
+    <string name="generic_error">Niečo sa pokazilo</string>
+    <string name="game_create_state">Teraz si vytvoríme nový stav</string>
     <string name="gotit">Rozumiem</string>
     <string name="game_new_state_title">Vytvor nový stav</string>
     <string name="game_welcome1">Táto hra ti pomôže sa naučiť základy tvorby konečných automatov</string>
-	<string name="username">Prihlasovacie meno</string>
-	<string name="password">Heslo</string>
-	<string name="sign_in">Prihlásiť sa</string>
-	<string name="sign_up">Registrovať sa</string>
-	<string name="log_in_header">Prihlásenie</string>
-	<string name="remember_future_logins">Zapamätať si</string>
-	<string name="username_empty">Používateľské meno nie je vyplnené</string>
+    <string name="username">Prihlasovacie meno</string>
+    <string name="password">Heslo</string>
+    <string name="sign_in">Prihlásiť sa</string>
+    <string name="sign_up">Registrovať sa</string>
+    <string name="log_in_header">Prihlásenie</string>
+    <string name="remember_future_logins">Zapamätať si</string>
+    <string name="username_empty">Používateľské meno nie je vyplnené</string>
     <string name="password_empty">Heslo nebolo zadané</string>
-	<string name="login_incorrect">Prihlasovacie meno alebo heslo je nesprávne</string>
-	<string name="logged_user">Prihlásený používateľ</string>
+    <string name="login_incorrect">Prihlasovacie meno alebo heslo je nesprávne</string>
+    <string name="logged_user">Prihlásený používateľ</string>
     <string name="find_task">Nájsť úlohy</string>
     <string name="create_task">Vytvoriť úlohu</string>
     <string name="games">Hry</string>
     <string name="change_password">Zmeniť heslo</string>
-	<string name="sign_out">Odhlásiť sa</string>
-	<string name="old_password">Staré heslo</string>
+    <string name="sign_out">Odhlásiť sa</string>
+    <string name="old_password">Staré heslo</string>
     <string name="new_password">Nové heslo</string>
-	<string name="new_password_confirm">Potvrď nové heslo</string>
-	<string name="passwords_dont_match">Heslá sa nezhodujú</string>
-	<string name="first_name">Meno</string>
+    <string name="new_password_confirm">Potvrď nové heslo</string>
+    <string name="passwords_dont_match">Heslá sa nezhodujú</string>
+    <string name="first_name">Meno</string>
     <string name="last_name">Priezvisko</string>
-	<string name="first_name_empty">Meno je prázdne</string>
+    <string name="first_name_empty">Meno je prázdne</string>
     <string name="last_name_empty">Priezvisko je prázdne</string>
     <string name="username_length_small">Používateľské meno musí mať 6 alebo viac znakov</string>
     <string name="password_length_error">Heslo musí mať 6 alebo viac znakov</string>
     <string name="username_exists_error">Toto používateľské meno sa už používa</string>
-	<string name="sign_up_header">Registrácia</string>
+    <string name="sign_up_header">Registrácia</string>
     <string name="successful_signup_toast_message">Používateľ {0} bol úspešne zaregistrovaný.</string>
-	<string name="deterministic_FA">Deterministický konečný automat</string>
+    <string name="deterministic_FA">Deterministický konečný automat</string>
     <string name="nondeterministic_fa">Nedeterministický konečný automat</string>
     <string name="deterministic_pushdown">Deterministický zásobníkový automat</string>
     <string name="nondeterministic_pushdown">Nedeterministický zásobníkový automat</string>
@@ -860,14 +1181,14 @@
     <string name="nondeterministic_loa">Nedeterministický lineárne ohraničený automat</string>
     <string name="deterministic_tm">Deterministický Turingov stroj</string>
     <string name="nondeterministic_tm">Nedeterministický turingov stroj</string>
-	<string name="available_tasks">Dostupné úlohy</string>
-	<string name="example_automata_description1">"Počet písmen a alebo b v slove musí byť 3k + 1. "</string>
-	<string name="start_task">Spustiť</string>
+    <string name="available_tasks">Dostupné úlohy</string>
+    <string name="example_automata_description1">"Počet písmen a alebo b v slove musí byť 3k + 1. "</string>
+    <string name="start_task">Spustiť</string>
     <string name="task_hint">Nápoveda</string>
-	<string name="deterministic">Deterministický</string>
+    <string name="deterministic">Deterministický</string>
     <string name="nondeterministic">Nedeterministický</string>
-	<string name="unknown_machine">Neznámy automat</string>
-	<string name="example_automata_description2">Slovo sa musí končiť na 01 alebo 10.</string>
+    <string name="unknown_machine">Neznámy automat</string>
+    <string name="example_automata_description2">Slovo sa musí končiť na 01 alebo 10.</string>
     <string name="example_automata_description3">Písmeno \'a\' sa musí opakovať N-krát.</string>
     <string name="example_automata_description4">Slovo pozostávajúce z písmen a alebo b nasledované písmenom c je
         nasledované obráteným počiatočným slovom.
@@ -885,35 +1206,35 @@
     </string>
     <string name="example_automata_description9">Pri násobení číslic môžeš použiť len jednu algebraickú operáciu.
     </string>
-	<string name="view_results">Prehliadať výsledky</string>
-	<string name="manage_users">Spravovať používateľov</string>
-	<string name="upload_task">Upload task</string>
-	<string name="user_management">Správa používateľov</string>
-	<string name="reload">Znovu načítať</string>
-	<string name="details">Detaily</string>
-	<string name="ascending">Vzostupne</string>
+    <string name="view_results">Prehliadať výsledky</string>
+    <string name="manage_users">Spravovať používateľov</string>
+    <string name="upload_task">Upload task</string>
+    <string name="user_management">Správa používateľov</string>
+    <string name="reload">Znovu načítať</string>
+    <string name="details">Detaily</string>
+    <string name="ascending">Vzostupne</string>
     <string name="descending">Zostupne</string>
     <string name="position">Poradie</string>
     <string name="order_by">Zoradiť podľa</string>
     <string name="by_first_name">Podľa mena</string>
     <string name="by_last_name">Podľa priezviska</string>
     <string name="by_username">Podľa prihlasovacieho mena</string>
-	<string name="USERATTRIBUTE">Vyhľadať podľa</string>
+    <string name="USERATTRIBUTE">Vyhľadať podľa</string>
     <string name="search">Vyhľadať</string>
-	<string name="student">Študent</string>
+    <string name="student">Študent</string>
     <string name="lector">Lektor</string>
     <string name="admin">Administrátor</string>
-	<string name="user_details">Podrobnosti o používateľovi</string>
-	<string name="achieved_results">Dosiahnuté výsledky</string>
-	<string name="account_management">Správa účtu</string>
-	<string name="automata_type">Druh automatu</string>
-	<string name="delete_user">Naozaj chcete vymazať používateľa {0}?</string>
-	<string name="delete_user_title">Vymazať používateľa</string>
-	<string name="no_tasks_available">Žiadne dostupné úlohy.</string>
-	<string name="user_deleted">Používateľ bol vymazaný.</string>
-	<string name="cant_delete_logged_user">Nemôžem vymazať práve prihláseného používateľa!</string>
-	<string name="user_type">Druh používateľa</string>
-	<string name="user_updated">Používateľ bol aktualizovaný!</string>
+    <string name="user_details">Podrobnosti o používateľovi</string>
+    <string name="achieved_results">Dosiahnuté výsledky</string>
+    <string name="account_management">Správa účtu</string>
+    <string name="automata_type">Druh automatu</string>
+    <string name="delete_user">Naozaj chcete vymazať používateľa {0}?</string>
+    <string name="delete_user_title">Vymazať používateľa</string>
+    <string name="no_tasks_available">Žiadne dostupné úlohy.</string>
+    <string name="user_deleted">Používateľ bol vymazaný.</string>
+    <string name="cant_delete_logged_user">Nemôžem vymazať práve prihláseného používateľa!</string>
+    <string name="user_type">Druh používateľa</string>
+    <string name="user_updated">Používateľ bol aktualizovaný!</string>
     <string name="upload_task_complete">Úloha bola úspešne nahraná!</string>
     <string name="task_delete_message">Ste si istý, že chcete odstrániť túto úlohu?</string>
     <string name="delete_task">Vymazať úlohu</string>
@@ -979,16 +1300,27 @@
     <string name="find_automata_tasks">Vyhľadať automaty</string>
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
-        <b>-</b> Implementácia hry</string>
+        <b>-</b>
+        Implementácia hry
+    </string>
     <string name="regex_help" formatted="true">
-        <b>*</b>       -> Opakovanie 0 - n-krát\n
-        <b>+</b>       -> Opakovanie 1 - n-krát\n
-        <b>?</b>       -> Opakuje sa 0 až jedenkrát\n
-        <b>()</b>      -> Zgrupovanie symbolov\n
-        <b>{n}</b>     -> Opakuje sa n-krát\n
-        <b>{,n}</b>    -> Opakuje sa najviac n-krát\n
-        <b>{n,}</b>    -> Opakuje sa najmenej n-krát\n
-        <b>{n,m}</b>   -> Opakuje sa n až m-krát</string>
+        <b>*</b>
+        -> Opakovanie 0 - n-krát\n
+        <b>+</b>
+        -> Opakovanie 1 - n-krát\n
+        <b>?</b>
+        -> Opakuje sa 0 až jedenkrát\n
+        <b>()</b>
+        -> Zgrupovanie symbolov\n
+        <b>{n}</b>
+        -> Opakuje sa n-krát\n
+        <b>{,n}</b>
+        -> Opakuje sa najviac n-krát\n
+        <b>{n,}</b>
+        -> Opakuje sa najmenej n-krát\n
+        <b>{n,m}</b>
+        -> Opakuje sa n až m-krát
+    </string>
     <string name="cancel_task">Ste si istý, že chcete ukončiť úlohu? Neuložená práca nebude uložená!</string>
     <string name="no_login_warning">Ak chcete zachovať svoju prácu, musíte sa prihlásiť!</string>
     <string name="add_new_game">Pridať novú hru</string>
@@ -996,7 +1328,9 @@
     <string name="zoom_out">Oddialiť</string>
     <string name="game_field_size_exceeded">Prekročili ste veľkosť šachovnice!</string>
     <string name="exit">Ukončiť</string>
-    <string name="dialog_exit_add_new_game_message">Naozaj chcete ukončiť vytváranie novej hry? Neuložená práca nebude zachovaná!</string>
+    <string name="dialog_exit_add_new_game_message">Naozaj chcete ukončiť vytváranie novej hry? Neuložená práca nebude
+        zachovaná!
+    </string>
     <string name="set_as_start">Nastaviť ako začiatok</string>
     <string name="set_as_finish">Nastaviť ako koniec</string>
     <string name="name_not_set">Meno hry nie je zadané!</string>

@@ -60,7 +60,7 @@ public class NewGrammarTestDialog extends DialogFragment {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: HANDLE POSITIVE BUTTON CLICK
+                // COMPLETED: HANDLE POSITIVE BUTTON CLICK
                 final EditText inputWordEditText = dialog.findViewById(R.id.edittext_input_word);
                 final String inputWord = inputWordEditText.getText().toString();
 

@@ -117,7 +117,7 @@ public class UsersManagementEditActivity extends FragmentActivity {
                 onBackPressed();
                 return true;
             case R.id.menu_user_save:
-                // TODO: IMPLEMENT SAVE
+                // COMPLETED: IMPLEMENT SAVE
                 class updateUserAsync extends AsyncTask<Bundle, Void, String> {
                     @Override
                     protected void onPreExecute() {

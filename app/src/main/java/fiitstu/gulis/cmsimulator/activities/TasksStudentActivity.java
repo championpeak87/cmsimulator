@@ -416,10 +416,6 @@ public class TasksStudentActivity extends FragmentActivity implements ExampleTas
             case R.id.menu_tasks_sign_out:
                 signOut(null);
                 return true;
-            case R.id.menu_edit_task_upload_task:
-                // TODO: Implement task uploading
-                Toast.makeText(this, "THIS FEATURE HAS NOT BEEN IMPLEMENTED", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.menu_tasks_manage_users:
                 Intent usersActivity = new Intent(this, UsersManagmentActivity.class);
                 usersActivity.putExtra("LOGGED_USER_AUTHKEY", loggedUser.getAuth_key());

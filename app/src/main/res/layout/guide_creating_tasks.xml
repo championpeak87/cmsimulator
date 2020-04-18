@@ -27,7 +27,7 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/ic_menu_white_with_background_48dp" android:tint="@null"/>
+                android:src="@drawable/baseline_more_vert_24" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/ic_menu_white_with_background_48dp" android:tint="@null"/>
+                android:src="@drawable/baseline_more_vert_24" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -65,9 +65,6 @@
             android:orientation="horizontal"
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical">
-        <ImageView
-                style="@style/guide_image"
-                android:src="@drawable/excl_green"/>
 
         <TextView
                 android:layout_width="match_parent"

@@ -763,7 +763,6 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                                             diagramView_configuration.invalidate();
                                             break;
                                         } else {
-                                            // TODO: PUSHDOWN EDIT
                                             String popString = output_bundle.getString(ChessGameTransitionDialog.POP_KEY);
                                             String pushString = output_bundle.getString(ChessGameTransitionDialog.PUSH_KEY);
                                             Symbol pop = getSymbol(popString);

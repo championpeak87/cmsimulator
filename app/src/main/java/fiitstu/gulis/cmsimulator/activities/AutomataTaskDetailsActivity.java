@@ -49,14 +49,6 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = this.getMenuInflater();
-        menuInflater.inflate(R.menu.menu_task_details, menu);
-
-        return true;
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_automata_task_details);
@@ -174,13 +166,9 @@ public class AutomataTaskDetailsActivity extends FragmentActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_help:
-                // TODO: IMPLEMENT HELP
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
-                return true;
         }
 
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     private void setConnectedTransition() {

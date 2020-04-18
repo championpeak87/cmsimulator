@@ -32,31 +32,15 @@ public class ExampleGrammars extends FragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = this.getMenuInflater();
-        menuInflater.inflate(R.menu.menu_browse_automata_tasks, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_help:
-                // TODO: CREATE HELP MENU
-                try {
-                    throw new NotImplementedException(this);
-                } catch (NotImplementedException e) {
-                    Log.w(TAG, e.getMessage(), e);
-                }
-                return true;
         }
 
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     private void setActionBar()

@@ -278,7 +278,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
                 timer.setOnTimeRunOutListener(new Timer.OnTimeRunOutListener() {
                     @Override
                     public void onTimeRunOut() {
-                        // TODO: HANDLE TIMER RUN OUT
+                        // COMPLETED: HANDLE TIMER RUN OUT
                         handleTimer();
                         //BrowseAutomataTasksActivity.adapter.setTaskStatus(task.getTask_id(), Task.TASK_STATUS.TOO_LATE);
                         AlertDialog timeRunOutAlert = new AlertDialog.Builder(GrammarActivity.this)

@@ -20,7 +20,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_menu_white_with_background_48dp"/>
+            android:src="@drawable/baseline_more_vert_24"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_checkbox_checked_green"/>
+            android:src="@drawable/ic_checkbox_checked_green" android:tint="@null"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_checkbox_checked_red"/>
+            android:src="@drawable/ic_checkbox_checked_red" android:tint="@null"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -84,7 +84,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_checkbox_indeterminate_green"/>
+            android:src="@drawable/ic_checkbox_indeterminate_green" android:tint="@null"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -100,7 +100,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_checkbox_indeterminate_red"/>
+            android:src="@drawable/ic_checkbox_indeterminate_red" android:tint="@null"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -116,7 +116,7 @@
         android:gravity="center_vertical">
         <ImageView
             style="@style/guide_image"
-            android:src="@drawable/ic_checkbox_unchecked_red"/>
+            android:src="@drawable/ic_checkbox_unchecked_red" android:tint="@null"/>
 
         <TextView
             android:layout_width="match_parent"

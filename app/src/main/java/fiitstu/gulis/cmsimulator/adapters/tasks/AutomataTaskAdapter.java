@@ -452,7 +452,6 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listOfTasks.size());
         if (listOfTasks.size() == 0)
-            // TODO: RESOLVE BrowseAutomataTasksActivity dependency
             BrowseAutomataTasksActivity.context.showEmptyScreen(true);
     }
 

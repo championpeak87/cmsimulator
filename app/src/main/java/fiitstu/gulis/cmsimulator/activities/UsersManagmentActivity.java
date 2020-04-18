@@ -305,10 +305,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             case R.id.menu_reload_users:
                 reloadUsers();
                 return true;
-            case R.id.menu_users_help:
-                // TODO: pridat pomocnika
-                Toast.makeText(this, "NOT IMPLEMENTED", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.menu_filter_users:
                 filterUsers();
                 return true;

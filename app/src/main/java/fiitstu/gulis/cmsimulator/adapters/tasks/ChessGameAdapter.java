@@ -30,6 +30,7 @@ import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
 import fiitstu.gulis.cmsimulator.models.ChessGame;
 import fiitstu.gulis.cmsimulator.models.ChessGameModel;
+import fiitstu.gulis.cmsimulator.models.users.Student;
 import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 
@@ -131,6 +132,8 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
             }
         });
 
+        if (TaskLoginActivity.loggedUser == null || TaskLoginActivity.loggedUser instanceof Student)
+            viewHolder.button_delete_task.setVisibility(View.GONE);
         viewHolder.button_delete_task.setOnClickListener(new View.OnClickListener() {
             final int task_id = currentItem.getTask_id();
 

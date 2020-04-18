@@ -65,28 +65,14 @@ public class ExampleAutomatas extends FragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = this.getMenuInflater();
-        menuInflater.inflate(R.menu.menu_examples_automatas, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.menu_examples_automatas_help:
-                // TODO: FIX SHOWN FRAGMENT TO NEWLY CREATED
-                FragmentManager fm = getSupportFragmentManager();
-                GuideFragment guideFragment = GuideFragment.newInstance(GuideFragment.TASKS);
-                guideFragment.show(fm, "HELP_DIALOG");
-                return true;
         }
 
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
 
