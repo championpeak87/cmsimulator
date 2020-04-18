@@ -29,7 +29,7 @@ public class NewGrammarTestDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        this.onAddedTestListener = (GrammarTestingActivity)context;
+        this.onAddedTestListener = (GrammarTestingActivity) context;
     }
 
     public void setOnAddedTestListener(OnAddedTestListener onAddedTestListener) {

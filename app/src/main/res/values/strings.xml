@@ -1331,7 +1331,7 @@
     <string name="whats_new">What\'s new</string>
     <string name="whats_new_content">
         <b>-</b>
-        Game implementation
+        Bugfixes
     </string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>
@@ -1405,5 +1405,17 @@
     <string name="submit_game_message_negative">Do you really want to submit this game? Simulation wasn\'t successful!
     </string>
     <string name="game_submitted_cant_open">Game was already submitted! No changes are allowed!</string>
+    <string name="permission_title">Let\'s resolve app permissions</string>
+    <string name="permission_detail">You have to accept these permission for app to work correctly!</string>
+    <string name="prev">Previous</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="finish">Finish</string>
+    <string name="file_access" formatted="true">- Storage access></string>
+    <string name="internet_access" formatted="true">- Internet access</string>
+    <string name="app_updated">App has been updated!</string>
+    <string name="everything_ready">Everything is ready</string>
+    <string name="lets_start">Let\'s start</string>
+    <string name="give">Give</string>
 
 </resources>

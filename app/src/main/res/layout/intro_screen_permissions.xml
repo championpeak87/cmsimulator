@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+    <com.airbnb.lottie.LottieAnimationView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
+                                           app:lottie_rawRes="@raw/permissions_lottie"
+                                           app:lottie_loop="true"
+                                           app:lottie_autoPlay="true"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal" android:text="@string/permission_title"
+              android:textColor="@color/md_white_1000" android:layout_margin="15dp" android:textSize="25sp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal" android:text="@string/permission_detail"
+              android:textColor="@color/md_white_1000" android:layout_margin="15dp" android:textSize="14sp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/file_access"
+              android:textColor="@color/md_white_1000" android:layout_marginLeft="15dp" android:layout_marginTop="5dp" android:textSize="14sp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/internet_access"
+              android:textColor="@color/md_white_1000" android:layout_marginLeft="15dp" android:layout_marginTop="5dp" android:textSize="14sp"/>
+
+</LinearLayout>

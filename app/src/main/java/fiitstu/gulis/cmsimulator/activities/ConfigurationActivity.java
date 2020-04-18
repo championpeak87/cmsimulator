@@ -66,9 +66,6 @@ import fiitstu.gulis.cmsimulator.network.ServerController;
 import fiitstu.gulis.cmsimulator.network.TaskResultSender;
 import fiitstu.gulis.cmsimulator.network.UrlManager;
 import fiitstu.gulis.cmsimulator.util.ProgressWorker;
-import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
-import io.blushine.android.ui.showcase.MaterialShowcaseView;
-import io.blushine.android.ui.showcase.ShowcaseListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 

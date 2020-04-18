@@ -19,7 +19,7 @@
         <!-- <activity android:name=".activities.SplashActivity"> -->
         <!-- </activity> -->
         <activity
-                android:name=".activities.MainActivity"
+                android:name=".activities.IntroActivity"
                 android:configChanges="orientation|screenSize"
                 android:label="@string/app_name"
                 android:theme="@style/splashTheme">
@@ -31,6 +31,9 @@
             <meta-data android:name="android.app.shortcuts"
                        android:resource="@xml/shortcuts"/>
         </activity>
+        <activity android:name=".activities.MainActivity"
+                  android:configChanges="orientation|screenSize"
+                  android:theme="@style/splashTheme"/>
         <activity android:name=".activities.BrowseGrammarTasksActivity"
                   android:configChanges="screenSize|orientation"/>
         <activity android:name=".activities.GrammarTestingActivity"

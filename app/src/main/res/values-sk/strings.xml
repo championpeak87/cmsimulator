@@ -1301,7 +1301,7 @@
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
         <b>-</b>
-        Implementácia hry
+        Opravy stability
     </string>
     <string name="regex_help" formatted="true">
         <b>*</b>
@@ -1368,4 +1368,15 @@
     <string name="submit_game_message_negative">Skutočne chcete odovzdať hru? Simulácia nebola úspešná
     </string>
     <string name="game_submitted_cant_open">Hra bola odovzdaná! Nie sú povolené žiadne zmeny1</string>
+    <string name="permission_title">Poďme vyriešiť povolenia</string>
+    <string name="permission_detail">Nasledujúce povolenia musia byť prijaté aby všetko správne fungovalo!</string>
+    <string name="next">Ďalej</string>
+    <string name="skip">Preskočiť</string>
+    <string name="finish">Dokončiť</string>
+    <string name="file_access">- Prístup k úložisku</string>
+    <string name="internet_access">- Prístup k internetu</string>
+    <string name="app_updated">Aplikácia bola aktualizovaná!</string>
+    <string name="everything_ready">Všetko je pripravené</string>
+    <string name="lets_start">Poďme na to</string>
+    <string name="give">Udeliť</string>
 </resources>

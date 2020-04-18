@@ -8,6 +8,7 @@ import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,6 +27,8 @@ import android.widget.*;
 
 import com.aditya.filebrowser.Constants;
 import com.aditya.filebrowser.FileChooser;
+import com.hololo.tutorial.library.PermissionStep;
+import com.hololo.tutorial.library.Step;
 import fiitstu.gulis.cmsimulator.BuildConfig;
 import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
@@ -35,15 +38,11 @@ import fiitstu.gulis.cmsimulator.dialogs.NewMachineDialog;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.dialogs.FileSelector;
 import fiitstu.gulis.cmsimulator.elements.Timer;
-import fiitstu.gulis.cmsimulator.network.ServerController;
-import io.blushine.android.ui.showcase.MaterialShowcase;
-import io.blushine.android.ui.showcase.MaterialShowcaseSequence;
-import io.blushine.android.ui.showcase.MaterialShowcaseView;
-import io.blushine.android.ui.showcase.ShowcaseConfig;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.ArrayList;
 
 import static fiitstu.gulis.cmsimulator.app.CMSimulator.getContext;
 
@@ -116,57 +115,6 @@ public class MainActivity extends FragmentActivity
 
     private Timer timer;
 
-    private boolean isFirstTimeLaunch() {
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        int defaultValue = getResources().getInteger(R.integer.first_time_launch);
-        int currentValue = sharedPreferences.getInt("FIRST_TIME_LAUNCH", defaultValue);
-
-        if (currentValue == 0) {
-            // SAVE FIRST TIME LAUNCH
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("FIRST_TIME_LAUNCH", 1);
-            editor.putString("LAST_KNOWN_VERSION", BuildConfig.VERSION_NAME);
-            editor.apply();
-        }
-
-        return currentValue == 0;
-    }
-
-    private boolean isNewVersion() {
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        String lastKnownVersion = sharedPreferences.getString("LAST_KNOWN_VERSION", "");
-        String currentVersion = BuildConfig.VERSION_NAME;
-
-        if (lastKnownVersion.equals("") || !lastKnownVersion.equals(currentVersion)) {
-            // SAVE LAST KNOWN VERSION
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("LAST_KNOWN_VERSION", BuildConfig.VERSION_NAME);
-            editor.apply();
-        }
-
-        return !currentVersion.equals(lastKnownVersion);
-    }
-
-    private void handleWhatsNewShowcase() {
-        boolean firstTimeLaunch = isFirstTimeLaunch();
-        boolean isNewVersion = isNewVersion();
-
-        if (isNewVersion && !firstTimeLaunch) {
-            MaterialShowcaseView whatsNewMessage = new MaterialShowcaseView.Builder(this)
-                    .renderOverNavigationBar()
-                    .setTitleText(getString(R.string.whats_new))
-                    .setContentTextColor(getColor(R.color.introContentText))
-                    .setContentText(getString(R.string.whats_new_content))
-                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                    .setDismissText(R.string.understood)
-                    .setDelay(500)
-                    .build();
-
-            whatsNewMessage._showNow();
-        }
-
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,74 +134,13 @@ public class MainActivity extends FragmentActivity
             }
         }
 
-        handleWhatsNewShowcase();
+        //handleWhatsNewShowcase();
 
         final int textColor = getColor(R.color.introContentText);
-
-        MaterialShowcaseSequence firstLaunchSequence = null;
-        MaterialShowcaseView firstLaunchMessage = null;
-        try {
-            firstLaunchSequence = new MaterialShowcaseSequence(this);
-            firstLaunchMessage = new MaterialShowcaseView.Builder(this)
-                    .renderOverNavigationBar()
-                    .setTitleText(getString(R.string.welcome))
-                    .setContentTextColor(textColor)
-                    .setContentText(getString(R.string.welcome_message))
-                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                    .setDismissText(R.string.understood)
-                    .setDelay(500)
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         Button newAutomata = findViewById(R.id.button_main_new),
                 newGrammar = findViewById(R.id.button_main_grammar),
                 tasks = findViewById(R.id.button_main_tasks);
-
-        try {
-            MaterialShowcaseView newAutomataMessage = new MaterialShowcaseView.Builder(this)
-                    .renderOverNavigationBar()
-                    .setTarget(newAutomata)
-                    .setContentTextColor(textColor)
-                    .setTitleText(getString(R.string.automatas))
-                    .setContentText(getString(R.string.automata_message))
-                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                    .setDismissText(R.string.understood)
-                    .setDelay(500)
-                    .build();
-
-            MaterialShowcaseView newGrammarMessage = new MaterialShowcaseView.Builder(this)
-                    .renderOverNavigationBar()
-                    .setTarget(newGrammar)
-                    .setTitleText(getString(R.string.grammar))
-                    .setContentTextColor(textColor)
-                    .setContentText(getString(R.string.grammar_message))
-                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                    .setDismissText(R.string.understood)
-                    .setDelay(500)
-                    .build();
-
-            MaterialShowcaseView tasksMessage = new MaterialShowcaseView.Builder(this)
-                    .renderOverNavigationBar()
-                    .setTarget(tasks)
-                    .setTitleText(getString(R.string.tasks))
-                    .setContentTextColor(textColor)
-                    .setContentText(getString(R.string.tasks_message))
-                    .setDismissBackgroundColor(getColor(R.color.primary_color_dark))
-                    .setDismissText(R.string.understood)
-                    .setDelay(500)
-                    .build();
-
-            firstLaunchSequence.addSequenceItem(firstLaunchMessage);
-            firstLaunchSequence.addSequenceItem(newAutomataMessage);
-            firstLaunchSequence.addSequenceItem(newGrammarMessage);
-            firstLaunchSequence.addSequenceItem(tasksMessage);
-            firstLaunchSequence.setSingleUse(FIRST_LAUNCH);
-            firstLaunchSequence.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         int nightModeFlags =
                 getContext().getResources().getConfiguration().uiMode &
