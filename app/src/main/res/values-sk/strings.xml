@@ -1367,7 +1367,7 @@
     <string name="submit_game">Odovzdať hru</string>
     <string name="submit_game_message_negative">Skutočne chcete odovzdať hru? Simulácia nebola úspešná
     </string>
-    <string name="game_submitted_cant_open">Hra bola odovzdaná! Nie sú povolené žiadne zmeny1</string>
+    <string name="game_submitted_cant_open">Hra bola odovzdaná! Nie sú povolené žiadne zmeny!</string>
     <string name="permission_title">Poďme vyriešiť povolenia</string>
     <string name="permission_detail">Nasledujúce povolenia musia byť prijaté aby všetko správne fungovalo!</string>
     <string name="next">Ďalej</string>
@@ -1379,4 +1379,7 @@
     <string name="everything_ready">Všetko je pripravené</string>
     <string name="lets_start">Poďme na to</string>
     <string name="give">Udeliť</string>
+    <string name="set_stack_alphabet">Set stack alphabet</string>
+    <string name="add_new_symbol">Add new symbol</string>
+    <string name="add_new_stack_symbol">Add new stack symbol</string>
 </resources>

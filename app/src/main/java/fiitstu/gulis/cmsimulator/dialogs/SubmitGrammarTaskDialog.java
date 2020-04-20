@@ -209,6 +209,7 @@ public class SubmitGrammarTaskDialog extends DialogFragment {
                 }
 
                 new SaveTaskAsync().execute();
+                dataSource.globalDrop();
             }
         });
     }

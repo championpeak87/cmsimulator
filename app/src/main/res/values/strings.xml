@@ -1417,5 +1417,8 @@
     <string name="everything_ready">Everything is ready</string>
     <string name="lets_start">Let\'s start</string>
     <string name="give">Give</string>
+    <string name="set_stack_alphabet">Set stack alphabet</string>
+    <string name="add_new_symbol">Add new symbol</string>
+    <string name="add_new_stack_symbol">Add new stack symbol</string>
 
 </resources>

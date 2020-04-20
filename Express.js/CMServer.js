@@ -1349,8 +1349,12 @@ app.get('/api/game/delete', (req, res) => {
           console.log("GAME COULD NOT BE DELETED! FILE DOES NOT EXIST!");
         }
       });
-      pool.query('DELETE FROM game_task_results WHERE task_id = $1;', [task_id], (err, result) => {})
-      pool.query('DELETE FROM game_tasks WHERE task_id = $1;', [task_id], (err, result) => {})
+      pool.query('DELETE FROM game_task_results WHERE task_id = $1;', [task_id], (error, results) => {
+        if (error) {throw error}
+      })
+      pool.query('DELETE FROM game_tasks WHERE task_id = $1;', [task_id], (error, results) => {
+        if (error) {throw error}
+      })
     }
     res.status(HTTP_OK).send({
       success: true,

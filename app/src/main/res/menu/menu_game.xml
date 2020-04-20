@@ -23,13 +23,16 @@
             android:icon="@drawable/baseline_play_arrow_24"
             android:iconTint="@color/md_white_1000"
             style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+    <item android:id="@+id/menu_set_stack_symbols"
+          android:title="@string/set_stack_alphabet"
+          style="@style/dropDownMenuItemStyle"/>
     <item
             android:id="@+id/menu_settings"
             android:title="@string/settings"
             app:showAsAction="never"
-            style="@style/dropDownMenuItemStyle" />
+            style="@style/dropDownMenuItemStyle"/>
     <item
             android:id="@+id/menu_configuration_help"
             android:title="@string/help"
-            style="@style/dropDownMenuItemStyle" />
+            style="@style/dropDownMenuItemStyle"/>
 </menu>

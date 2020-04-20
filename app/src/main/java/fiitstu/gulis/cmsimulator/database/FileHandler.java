@@ -168,7 +168,7 @@ public class FileHandler {
      * 1.0 - the original version (number assigned retro-actively)
      * 2.0 - the version used by CMSimulator 3
      */
-    private static final String CURRENT_CMS_VERSION = BuildConfig.VERSION_NAME;
+    private static final String CURRENT_CMS_VERSION = "2.1";
 
     //xml tag names
     private static final String ROOT = "structure";

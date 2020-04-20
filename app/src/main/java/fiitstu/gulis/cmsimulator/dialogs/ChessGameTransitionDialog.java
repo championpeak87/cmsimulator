@@ -13,19 +13,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
+import fiitstu.gulis.cmsimulator.adapters.configuration.ChessGameStackSymbolAdapter;
+import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.elements.PdaTransition;
 import fiitstu.gulis.cmsimulator.elements.State;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
 import fiitstu.gulis.cmsimulator.elements.Transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
@@ -49,22 +56,16 @@ public class ChessGameTransitionDialog extends DialogFragment {
             togglebutton_up,
             togglebutton_left,
             togglebutton_right,
-            togglebutton_down,
-
-    togglebutton_push_up,
-            togglebutton_push_left,
-            togglebutton_push_right,
-            togglebutton_push_down,
-
-    togglebutton_pop_up,
-            togglebutton_pop_left,
-            togglebutton_pop_right,
-            togglebutton_pop_down;
+            togglebutton_down;
 
     private ImageButton
             selected_button = null,
             selected_push_button = null,
             selected_pop_button = null;
+
+    private ImageButton
+            imagebutton_add_push_symbol,
+            imagebutton_add_pop_symbol;
 
     private LinearLayout linearlayout_pushdown_config;
 
@@ -75,6 +76,12 @@ public class ChessGameTransitionDialog extends DialogFragment {
     private Transition transition;
     private List<Transition> transitionList;
     private List<Transition> fromTransitionList;
+
+    private RecyclerView recyclerview_pop;
+    private RecyclerView recyclerview_push;
+
+    private List<Symbol> popSymbols;
+    private List<Symbol> pushSymbol;
 
     public interface TransitionChangeListener {
         void OnChange(Bundle output_bundle);
@@ -174,72 +181,65 @@ public class ChessGameTransitionDialog extends DialogFragment {
             linearlayout_pushdown_config = view.findViewById(R.id.linearlayou_pushdown_config);
             linearlayout_pushdown_config.setVisibility(View.VISIBLE);
 
-            togglebutton_pop_up = view.findViewById(R.id.togglebutton_pop_up);
-            togglebutton_pop_down = view.findViewById(R.id.togglebutton_pop_down);
-            togglebutton_pop_left = view.findViewById(R.id.togglebutton_pop_left);
-            togglebutton_pop_right = view.findViewById(R.id.togglebutton_pop_right);
+            recyclerview_pop = view.findViewById(R.id.recyclerview_pop);
+            recyclerview_push = view.findViewById(R.id.recyclerview_push);
 
-            togglebutton_push_up = view.findViewById(R.id.togglebutton_push_up);
-            togglebutton_push_down = view.findViewById(R.id.togglebutton_push_down);
-            togglebutton_push_left = view.findViewById(R.id.togglebutton_push_left);
-            togglebutton_push_right = view.findViewById(R.id.togglebutton_push_right);
+            DataSource dataSource = DataSource.getInstance();
+            dataSource.open();
+            List<Symbol> stackAlphabet = dataSource.getStackAlphabetFullExtract();
 
-            togglebutton_pop_up.setOnClickListener(new View.OnClickListener() {
+            final Symbol[] initStack = {null};
+            for (Symbol s : dataSource.getStackAlphabetFullExtract()) {
+                if (s.isStackBotom()) {
+                    initStack[0] = s;
+                    break;
+                }
+            }
+
+            final List<Symbol> popSymbolList, pushSymbolList;
+            if (transition != null) {
+                popSymbolList = ((PdaTransition) transition).getPopSymbolList();
+                pushSymbolList = ((PdaTransition) transition).getPushSymbolList();
+            } else {
+                popSymbolList = new ArrayList<>();
+                popSymbolList.add(initStack[0]);
+
+                pushSymbolList = new ArrayList<>();
+                pushSymbolList.add(initStack[0]);
+            }
+
+
+            final ChessGameStackSymbolAdapter chessGameStackSymbolPopAdapter = new ChessGameStackSymbolAdapter(popSymbolList, stackAlphabet, getContext());
+            final ChessGameStackSymbolAdapter chessGameStackSymbolPushAdapter = new ChessGameStackSymbolAdapter(pushSymbolList, stackAlphabet, getContext());
+
+            imagebutton_add_push_symbol = view.findViewById(R.id.imagebutton_add_push_symbol);
+            imagebutton_add_push_symbol.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setDirectionPopButton((ImageButton) v);
+                    chessGameStackSymbolPushAdapter.addSymbol(initStack[0]);
                 }
             });
 
-            togglebutton_pop_down.setOnClickListener(new View.OnClickListener() {
+            imagebutton_add_pop_symbol = view.findViewById(R.id.imagebutton_add_pop_symbol);
+            imagebutton_add_pop_symbol.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setDirectionPopButton((ImageButton) v);
+                    chessGameStackSymbolPopAdapter.addSymbol(initStack[0]);
                 }
             });
 
-            togglebutton_pop_left.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPopButton((ImageButton) v);
-                }
-            });
+            LinearLayoutManager linearLayoutManagerPop = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager linearLayoutManagerPush = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-            togglebutton_pop_right.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPopButton((ImageButton) v);
-                }
-            });
+            recyclerview_pop.setAdapter(chessGameStackSymbolPopAdapter);
+            recyclerview_push.setAdapter(chessGameStackSymbolPushAdapter);
 
+            recyclerview_push.setLayoutManager(linearLayoutManagerPush);
+            recyclerview_pop.setLayoutManager(linearLayoutManagerPop);
 
-            togglebutton_push_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPushButton((ImageButton) v);
-                }
-            });
-
-            togglebutton_push_down.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPushButton((ImageButton) v);
-                }
-            });
-
-            togglebutton_push_left.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPushButton((ImageButton) v);
-                }
-            });
-
-            togglebutton_push_right.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setDirectionPushButton((ImageButton) v);
-                }
-            });
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.item_show_animation);
+            recyclerview_pop.setAnimation(animation);
+            recyclerview_push.setAnimation(animation);
         }
 
         if (dialog_type == DIALOG_TYPE.EDIT) {
@@ -268,36 +268,6 @@ public class ChessGameTransitionDialog extends DialogFragment {
 
                 String popString = popSymbol.get(0).getValue();
                 String pushString = pushSymbol.get(0).getValue();
-
-                switch (popString) {
-                    case Symbol.MOVEMENT_UP:
-                        setDirectionPopButton(togglebutton_pop_up);
-                        break;
-                    case Symbol.MOVEMENT_DOWN:
-                        setDirectionPopButton(togglebutton_pop_down);
-                        break;
-                    case Symbol.MOVEMENT_RIGHT:
-                        setDirectionPopButton(togglebutton_pop_right);
-                        break;
-                    case Symbol.MOVEMENT_LEFT:
-                        setDirectionPopButton(togglebutton_pop_left);
-                        break;
-                }
-
-                switch (pushString) {
-                    case Symbol.MOVEMENT_UP:
-                        setDirectionPushButton(togglebutton_push_up);
-                        break;
-                    case Symbol.MOVEMENT_DOWN:
-                        setDirectionPushButton(togglebutton_push_down);
-                        break;
-                    case Symbol.MOVEMENT_RIGHT:
-                        setDirectionPushButton(togglebutton_push_right);
-                        break;
-                    case Symbol.MOVEMENT_LEFT:
-                        setDirectionPushButton(togglebutton_push_left);
-                        break;
-                }
             }
         }
 
@@ -364,35 +334,6 @@ public class ChessGameTransitionDialog extends DialogFragment {
                         output_bundle.putString(DIRECTION_KEY, Symbol.MOVEMENT_RIGHT);
                 }
 
-                if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
-
-                    // POP
-                    if (selected_pop_button != null) {
-                        if (selected_pop_button.equals(togglebutton_pop_up))
-                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_UP);
-                        else if (selected_pop_button.equals(togglebutton_pop_down))
-                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_DOWN);
-                        else if (selected_pop_button.equals(togglebutton_pop_left))
-                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_LEFT);
-                        else if (selected_pop_button.equals(togglebutton_pop_right))
-                            output_bundle.putString(POP_KEY, Symbol.MOVEMENT_RIGHT);
-
-                    } else output_bundle.putString(POP_KEY, Symbol.EMPTY_SYMBOL);
-
-                    // PUSH
-                    if (selected_push_button != null) {
-                        if (selected_push_button.equals(togglebutton_push_up))
-                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_UP);
-                        else if (selected_push_button.equals(togglebutton_push_down))
-                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_DOWN);
-                        else if (selected_push_button.equals(togglebutton_push_left))
-                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_LEFT);
-                        else if (selected_push_button.equals(togglebutton_push_right))
-                            output_bundle.putString(PUSH_KEY, Symbol.MOVEMENT_RIGHT);
-
-                    } else output_bundle.putString(PUSH_KEY, Symbol.EMPTY_SYMBOL);
-                }
-
 
                 if (selected_button != null && transitionChangeListener != null) {
                     transitionChangeListener.OnChange(output_bundle);
@@ -428,35 +369,5 @@ public class ChessGameTransitionDialog extends DialogFragment {
             this.selected_button.getBackground().clearColorFilter();
         this.selected_button = selected_button;
         selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-    }
-
-    private void setDirectionPushButton(ImageButton selected_button) {
-        if (this.selected_push_button != null) {
-            if (this.selected_push_button.equals(selected_button)) {
-                this.selected_push_button.getBackground().clearColorFilter();
-                this.selected_push_button = null;
-                return;
-            } else {
-                this.selected_push_button.getBackground().clearColorFilter();
-                this.selected_push_button = selected_button;
-            }
-        }
-        selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-        selected_push_button = selected_button;
-    }
-
-    private void setDirectionPopButton(ImageButton selected_button) {
-        if (this.selected_pop_button != null) {
-            if (this.selected_pop_button.equals(selected_button)) {
-                this.selected_pop_button.getBackground().clearColorFilter();
-                this.selected_pop_button = null;
-                return;
-            } else {
-                this.selected_pop_button.getBackground().clearColorFilter();
-                this.selected_pop_button = selected_button;
-            }
-        }
-        selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
-        selected_pop_button = selected_button;
     }
 }

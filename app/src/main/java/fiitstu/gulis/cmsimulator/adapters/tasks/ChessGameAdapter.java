@@ -25,6 +25,7 @@ import fiitstu.gulis.cmsimulator.activities.AutomataTaskDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.ChessGameActivity;
 import fiitstu.gulis.cmsimulator.activities.GameDetailsActivity;
 import fiitstu.gulis.cmsimulator.activities.TaskLoginActivity;
+import fiitstu.gulis.cmsimulator.database.DataSource;
 import fiitstu.gulis.cmsimulator.database.FileHandler;
 import fiitstu.gulis.cmsimulator.elements.Task;
 import fiitstu.gulis.cmsimulator.exceptions.NotImplementedException;
@@ -98,7 +99,11 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
                     protected String doInBackground(Void... voids) {
                         UrlManager urlManager = new UrlManager();
                         ServerController serverController = new ServerController();
-                        URL url = urlManager.getDownloadGameURL(task_id, user_id);
+                        URL url;
+                        if (user_id == -1)
+                            url = urlManager.getDownloadGameURL(task_id);
+                        else
+                            url = urlManager.getDownloadGameURL(task_id, user_id);
                         String output = null;
 
                         try {
@@ -128,6 +133,10 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
                         }
                     }
                 }
+                DataSource dataSource = DataSource.getInstance();
+                dataSource.open();
+                dataSource.globalDrop();
+                dataSource.close();
                 new DownloadGameAsync().execute();
             }
         });

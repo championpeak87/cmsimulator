@@ -183,6 +183,22 @@ public class UrlManager {
         }
     }
 
+    public URL getDownloadGameURL(int task_id) {
+        Uri uri = Uri.parse(URI + DOWNLOAD_GAME_PATH).buildUpon()
+                .appendQueryParameter(TASK_ID_KEY, Integer.toString(task_id))
+                .build();
+
+        URL url = null;
+
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } finally {
+            return url;
+        }
+    }
+
 
     public URL getDeleteGameURL(int task_id) {
         Uri uri = Uri.parse(URI + DELETE_GAME_PATH).buildUpon()
