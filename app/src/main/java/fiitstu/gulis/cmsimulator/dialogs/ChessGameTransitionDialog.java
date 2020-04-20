@@ -84,7 +84,7 @@ public class ChessGameTransitionDialog extends DialogFragment {
     private List<Symbol> pushSymbol;
 
     public interface TransitionChangeListener {
-        void OnChange(Bundle output_bundle);
+        void OnChange(Bundle output_bundle, List<Symbol> popSymbols, List<Symbol> pushSymbol);
     }
 
     public enum AUTOMATA_TYPE {
@@ -196,21 +196,20 @@ public class ChessGameTransitionDialog extends DialogFragment {
                 }
             }
 
-            final List<Symbol> popSymbolList, pushSymbolList;
             if (transition != null) {
-                popSymbolList = ((PdaTransition) transition).getPopSymbolList();
-                pushSymbolList = ((PdaTransition) transition).getPushSymbolList();
+                popSymbols = ((PdaTransition) transition).getPopSymbolList();
+                pushSymbol = ((PdaTransition) transition).getPushSymbolList();
             } else {
-                popSymbolList = new ArrayList<>();
-                popSymbolList.add(initStack[0]);
+                popSymbols = new ArrayList<>();
+                popSymbols.add(initStack[0]);
 
-                pushSymbolList = new ArrayList<>();
-                pushSymbolList.add(initStack[0]);
+                pushSymbol = new ArrayList<>();
+                pushSymbol.add(initStack[0]);
             }
 
 
-            final ChessGameStackSymbolAdapter chessGameStackSymbolPopAdapter = new ChessGameStackSymbolAdapter(popSymbolList, stackAlphabet, getContext());
-            final ChessGameStackSymbolAdapter chessGameStackSymbolPushAdapter = new ChessGameStackSymbolAdapter(pushSymbolList, stackAlphabet, getContext());
+            final ChessGameStackSymbolAdapter chessGameStackSymbolPopAdapter = new ChessGameStackSymbolAdapter(popSymbols, stackAlphabet, getContext());
+            final ChessGameStackSymbolAdapter chessGameStackSymbolPushAdapter = new ChessGameStackSymbolAdapter(pushSymbol, stackAlphabet, getContext());
 
             imagebutton_add_push_symbol = view.findViewById(R.id.imagebutton_add_push_symbol);
             imagebutton_add_push_symbol.setOnClickListener(new View.OnClickListener() {
@@ -228,8 +227,8 @@ public class ChessGameTransitionDialog extends DialogFragment {
                 }
             });
 
-            LinearLayoutManager linearLayoutManagerPop = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            LinearLayoutManager linearLayoutManagerPush = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager linearLayoutManagerPop = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
+            LinearLayoutManager linearLayoutManagerPush = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
 
             recyclerview_pop.setAdapter(chessGameStackSymbolPopAdapter);
             recyclerview_push.setAdapter(chessGameStackSymbolPushAdapter);
@@ -336,7 +335,7 @@ public class ChessGameTransitionDialog extends DialogFragment {
 
 
                 if (selected_button != null && transitionChangeListener != null) {
-                    transitionChangeListener.OnChange(output_bundle);
+                    transitionChangeListener.OnChange(output_bundle, popSymbols, pushSymbol);
                     dismiss();
                 } else {
                     ValueAnimator valueAnimator = new ValueAnimator();

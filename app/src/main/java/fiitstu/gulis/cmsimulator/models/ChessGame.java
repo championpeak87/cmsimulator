@@ -17,12 +17,12 @@ public class ChessGame {
     private int maxStateCount;
     private List<State> listOfStates;
     private List<Transition> listOfTransitions;
+    private List<Symbol> stackAlphabet;
     private automata_type automata_type;
 
     private static List<Symbol> listOfSymbols;
 
-    public static List<Symbol> getMovementSymbolList()
-    {
+    public static List<Symbol> getMovementSymbolList() {
         List<Symbol> movementList = new ArrayList<>();
         movementList.add(new Symbol(Symbol.MOVEMENT_UP_ID, Symbol.MOVEMENT_UP));
         movementList.add(new Symbol(Symbol.MOVEMENT_DOWN_ID, Symbol.MOVEMENT_DOWN));
@@ -42,6 +42,8 @@ public class ChessGame {
         listOfStates = new ArrayList<>();
         listOfTransitions = new ArrayList<>();
         listOfSymbols = getMovementSymbolList();
+
+        stackAlphabet = new ArrayList<>();
     }
 
     public ChessGame(Pair<Integer, Integer> startField, Pair<Integer, Integer> finishField, List<Pair<Integer, Integer>> pathFields, Pair<Integer, Integer> fieldSize, int maxStateCount, List<State> listOfStates, List<Transition> listOfTransitions, fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
@@ -54,6 +56,7 @@ public class ChessGame {
         this.listOfTransitions = listOfTransitions;
         this.automata_type = automata_type;
         listOfSymbols = getMovementSymbolList();
+        stackAlphabet = new ArrayList<>();
     }
 
     public Pair<Integer, Integer> getStartField() {
@@ -118,5 +121,21 @@ public class ChessGame {
 
     public void setAutomata_type(fiitstu.gulis.cmsimulator.models.tasks.automata_type automata_type) {
         this.automata_type = automata_type;
+    }
+
+    public List<Symbol> getStackAlphabet() {
+        return stackAlphabet;
+    }
+
+    public void setStackAlphabet(List<Symbol> stackAlphabet) {
+        this.stackAlphabet = stackAlphabet;
+    }
+
+    public static List<Symbol> getListOfSymbols() {
+        return listOfSymbols;
+    }
+
+    public static void setListOfSymbols(List<Symbol> listOfSymbols) {
+        ChessGame.listOfSymbols = listOfSymbols;
     }
 }

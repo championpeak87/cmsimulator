@@ -57,9 +57,9 @@ public class ChessGameStackSymbolAdapter extends RecyclerView.Adapter<ChessGameS
                             removeSymbol(itemHolder.getLayoutPosition());
                             return true;
                         }
-                        Symbol selectedSymbol = stackAlphabetMap.get(symbolValue);
 
-                        itemHolder.button_stack_configurator.setText(selectedSymbol.getValue());
+                        Symbol changedSymbol = stackAlphabetMap.get(symbolValue);
+                        changeSymbol(itemHolder.getLayoutPosition(), changedSymbol);
 
                         return true;
                     }
@@ -102,8 +102,17 @@ public class ChessGameStackSymbolAdapter extends RecyclerView.Adapter<ChessGameS
         notifyItemInserted(stackSymbols.lastIndexOf(s));
     }
 
+    public void changeSymbol(int position, Symbol s){
+        stackSymbols.set(position, s);
+        notifyItemChanged(position);
+    }
+
     public void removeSymbol(int position) {
         stackSymbols.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public List<Symbol> getStackSymbols() {
+        return stackSymbols;
     }
 }

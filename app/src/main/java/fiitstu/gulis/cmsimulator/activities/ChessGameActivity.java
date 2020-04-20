@@ -152,9 +152,19 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         setChessField();
 
         if (chessGame.getAutomata_type() == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
-            Symbol initSymbol = dataSource.addStackSymbol("Z", Symbol.STACK_BOTTOM);
-            stackAlphabet.add(initSymbol);
-            stack.add(initSymbol);
+            stackAlphabet = dataSource.getStackAlphabetFullExtract();
+            boolean foundInitStack = false;
+            for (Symbol s : stackAlphabet) {
+                if (s.getProperties() == Symbol.STACK_BOTTOM) {
+                    foundInitStack = true;
+                    break;
+                }
+            }
+            if (!foundInitStack) {
+                Symbol initSymbol = dataSource.addStackSymbol("Z", Symbol.STACK_BOTTOM);
+                stackAlphabet.add(initSymbol);
+                stack.add(initSymbol);
+            }
         }
 
         Intent intent = this.getIntent();
@@ -333,6 +343,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSC);
                 chessGame.setListOfStates(stateList);
                 chessGame.setListOfTransitions(transitions);
+                dataSource.open();
+                stackAlphabet = dataSource.getStackAlphabetFullExtract();
+                chessGame.setStackAlphabet(stackAlphabet);
                 try {
                     fileHandler.setData(chessGame);
                     fileHandler.writeFile(Integer.toString(task_id));
@@ -669,7 +682,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.NEW, type);
         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
             @Override
-            public void OnChange(Bundle output_bundle) {
+            public void OnChange(Bundle output_bundle, List<Symbol> popSymbols, List<Symbol> pushSymbol) {
                 final String direction = output_bundle.getString(ChessGameTransitionDialog.DIRECTION_KEY);
                 dataSource.open();
                 List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
@@ -681,17 +694,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             transitions.add(transition);
                             break;
                         } else {
-                            String popString = output_bundle.getString(ChessGameTransitionDialog.POP_KEY);
-                            String pushString = output_bundle.getString(ChessGameTransitionDialog.PUSH_KEY);
-                            Symbol pop = getSymbol(popString);
-                            Symbol push = getSymbol(pushString);
-
-                            List<Symbol> popList = new ArrayList<>();
-                            popList.add(pop);
-
-                            List<Symbol> pushList = new ArrayList<>();
-                            pushList.add(push);
-                            PdaTransition transition = (PdaTransition) dataSource.addPdaTransition(fromState, s, toState, emptyInputSymbolId, popList, pushList);
+                            PdaTransition transition = (PdaTransition) dataSource.addPdaTransition(fromState, s, toState, emptyInputSymbolId, popSymbols, pushSymbol);
                             transitions.add(transition);
                             diagramView_configuration.addTransition(transition);
                         }
@@ -779,7 +782,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                         ChessGameTransitionDialog chessGameTransitionDialog = new ChessGameTransitionDialog(transition, fromTransitionList, transitionList, fromState, toState, ChessGameTransitionDialog.DIALOG_TYPE.EDIT, type);
                         chessGameTransitionDialog.setTransitionChangeListener(new ChessGameTransitionDialog.TransitionChangeListener() {
                             @Override
-                            public void OnChange(Bundle output_bundle) {
+                            public void OnChange(Bundle output_bundle, List<Symbol> popSymbols, List<Symbol> pushSymbol) {
                                 final String direction = output_bundle.getString(ChessGameTransitionDialog.DIRECTION_KEY);
                                 dataSource.open();
                                 List<Symbol> symbols = dataSource.getInputAlphabetFullExtract();
@@ -791,20 +794,10 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                                             diagramView_configuration.invalidate();
                                             break;
                                         } else {
-                                            String popString = output_bundle.getString(ChessGameTransitionDialog.POP_KEY);
-                                            String pushString = output_bundle.getString(ChessGameTransitionDialog.PUSH_KEY);
-                                            Symbol pop = getSymbol(popString);
-                                            Symbol push = getSymbol(pushString);
-
-                                            List<Symbol> popList = new ArrayList<>();
-                                            popList.add(pop);
-
-                                            List<Symbol> pushList = new ArrayList<>();
-                                            pushList.add(push);
-                                            dataSource.updatePdaTransition((PdaTransition) transition, fromState, s, toState, emptyInputSymbolId, popList, pushList);
+                                            dataSource.updatePdaTransition((PdaTransition) transition, fromState, s, toState, emptyInputSymbolId, popSymbols, pushSymbol);
                                             PdaTransition t = (PdaTransition) transitions.get(transitions.indexOf(transition));
-                                            t.setPopSymbolList(popList);
-                                            t.setPushSymbolList(pushList);
+                                            t.setPopSymbolList(popSymbols);
+                                            t.setPushSymbolList(pushSymbol);
                                             t.setReadSymbol(s);
                                             diagramView_configuration.invalidate();
                                         }
