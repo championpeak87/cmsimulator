@@ -66,4 +66,9 @@ public class ChessGameStackAdapter extends RecyclerView.Adapter<ChessGameStackAd
         notifyItemRemoved(listOfStackSymbols.size() - 1);
         return popSymbol;
     }
+
+    public void reset() {
+        notifyItemRangeRemoved(0, listOfStackSymbols.size());
+        listOfStackSymbols.clear();
+    }
 }

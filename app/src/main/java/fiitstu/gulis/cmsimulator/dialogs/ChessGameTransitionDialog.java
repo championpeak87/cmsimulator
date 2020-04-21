@@ -280,27 +280,29 @@ public class ChessGameTransitionDialog extends DialogFragment {
                 alertBuilder.setTitle(R.string.edit_transition);
                 break;
         }
-        for (Transition t : fromTransitionList) {
-            Symbol s = t.getReadSymbol();
-            String value = s.getValue();
+        if (automata_type == AUTOMATA_TYPE.FINITE) {
+            for (Transition t : fromTransitionList) {
+                Symbol s = t.getReadSymbol();
+                String value = s.getValue();
 
 
-            if (t.equals(transition))
-                continue;
+                if (t.equals(transition))
+                    continue;
 
-            switch (value) {
-                case Symbol.MOVEMENT_UP:
-                    togglebutton_up.setEnabled(false);
-                    break;
-                case Symbol.MOVEMENT_DOWN:
-                    togglebutton_down.setEnabled(false);
-                    break;
-                case Symbol.MOVEMENT_RIGHT:
-                    togglebutton_right.setEnabled(false);
-                    break;
-                case Symbol.MOVEMENT_LEFT:
-                    togglebutton_left.setEnabled(false);
-                    break;
+                switch (value) {
+                    case Symbol.MOVEMENT_UP:
+                        togglebutton_up.setEnabled(false);
+                        break;
+                    case Symbol.MOVEMENT_DOWN:
+                        togglebutton_down.setEnabled(false);
+                        break;
+                    case Symbol.MOVEMENT_RIGHT:
+                        togglebutton_right.setEnabled(false);
+                        break;
+                    case Symbol.MOVEMENT_LEFT:
+                        togglebutton_left.setEnabled(false);
+                        break;
+                }
             }
         }
 

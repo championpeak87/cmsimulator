@@ -68,8 +68,7 @@ public class ChessGameStackSymbolAdapter extends RecyclerView.Adapter<ChessGameS
                 for (Symbol s : stackAlphabet) {
                     menu.add(s.getValue());
                 }
-                if (itemHolder.getLayoutPosition() != 0)
-                    menu.add(R.string.remove);
+                menu.add(R.string.remove);
 
                 popupMenu.show();
             }
@@ -102,7 +101,7 @@ public class ChessGameStackSymbolAdapter extends RecyclerView.Adapter<ChessGameS
         notifyItemInserted(stackSymbols.lastIndexOf(s));
     }
 
-    public void changeSymbol(int position, Symbol s){
+    public void changeSymbol(int position, Symbol s) {
         stackSymbols.set(position, s);
         notifyItemChanged(position);
     }

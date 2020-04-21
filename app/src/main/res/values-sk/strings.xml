@@ -1379,7 +1379,8 @@
     <string name="everything_ready">Všetko je pripravené</string>
     <string name="lets_start">Poďme na to</string>
     <string name="give">Udeliť</string>
-    <string name="set_stack_alphabet">Set stack alphabet</string>
-    <string name="add_new_symbol">Add new symbol</string>
-    <string name="add_new_stack_symbol">Add new stack symbol</string>
+    <string name="set_stack_alphabet">Nastaviť zásobníkovú abecedu</string>
+    <string name="add_new_symbol">Pridať nový znak</string>
+    <string name="add_new_stack_symbol">Pridať nový zásobníkový symbol</string>
+    <string name="symbol_in_use">Symbol sa používa!</string>
 </resources>

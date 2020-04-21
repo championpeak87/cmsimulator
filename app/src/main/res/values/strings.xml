@@ -1420,5 +1420,6 @@
     <string name="set_stack_alphabet">Set stack alphabet</string>
     <string name="add_new_symbol">Add new symbol</string>
     <string name="add_new_stack_symbol">Add new stack symbol</string>
+    <string name="symbol_in_use">Symbol is in use</string>
 
 </resources>

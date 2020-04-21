@@ -126,8 +126,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
     private DiagramView diagramView_configuration;
     private RecyclerView recycler_view_stack;
 
-    private List<Symbol> stack = new ArrayList<>();
+    private List<Symbol> stack;
     private ChessGameStackAdapter chessGameStackAdapter;
+    private Symbol initStackSymbol;
 
     //onCreate method
     @Override
@@ -147,9 +148,6 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
 
         loadGame();
         setActionBar();
-        setUIElements();
-        setEvents();
-        setChessField();
 
         if (chessGame.getAutomata_type() == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
             stackAlphabet = dataSource.getStackAlphabetFullExtract();
@@ -157,15 +155,21 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             for (Symbol s : stackAlphabet) {
                 if (s.getProperties() == Symbol.STACK_BOTTOM) {
                     foundInitStack = true;
+                    initStackSymbol = s;
                     break;
                 }
             }
             if (!foundInitStack) {
-                Symbol initSymbol = dataSource.addStackSymbol("Z", Symbol.STACK_BOTTOM);
-                stackAlphabet.add(initSymbol);
-                stack.add(initSymbol);
+                initStackSymbol = dataSource.addStackSymbol("Z", Symbol.STACK_BOTTOM);
+                stackAlphabet.add(initStackSymbol);
             }
+            stack = new ArrayList<>();
+            pushSymbol(initStackSymbol);
         }
+
+        setUIElements();
+        setEvents();
+        setChessField();
 
         Intent intent = this.getIntent();
         task_id = intent.getIntExtra(TASK_ID_KEY, -1);
@@ -196,7 +200,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         chessGameStackAdapter = new ChessGameStackAdapter(stack, this);
         recycler_view_stack.setAdapter(chessGameStackAdapter);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
         recycler_view_stack.setLayoutManager(layoutManager);
         recycler_view_stack.setAdapter(chessGameStackAdapter);
 
@@ -533,7 +539,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 if (getInitialState() != null) {
                     if (!isFieldVisible)
                         imagebutton_drop_up.callOnClick();
+                    chessGameStackAdapter.reset();
+                    List<Symbol> init = new ArrayList<>();
+                    init.add(initStackSymbol);
+                    chessGameStackAdapter.pushSymbol(init);
                     stack = new ArrayList<>();
+                    pushSymbol(initStackSymbol);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -601,8 +612,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             dataSource.open();
             stateList = dataSource.getStateFullExtract();
             List<Symbol> inputAlphabet = dataSource.getInputAlphabetFullExtract();
+            stackAlphabet = dataSource.getStackAlphabetFullExtract();
             if (automata_type == fiitstu.gulis.cmsimulator.models.tasks.automata_type.PUSHDOWN_AUTOMATA) {
-                transitions = dataSource.getPdaTransitionFullExtract(inputAlphabet, inputAlphabet, stateList);
+                transitions = dataSource.getPdaTransitionFullExtract(inputAlphabet, stackAlphabet, stateList);
             } else
                 transitions = dataSource.getFsaTransitionFullExtract(inputAlphabet, stateList);
 
@@ -661,6 +673,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dataSource.open();
+                        dataSource.globalDrop();
+                        dataSource.close();
                         ChessGameActivity.super.onBackPressed();
                     }
                 }).create();
@@ -1134,7 +1149,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
-                            //chessGameStackAdapter.popSymbol(popList);
+                            chessGameStackAdapter.popSymbol(popList);
                             chessGameStackAdapter.pushSymbol(pushList);
                             recycler_view_stack.smoothScrollToPosition(stack.size() - 1);
                             return;
@@ -1149,9 +1164,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
+                            chessGameStackAdapter.popSymbol(popList);
                             chessGameStackAdapter.pushSymbol(pushList);
                             recycler_view_stack.smoothScrollToPosition(stack.size() - 1);
-                            //chessGameStackAdapter.popSymbol(popList);
                             return;
                         }
                     }
@@ -1164,7 +1179,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
-                            //chessGameStackAdapter.popSymbol(popList);
+                            chessGameStackAdapter.popSymbol(popList);
                             chessGameStackAdapter.pushSymbol(pushList);
                             recycler_view_stack.smoothScrollToPosition(stack.size() - 1);
                             return;
@@ -1179,7 +1194,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
-                            //chessGameStackAdapter.popSymbol(popList);
+                            chessGameStackAdapter.popSymbol(popList);
                             chessGameStackAdapter.pushSymbol(pushList);
                             recycler_view_stack.smoothScrollToPosition(stack.size() - 1);
                             return;

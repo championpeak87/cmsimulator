@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import fiitstu.gulis.cmsimulator.R;
 import fiitstu.gulis.cmsimulator.database.DataSource;
+import fiitstu.gulis.cmsimulator.elements.PdaTransition;
 import fiitstu.gulis.cmsimulator.elements.Symbol;
+import fiitstu.gulis.cmsimulator.elements.Transition;
 
 import java.util.List;
 
@@ -45,10 +48,34 @@ public class StackAlphabetAdapter extends RecyclerView.Adapter<StackAlphabetAdap
         itemHolder.imagebutton_stack_symbol_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteSymbol(currentSymbol);
-                stackAlphabet.remove(currentSymbol);
                 DataSource dataSource = DataSource.getInstance();
                 dataSource.open();
+                List<Transition> transitions = dataSource.getPdaTransitionFullExtract(
+                        dataSource.getInputAlphabetFullExtract(),
+                        dataSource.getStackAlphabetFullExtract(),
+                        dataSource.getStateFullExtract());
+
+                for (Transition t : transitions) {
+                    PdaTransition pt = (PdaTransition) t;
+                    List<Symbol> popList = pt.getPopSymbolList();
+                    List<Symbol> pushList = pt.getPushSymbolList();
+                    for (Symbol s : popList) {
+                        if (s.getValue().equals(currentSymbol.getValue()))
+                        {
+                            Toast.makeText(mContext, R.string.symbol_in_use, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                    for (Symbol s : pushList) {
+                        if (s.getValue().equals(currentSymbol.getValue()))
+                        {
+                            Toast.makeText(mContext, R.string.symbol_in_use, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }
+                deleteSymbol(currentSymbol);
+                stackAlphabet.remove(currentSymbol);
                 dataSource.deleteStackSymbol(currentSymbol);
             }
         });

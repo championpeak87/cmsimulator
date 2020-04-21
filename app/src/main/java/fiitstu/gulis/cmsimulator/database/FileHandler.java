@@ -534,6 +534,7 @@ public class FileHandler {
 
         // STATES
         List<State> stateList = new ArrayList<>();
+        LongSparseArray<Long> stateIdMap = new LongSparseArray<>();
         LongSparseArray<State> stateMap = new LongSparseArray<>();
         {
             NodeList statesNodeList = document.getElementsByTagName(STATES);
@@ -552,6 +553,9 @@ public class FileHandler {
                 NamedNodeMap namedNodeMap = field.getAttributes();
                 if (namedNodeMap == null)
                     continue;
+                Node id = namedNodeMap.getNamedItem(ID);
+                String s_id = id.getNodeValue();
+
                 Node x = namedNodeMap.getNamedItem(X);
                 String s_x = x.getNodeValue();
 
@@ -568,12 +572,14 @@ public class FileHandler {
                 String s_name = name.getNodeValue();
 
                 State state = dataSource.addState(s_name, Integer.parseInt(s_x), Integer.parseInt(s_y), Boolean.parseBoolean(s_initial), Boolean.parseBoolean(s_final));
+                stateIdMap.append(Long.parseLong(s_id), state.getId());
                 stateMap.append(state.getId(), state);
                 stateList.add(state);
             }
         }
 
         // STACK ALPHABET
+        LongSparseArray<Symbol> alphabetMap = new LongSparseArray<>();
         {
             if (autotype == automata_type.PUSHDOWN_AUTOMATA) {
                 NodeList stackAlphabetNodeList = document.getElementsByTagName(STACK_ALPHABET);
@@ -591,7 +597,8 @@ public class FileHandler {
                     Node property = symbolAttrs.getNamedItem(PROPERTIES);
                     String s_property = property.getNodeValue();
 
-                    dataSource.addStackSymbol(s_value, Integer.parseInt(s_property));
+                    Symbol s = dataSource.addStackSymbol(s_value, Integer.parseInt(s_property));
+                    alphabetMap.append(s.getId(), s);
                 }
             }
 
@@ -623,30 +630,47 @@ public class FileHandler {
                     Node read = namedNodeMap.getNamedItem(READ);
                     String s_read = read.getNodeValue();
 
-                    State fromState = stateMap.get(Long.parseLong(s_from));
-                    State toState = stateMap.get(Long.parseLong(s_to));
+                    long newFromId = stateIdMap.get(Long.parseLong(s_from));
+                    long newToId = stateIdMap.get(Long.parseLong(s_to));
+                    State fromState = stateMap.get(newFromId);
+                    State toState = stateMap.get(newToId);
                     Symbol readSymbol = getSymbol(s_read, dataSource.getInputAlphabetFullExtract());
 
-                    Node pop, push;
-                    String s_pop, s_push;
                     if (autotype == automata_type.PUSHDOWN_AUTOMATA) {
-                        pop = namedNodeMap.getNamedItem(POP);
-                        s_pop = pop.getNodeValue();
+                        NodeList transitionNodeList = field.getChildNodes();
+                        final int transitionListSize = transitionNodeList.getLength();
 
-                        push = namedNodeMap.getNamedItem(PUSH);
-                        s_push = push.getNodeValue();
+                        List<Symbol> popSymbols = new ArrayList<>();
+                        List<Symbol> pushSymbols = new ArrayList<>();
+                        for (int j = 0; j < transitionListSize; j++) {
+                            Node symbolNode = transitionNodeList.item(j);
+                            NodeList symbolsNodeList = symbolNode.getChildNodes();
+                            final int symbolListSize = symbolsNodeList.getLength();
+                            for (int k = 0; k < symbolListSize; k++) {
+                                Node symbol = symbolsNodeList.item(k);
+                                NamedNodeMap symbolAttribs = symbol.getAttributes();
+                                if (symbolAttribs == null)
+                                    continue;
 
-                        List<Symbol> popList = new ArrayList<>();
-                        List<Symbol> pushList = new ArrayList<>();
-                        List<Symbol> inputAlphabet = DataSource.getInstance().getInputAlphabetFullExtract();
-                        popList.add(getSymbol(s_pop, inputAlphabet));
-                        pushList.add(getSymbol(s_push, inputAlphabet));
+                                Node id = symbolAttribs.getNamedItem(ID);
+                                Node value = symbolAttribs.getNamedItem(VALUE);
+                                Node properties = symbolAttribs.getNamedItem(PROPERTIES);
 
-                        dataSource.open();
-                        PdaTransition t = (PdaTransition) dataSource.addPdaTransition(fromState, readSymbol, toState, emptyInputSymbolId, popList, pushList);
+                                Long s_id = Long.parseLong(id.getNodeValue());
+                                String s_value = value.getNodeValue();
+                                int s_properties = Integer.parseInt(properties.getNodeValue());
+
+                                Symbol s = alphabetMap.get(s_id);
+                                String symbolsState = symbolNode.getNodeName();
+                                if (symbolsState.equals(POP))
+                                    popSymbols.add(s);
+                                else if (symbolsState.equals(PUSH))
+                                    pushSymbols.add(s);
+                            }
+                        }
+                        PdaTransition t = (PdaTransition) dataSource.addPdaTransition(fromState, readSymbol, toState, emptyInputSymbolId, popSymbols, pushSymbols);
                         transitionList.add(t);
                     } else {
-                        dataSource.open();
                         FsaTransition f = (FsaTransition) dataSource.addFsaTransition(fromState, readSymbol, toState, emptyInputSymbolId);
                         transitionList.add(f);
                     }
@@ -713,7 +737,7 @@ public class FileHandler {
         }
     }
 
-    public void writeGame(ChessGame game) throws ParserConfigurationException {
+    public void writeGame(ChessGame game) {
         Element gameElement = document.createElement(CHESS_GAME);
         document.appendChild(gameElement);
 
@@ -799,11 +823,29 @@ public class FileHandler {
                     transition.setAttribute(TO, Long.toString(t.getToState().getId()));
                     transition.setAttribute(READ, t.getReadSymbol().getValue());
                     StringBuilder popString = new StringBuilder();
-                    for (Symbol s : trans.getPopSymbolList()) {
-                        popString.append(s.getValue());
+
+                    List<Symbol> listOfPopSymbols = trans.getPopSymbolList();
+                    List<Symbol> listOfPushSymbols = trans.getPushSymbolList();
+
+                    Element pop = document.createElement(POP);
+                    for (Symbol s : listOfPopSymbols) {
+                        Element popSymbol = document.createElement(SYMBOL);
+                        popSymbol.setAttribute(ID, Long.toString(s.getId()));
+                        popSymbol.setAttribute(VALUE, s.getValue());
+                        popSymbol.setAttribute(PROPERTIES, Integer.toString(s.getProperties()));
+                        pop.appendChild(popSymbol);
                     }
-                    transition.setAttribute(POP, trans.getPopSymbolList().get(0).getValue());
-                    transition.setAttribute(PUSH, trans.getPushSymbolList().get(0).getValue());
+                    transition.appendChild(pop);
+
+                    Element push = document.createElement(PUSH);
+                    for (Symbol s : listOfPushSymbols) {
+                        Element pushSymbol = document.createElement(SYMBOL);
+                        pushSymbol.setAttribute(ID, Long.toString(s.getId()));
+                        pushSymbol.setAttribute(VALUE, s.getValue());
+                        pushSymbol.setAttribute(PROPERTIES, Integer.toString(s.getProperties()));
+                        push.appendChild(pushSymbol);
+                    }
+                    transition.appendChild(push);
                 } else if (game.getAutomata_type() == automata_type.FINITE_AUTOMATA) {
                     transition.setAttribute(ID, Long.toString(t.getId()));
                     transition.setAttribute(FROM, Long.toString(t.getFromState().getId()));
