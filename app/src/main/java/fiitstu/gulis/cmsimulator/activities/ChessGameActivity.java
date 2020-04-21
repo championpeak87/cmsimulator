@@ -164,7 +164,7 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                 stackAlphabet.add(initStackSymbol);
             }
             stack = new ArrayList<>();
-            pushSymbol(initStackSymbol);
+            stack.add(initStackSymbol);
         }
 
         setUIElements();
@@ -540,11 +540,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                     if (!isFieldVisible)
                         imagebutton_drop_up.callOnClick();
                     chessGameStackAdapter.reset();
-                    List<Symbol> init = new ArrayList<>();
-                    init.add(initStackSymbol);
-                    chessGameStackAdapter.pushSymbol(init);
                     stack = new ArrayList<>();
-                    pushSymbol(initStackSymbol);
+                    stack.add(initStackSymbol);
+                    chessGameStackAdapter.pushSymbol(stack);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -1137,15 +1135,12 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
             List<Symbol> popList = ((PdaTransition) t).getPopSymbolList();
             List<Symbol> pushList = ((PdaTransition) t).getPushSymbolList();
 
-            Symbol pop = popList.get(0);
-            Symbol push = pushList.get(0);
-
             switch (movement) {
                 case Symbol.MOVEMENT_UP:
                     if (up) {
-                        if (popSymbol(pop)) {
+                        if (popSymbol(popList)) {
                             moveUp();
-                            pushSymbol(push);
+                            pushSymbol(pushList);
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
@@ -1158,9 +1153,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                     break;
                 case Symbol.MOVEMENT_DOWN:
                     if (down) {
-                        if (popSymbol(pop)) {
+                        if (popSymbol(popList)) {
                             moveDown();
-                            pushSymbol(push);
+                            pushSymbol(pushList);
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
@@ -1173,9 +1168,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                     break;
                 case Symbol.MOVEMENT_LEFT:
                     if (left) {
-                        if (popSymbol(pop)) {
+                        if (popSymbol(popList)) {
                             moveLeft();
-                            pushSymbol(push);
+                            pushSymbol(pushList);
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
@@ -1188,9 +1183,9 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
                     break;
                 case Symbol.MOVEMENT_RIGHT:
                     if (right) {
-                        if (popSymbol(pop)) {
+                        if (popSymbol(popList)) {
                             moveRight();
-                            pushSymbol(push);
+                            pushSymbol(pushList);
                             currentState = t.getToState();
                             currentStateTransitions = getStatesTransitions(currentState);
                             activeField = chessview_field.getActiveField();
@@ -1216,26 +1211,27 @@ public class ChessGameActivity extends FragmentActivity implements DiagramView.I
         return null;
     }
 
-    private boolean popSymbol(Symbol s) {
-        if (s.getValue().equals(Symbol.EMPTY_SYMBOL))
-            return true;
-        Symbol lastSymbol = getLastSymbolFromStack();
+    private boolean popSymbol(List<Symbol> s) {
+        if (s.size() > 0) {
+            for (Symbol symbol : s) {
+                Symbol lastSymbol = getLastSymbolFromStack();
 
-        if (lastSymbol != null && lastSymbol.getValue().equals(s.getValue())) {
-            stack.remove(stack.size() - 1);
-            return true;
-        } else return false;
+                if (lastSymbol != null && lastSymbol.getValue().equals(symbol.getValue())) {
+                    stack.remove(stack.size() - 1);
+                } else return false;
+            }
+        }
+        return true;
     }
 
-    private void pushSymbol(Symbol s) {
-        if (!s.getValue().equals(Symbol.EMPTY_SYMBOL))
-            stack.add(s);
+    private void pushSymbol(List<Symbol> s) {
+        if (s.size() > 0) {
+            for (int i = s.size() -1; i >= 0 ; i--)
+            {
+                Symbol symbol = s.get(i);
+                if (!symbol.getValue().equals(Symbol.EMPTY_SYMBOL))
+                    stack.add(symbol);
+            }
+        }
     }
-
-    private boolean isStackEmpty() {
-        final int stackSize = stack.size();
-
-        return stackSize == 0;
-    }
-
 }

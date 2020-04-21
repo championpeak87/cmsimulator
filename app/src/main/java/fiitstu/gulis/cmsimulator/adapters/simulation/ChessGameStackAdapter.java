@@ -55,16 +55,23 @@ public class ChessGameStackAdapter extends RecyclerView.Adapter<ChessGameStackAd
     }
 
     public void pushSymbol(List<Symbol> symbols) {
-        final int preSize = listOfStackSymbols.size();
-        listOfStackSymbols.addAll(symbols);
-        notifyItemRangeInserted(preSize, symbols.size());
+        if (symbols.size() > 0) {
+            final int preSize = listOfStackSymbols.size();
+            for (int i = symbols.size() - 1; i >= 0; i--) {
+                Symbol s = symbols.get(i);
+                listOfStackSymbols.add(s);
+            }
+            notifyItemRangeInserted(preSize, symbols.size());
+        }
     }
 
     public Symbol popSymbol(List<Symbol> symbols) {
-        final Symbol popSymbol = listOfStackSymbols.get(listOfStackSymbols.size() - 1);
-        listOfStackSymbols.remove(popSymbol);
-        notifyItemRemoved(listOfStackSymbols.size() - 1);
-        return popSymbol;
+        if (symbols.size() > 0) {
+            final Symbol popSymbol = listOfStackSymbols.get(listOfStackSymbols.size() - 1);
+            notifyItemRemoved(listOfStackSymbols.size() - 1);
+            listOfStackSymbols.remove(popSymbol);
+            return popSymbol;
+        } else return null;
     }
 
     public void reset() {
