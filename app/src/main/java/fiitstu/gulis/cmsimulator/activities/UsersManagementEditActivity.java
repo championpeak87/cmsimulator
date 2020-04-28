@@ -247,7 +247,7 @@ public class UsersManagementEditActivity extends FragmentActivity {
         newValuesBundle.putString("FIRST_NAME", first_name);
         newValuesBundle.putString("LAST_NAME", last_name);
         newValuesBundle.putString("PASSWORD_HASH", password_hash);
-        UsersManagmentActivity.notifyUpdate(item_position, newValuesBundle, UsersManagmentActivity.layout);
+        //UsersManagmentActivity.notifyUpdate(item_position, newValuesBundle, UsersManagmentActivity.layout);
         onBackPressed();
     }
 

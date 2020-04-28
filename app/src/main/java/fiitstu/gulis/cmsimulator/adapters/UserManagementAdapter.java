@@ -112,7 +112,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
             holder.usertype.setText(usertype);
 
             if (view_results) {
-                UsersManagmentActivity.context.setActionBarTitle();
+                ((UsersManagmentActivity)mContext).setActionBarTitle();
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -127,7 +127,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
                     }
                 });
             } else if (view_grammar_results) {
-                UsersManagmentActivity.context.setActionBarTitle();
+                ((UsersManagmentActivity)mContext).setActionBarTitle();
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

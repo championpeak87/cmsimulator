@@ -41,14 +41,12 @@ import java.util.List;
 
 public class UsersManagmentActivity extends FragmentActivity implements InfiniteScrollListener.OnLoadMoreListener {
 
-    public static String authkey;
-    public static int logged_user_id;
-    public static UserManagementAdapter adapter;
-    public static RecyclerView.LayoutManager layout;
-    private static List<User> userList;
-    public static Context mContext;
+    public String authkey;
+    public int logged_user_id;
+    public UserManagementAdapter adapter;
+    public RecyclerView.LayoutManager layout;
+    private List<User> userList;
     private int userCount;
-    public static UsersManagmentActivity context;
     InfiniteScrollListener infiniteScrollListener;
     private boolean view_automata_task_results = false;
     private boolean view_grammar_task_results = false;
@@ -100,9 +98,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        context = this;
         this.setContentView(R.layout.activity_users_management);
-        mContext = this;
 
         view_automata_task_results = getIntent().getBooleanExtra("VIEW_AUTOMATA_RESULTS", false);
         view_grammar_task_results = getIntent().getBooleanExtra("VIEW_GRAMMAR_RESULTS", false);
@@ -133,7 +129,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         return true;
     }
 
-    public static List<User> getUserList() {
+    public List<User> getUserList() {
         return userList;
     }
 
@@ -198,7 +194,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                 protected void onPostExecute(List<User> users) {
                                     super.onPostExecute(users);
 
-                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results, view_grammar_task_results);
+                                    UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.this, users, view_automata_task_results, view_grammar_task_results);
                                     setAdapter(adapter);
                                     showLoadScreen(false);
                                     setUserList(users);
@@ -218,7 +214,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         @Override
         protected List<User> doInBackground(Void... voids) {
             UrlManager urlManager = new UrlManager();
-            int offset = 20 * ((adapter.getItemCount() / 20));
+            int offset = adapter.getItemCount();
             URL getUsersURL = urlManager.getAllUsersUrl(authkey, offset);
 
             ServerController serverController = new ServerController();
@@ -282,7 +278,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             super.onPostExecute(users);
 
             showLoadScreen(false);
-            adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, users, view_automata_task_results, view_grammar_task_results);
+            adapter = new UserManagementAdapter(UsersManagmentActivity.this, users, view_automata_task_results, view_grammar_task_results);
             if (users.size() != userCount)
                 adapter.addNullData();
             setAdapter(adapter);
@@ -300,7 +296,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-
                 return true;
             case R.id.menu_reload_users:
                 reloadUsers();
@@ -317,8 +312,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     }
 
     public void filterUsers() {
-
-
         final AlertDialog filterDialog = new AlertDialog.Builder(this)
                 .setView(R.layout.dialog_users_filter)
                 .setTitle(R.string.filter)
@@ -326,13 +319,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                 .setPositiveButton(R.string.OK, new Dialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Comparator selectedComparator = null;
-
-                        final int ASCENDING = 1;
-                        final int DESCENDING = 2;
-
-                        int orderPosition = 0;
-
                         RadioGroup order = ((AlertDialog) dialog).findViewById(R.id.radiogroup_order);
                         RadioGroup orderby = ((AlertDialog) dialog).findViewById(R.id.radiogroup_orderby);
 
@@ -395,7 +381,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                                     UserParser userParser = new UserParser();
                                     try {
                                         List<User> orderedUsers = userParser.getListOfUsers(s);
-                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.mContext, orderedUsers, view_automata_task_results, view_grammar_task_results);
+                                        UserManagementAdapter adapter = new UserManagementAdapter(UsersManagmentActivity.this, orderedUsers, view_automata_task_results, view_grammar_task_results);
                                         setAdapter(adapter);
                                         showLoadScreen(false);
                                         setUserList(orderedUsers);
@@ -487,7 +473,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         getWindow().setExitTransition(fade);
     }
 
-    public static void notifyUpdate(int position, Bundle newValues, RecyclerView.LayoutManager layout) {
+    public void notifyUpdate(int position, Bundle newValues, RecyclerView.LayoutManager layout) {
         View view = layout.findViewByPosition(position);
         TextView fullname = view.findViewById(R.id.textview_full_name);
         TextView usertype = view.findViewById(R.id.textview_user_type);
@@ -507,7 +493,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         final int userid = userList.get(position).getUser_id();
         User updatedUser;
 
-        if (s_usertype == mContext.getString(R.string.lector)) {
+        if (s_usertype == getString(R.string.lector)) {
             updatedUser = new Lector();
             updatedUser.setUsername(s_username);
             updatedUser.setAuth_key(s_passwordhash);
@@ -515,7 +501,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             updatedUser.setLast_name(s_lastname);
             updatedUser.setUsername(s_username);
             updatedUser.setUser_id(userid);
-        } else if (s_usertype == mContext.getString(R.string.admin)) {
+        } else if (s_usertype == getString(R.string.admin)) {
             updatedUser = new Admin();
             updatedUser.setUsername(s_username);
             updatedUser.setAuth_key(s_passwordhash);

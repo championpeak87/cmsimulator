@@ -310,6 +310,10 @@ public class TaskDialog extends DialogFragment {
                     if (TaskLoginActivity.loggedUser == null)
                         outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.LOAD_MACHINE);
                     else {
+                        DataSource dataSource = DataSource.getInstance();
+                        dataSource.open();
+                        dataSource.globalDrop();
+                        dataSource.close();
                         if (mode == PREVIEW) {
                             outputBundle.putInt(MainActivity.CONFIGURATION_TYPE, MainActivity.PREVIEW_TASK);
                         } else {
