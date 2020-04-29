@@ -268,10 +268,13 @@ public class MainActivity extends FragmentActivity
                 Uri uri = data.getData();
                 String path = uri.getPath();
                 String[] temp = path.split("\\.");
-                if (temp[temp.length - 1].equals("cms") || temp[temp.length - 1].equals("cmst")) {
+                if (temp[temp.length - 1].equals("cms") || temp[temp.length - 1].equals("cmst") || temp[temp.length - 1].equals("jff")) {
                     Bundle outputBundle = new Bundle();
                     outputBundle.putInt(CONFIGURATION_TYPE, LOAD_MACHINE);
-                    outputBundle.putBoolean(DEFAULT_FORMAT, true);
+                    if (temp[temp.length - 1].equals("jff"))
+                        outputBundle.putBoolean(DEFAULT_FORMAT, false);
+                    else
+                        outputBundle.putBoolean(DEFAULT_FORMAT, true);
                     outputBundle.putString(FILE_NAME, path);
                     Log.v(TAG, "outputBundle initialized");
 

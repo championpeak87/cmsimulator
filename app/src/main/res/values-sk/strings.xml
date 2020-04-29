@@ -1301,7 +1301,7 @@
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
         <b>-</b>
-        Opravy stability
+        Opravené otváranie .cms súborov
     </string>
     <string name="regex_help" formatted="true">
         <b>*</b>
@@ -1383,4 +1383,6 @@
     <string name="add_new_symbol">Pridať nový znak</string>
     <string name="add_new_stack_symbol">Pridať nový zásobníkový symbol</string>
     <string name="symbol_in_use">Symbol sa používa!</string>
+    <string name="known_issues">Známe chyby</string>
+    <string name="known_issues_content">- Nie je možné otvoriť .jff automaty</string>
 </resources>

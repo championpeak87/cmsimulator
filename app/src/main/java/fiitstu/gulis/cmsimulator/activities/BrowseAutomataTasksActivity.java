@@ -164,7 +164,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
         // set recyclerview
         RecyclerView recyclerViewTasks = findViewById(R.id.recyclerview_tasks);
         if (adapter == null) {
-            adapter = new AutomataTaskAdapter(this, listOfTasks, view_results);
+            adapter = new AutomataTaskAdapter(this, listOfTasks, view_results, user_id);
         } else adapter.setListOfTasks(listOfTasks);
         if (listOfTasks.size() == 0) {
             LinearLayout emptyTasks = findViewById(R.id.linearLayout_empty_tasks);

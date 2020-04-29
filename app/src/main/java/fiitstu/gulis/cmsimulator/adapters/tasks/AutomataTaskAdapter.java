@@ -61,14 +61,16 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
 
     private static final String TASK_DIALOG = "TASK_DIALOG";
     private boolean view_results;
+    private int user_id;
 
     private Context mContext;
     private List<Task> listOfTasks = null;
 
-    public AutomataTaskAdapter(Context mContext, List<Task> listOfTasks, boolean view_results) {
+    public AutomataTaskAdapter(Context mContext, List<Task> listOfTasks, boolean view_results, int user_id) {
         this.listOfTasks = listOfTasks;
         this.view_results = view_results;
         this.mContext = mContext;
+        this.user_id = user_id;
     }
 
     public void setListOfTasks(List<Task> listOfTasks) {
@@ -183,7 +185,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
             @Override
             public void onClick(View v) {
                 final int task_id = currentTask.getTask_id();
-                final int user_id = TaskLoginActivity.loggedUser.getUser_id();
+                final int user_id = AutomataTaskAdapter.this.user_id;
 
                 TaskStatusDialog taskStatusDialog = new TaskStatusDialog();
                 taskStatusDialog.setContext(mContext);
@@ -266,7 +268,7 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         if (TaskLoginActivity.loggedUser == null)
                             user_id = -1;
                         else
-                            user_id = TaskLoginActivity.loggedUser.getUser_id();
+                            user_id = AutomataTaskAdapter.this.user_id;
                         URL downloadUrl = urlManager.getAutomataTaskDownloadURL(currentTask.getTask_id(), user_id);
                         ServerController serverController = new ServerController();
                         String output = null;
@@ -303,11 +305,11 @@ public class AutomataTaskAdapter extends RecyclerView.Adapter<AutomataTaskAdapte
                         }
 
                         if (AutomataTaskAdapter.this.view_results) {
-                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.PREVIEW, machineType);
+                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.PREVIEW, machineType, user_id);
                             taskDialog.setAdapter(thisAdapter);
                             taskDialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), TASK_DIALOG);
                         } else {
-                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType);
+                            TaskDialog taskDialog = TaskDialog.newInstance(currentTask, TaskDialog.ENTERING, machineType, user_id);
                             taskDialog.setAdapter(thisAdapter);
                             taskDialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), TASK_DIALOG);
                         }

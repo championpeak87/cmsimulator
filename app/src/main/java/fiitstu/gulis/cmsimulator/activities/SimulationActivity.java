@@ -869,13 +869,15 @@ public class SimulationActivity extends FragmentActivity
                 submitTaskButton.setVisible(true);
             }
             if (configurationType == MainActivity.EDIT_TASK ||
-                    (configurationType == MainActivity.SOLVE_TASK && task.getPublicInputs()) ||
-                    (configurationType == MainActivity.PREVIEW_TASK && task.getPublicInputs()) ||
-                    (configurationType == MainActivity.LOAD_MACHINE && task.getPublicInputs())) {
-                menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
-                menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
-                menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);
-                menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
+                    configurationType == MainActivity.SOLVE_TASK ||
+                    configurationType == MainActivity.PREVIEW_TASK ||
+                    configurationType == MainActivity.LOAD_MACHINE) {
+                if (task != null && task.getPublicInputs()) {
+                    menu.findItem(R.id.menu_simulation_bulk_test).setTitle(R.string.correct_inputs);
+                    menu.findItem(R.id.menu_simulation_bulk_test).setVisible(true);
+                    menu.findItem(R.id.menu_simulation_negative_test).setTitle(R.string.incorrect_inputs);
+                    menu.findItem(R.id.menu_simulation_negative_test).setVisible(true);
+                }
             }
         }
 
@@ -1841,6 +1843,8 @@ public class SimulationActivity extends FragmentActivity
             FileHandler fileHandler = new FileHandler(format);
             fileHandler.loadFile(filename);
             machineType = fileHandler.getMachineType();
+            dataSource.open();
+            dataSource.globalDrop();
             fileHandler.getData(dataSource);
             emptyInputSymbolId = fileHandler.getEmptyInputSymbolId();
             if (machineType == MainActivity.PUSHDOWN_AUTOMATON) {

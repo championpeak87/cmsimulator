@@ -1421,5 +1421,7 @@
     <string name="add_new_symbol">Add new symbol</string>
     <string name="add_new_stack_symbol">Add new stack symbol</string>
     <string name="symbol_in_use">Symbol is in use</string>
+    <string name="known_issues">Known issues</string>
+    <string name="known_issues_content">- Unable to open .jff automatas</string>
 
 </resources>

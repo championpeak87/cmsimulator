@@ -44,7 +44,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
     public String authkey;
     public int logged_user_id;
     public UserManagementAdapter adapter;
-    public RecyclerView.LayoutManager layout;
+    public GridLayoutManager layout;
     private List<User> userList;
     private int userCount;
     InfiniteScrollListener infiniteScrollListener;
@@ -57,8 +57,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             @Override
             public void run() {
                 new LoadMoreUsersAsync().execute();
-
-                infiniteScrollListener.setLoaded();
             }
         }, 500);
     }
@@ -74,9 +72,8 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                 output = serverController.getResponseFromServer(url);
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                return output;
             }
+            return output;
         }
 
         @Override
@@ -87,6 +84,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                 try {
                     JSONObject jsonObject = new JSONObject(s);
                     userCount = jsonObject.getInt("count");
+                    reloadUsers();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -103,8 +101,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         view_automata_task_results = getIntent().getBooleanExtra("VIEW_AUTOMATA_RESULTS", false);
         view_grammar_task_results = getIntent().getBooleanExtra("VIEW_GRAMMAR_RESULTS", false);
 
-        new FetchUsersCountAsync().execute();
-
         authkey = TaskLoginActivity.loggedUser.getAuth_key();
         logged_user_id = TaskLoginActivity.loggedUser.getUser_id();
         // menu
@@ -112,12 +108,11 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.user_management);
 
-        reloadUsers();
+        new FetchUsersCountAsync().execute();
         setConnectedTransition();
     }
 
-    public void setActionBarTitle()
-    {
+    public void setActionBarTitle() {
         getActionBar().setTitle(R.string.select_user);
     }
 
@@ -181,9 +176,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
                                         UserParser userParser = new UserParser();
                                         listOfAllUsers = userParser.getListOfUsers(output);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } catch (JSONException e) {
+                                    } catch (IOException | JSONException e) {
                                         e.printStackTrace();
                                     }
 
@@ -222,12 +215,11 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
             List<User> listOfNewUsers = null;
             try {
                 output = serverController.getResponseFromServer(getUsersURL);
-
-                UserParser userParser = new UserParser();
-                listOfNewUsers = userParser.getListOfUsers(output);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+                if (!output.equals("ERROR")) {
+                    UserParser userParser = new UserParser();
+                    listOfNewUsers = userParser.getListOfUsers(output);
+                }
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
 
@@ -236,10 +228,13 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
         @Override
         protected void onPostExecute(List<User> users) {
-            adapter.removeNullData();
-            adapter.addUsers(users);
-            if (userList.size() != userCount)
-                adapter.addNullData();
+            if (users != null) {
+                adapter.removeNullData();
+                adapter.addUsers(users);
+                if (userList.size() != userCount)
+                    adapter.addNullData();
+            }
+            infiniteScrollListener.setLoaded();
         }
     }
 
@@ -264,9 +259,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
                 UserParser userParser = new UserParser();
                 listOfAllUsers = userParser.getListOfUsers(output);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
 
@@ -350,8 +343,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
                             ascending_bool = ascending.isChecked() ? true : false;
                         }
 
-                        class GetOrderedUsersAsync extends AsyncTask<URL, Void, String>
-                        {
+                        class GetOrderedUsersAsync extends AsyncTask<URL, Void, String> {
                             @Override
                             protected void onPreExecute() {
                                 showLoadScreen(true);
@@ -372,12 +364,9 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
 
                             @Override
                             protected void onPostExecute(String s) {
-                                if (s == null || s.isEmpty())
-                                {
+                                if (s == null || s.isEmpty()) {
                                     Toast.makeText(UsersManagmentActivity.this, R.string.generic_error, Toast.LENGTH_SHORT).show();
-                                }
-                                else
-                                {
+                                } else {
                                     UserParser userParser = new UserParser();
                                     try {
                                         List<User> orderedUsers = userParser.getListOfUsers(s);
@@ -420,7 +409,7 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         layout = new GridLayoutManager(this, noOfColumns);
         users.setLayoutManager(layout);
 
-        infiniteScrollListener = new InfiniteScrollListener((GridLayoutManager) layout, this);
+        infiniteScrollListener = new InfiniteScrollListener(layout, this);
         infiniteScrollListener.setLoaded();
         users.addOnScrollListener(infiniteScrollListener);
 
@@ -447,9 +436,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         RecyclerView users = this.findViewById(R.id.recyclerview_user_management);
 
         // fix recyclerview layout
-
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 
         int noOfColumns;
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -521,7 +507,6 @@ public class UsersManagmentActivity extends FragmentActivity implements Infinite
         }
 
         userList.set(position, updatedUser);
-
         adapter.notifyItemChanged(position);
     }
 

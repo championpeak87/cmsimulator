@@ -86,6 +86,7 @@ public class TaskDialog extends DialogFragment {
 
     private Timer timer;
     private AutomataTaskAdapter adapter;
+    private int user_id;
 
     public void setAdapter(AutomataTaskAdapter adapter) {
         this.adapter = adapter;
@@ -108,13 +109,14 @@ public class TaskDialog extends DialogFragment {
      * @param machineType the type of the machine (one of MainActivity's static members)
      * @return the created instance
      */
-    public static TaskDialog newInstance(Task task, int mode, int machineType) {
+    public static TaskDialog newInstance(Task task, int mode, int machineType, int user_id) {
         TaskDialog frag = new TaskDialog();
         Bundle args = new Bundle();
         args.putInt(MODE, mode);
         args.putInt(MainActivity.MACHINE_TYPE, machineType);
         args.putSerializable(TASK, task);
         frag.setArguments(args);
+        frag.user_id = user_id;
         return frag;
     }
 
@@ -326,7 +328,7 @@ public class TaskDialog extends DialogFragment {
                     final Task.TASK_STATUS currentStatus = task.getStatus();
                     if (TaskLoginActivity.loggedUser != null) {
                         if (currentStatus == Task.TASK_STATUS.NEW && mode != PREVIEW) {
-                            markAsStarted(Task.TASK_STATUS.IN_PROGRESS, TaskLoginActivity.loggedUser.getUser_id(), task.getTask_id());
+                            markAsStarted(Task.TASK_STATUS.IN_PROGRESS, user_id, task.getTask_id());
                             int position = adapter.getListOfTasks().indexOf(task);
                             adapter.notifyItemChanged(position);
                         }

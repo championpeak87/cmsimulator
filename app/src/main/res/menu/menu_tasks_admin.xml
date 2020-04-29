@@ -1,7 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="fiitstu.gulis.cmsimulator.activities.TasksActivity">
+      xmlns:tools="http://schemas.android.com/tools">
     <item android:id="@+id/menu_tasks_change_password"
           android:title="@string/change_password"
           android:showAsAction="ifRoom"
