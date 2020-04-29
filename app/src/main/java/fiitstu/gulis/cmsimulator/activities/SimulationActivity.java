@@ -401,7 +401,7 @@ public class SimulationActivity extends FragmentActivity
             case R.id.menu_save_task:
                 // COMPLETED: SAVE TASK TO CLOUD
                 final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
-                final int user_id = BrowseAutomataTasksActivity.user_id;
+                final int user_id = TaskLoginActivity.loggedUser != null ? TaskLoginActivity.loggedUser.getUser_id() : -1;
                 class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
                     @Override
                     protected String doInBackground(File... files) {
@@ -483,7 +483,7 @@ public class SimulationActivity extends FragmentActivity
                     @Override
                     public void submitTaskDialogClick() {
                         final String file_name = Integer.toString(task.getTask_id()) + "." + FileHandler.Format.CMST.toString().toLowerCase();
-                        final int user_id = BrowseAutomataTasksActivity.user_id;
+                        final int user_id = TaskLoginActivity.loggedUser != null ? TaskLoginActivity.loggedUser.getUser_id() : -1;
                         class SaveTaskToCloudAsync extends AsyncTask<File, Void, String> {
                             @Override
                             protected String doInBackground(File... files) {

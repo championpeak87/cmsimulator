@@ -44,6 +44,7 @@ public class UserManagementAdapter extends RecyclerView.Adapter<UserManagementAd
     private List<User> listOfUsers;
     private boolean view_results;
     private boolean view_grammar_results;
+    private int user_id;
 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_LOADING = 1;

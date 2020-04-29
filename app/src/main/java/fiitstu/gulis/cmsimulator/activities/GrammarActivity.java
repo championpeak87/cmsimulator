@@ -86,6 +86,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     // INTENT EXTRA KEYS
     public static final String EXAMPLE_GRAMMAR_KEY = "EXAMPLE_GRAMMAR";
     public static final String EXAMPLE_NUMBER_KEY = "EXAMPLE_GRAMMAR_NUMBER";
+    public static final String PREVIEW_TASK_KEY = "PREVIEW_TASK_KEY";
     public static final String CONFIGURATION_GRAMMAR_KEY = "CONFIGURATION_GRAMMAR_KEY";
     public static final String TASK_SOLVE_GRAMMAR_KEY = "TASK_SOLVE_GRAMMAR_KEY";
     public static final String HAS_TESTS_ENABLED_KEY = "HAS_TEST_ENABLED_KEY";
@@ -112,6 +113,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private boolean taskSolving = false;
     private boolean timerRunOut = false;
     private boolean hasTimer = false;
+    private boolean previewTask = false;
 
     private int task_id = -1;
 
@@ -154,6 +156,7 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         Intent thisIntent = this.getIntent();
         setGrammarTask = thisIntent.getBooleanExtra(CONFIGURATION_GRAMMAR_KEY, false);
         hasTestsEnabled = thisIntent.getBooleanExtra(HAS_TESTS_ENABLED_KEY, true);
+        previewTask = thisIntent.getBooleanExtra(PREVIEW_TASK_KEY, false);
 
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
@@ -181,6 +184,26 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         // IF TASK CONFIGURATION
         if (setGrammarTask) {
             loadTask();
+        }
+
+        if (previewTask) {
+            FileHandler fileHandler = new FileHandler(FileHandler.Format.CMSG);
+
+            String filePath = this.getApplicationInfo().dataDir + "/grammarTask.cmsg";
+            try {
+                fileHandler.loadFile(filePath);
+                dataSource.open();
+                dataSource.globalDrop();
+                fileHandler.getData(dataSource);
+                List<GrammarRule> grammarRuleList = dataSource.getGrammarRuleFullExtract();
+                filename = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
+                rulesAdapter = new RulesAdapter(rulesTableSize);
+                rulesAdapter.setGrammarRuleList(grammarRuleList);
+                recyclerView.setAdapter(rulesAdapter);
+                recyclerView.setItemViewCacheSize(rulesTableSize);
+            } catch (Exception e) {
+                Toast.makeText(this, R.string.file_not_loaded, Toast.LENGTH_SHORT).show();
+            }
         }
 
         //test

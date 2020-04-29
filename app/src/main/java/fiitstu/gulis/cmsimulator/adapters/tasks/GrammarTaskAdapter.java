@@ -64,14 +64,16 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
     private List<GrammarTask> grammarTaskList;
     private DatasetChangedListener datasetChangedListener = null;
     private boolean view_results = false;
+    private int user_id;
 
     public static GrammarTask runningTask = null;
 
-    public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks, boolean view_results) {
+    public GrammarTaskAdapter(Context mContext, List<GrammarTask> grammarTasks, boolean view_results, int user_id) {
         instance = this;
         this.mContext = mContext;
         this.grammarTaskList = grammarTasks;
         this.view_results = view_results;
+        this.user_id = user_id;
         if (datasetChangedListener != null)
             datasetChangedListener.onDataChange();
     }
@@ -114,7 +116,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                         if (view_results)
                             user_id = ((BrowseGrammarTasksActivity) mContext).getUser_id();
                         else
-                            user_id = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
+                            user_id = TaskLoginActivity.loggedUser == null ? -1 : GrammarTaskAdapter.this.user_id;
                         URL downloadURL = urlManager.getDownloadGrammarTaskURL(user_id, selectedGrammarTask.getTask_id());
                         ServerController serverController = new ServerController();
                         String output = null;
@@ -198,7 +200,15 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
 
                                 Intent grammarActivityIntent = new Intent(mContext, GrammarActivity.class);
                                 if (view_results) {
+                                    grammarActivityIntent.putExtra(GrammarActivity.PREVIEW_TASK_KEY, true);
                                     grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
+                                    grammarActivityIntent.putExtra(GrammarActivity.TASK_ID_KEY, selectedGrammarTask.getTask_id());
+                                    grammarActivityIntent.putExtra(GrammarActivity.AVAILABLE_TIME_KEY, selectedGrammarTask.getAvailable_time());
+                                    Time time = selectedGrammarTask.getRemaining_time();
+                                    boolean timerEnabled = time.after(Time.valueOf("00:00:00"));
+                                    grammarActivityIntent.putExtra(GrammarActivity.HAS_TIMER_ENABLED, timerEnabled);
+                                    if (timerEnabled)
+                                        grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
                                 } else if (TaskLoginActivity.loggedUser != null) {
                                     grammarActivityIntent.putExtra(GrammarActivity.TASK_SOLVE_GRAMMAR_KEY, true);
                                     grammarActivityIntent.putExtra(GrammarActivity.HAS_TESTS_ENABLED_KEY, selectedGrammarTask.isPublicInputs());
@@ -299,7 +309,7 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
             @Override
             public void onClick(View view) {
                 final int task_id = selectedGrammarTask.getTask_id();
-                final int user_id = TaskLoginActivity.loggedUser.getUser_id();
+                final int user_id = GrammarTaskAdapter.this.user_id;
 
                 TaskStatusDialog taskStatusDialog = new TaskStatusDialog();
                 taskStatusDialog.setContext(mContext);

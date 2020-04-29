@@ -45,7 +45,7 @@ public class BrowseAutomataTasksActivity extends FragmentActivity {
     private static final String TAG = "BrowseAutomataTasksActi";
 
     private List<Task> listOfTasks;
-    public static int user_id;
+    private static int user_id;
     private String authkey;
     public static Context mContext;
     public static BrowseAutomataTasksActivity context;

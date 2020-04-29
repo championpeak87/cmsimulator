@@ -174,7 +174,7 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
 
     private void setRecyclerView() {
         if (adapter == null)
-            adapter = new GrammarTaskAdapter(this, grammarTaskList, view_results);
+            adapter = new GrammarTaskAdapter(this, grammarTaskList, view_results, user_id);
 
         adapter.setDatasetChangedListener(new GrammarTaskAdapter.DatasetChangedListener() {
             @Override

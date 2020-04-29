@@ -19,6 +19,14 @@
             android:visible="false"
             style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
     <item
+            android:id="@+id/menu_show_task"
+            android:title="@string/show_task"
+            android:icon="@drawable/baseline_visibility_24"
+            android:iconTint="@color/md_white_1000"
+            android:showAsAction="always"
+            android:visible="false"
+            style="@style/dropDownMenuItemStyle" tools:ignore="AppCompatResource"/>
+    <item
         android:id="@+id/menu_configuration_simulate"
         android:title="@string/simulate"
         app:showAsAction="never"
