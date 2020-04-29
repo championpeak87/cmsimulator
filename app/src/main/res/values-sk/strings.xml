@@ -1301,7 +1301,9 @@
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
         <b>-</b>
-        Opravené otváranie .cms súborov
+        Opravené otváranie .cms súborov\n
+        <b>-</b>
+        Možnosť pozrieť si zadanie počas riešenia úlohy
     </string>
     <string name="regex_help" formatted="true">
         <b>*</b>

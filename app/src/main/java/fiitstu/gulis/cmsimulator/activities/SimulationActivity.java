@@ -299,6 +299,11 @@ public class SimulationActivity extends FragmentActivity
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_show_task:
+                TaskAssignmentDialog taskAssignmentDialog = TaskAssignmentDialog.newInstance(task);
+                FragmentManager fm1 = this.getSupportFragmentManager();
+                taskAssignmentDialog.show(fm1, TAG);
+                return true;
             case R.id.menu_simulation_configure:
                 if (simulating) {
                     stopSimulation();
@@ -863,10 +868,12 @@ public class SimulationActivity extends FragmentActivity
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             MenuItem saveButton = menu.getItem(0);
             MenuItem submitTaskButton = menu.getItem(1);
+            MenuItem taskInfoButton = menu.findItem(R.id.menu_show_task);
 
             if (configurationType == MainActivity.SOLVE_TASK) {
                 saveButton.setVisible(true);
                 submitTaskButton.setVisible(true);
+                taskInfoButton.setVisible(true);
             }
             if (configurationType == MainActivity.EDIT_TASK ||
                     configurationType == MainActivity.SOLVE_TASK ||

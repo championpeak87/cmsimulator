@@ -1331,7 +1331,9 @@
     <string name="whats_new">What\'s new</string>
     <string name="whats_new_content">
         <b>-</b>
-        Bugfixes
+        Bugfixes -> Able to open .cms automatas\n
+        <b>-</b>
+        Can preview task\'s assignment during task solving
     </string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>

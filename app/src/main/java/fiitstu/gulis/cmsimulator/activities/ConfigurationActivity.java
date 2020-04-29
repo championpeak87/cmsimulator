@@ -658,11 +658,12 @@ public class ConfigurationActivity extends FragmentActivity
             task = (Task) inputBundle.getSerializable(MainActivity.TASK);
             MenuItem saveButton = menu.findItem(R.id.menu_save_task);
             MenuItem submitTaskButton = menu.findItem(R.id.menu_submit_task);
-            //MenuItem taskInfoButton = findViewById(R.id.menu_configuration_task_info);
+            MenuItem taskInfoButton = menu.findItem(R.id.menu_show_task);
 
             if (taskConfiguration == MainActivity.SOLVE_TASK) {
                 saveButton.setVisible(true);
                 submitTaskButton.setVisible(true);
+                taskInfoButton.setVisible(true);
             }
             if (taskConfiguration == MainActivity.EDIT_TASK || task.getPublicInputs()) {
                 menu.findItem(R.id.menu_configuration_bulk_test).setTitle(R.string.correct_inputs);
@@ -746,6 +747,11 @@ public class ConfigurationActivity extends FragmentActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.menu_show_task:
+                TaskAssignmentDialog taskAssignmentDialog = TaskAssignmentDialog.newInstance(task);
+                FragmentManager fm1 = this.getSupportFragmentManager();
+                taskAssignmentDialog.show(fm1, TAG);
                 return true;
             case R.id.menu_configuration_simulate:
 

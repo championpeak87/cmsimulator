@@ -220,6 +220,9 @@ public class GrammarTaskAdapter extends RecyclerView.Adapter<GrammarTaskAdapter.
                                     if (timerEnabled)
                                         grammarActivityIntent.putExtra(GrammarActivity.TIMER_KEY, time);
                                 }
+                                grammarActivityIntent.putExtra(GrammarActivity.TASK_NAME_KEY, selectedGrammarTask.getTitle());
+                                grammarActivityIntent.putExtra(GrammarActivity.TASK_TEXT_KEY, selectedGrammarTask.getText());
+                                grammarActivityIntent.putExtra(GrammarActivity.REMAINING_TIME_KEY, selectedGrammarTask.getRemaining_time().toString());
                                 mContext.startActivity(grammarActivityIntent);
                                 runningTask = selectedGrammarTask;
                             }

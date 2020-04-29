@@ -94,7 +94,9 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     public static final String TIMER_KEY = "TIMER_KEY";
     public static final String TASK_ID_KEY = "TASK_ID_KEY";
     public static final String AVAILABLE_TIME_KEY = "AVAILABLE_TIME_KEY";
-    public static final String ADAPTER_KEY = "ADAPTER_KEY";
+    public static final String TASK_NAME_KEY = "TASK_NAME_KEY";
+    public static final String TASK_TEXT_KEY = "TASK_TEXT_KEY";
+    public static final String REMAINING_TIME_KEY = "REMAINING_TIME_KEY";
 
     //storage permissions
     public static final int REQUEST_READ_STORAGE = 0;
@@ -115,6 +117,10 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
     private boolean hasTimer = false;
     private boolean previewTask = false;
 
+    private String task_name;
+    private String task_text;
+    private String remaining_time;
+
     private int task_id = -1;
 
     @Override
@@ -125,9 +131,11 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         if (taskSolving) {
             MenuItem save = menu.findItem(R.id.menu_save_task);
             MenuItem publish = menu.findItem(R.id.menu_submit_task);
+            MenuItem showTask = menu.findItem(R.id.menu_show_task);
 
             save.setVisible(true);
             publish.setVisible(true);
+            showTask.setVisible(true);
             if (hasTestsEnabled)
                 tests.setVisible(true);
             else tests.setVisible(false);
@@ -157,6 +165,10 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         setGrammarTask = thisIntent.getBooleanExtra(CONFIGURATION_GRAMMAR_KEY, false);
         hasTestsEnabled = thisIntent.getBooleanExtra(HAS_TESTS_ENABLED_KEY, true);
         previewTask = thisIntent.getBooleanExtra(PREVIEW_TASK_KEY, false);
+
+        task_name = thisIntent.getStringExtra(TASK_NAME_KEY);
+        task_text = thisIntent.getStringExtra(TASK_TEXT_KEY);
+        remaining_time = thisIntent.getStringExtra(REMAINING_TIME_KEY);
 
         //recycler view creation
         recyclerView = findViewById(R.id.recyclerViewRules);
@@ -412,6 +424,12 @@ public class GrammarActivity extends FragmentActivity implements SaveGrammarDial
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.menu_show_task:
+                // TODO: IMPLEMENT TASK DIALOG
+                TaskAssignmentDialog taskAssignmentDialog = TaskAssignmentDialog.newInstance(task_name ,task_text);
+                FragmentManager fm1 = this.getSupportFragmentManager();
+                taskAssignmentDialog.show(fm1, TAG);
                 return true;
             case R.id.menu_save_task:
                 try {

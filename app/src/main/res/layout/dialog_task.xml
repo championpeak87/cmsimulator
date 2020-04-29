@@ -1,76 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="10dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:orientation="vertical">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="@string/name" style="@style/text_subheader" android:layout_marginHorizontal="15dp"/>
+            <TextView
+                    android:id="@+id/textView_dialog_task_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="@string/name" style="@style/text_subheader" android:layout_marginHorizontal="15dp"/>
-        <TextView
-                android:id="@+id/textView_dialog_task_name"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginHorizontal="30dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:text="@string/task_description" style="@style/text_subheader"
+                      android:layout_marginHorizontal="15dp"/>
+            <TextView
+                    android:id="@+id/textView_dialog_task_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginHorizontal="30dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout_dialog_task_remaining_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:orientation="vertical">
+            <TextView android:id="@+id/textView_dialog_task_time_label" android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:text="@string/remaining_time" style="@style/text_subheader"
+                      android:layout_marginHorizontal="15dp"/>
 
-                android:layout_marginBottom="16dp"
-                android:layout_marginHorizontal="30dp"/>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="@string/task_description" style="@style/text_subheader"
-                  android:layout_marginHorizontal="15dp"/>
-        <TextView
-                android:id="@+id/textView_dialog_task_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-
-                android:layout_marginBottom="16dp"
-                android:layout_marginHorizontal="30dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:id="@+id/linearLayout_dialog_task_remaining_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <TextView android:id="@+id/textView_dialog_task_time_label" android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="@string/remaining_time" style="@style/text_subheader"
-                  android:layout_marginHorizontal="15dp"/>
+            <TextView
+                    android:id="@+id/textView_dialog_task_remaining_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/md_red_500"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="30dp"/>
+        </LinearLayout>
 
         <TextView
-                android:id="@+id/textView_dialog_task_remaining_time"
+                android:id="@+id/textView_dialog_task_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/md_red_500"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                android:layout_marginHorizontal="30dp"/>
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/md_green_400"
+                android:text="@string/done"
+                android:visibility="gone"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <ProgressBar
+                android:id="@+id/progressBar_dialog_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/textView_dialog_task_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/md_green_400"
-            android:text="@string/done"
-            android:visibility="gone"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-    <ProgressBar
-            android:id="@+id/progressBar_dialog_task"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"/>
-</LinearLayout>
+</ScrollView>

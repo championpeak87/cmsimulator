@@ -204,8 +204,8 @@ app.get('/api/user/delete', (req, res) => {
   pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_id = $2 AND user_type = \'admin\';', [auth_key, logged_user_id], (err, results) => {
     if (err) { throw err }
     if (results.rowCount > 0) {
-      pool.query('DELETE FROM automata_tasks ')
-      pool.query('DELETE FROM users WHERE user_id = $1 CASCADE;', [user_id], (error, result) => {
+      pool.query('DELETE FROM automata_task_results WHERE user_id = $1;', [user_id], (error, result) => {})
+      pool.query('DELETE FROM users WHERE user_id = $1;', [user_id], (error, result) => {
         if (error) { throw error }
         if (result.rowCount > 0) {
           res.status(HTTP_OK).send(
@@ -232,22 +232,27 @@ app.get('/api/user/getUsers', (req, res) => {
   const auth_key = '\\x' + req.query.auth_key;
   const offset = req.query.offset;
   console.log([auth_key]);
-  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_type = \'admin\';', [auth_key], (err, results) => {
-    if (err) { throw err }
-    if (results.rowCount > 0) {
-      pool.query('SELECT * FROM users LIMIT 20 OFFSET $1;', [offset], (error, foundUsers) => {
-        if (error) { throw error }
-        if (foundUsers.rowCount > 0) {
-          res.status(HTTP_OK).send(foundUsers.rows);
-          console.log("All users have been requested!");
-        }
-      })
-    }
-    else {
-      res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
-      console.log("Unauthorised request to download all users!");
-    }
-  })
+//  pool.query('SELECT * FROM users WHERE password_hash = $1 AND user_type = \'admin\';', [auth_key], (err, results) => {
+//    if (err) { throw err }
+//    if (results.rowCount > 0) {
+      pool.query('SELECT count(*) from users;', (error, result) => {
+	if (error) {throw error}
+	if (result.rowCount > 0) {
+	      pool.query('SELECT * FROM users LIMIT 20 OFFSET $1;', [offset], (err, foundUsers) => {
+	        if (error) { throw error }
+        	if (foundUsers.rowCount > 0) {
+	          res.status(HTTP_OK).send(foundUsers.rows);
+        	  console.log("All users have been requested!");
+		} else res.send("ERROR");
+		});
+        } else res.send("ERROR");
+      });
+//    }
+//    else {
+//      res.status(HTTP_FORBIDDEN).send("You are not authorised to perform this operation!");
+//      console.log("Unauthorised request to download all users!");
+//    }
+//  })
 })
 
 app.get('/api/user/filterUsers', (req, res) => {
@@ -1363,6 +1368,7 @@ app.get('/api/game/delete', (req, res) => {
   })
 })
 
+
 app.get('/api/game/download', (req, res) => {
   const task_id = req.query.task_id;
   const user_id = req.query.user_id;
@@ -1372,7 +1378,6 @@ app.get('/api/game/download', (req, res) => {
       if (err) { throw err }
       if (result.rowCount > 0) {
         pool.query('SELECT * FROM game_task_results WHERE task_id = $1 AND user_id = $2;', [task_id, user_id], (errx, results) => {
-          if (errx) { throw errx}
           if (results.rowCount > 0) {
             const filePath = "./uploads/" + user_id + "/" + task_id + ".cmsc";
             res.status(HTTP_OK).download(filePath);
@@ -1385,7 +1390,7 @@ app.get('/api/game/download', (req, res) => {
               if (error3) { throw error3 }
             });
             pool.query('INSERT INTO game_task_results (user_id, task_id, task_status) VALUES ($1, $2, $3);', [user_id, task_id, "in_progress"], (err2, result2) => { });
-            res.status(HTTP_OK).download(filePath);
+            res.status(HTTP_OK).download(userPath);
           }
         });
       }
