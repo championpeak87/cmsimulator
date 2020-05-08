@@ -1331,9 +1331,11 @@
     <string name="whats_new">What\'s new</string>
     <string name="whats_new_content">
         <b>-</b>
-        Bugfixes -> Able to open .cms automatas\n
+        Grammar tasks now show results\n
         <b>-</b>
-        Can preview task\'s assignment during task solving
+        Game works with finite automata\n
+        <b>-</b>
+        Game with pushdown automata allows for epsilon-transitions
     </string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>

@@ -45,6 +45,17 @@ import java.util.List;
 
 public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.ViewHolder> {
     private static final String TAG = "ChessGameAdapter";
+    public static ChessGameAdapter instance = null;
+
+    public void setGameStatus(int task_id, boolean b) {
+        for (ChessGameModel m : listOfGames) {
+            if (m.getTask_id() == task_id) {
+                m.setStatus(b ? Task.TASK_STATUS.CORRECT : Task.TASK_STATUS.WRONG);
+                notifyItemChanged(listOfGames.indexOf(m));
+                return;
+            }
+        }
+    }
 
     public interface OnDataSetChangedListener {
         void onChange();
@@ -55,6 +66,7 @@ public class ChessGameAdapter extends RecyclerView.Adapter<ChessGameAdapter.View
     private OnDataSetChangedListener onDataSetChangedListener = null;
 
     public ChessGameAdapter(List<ChessGameModel> listOfGames, Context mContext) {
+        instance = this;
         this.listOfGames = listOfGames;
         this.mContext = mContext;
     }

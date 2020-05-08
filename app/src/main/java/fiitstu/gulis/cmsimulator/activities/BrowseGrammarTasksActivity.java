@@ -133,7 +133,7 @@ public class BrowseGrammarTasksActivity extends FragmentActivity {
                 if (view_results)
                     userid = user_id;
                 else userid = TaskLoginActivity.loggedUser == null ? -1 : TaskLoginActivity.loggedUser.getUser_id();
-                URL fetchTasksURL = urlManager.getAllGrammarTasksUrl(user_id);
+                URL fetchTasksURL = urlManager.getAllGrammarTasksUrl(userid);
                 ServerController serverController = new ServerController();
                 String output = null;
 

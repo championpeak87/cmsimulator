@@ -58,10 +58,10 @@ public class ChessGameTransitionDialog extends DialogFragment {
             togglebutton_right,
             togglebutton_down;
 
-    private ImageButton
-            selected_button = null,
-            selected_push_button = null,
-            selected_pop_button = null;
+    private Button togglebutton_epsilon;
+
+    private View
+            selected_button = null;
 
     private ImageButton
             imagebutton_add_push_symbol,
@@ -177,12 +177,22 @@ public class ChessGameTransitionDialog extends DialogFragment {
             }
         });
 
+        togglebutton_epsilon = view.findViewById(R.id.togglebutton_epsilon);
+        togglebutton_epsilon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDirectionButton(view);
+            }
+        });
+
         if (automata_type == AUTOMATA_TYPE.PUSHDOWN) {
-            linearlayout_pushdown_config = view.findViewById(R.id.linearlayou_pushdown_config);
+            linearlayout_pushdown_config = view.findViewById(R.id.linearlayout_pushdown_config);
             linearlayout_pushdown_config.setVisibility(View.VISIBLE);
 
             recyclerview_pop = view.findViewById(R.id.recyclerview_pop);
             recyclerview_push = view.findViewById(R.id.recyclerview_push);
+
+            togglebutton_epsilon.setVisibility(View.VISIBLE);
 
             DataSource dataSource = DataSource.getInstance();
             dataSource.open();
@@ -333,6 +343,8 @@ public class ChessGameTransitionDialog extends DialogFragment {
                         output_bundle.putString(DIRECTION_KEY, Symbol.MOVEMENT_LEFT);
                     else if (selected_button.equals(togglebutton_right))
                         output_bundle.putString(DIRECTION_KEY, Symbol.MOVEMENT_RIGHT);
+                    else if (selected_button.equals(togglebutton_epsilon))
+                        output_bundle.putString(DIRECTION_KEY, Symbol.EMPTY_SYMBOL);
                 }
 
 
@@ -340,35 +352,42 @@ public class ChessGameTransitionDialog extends DialogFragment {
                     transitionChangeListener.OnChange(output_bundle, popSymbols, pushSymbol);
                     dismiss();
                 } else {
-                    ValueAnimator valueAnimator = new ValueAnimator();
-                    valueAnimator.setIntValues(Color.RED, getContext().getColor(R.color.bootstrap_gray));
-                    valueAnimator.setEvaluator(new ArgbEvaluator());
-                    valueAnimator.setDuration(2000);
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            if (togglebutton_up.isEnabled())
-                                togglebutton_up.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            if (togglebutton_down.isEnabled())
-                                togglebutton_down.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            if (togglebutton_left.isEnabled())
-                                togglebutton_left.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                            if (togglebutton_right.isEnabled())
-                                togglebutton_right.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-                        }
-                    });
+                    if (automata_type == AUTOMATA_TYPE.FINITE) {
+                        ValueAnimator valueAnimator = new ValueAnimator();
+                        valueAnimator.setIntValues(Color.RED, getContext().getColor(R.color.bootstrap_gray));
+                        valueAnimator.setEvaluator(new ArgbEvaluator());
+                        valueAnimator.setDuration(2000);
+                        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                if (togglebutton_up.isEnabled())
+                                    togglebutton_up.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                                if (togglebutton_down.isEnabled())
+                                    togglebutton_down.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                                if (togglebutton_left.isEnabled())
+                                    togglebutton_left.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                                if (togglebutton_right.isEnabled())
+                                    togglebutton_right.getBackground().setColorFilter((int) animation.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+                            }
+                        });
 
-                    valueAnimator.start();
+                        valueAnimator.start();
+                    }
                 }
 
             }
         });
     }
 
-    private void setDirectionButton(ImageButton selected_button) {
+    private void setDirectionButton(View selected_button) {
         if (this.selected_button != null)
             this.selected_button.getBackground().clearColorFilter();
         this.selected_button = selected_button;
-        selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+        if (selected_button.equals(togglebutton_epsilon))
+            togglebutton_epsilon.setTextColor(getContext().getColor(R.color.toggle_color));
+        else {
+            togglebutton_epsilon.setTextColor(getContext().getColor(R.color.bootstrap_gray));
+            selected_button.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.toggle_color), PorterDuff.Mode.MULTIPLY);
+        }
     }
 }

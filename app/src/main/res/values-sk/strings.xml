@@ -1301,9 +1301,11 @@
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
         <b>-</b>
-        Opravené otváranie .cms súborov\n
+        Opravené zobrazovanie výsledkov gramatík\n
         <b>-</b>
-        Možnosť pozrieť si zadanie počas riešenia úlohy
+        Hra funguje s konečným automatom\n
+        <b>-</b>
+        Hra so zázobníkovým automatom umožňuje pridávať epsilónové prechody
     </string>
     <string name="regex_help" formatted="true">
         <b>*</b>

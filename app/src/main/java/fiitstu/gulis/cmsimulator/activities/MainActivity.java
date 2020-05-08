@@ -317,7 +317,7 @@ public class MainActivity extends FragmentActivity
 
                 Intent i2 = new Intent(getApplicationContext(), FileChooser.class);
                 i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
-                i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "cms;cmst;jff");
+                i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "cms;jff");
                 startActivityForResult(i2, READ_REQUEST_CODE);
 
                 break;
