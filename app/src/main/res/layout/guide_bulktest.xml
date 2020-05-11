@@ -47,7 +47,7 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/edit" android:tint="@color/bootstrap_gray"/>
+                android:src="@drawable/baseline_edit_24" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/remove" android:tint="@color/bootstrap_gray"/>
+                android:src="@drawable/baseline_delete_24" android:tint="@color/bootstrap_gray"/>
 
         <TextView
                 android:layout_width="match_parent"

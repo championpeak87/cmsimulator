@@ -877,17 +877,31 @@
 
     <!--Tasks Guide-->
     <string name="guide_title_tasks">Úlohy</string>
-    <string name="guide_tasks_introduction1">Okrem toho, že vám umožňuje vytvárať a simulovať formálne výpočtové stroje,
+    <string name="guide_tasks_introduction1">
+        Okrem toho, že vám umožňuje vytvárať a simulovať formálne výpočtové stroje,
         CMSimulátor poskytuje tiež platformu pre interaktívne riešenie úloh. Prostredníctvom Menu úloh môžete
-        buď vytvoriť úlohy, ktoré môžete zadávať ostatným, alebo vyhľadať úlohy, ktoré vám zadávajú ostatní
-        používatelia v miestnej sieti.
+        buď pristupovať k úlohám, ktoré sú dostupné na serveri. Pre prístup je nutné sa registrovať alebo použiť môžnosť
+        pokračovať bez prihlásenia.
     </string>
-    <string name="guide_tasks_introduction2">Cieľom úlohy je vytvoriť automat, ktorý spĺňa dané kritéria. Automat
+    <string name="guide_tasks_introduction2">
+        V ponuke úlohy je možné nájsť tri druhy úloh. Automaty, gramatiky a hry. \n
+        Cieľom úlohy je vytvoriť automat, ktorý spĺňa dané kritéria. Automat
         môže byť ohodnotený na základe toho, či akceptuje vstupy, ktoré má akceptovať, odmieta vstupy, ktoré má
         odmietať a či generuje výstupy, ktoré má generovať. Automat je simulovaný až po maximálny počet krokov
         nastavený zadávateľom v <b>Nastaveniach</b> a vstupy, pri ktorých stroj dlho nezastaví, sú považované za
         odmietnuté. Úloha je zvyčajne slovne opísaná a samotné testy, ktoré sú spúšťané, môžu a nemusia byť ukázané
-        riešiteľom, podla toho, ako sa zadávateľ rozhodne.
+        riešiteľom, podla toho, ako sa zadávateľ rozhodne.\n
+
+        Cieľom úlohy pre gramatiky je definovať množinu pravidiel, ktorá generuje daný jazyk tak, ako je to definované v
+        zadaní. Množnina pravidiel je vyhodnotená množninou správnycb a nesprávnych testov. Prístupnosť k týmto testom
+        závisí od zadania. Okrem toho na každú úlohu môže byť stanovený časový limit. Tento časový limit je uvedený,
+        pred
+        každým spustením úlohy. \n
+
+        Cieľom hry je poskytnúť používateľovi jednoduchý úvod do problematiky tvorby automatov. Cieľom je vytvoriť
+        automat,
+        ktorý privedie hráča zo štartovacej pozície do cieľa. Spôsob riešenia nie je pevne daný, avšak úloha môže mať
+        obmedzený maximálny počet stavov!
     </string>
 
     <!--Solve Tasks Guide-->
@@ -910,24 +924,30 @@
     <string name="guide_solving_tasks_task_button">
         <b>Informácie o úlohe -</b>
         po ťuknutí na toto tlačidlo sa zobrazí
-        dialógové okno, v ktorom si môžete znova prečítať zadanie, skontrolovať, koľko času vám ostáva, a odovzdať
-        úlohu.
+        dialógové okno, v ktorom si môžete znova prečítať zadanie.
     </string>
 
     <!--Create Tasks Guide-->
-    <string name="guide_title_creating_tasks">Vytváranie úloh</string>
-    <string name="guide_creating_tasks_introduction">Pre vytvorenie novej úlohy ťuknite na tlačidlo <b>Vytvoriť
+    <string name="guide_title_creating_tasks">Vytváranie úloh (Administrátor)</string>
+    <string name="guide_creating_tasks_introduction">
+        Pre vytvorenie novej úlohy ťuknite na tlačidlo <b>Vytvoriť
         úlohu
-    </b> v Menu úloh. Pre načítanie uloženej úlohy ťuknite na tlačidlo <b>Načítať úlohu</b>. Budete prenesení
-        do Obrazovky úpravy úlohy, kde môžete nastaviť vlastnosti úlohy a upraviť s ňou spojený automat.
+    </b> v Menu úloh. Podľa typu úlohy vyberte príslušné tlačidlo.
+
     </string>
 
     <string name="guide_title_edit_task_activity">Obrazovka úpravy úlohy</string>
 
-    <string name="guide_edit_task_activty">V Obrazovke úpravy úlohy môžete nastaviť názov úlohy, zadanie, časový limit
-        a to, či chcete testovacie vstupy zdieľať s riešiteľmi. Ťuknutím na tlačidlo <b>Nastaviť testovacie vstupy
-            a automat
-        </b> môžete nastaviť testovacie vstupy a s úlohou spojený automat.
+    <string name="guide_edit_task_activty">Automaty/Gramatiky
+        Pre pridanie novej úlohy je potrebné zadať jej názov a zadanie. Následne vytvoríme konfiguráciu úlohy. Táto
+        konfigurácia bude zobrazená používateľovi. Je možné ponechať aj prázdnu konfiguráciu. Testy môžu byť pridané
+        kliknutím na tlačidlo menu nasledované tlačidlom \'Správne/Nesprávne vstupy\'. Jednotlivé testy pridám tlačidlom
+        \'Pridať nový test\'. Viac testov viem pridať kliknutím na tlačidlo \'Pridať regex testy\'. Vstupom je regulárny
+        výraz, ktorý generuje testy.\n\n
+        Hry
+        Pre pridanie hry kliknite na tlačidlo \'Pridať novú hru\'. Je potrebné zadať názov a zadanie hry. Následne je
+        potrebné vytvoriť herné pole. Krátke kliknutie na políčko pridá/odstráni pole z cesty. Dlhé podržanie pridá
+        začiatok/koniec cesty. Posledným parametrom je počet maximálne povolených stavov (interval 1 - 20).
     </string>
 
     <string name="guide_edit_task_menu">Menu v tejto obrazovke vám umožňuje uložiť úlohu, zobraziť Pomoc, alebo
@@ -990,7 +1010,8 @@
         a odvodenie do pravého stĺpca. Ak jedno pravidlo generuje viacero odvodení, jednotlivé odvodenia môžete rozdeliť
         pomocou symbolu
         <b>pipe</b>
-        <i>(Pozri Špeciálne symboly pre gramatiku)</i>. Ak chcete zadať prázdne slovo, prosím použite znak <b>epsilon
+        <i>(Pozri Špeciálne symboly pre gramatiku)</i>. Ak chcete zadať prázdne slovo, prosím použite znak
+        <b>epsilon
         </b>
         <i>(Pozri Špreciálne symboly pre gramatiku)</i>.
         Keďže tieto znaky sú nezvyčajné na Androidových klávesniciach, možete ich zadávať pomocou tlačidiel na
@@ -1389,4 +1410,32 @@
     <string name="symbol_in_use">Symbol sa používa!</string>
     <string name="known_issues">Známe chyby</string>
     <string name="known_issues_content">- Nie je možné otvoriť .jff automaty</string>
+    <string name="guide_about_desc7"/>
+    <string name="guide_settings_regex">Toto nastavenie označuje maximálnu hĺbku kvantifikátorov regulárnych výrazov.
+        Ináč povedené na koľko testov bude prevedený jeden kvantifikátor.
+    </string>
+    <string name="guide_solving_tasks_submit_button">
+        <b>Odovzdať úlohu</b>
+        - toto tlačidlo otestuje všetky testy, zobrazí
+        ich výsledky a spýta sa používateľa, či naozaj chce odovzdať úlohu. <b>POZOR</b>, po úspešnom odovzdaní
+        nie je možné vykonať akékoľvek zmeny!
+    </string>
+    <string name="guide_solving_tasks_save_button">
+        <b>Uložiť úlohu</b>
+        - toto tlačidlo uloží úlohu bez jej odovzdania.
+        Pre uchovanie práce je nevyhnutné uložiť si svoju prácu.
+    </string>
+    <string name="guide_title_game_solving">Riešenie hry</string>
+    <string name="guide_game_solvin_paragraph1">Hra je nový interaktívny spôsob ako začať vytvárať automaty. Týmto
+        spôsobom
+        sa môžeš naučiť základy tvorby automatov veľmi zábavnym spôsobom.
+    </string>
+    <string name="guide_game_solvin_paragraph2">Hra sa zameriava na tvorbu konečných a zásobníkových automatov.
+    Vstupná abeceda je zamenená za smyboly smeru, ktoré prestavujú pohyb po hernej ploche. Červené pole znamená začiatok
+    cesty, zelené pole znamená cieľ cesty. Úlohou je zostrojiť automat tak, aby prešiel od začiatku do cieľa cesty. </string>
+    <string name="guide_game_solvin_paragraph3">
+        V prípade, že hra sa zameriava na tvorbu zásbníkového automatu, je nutné vytvoriť si vlastnú zásobníkovú abecedu.
+        Kliknutím na tlačidlo menu, nastav zásobníkovú abecedu môžeš nastaviť abecedu. Predvolený znak <b>Z</b>, predstavuje
+        inicializačný symbol zásobníka.
+    </string>
 </resources>

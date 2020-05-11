@@ -20,7 +20,7 @@ import java.util.Calendar;
 
 /**
  * A fragment that displays the user guide.
- *
+ * <p>
  * Created by Jakub Sedlář on 25.01.2018.
  */
 public class GuideFragment extends DialogFragment {
@@ -46,6 +46,7 @@ public class GuideFragment extends DialogFragment {
     public static final int GRAMMAR = 13;
     public static final int SIMULATION_GRAMMAR = 14;
     public static final int MULTIPLE_TESTS = 15;
+    public static final int GAME_SOLVING = 16;
 
     private ImageButton prevPageButton;
     private ImageButton nextPageButton;
@@ -54,6 +55,7 @@ public class GuideFragment extends DialogFragment {
 
     /**
      * Creates a new GuideFragment
+     *
      * @param page the page to be shown (a static member of this class)
      * @return the created instance
      */
@@ -147,11 +149,29 @@ public class GuideFragment extends DialogFragment {
             case MULTIPLE_TESTS:
                 showMultipleTests(view);
                 break;
+            case GAME_SOLVING:
+                showGameSolving(view);
+                break;
         }
+    }
+
+    private void showGameSolving(final View view) {
+        prevPageButton.setVisibility(View.VISIBLE);
+        prevPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSettings(view);
+            }
+        });
+        nextPageButton.setVisibility(View.INVISIBLE);
+        resetScrollView();
+        ScrollView.inflate(contentScrollView.getContext(), R.layout.guide_game_solving, contentScrollView);
+        activateLinks(view);
     }
 
     /**
      * Finds cross-references in the view and sets their OnClickListeners to show the appropriate page
+     *
      * @param view the view that contains the GuideFragment
      */
     private void activateLinks(final View view) {
@@ -278,7 +298,7 @@ public class GuideFragment extends DialogFragment {
         }
 
         link = view.findViewById(R.id.linearLayout_guide_grammar_link);
-        if (link != null){
+        if (link != null) {
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -288,7 +308,7 @@ public class GuideFragment extends DialogFragment {
         }
 
         link = view.findViewById(R.id.linearLayout_guide_grammar_simulation_link);
-        if (link != null){
+        if (link != null) {
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -298,7 +318,7 @@ public class GuideFragment extends DialogFragment {
         }
 
         link = view.findViewById(R.id.linearLayout_guide_multiple_tests_link);
-        if (link != null){
+        if (link != null) {
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -308,7 +328,7 @@ public class GuideFragment extends DialogFragment {
         }
 
         link = view.findViewById(R.id.linearLayout_guide_grammar_special_symbols_link);
-        if (link != null){
+        if (link != null) {
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -318,11 +338,21 @@ public class GuideFragment extends DialogFragment {
         }
 
         link = view.findViewById(R.id.linearLayout_guide_grammar_load_save_link);
-        if(link != null){
+        if (link != null) {
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showGrammarLoadSave(view);
+                }
+            });
+        }
+
+        link = view.findViewById(R.id.linearLayout_guide_game_link);
+        if (link != null) {
+            link.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showGameSolving(view);
                 }
             });
         }
@@ -597,13 +627,19 @@ public class GuideFragment extends DialogFragment {
                 showGrammarLoadSave(view);
             }
         });
-        nextPageButton.setVisibility(View.INVISIBLE);
+        nextPageButton.setVisibility(View.VISIBLE);
+        nextPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGameSolving(view);
+            }
+        });
         resetScrollView();
         ScrollView.inflate(contentScrollView.getContext(), R.layout.guide_settings, contentScrollView);
         activateLinks(view);
     }
 
-    private void showGrammar(final View view){
+    private void showGrammar(final View view) {
         prevPageButton.setVisibility(View.VISIBLE);
         prevPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -623,7 +659,7 @@ public class GuideFragment extends DialogFragment {
         activateLinks(view);
     }
 
-    private void showSimulationGrammar(final View view){
+    private void showSimulationGrammar(final View view) {
         prevPageButton.setVisibility(View.VISIBLE);
         prevPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -643,7 +679,7 @@ public class GuideFragment extends DialogFragment {
         activateLinks(view);
     }
 
-    private void showMultipleTests(final View view){
+    private void showMultipleTests(final View view) {
         prevPageButton.setVisibility(View.VISIBLE);
         prevPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -663,7 +699,7 @@ public class GuideFragment extends DialogFragment {
         activateLinks(view);
     }
 
-    private void showGrammarSpecialSymbols(final View view){
+    private void showGrammarSpecialSymbols(final View view) {
         prevPageButton.setVisibility(View.VISIBLE);
         prevPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -683,7 +719,7 @@ public class GuideFragment extends DialogFragment {
         activateLinks(view);
     }
 
-    private void showGrammarLoadSave(final View view){
+    private void showGrammarLoadSave(final View view) {
         prevPageButton.setVisibility(View.VISIBLE);
         prevPageButton.setOnClickListener(new View.OnClickListener() {
             @Override

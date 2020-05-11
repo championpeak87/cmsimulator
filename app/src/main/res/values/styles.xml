@@ -176,7 +176,7 @@
         <item name="android:src">@drawable/simple_arrow</item>
         <item name="android:background">@drawable/simple_arrow</item>
         <item name="android:layout_marginRight">8dp</item>
-        <item name="android:tint">@color/bootstrap_gray</item>
+        <item name="android:tint">@color/button_tint_gray</item>
     </style>
 
     <style name="guide_content_container">

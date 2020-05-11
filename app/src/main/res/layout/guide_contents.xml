@@ -11,7 +11,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_about_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_about"/>
@@ -20,7 +20,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_credits_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_credits"/>
@@ -29,7 +29,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_getting_started_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_getting_started"/>
@@ -38,7 +38,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_configuration_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_configuration_activity"/>
@@ -47,7 +47,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_special_symbols_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_special_symbols"/>
@@ -56,7 +56,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_simulation_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_simulation_activity"/>
@@ -65,7 +65,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_bulk_test_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_bulk_test_activity"/>
@@ -74,7 +74,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_save_load_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_save_load"/>
@@ -83,7 +83,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_tasks_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_tasks"/>
@@ -92,7 +92,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_solving_tasks_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_solving_tasks"/>
@@ -101,7 +101,7 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_creating_tasks_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_creating_tasks"/>
@@ -110,7 +110,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_guide_grammar_link"
         style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
             style="@style/guide_content_text"
             android:text="@string/guide_title_grammar_definition"/>
@@ -119,7 +119,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_guide_grammar_simulation_link"
         style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
             style="@style/guide_content_text"
             android:text="@string/guide_title_grammar_simulation"/>
@@ -128,7 +128,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_guide_multiple_tests_link"
         style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
             style="@style/guide_content_text"
             android:text="@string/guide_title_multiple_tests"/>
@@ -137,7 +137,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_guide_grammar_special_symbols_link"
         style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
             style="@style/guide_content_text"
             android:text="@string/guide_title_grammar_special_symbols"/>
@@ -146,7 +146,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_guide_grammar_load_save_link"
         style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
             style="@style/guide_content_text"
             android:text="@string/guide_title_grammar_load_save"/>
@@ -155,10 +155,19 @@
     <LinearLayout
             android:id="@+id/linearLayout_guide_settings_link"
             style="@style/guide_content_container">
-        <ImageView style="@style/guide_content_bullet" android:tint="@color/bootstrap_gray"/>
+        <ImageView style="@style/guide_content_bullet" />
         <TextView
                 style="@style/guide_content_text"
                 android:text="@string/guide_title_settings"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_game_link"
+            style="@style/guide_content_container">
+        <ImageView style="@style/guide_content_bullet" />
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_game_solving"/>
     </LinearLayout>
 
 </LinearLayout>

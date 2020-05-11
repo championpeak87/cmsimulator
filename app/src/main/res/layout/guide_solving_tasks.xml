@@ -19,7 +19,7 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/arrow"/>
+                android:src="@drawable/baseline_help_24"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -55,12 +55,44 @@
             android:gravity="center_vertical">
         <ImageView
                 style="@style/guide_image"
-                android:src="@drawable/excl_red"/>
+                android:src="@drawable/baseline_subject_24"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/guide_solving_tasks_task_button" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/baseline_assignment_turned_in_24"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_solving_tasks_submit_button" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+        <ImageView
+                style="@style/guide_image"
+                android:src="@drawable/baseline_save_24"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_solving_tasks_save_button" />
     </LinearLayout>
 
     <TextView

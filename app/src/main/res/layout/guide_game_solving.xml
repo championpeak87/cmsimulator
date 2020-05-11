@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            style="@style/guide_heading"
+            android:text="@string/guide_title_game_solving"/>
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_game_solvin_paragraph1"/>
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_game_solvin_paragraph2"/>
+
+    <ImageView android:layout_width="350dp" android:layout_height="300dp" android:layout_gravity="center_horizontal"
+               android:layout_margin="10dp" android:tint="@null"
+               android:src="@drawable/gamefield_en"/>
+
+    <TextView
+            style="@style/guide_paragraph"
+            android:text="@string/guide_game_solvin_paragraph3"/>
+
+    <TextView
+            style="@style/guide_see_also"/>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_solving_tasks_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet"/>
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_solving_tasks"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_creating_tasks_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet"/>
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_creating_tasks"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/linearLayout_guide_settings_link"
+            style="@style/guide_content_container">
+        <ImageView
+                style="@style/guide_content_bullet"/>
+
+        <TextView
+                style="@style/guide_content_text"
+                android:text="@string/guide_title_settings"/>
+    </LinearLayout>
+</LinearLayout>

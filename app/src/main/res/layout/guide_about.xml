@@ -27,16 +27,16 @@
             android:text="@string/guide_about_desc3" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:text="@string/guide_about_desc4" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:text="@string/guide_about_desc6" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="@string/guide_about_desc7" />
 
     <TextView
             android:layout_width="wrap_content"

@@ -93,6 +93,8 @@
     <color name="machine_stuck_color">@color/md_red_A700</color>
     <color name="nondeterministic_color">@color/md_red_500</color>
 
+    <color name="button_tint_gray">#90a4ae</color>
+
     <!--configuration colors-->
     <color name="toggle_color">@color/md_light_green_A400</color>
     <color name="configure_color">@color/md_yellow_500</color>

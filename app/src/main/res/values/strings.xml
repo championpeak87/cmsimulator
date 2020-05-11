@@ -892,27 +892,38 @@
     <!--Tasks Guide-->
     <string name="guide_title_tasks">Tasks</string>
     <string name="guide_tasks_introduction1">In addition to allowing you to create and simulate abstract machines,
-        CMSimulator also provides a platform for solving interactive tasks. Using the Tasks Menu, you can either
-        create tasks for others to solve, or find tasks assigned to you by other users in the local network.
+        CMSimulator also provides a platform for solving interactive tasks. Using the Tasks Menu, you can access tasks
+        which are available on the server. In order to access them, you\'ll have to sign up or use the option to continue
+        without login.
     </string>
-    <string name="guide_tasks_introduction2">The goal of a task is to create a machine that matches given criteria.
+    <string name="guide_tasks_introduction2">In the tasks menu you are able to find three kinds of tasks. Automatas,
+        grammars and games.
+        The goal of an automata task is to create a machine that matches given criteria.
         The machine can be evaluated based on whether or not it accepts the inputs it is supposed to accept, rejects the
         inputs it is supposed to reject, and generates the outputs it is supposed to generate. The machine is simulated
         for up to the maximum number of steps set by the assigner in their <b>Settings</b>, and inputs for which
         the machine runs too long are considered to be rejected. The task is typically described verbally, and the
         actual tests that are run may or may not be shown to the solvers, based on how the assigner decides.
+
+        The goal of a grammar task is to define a set of rules, which generate a certain language based on description.
+        The rules will be evaluated through a subset of correct and incorrect input tests. These tests may or may not be
+        visible to the solver. According to the task, there might be a timer as well. Your task is to define a set of rules
+        whthin this time limit.
+
+        The goal of a game is to introduce a user into the basics of automata creation. Your goal is to create an automata,
+        which will bring you from the start to the end. The approach you will take is completely on you. Try to come up with
+        the simplest solution. Beware! There might be a boundary set on a maximum state count, so plan wisely!
     </string>
 
     <!--Solve Tasks Guide-->
     <string name="guide_title_solving_tasks">Finding and Solving Tasks</string>
-    <string name="guide_solving_tasks_introduction">To find tasks currently being assigned by people in
-        your local network, tap the <b>Find Tasks</b> button in the Tasks Menu. The application will automatically
-        connect to nearby devices and show the list of available tasks. If you are not seeing a task that should be
-        available, you can try reloading them using the <b>Refresh</b> button.
+    <string name="guide_solving_tasks_introduction">To find tasks currently being assigned,
+        tap the <b>Find Automata/Grammar/Game Tasks</b> button in the Tasks Menu. The application will automatically
+        fetch the available tasks and show the list of available tasks.
     </string>
     <string name="guide_solving_arrow_button">
         <b>Detail -</b>
-        show details about the task and offer option to solve it.
+        show details about the task.
     </string>
     <string name="guide_title_solving_task">Solving a Task</string>
     <string name="guide_solving_task_menu">If you are allowed to view the evaluation inputs, the Bulk Testing option
@@ -922,22 +933,28 @@
     <string name="guide_solving_tasks_task_button">
         <b>Task info -</b>
         tap this button to show the task popup,
-        allowing you to read the assignment again, see how much time you have left, and turn in the task.
+        allowing you to read the assignment again.
     </string>
 
     <!--Create Tasks Guide-->
-    <string name="guide_title_creating_tasks">Creating Tasks</string>
+    <string name="guide_title_creating_tasks">Creating Tasks (ADMINISTRATORS ONLY)</string>
     <string name="guide_creating_tasks_introduction">To create a new task, tap the <b>New Task</b> button in the
-        Tasks Menu. To load a previously saved task, tap the <b>Load Task</b> button. You will be taken to the
-        Task Editing Activity, where you can set the task\'s properties and edit the associated machine.
+        Tasks Menu. According to task\'s type pick automata, grammar or game button.
     </string>
 
     <string name="guide_title_edit_task_activity">Task Editing Activity</string>
 
-    <string name="guide_edit_task_activty">In the Task Editing Activity, you can set the task\'s title,
-        verbal assignment, time limit, and whether or not you wish to share the test inputs with the
-        solvers. Tap the <b>Set Test Inputs and Machine</b> button to set the test inputs and edit the
-        associated machine.
+    <string name="guide_edit_task_activty">Automatas/Grammars
+        In order to create new task you have to enter task\'s name and description. Afterwards it is time
+        to set automata/grammar by clicking \'Set automata/grammar\' button. The configuration you\'ll enter here will be
+        shown to the user. Tests can be added by clicking the menu button followed by Correct/Incorrect inputs. \n\n
+        In the test inputs activity you are able to set test one by one by clicking the \'Add new test\' button. Multiple
+        tests can be added by clicking \'Add regex test\' button.\n\n
+        Games
+        In order to create new game click the \'Add new game\' button. You have to enter task\'s name and description.
+        Afterwards it is time to set the game field. By shortclicking a certain field you\'ll mark the field as a path
+        field. By longclicking a certain field you can set this field as start or end point. Finally you have to set the
+        maximum count of allowed states (between 1 - 20).
     </string>
 
     <string name="guide_edit_task_menu">The menu in this activity allows you to save the task, view Help
@@ -1427,5 +1444,29 @@
     <string name="symbol_in_use">Symbol is in use</string>
     <string name="known_issues">Known issues</string>
     <string name="known_issues_content">- Unable to open .jff automatas</string>
+    <string name="guide_about_desc7">Since version 5.x.x the application has been extended by solving automata and grammar tasks via assignments available on server.</string>
+    <string name="guide_settings_regex">This setting marks maximum depth a regex quantifier can go to. In other word,
+        into how many test one quantifier will be turned into.
+    </string>
+    <string name="guide_solving_tasks_submit_button">
+        <b>Submit task</b> - this button will execute all the assigned test, shows the results and asks you whether you
+        really want to submit the task. <b>WARNING</b>, after you have successfully submitted the task you won\'t be able
+        to make any changes to it!
+    </string>
+    <string name="guide_solving_tasks_save_button"><b>Save task</b> - This button save the current configuration without submission.
+        If you would like to retain your work you have to save your task.</string>
+    <string name="guide_title_game_solving">Game solving</string>
+    <string name="guide_game_solvin_paragraph1">Game is a new interactive way how to get started with automatas. You can
+        learn the basics of automata creation in a very entertaining way. </string>
+    <string name="guide_game_solvin_paragraph2">
+        Game focuses on creation of finite and pushdown automatas. Input alphabet has been replaced with direction
+        symbols, which represent the movement on a game field. Red field represents start and green field represents
+        finish. Your task is to create an automata, which will direct you from the start over to finish alongside the path.
+    </string>
+    <string name="guide_game_solvin_paragraph3">
+        In case, game focuses on pushdown automata, it is necessary to create your own stack alphabet. You can achieve
+        this by clicking the menu button, followed by Set stack alphabet option. The default <b>Z</b> symbol, represents
+        initial stack symbol and cannot be removed.
+    </string>
 
 </resources>
