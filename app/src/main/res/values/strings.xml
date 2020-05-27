@@ -1348,11 +1348,7 @@
     <string name="whats_new">What\'s new</string>
     <string name="whats_new_content">
         <b>-</b>
-        Grammar tasks now show results\n
-        <b>-</b>
-        Game works with finite automata\n
-        <b>-</b>
-        Game with pushdown automata allows for epsilon-transitions
+        Final release version
     </string>
     <string name="testing">Testing</string>
     <string name="continue_task">Continue</string>

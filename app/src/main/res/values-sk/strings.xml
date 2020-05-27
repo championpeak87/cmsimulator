@@ -1322,11 +1322,7 @@
     <string name="find_grammar_tasks">Vyhľadať gramatiky</string>
     <string name="whats_new_content">
         <b>-</b>
-        Opravené zobrazovanie výsledkov gramatík\n
-        <b>-</b>
-        Hra funguje s konečným automatom\n
-        <b>-</b>
-        Hra so zázobníkovým automatom umožňuje pridávať epsilónové prechody
+        Finálne produkčné vydanie
     </string>
     <string name="regex_help" formatted="true">
         <b>*</b>
@@ -1392,6 +1388,7 @@
     <string name="submit_game">Odovzdať hru</string>
     <string name="submit_game_message_negative">Skutočne chcete odovzdať hru? Simulácia nebola úspešná
     </string>
+    <string name="prev">Späť</string>
     <string name="game_submitted_cant_open">Hra bola odovzdaná! Nie sú povolené žiadne zmeny!</string>
     <string name="permission_title">Poďme vyriešiť povolenia</string>
     <string name="permission_detail">Nasledujúce povolenia musia byť prijaté aby všetko správne fungovalo!</string>
